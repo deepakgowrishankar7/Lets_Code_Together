@@ -66,7 +66,7 @@ public class MailService {
                     .build();
 
             String jsonBody = String.format(
-                "{\"from\":\"Let's Code Together <onboarding@resend.dev>\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":\"%s\"}",
+                "{\"from\":\"onboarding@resend.dev\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":\"%s\"}",
                 to, escapeJson(subject), escapeJson(htmlContent)
             );
 
@@ -74,6 +74,7 @@ public class MailService {
                     .uri(URI.create("https://api.resend.com/emails"))
                     .header("Authorization", "Bearer " + resendApiKey.trim())
                     .header("Content-Type", "application/json")
+                    .header("User-Agent", "ResendJava/1.0")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .timeout(Duration.ofSeconds(10))
                     .build();
