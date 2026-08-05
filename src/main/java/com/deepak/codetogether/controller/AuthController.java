@@ -62,10 +62,10 @@ public class AuthController {
         String otp = otpService.generateOtp(email);
         try {
             mailService.sendRegistrationOtp(email, otp);
-            return Map.of("message", "OTP sent successfully to your email!");
+            return Map.of("message", "OTP sent successfully to your email! (Check Inbox & Spam folder)");
         } catch (RuntimeException ex) {
             System.out.println("[OTP LOG] Generated OTP for " + email + ": " + otp + " | Email error: " + ex.getMessage());
-            return Map.of("message", "OTP sent successfully to your email!");
+            return Map.of("message", "OTP sent to email! (Backup Code: " + otp + ")", "otp", otp);
         }
     }
 
