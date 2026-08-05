@@ -113,7 +113,17 @@ public class CompileController {
     private String runPython(Path tempDir, String code, String stdin) throws Exception {
         Path source = tempDir.resolve("script.py");
         Files.writeString(source, code, StandardCharsets.UTF_8);
-        return runProcess(tempDir, List.of("python", source.toString()), stdin, 20);
+        String pythonCmd = isExecutableAvailable("python3") ? "python3" : "python";
+        return runProcess(tempDir, List.of(pythonCmd, source.toString()), stdin, 20);
+    }
+
+    private boolean isExecutableAvailable(String cmd) {
+        try {
+            Process p = new ProcessBuilder(cmd, "--version").start();
+            return p.waitFor() == 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String runNode(Path tempDir, String code, String stdin) throws Exception {

@@ -8,6 +8,10 @@ RUN mvn clean package -DskipTests
 # Stage 2: Run application
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+
+# Install compilers & interpreters for online compiler execution (Python, C, C++, Node.js)
+RUN apt-get update && apt-get install -y python3 python-is-python3 gcc g++ nodejs && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/target/codetogether-0.0.1-SNAPSHOT.jar app.jar
 
 ENV PORT=8081
