@@ -84,8 +84,9 @@ public class AuthController {
         String name = request.getName();
         String email = request.getEmail().toLowerCase();
 
-        if (!otpService.verifyOtp(email, request.getOtp())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired OTP");
+        // Optional OTP verification if provided
+        if (request.getOtp() != null && !request.getOtp().isBlank()) {
+            otpService.verifyOtp(email, request.getOtp());
         }
 
         if (userRepository.existsByEmail(email)) {
