@@ -864,6 +864,32 @@ function initQuizAntiCheating() {
             }
         }
     }, true);
+
+    // Auto-blur quiz content when window loses focus (Snipping tool / Alt+Tab / Tab switch)
+    window.addEventListener("blur", () => {
+        const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+        if (activeQuiz) {
+            activeQuiz.classList.add("quiz-blur-protection");
+        }
+    });
+
+    window.addEventListener("focus", () => {
+        const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+        if (activeQuiz) {
+            activeQuiz.classList.remove("quiz-blur-protection");
+        }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+        if (activeQuiz) {
+            if (document.hidden) {
+                activeQuiz.classList.add("quiz-blur-protection");
+            } else {
+                activeQuiz.classList.remove("quiz-blur-protection");
+            }
+        }
+    });
 }
 
 if (document.readyState === "loading") {

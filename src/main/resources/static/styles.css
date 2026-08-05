@@ -5166,3 +5166,11 @@ body.light-mode .compiler-output {
   -ms-user-select: none !important;
   -webkit-touch-callout: none !important;
 }
+
+/* Anti-Screenshot / Window Blur Protection */
+.quiz-blur-protection {
+  filter: blur(18px) !important;
+  opacity: 0.2 !important;
+  pointer-events: none !important;
+  transition: filter 0.15s ease, opacity 0.15s ease !important;
+}
