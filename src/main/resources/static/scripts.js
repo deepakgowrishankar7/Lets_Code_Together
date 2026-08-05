@@ -2106,6 +2106,7 @@ function checkRoomInUrl() {
     const params = new URLSearchParams(window.location.search);
     const roomId = params.get("room");
     if (roomId) {
+        localStorage.removeItem("pendingRoomId");
         showSection("compiler");
         const roomBanner = $("#room-banner");
         const roomLinkText = $("#room-link-text");

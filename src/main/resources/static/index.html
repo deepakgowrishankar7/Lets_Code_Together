@@ -637,7 +637,12 @@
         localStorage.setItem("loggedInEmail", email);
         localStorage.setItem("loggedInUserName", data.userName);
         localStorage.removeItem("isGuest");
-        window.location.href = "main.html"; // redirect to dashboard
+        const pendingRoom = localStorage.getItem("pendingRoomId");
+        if (pendingRoom) {
+          window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
+        } else {
+          window.location.href = "main.html";
+        }
       } else {
         errorMsg.textContent = data.message || "Login failed";
       }
@@ -646,15 +651,17 @@
     }
   }
   function goWithoutLogin() {
-  // clear any existing login credentials
   localStorage.removeItem("loggedInEmail");
   localStorage.removeItem("loggedInUserName");
-  // set guest mode flag
   localStorage.setItem("isGuest", "true");
-  // let dashboard know we just entered as guest (for welcome message)
   try { sessionStorage.setItem("justGuest", "true"); } catch(e) {}
   alert("You are now in guest mode. Some features will require login.");
-  window.location.href = "main.html";
+  const pendingRoom = localStorage.getItem("pendingRoomId");
+  if (pendingRoom) {
+    window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
+  } else {
+    window.location.href = "main.html";
+  }
 }
 
 </script>
