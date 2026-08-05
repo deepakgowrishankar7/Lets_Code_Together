@@ -110,7 +110,7 @@ public class MailService {
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
-            String senderEmail = hasText(brevoFrom) ? brevoFrom : "deepakgowrishankar7@gmail.com";
+            String senderEmail = hasText(brevoFrom) ? brevoFrom : "letscodetogetheredu@gmail.com";
 
             String jsonBody = String.format(
                 "{\"sender\":{\"name\":\"Let's Code Together\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":\"%s\"}",
