@@ -786,10 +786,10 @@ function copyCompilerOutput() {
     }
 }
 
-function initIdeGutterSync() {
-    const editor = $("#compiler-editor") || $(".compiler-editor");
-    const gutter = $("#ide-gutter");
-    const cursorPosEl = $("#ide-cursor-pos");
+function bindEditorGutter(editorId, gutterId, cursorPosId) {
+    const editor = $(editorId);
+    const gutter = $(gutterId);
+    const cursorPosEl = $(cursorPosId);
 
     if (!editor || !gutter) return;
 
@@ -833,11 +833,11 @@ function initIdeGutterSync() {
             editor.selectionStart = editor.selectionEnd = start + 4;
             updateGutter();
             updateCursorPos();
-            if (typeof currentRoomId !== "undefined" && currentRoomId) {
+            if (editorId === "#compiler-editor" && typeof currentRoomId !== "undefined" && currentRoomId) {
                 if (typeof sendRoomCode === "function") sendRoomCode();
             }
         }
-        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        if (editorId === "#compiler-editor" && (e.ctrlKey || e.metaKey) && e.key === "Enter") {
             e.preventDefault();
             const runBtn = $(".compiler-run-btn");
             if (runBtn && !runBtn.disabled) runBtn.click();
@@ -846,6 +846,11 @@ function initIdeGutterSync() {
 
     updateGutter();
     updateCursorPos();
+}
+
+function initIdeGutterSync() {
+    bindEditorGutter("#compiler-editor", "#ide-gutter", "#ide-cursor-pos");
+    bindEditorGutter("#visualizer-editor", "#visualizer-gutter", "#visualizer-cursor-pos");
 }
 
 function attachCompilerButtonListener() {
