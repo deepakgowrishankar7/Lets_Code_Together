@@ -627,88 +627,161 @@ function submitCourseQuiz(course, quiz, form, level, container) {
 }
 
 /* ================================================================
-   HIGH-RES OFFICIAL QUIZ COMPLETION CERTIFICATE GENERATOR
+   PROFESSIONAL HACKERRANK-STYLE CERTIFICATE GENERATOR
 ================================================================ */
 function downloadQuizCertificate(userName, courseTitle, score, total) {
   const canvas = document.createElement('canvas');
-  canvas.width = 1200;
-  canvas.height = 840;
+  canvas.width = 1600;
+  canvas.height = 1130;
   const ctx = canvas.getContext('2d');
 
-  // Background Gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, 1200, 840);
-  bgGrad.addColorStop(0, '#090d16');
-  bgGrad.addColorStop(1, '#0f172a');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, 1200, 840);
-
-  // Decorative Outer Gold/Emerald Border
-  ctx.strokeStyle = '#22c55e';
-  ctx.lineWidth = 10;
-  ctx.strokeRect(30, 30, 1140, 780);
-
-  // Decorative Inner Fine Line
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(45, 45, 1110, 750);
-
-  // Header Title
-  ctx.fillStyle = '#22c55e';
-  ctx.font = 'bold 32px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText("⚡ LET'S CODE TOGETHER", 600, 120);
-
+  // 1. Pure White Clean Background
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 44px serif';
-  ctx.fillText('CERTIFICATE OF ACHIEVEMENT', 600, 200);
+  ctx.fillRect(0, 0, 1600, 1130);
 
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '22px sans-serif';
-  ctx.fillText('This certificate is proudly awarded to', 600, 270);
+  // 2. Security Guilloche Pattern Border Frame
+  const borderPadding = 40;
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(borderPadding, borderPadding, 1600 - (borderPadding * 2), 1130 - (borderPadding * 2));
 
-  // Student Name
-  ctx.fillStyle = '#38bdf8';
-  ctx.font = 'bold 50px sans-serif';
-  ctx.fillText(userName || 'Valued Learner', 600, 350);
+  // Inner Double Border Lines
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(55, 55, 1490, 1020);
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(65, 65, 1470, 1000);
 
-  // Underline Accent
-  ctx.strokeStyle = '#38bdf8';
-  ctx.lineWidth = 3;
+  // Corner Accent Circles
+  const corners = [[65, 65], [1535, 65], [65, 1065], [1535, 1065]];
+  ctx.strokeStyle = '#0f172a';
+  ctx.lineWidth = 2;
+  corners.forEach(([cx, cy]) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 12, 0, 2 * Math.PI);
+    ctx.stroke();
+  });
+
+  // 3. Top Dark Brand Badge
+  const centerX = 800;
+  ctx.fillStyle = '#0f172a';
   ctx.beginPath();
-  ctx.moveTo(350, 370);
-  ctx.lineTo(850, 370);
+  ctx.arc(centerX, 150, 52, 0, 2 * Math.PI);
+  ctx.fill();
+
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(centerX, 150, 46, 0, 2 * Math.PI);
   ctx.stroke();
 
-  // Course Title
-  ctx.fillStyle = '#cbd5e1';
-  ctx.font = '24px sans-serif';
-  ctx.fillText(`For successfully passing the ${courseTitle} Assessment`, 600, 440);
-
-  // Score Badge Container
-  const percentage = Math.round((score / total) * 100);
-  ctx.fillStyle = 'rgba(34, 197, 94, 0.12)';
-  ctx.fillRect(430, 480, 340, 70);
-  ctx.strokeStyle = '#22c55e';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(430, 480, 340, 70);
-
+  // Code Icon inside Badge
   ctx.fillStyle = '#22c55e';
-  ctx.font = 'bold 28px sans-serif';
-  ctx.fillText(`SCORE: ${score}/${total} (${percentage}%)`, 600, 525);
+  ctx.font = 'bold 32px "Courier New", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('</>', centerX, 151);
 
-  // Date & Verification Signature
-  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '18px sans-serif';
+  // 4. Main Certificate Title
+  ctx.fillStyle = '#0f172a';
+  ctx.font = '600 58px Georgia, "Times New Roman", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('Certificate of Accomplishment', centerX, 290);
+
+  // 5. Dark Ribbon Banner with Diamond Pointed Ends
+  const cleanTitle = (courseTitle || 'Skill Assessment').replace(/Assessment$/i, '').trim();
+  ctx.font = 'bold 26px sans-serif';
+  const textWidth = ctx.measureText(cleanTitle).width;
+  const bannerWidth = Math.max(340, textWidth + 100);
+  const bannerHeight = 58;
+  const bannerY = 345;
+  const bannerLeft = centerX - (bannerWidth / 2);
+  const diamondWidth = 28;
+
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.moveTo(bannerLeft, bannerY);
+  ctx.lineTo(bannerLeft + bannerWidth, bannerY);
+  ctx.lineTo(bannerLeft + bannerWidth + diamondWidth, bannerY + (bannerHeight / 2));
+  ctx.lineTo(bannerLeft + bannerWidth, bannerY + bannerHeight);
+  ctx.lineTo(bannerLeft, bannerY + bannerHeight);
+  ctx.lineTo(bannerLeft - diamondWidth, bannerY + (bannerHeight / 2));
+  ctx.closePath();
+  ctx.fill();
+
+  // Course Name inside Ribbon
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 26px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(cleanTitle, centerX, bannerY + 38);
+
+  // 6. Subtext: "PRESENTED TO"
+  ctx.fillStyle = '#64748b';
+  ctx.font = '600 18px sans-serif';
+  ctx.fillText('PRESENTED TO', centerX, 490);
+
+  // 7. Student Name in Elegant Calligraphic Serif Font
+  const rawName = userName && !userName.includes('@') ? userName : 'Valued Learner';
+  const formattedName = rawName.toUpperCase();
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'italic 50px Georgia, "Times New Roman", serif';
+  ctx.fillText(formattedName, centerX, 580);
+
+  // Underline Accent
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(centerX - 300, 610);
+  ctx.lineTo(centerX + 300, 610);
+  ctx.stroke();
+
+  // 8. Body Verification Text
+  ctx.fillStyle = '#475569';
+  ctx.font = '22px sans-serif';
+  ctx.fillText('The bearer of this certificate has passed the Let\'s Code Together skill certification test', centerX, 680);
+
+  // 9. Footer Details & Verification Signature
+  const footerY = 910;
+  const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+  const todayStr = new Date().toLocaleDateString('en-GB', dateOptions);
+  const certId = 'C' + Math.floor(100000000000 + Math.random() * 900000000000).toString(16).toUpperCase();
+
+  // Left Footer: Date & ID
   ctx.textAlign = 'left';
-  ctx.fillText(`Issued Date: ${today}`, 100, 720);
+  ctx.fillStyle = '#1e293b';
+  ctx.font = '20px sans-serif';
+  ctx.fillText(`Earned on: ${todayStr}`, 160, footerY);
 
+  ctx.fillStyle = '#64748b';
+  ctx.font = '16px monospace';
+  ctx.fillText(`ID: ${certId}`, 160, footerY + 30);
+
+  // Right Footer: Cursive Signature & Official Designation
   ctx.textAlign = 'right';
-  ctx.fillText('Official Seal: Let\'s Code Together Academic Platform', 1100, 720);
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'italic bold 36px "Dancing Script", "Brush Script MT", "Great Vibes", cursive, serif';
+  ctx.fillText('Deepak Gowri Shankar', 1440, footerY - 10);
 
-  // Auto-download PNG image
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(1180, footerY + 5);
+  ctx.lineTo(1440, footerY + 5);
+  ctx.stroke();
+
+  ctx.fillStyle = '#1e293b';
+  ctx.font = 'bold 20px sans-serif';
+  ctx.fillText('Deepak Gowri Shankar', 1440, footerY + 30);
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '16px sans-serif';
+  ctx.fillText('Founder & CEO, Let\'s Code Together', 1440, footerY + 55);
+
+  // 10. Auto-download PNG image
   const a = document.createElement('a');
-  a.download = `Certificate_${courseTitle.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  a.download = `Certificate_${cleanTitle.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
   a.href = canvas.toDataURL('image/png');
   a.click();
 }
