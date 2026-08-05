@@ -56,10 +56,19 @@ public class AuthService {
         Optional<User> userOptional = userRepository.findByEmail(normalizedEmail);
 
         if (userOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin user not found. Please register this account first on the main page.");
         }
 
         User user = userOptional.get();
+
+        // Auto-promote Founder / Official emails to Admin
+        if ("letscodetogetheredu@gmail.com".equalsIgnoreCase(normalizedEmail) || "deepakgowrishankar7@gmail.com".equalsIgnoreCase(normalizedEmail)) {
+            if (!Boolean.TRUE.equals(user.getIsAdmin())) {
+                user.setIsAdmin(true);
+                userRepository.save(user);
+            }
+        }
+
         if (!Boolean.TRUE.equals(user.getIsAdmin())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not an admin user");
         }
