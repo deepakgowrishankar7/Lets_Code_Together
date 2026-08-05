@@ -492,7 +492,7 @@ function submitCourseQuiz(course, quiz, form, level, container) {
   const summary = document.createElement('div');
   summary.className = 'quiz-score-summary';
   summary.innerHTML = `
-    <div>
+    <div class="quiz-summary-content" style="flex:1">
       <div class="score-title">${emoji} ${getCourseQuizTitle(course, level)} — Completed!</div>
       <div style="margin-top:12px;" class="quiz-score-stats">
         <div class="quiz-stat stat-correct">
@@ -518,15 +518,20 @@ function submitCourseQuiz(course, quiz, form, level, container) {
     </div>
   `;
   const currentCourseTitle = getCourseQuizTitle(course, level);
-  const learnerName = localStorage.getItem('loggedInUserName') || 'Valued Learner';
+  const learnerName = localStorage.getItem('loggedInUserName') || localStorage.getItem('loggedInEmail') || 'Valued Learner';
 
-  if (pct >= 50) {
+  if (pct >= 40) {
     const certBtn = document.createElement('button');
     certBtn.className = 'quiz-retry-btn';
-    certBtn.style.cssText = 'background:linear-gradient(135deg, #22c55e, #16a34a); color:#021a0d; font-weight:700; margin-top:16px; width:100%; border:none; box-shadow: 0 4px 15px rgba(34,197,94,0.3);';
+    certBtn.style.cssText = 'background:linear-gradient(135deg, #22c55e, #16a34a); color:#021a0d; font-weight:700; margin-top:16px; width:100%; border:none; box-shadow: 0 4px 15px rgba(34,197,94,0.3); cursor:pointer; padding:12px 20px; border-radius:8px; display:block;';
     certBtn.innerHTML = '🎓 Download Official Completion Certificate';
     certBtn.onclick = () => downloadQuizCertificate(learnerName, currentCourseTitle, correct, total);
     summary.querySelector('.quiz-summary-content').appendChild(certBtn);
+  } else {
+    const notice = document.createElement('div');
+    notice.style.cssText = 'color:#eab308; margin-top:12px; font-size:0.9em; font-weight:600;';
+    notice.innerHTML = '💡 Score 40% or higher to unlock your Official Completion Certificate!';
+    summary.querySelector('.quiz-summary-content').appendChild(notice);
   }
 
   container.appendChild(summary);
