@@ -1976,6 +1976,75 @@ if (typeof checkAdminMessages === 'function') checkAdminMessages();
 /* =====================================================
    HOST CODE ROOM & LINK SHARING
 ===================================================== */
+let currentRoomId = null;
+let currentClientSessionId = Math.random().toString(36).substring(2);
+let roomSyncTimer = null;
+
+function startRoomSync(roomId) {
+    currentRoomId = roomId;
+    if (roomSyncTimer) clearInterval(roomSyncTimer);
+
+    const editor = $(".compiler-editor");
+    const langSelect = $("#compiler-language");
+    if (editor && !editor.dataset.syncBound) {
+        editor.dataset.syncBound = "true";
+        editor.addEventListener("input", () => {
+            if (currentRoomId) sendRoomCode();
+        });
+        if (langSelect) {
+            langSelect.addEventListener("change", () => {
+                if (currentRoomId) sendRoomCode();
+            });
+        }
+    }
+
+    roomSyncTimer = setInterval(fetchRoomCode, 1200);
+    fetchRoomCode();
+}
+
+function sendRoomCode() {
+    if (!currentRoomId) return;
+    const editor = $(".compiler-editor");
+    const langSelect = $("#compiler-language");
+    const code = editor ? editor.value : "";
+    const lang = langSelect ? langSelect.value : "python";
+
+    fetch("/api/room/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            roomId: currentRoomId,
+            code: code,
+            language: lang,
+            senderId: currentClientSessionId
+        })
+    }).catch(() => {});
+}
+
+function fetchRoomCode() {
+    if (!currentRoomId) return;
+    fetch(`/api/room/sync?roomId=${encodeURIComponent(currentRoomId)}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.status !== "empty" && data.senderId !== currentClientSessionId) {
+                const editor = $(".compiler-editor");
+                const langSelect = $("#compiler-language");
+                if (editor && typeof data.code === "string" && editor.value !== data.code) {
+                    const start = editor.selectionStart;
+                    const end = editor.selectionEnd;
+                    editor.value = data.code;
+                    if (document.activeElement === editor) {
+                        editor.setSelectionRange(start, end);
+                    }
+                }
+                if (langSelect && data.language && langSelect.value !== data.language) {
+                    langSelect.value = data.language;
+                }
+            }
+        })
+        .catch(() => {});
+}
+
 function hostRoom() {
     if (state.isGuest) {
         showGuestMessage();
@@ -1984,6 +2053,7 @@ function hostRoom() {
     const roomId = 'CT-ROOM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     const url = new URL(window.location.href);
     url.searchParams.set("room", roomId);
+    window.history.pushState({}, "", url.toString());
 
     const roomBanner = $("#room-banner");
     const roomLinkText = $("#room-link-text");
@@ -1993,8 +2063,10 @@ function hostRoom() {
         roomBanner.style.display = "flex";
     }
 
+    startRoomSync(roomId);
+
     navigator.clipboard.writeText(url.toString()).then(() => {
-        alert("🌐 Code Room created!\nRoom ID: " + roomId + "\n\nShareable Link copied to clipboard!");
+        alert("🌐 Code Room created!\nRoom ID: " + roomId + "\n\nShareable Link copied to clipboard!\nAnyone opening this link will see your live code!");
     }).catch(() => {
         alert("🌐 Code Room created!\nRoom ID: " + roomId + "\nShareable Link: " + url.toString());
     });
@@ -2020,6 +2092,7 @@ function checkRoomInUrl() {
             roomLinkText.textContent = window.location.href;
             roomBanner.style.display = "flex";
         }
+        startRoomSync(roomId);
         return true;
     }
     return false;
