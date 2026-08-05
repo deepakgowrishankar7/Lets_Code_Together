@@ -43,6 +43,16 @@ function showSection(sectionId) {
     target.classList.add("active-section");
     setActiveSidebar(sectionId);
 
+    // Show top course search bar ONLY on courses & home sections
+    const headerSearch = $("#header-search-courses");
+    if (headerSearch) {
+        if (sectionId === 'courses' || sectionId === 'home') {
+            headerSearch.style.display = "inline-block";
+        } else {
+            headerSearch.style.display = "none";
+        }
+    }
+
     if (sectionId === 'settings') {
         populateSettings();
     }
@@ -56,6 +66,31 @@ function setActiveSidebar(sectionId) {
     const active = document.querySelector(`.sidebar .nav-link[data-section="${sectionId}"]`);
     if (active) active.classList.add("active");
 }
+
+function initCourseSearch() {
+    const searchInput = $("#header-search-courses");
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.trim().toLowerCase();
+        const courseCards = $$(".domain-card, .track-card, .course-card, #courses .course");
+
+        courseCards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (!query || text.includes(query)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        // If searching while not on home/courses, auto-switch to courses
+        if (query && !document.getElementById("courses")?.classList.contains("active-section") && !document.getElementById("home")?.classList.contains("active-section")) {
+            showSection("courses");
+        }
+    });
+}
+document.addEventListener("DOMContentLoaded", initCourseSearch);
 
 /* =====================================================
    PROTECTED SECTIONS (GUEST MODE)
