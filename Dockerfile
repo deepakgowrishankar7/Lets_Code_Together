@@ -5,8 +5,8 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run application
-FROM eclipse-temurin:21-jre
+# Stage 2: Run application with full JDK (java + javac) and multi-language compilers
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Install compilers & interpreters for online compiler execution (Python, C, C++, Node.js)

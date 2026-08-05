@@ -175,8 +175,12 @@ public class CompileController {
             Files.writeString(source, wrapped, StandardCharsets.UTF_8);
         }
 
-        runProcess(tempDir, List.of("javac", source.toString()), stdin, 30);
-        return runProcess(tempDir, List.of("java", "-cp", tempDir.toString(), runClass), stdin, 20);
+        if (isExecutableAvailable("javac")) {
+            runProcess(tempDir, List.of("javac", source.toString()), stdin, 30);
+            return runProcess(tempDir, List.of("java", "-cp", tempDir.toString(), runClass), stdin, 20);
+        } else {
+            return runProcess(tempDir, List.of("java", source.toString()), stdin, 30);
+        }
     }
 
     private String extractJavaClassName(String code) {
