@@ -8,12 +8,10 @@ import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
@@ -22,38 +20,63 @@ public class MailService {
     @Autowired(required = false)
     private JavaMailSender javaMailSender;
 
+    @Value("${mail.provider:smtp}")
+    private String mailProvider;
+
     @Value("${spring.mail.username:}")
     private String fromEmail;
 
     @Value("${brevo.api.key:}")
     private String brevoApiKey;
 
+    @Value("${brevo.from:}")
+    private String brevoFrom;
+
     @Value("${resend.api.key:}")
     private String resendApiKey;
+
+    @Value("${resend.from:}")
+    private String resendFrom;
 
     public void sendEmail(String to, String subject, String text) {
         sendHtmlEmail(to, subject, buildGenericEmailTemplate(subject, text));
     }
 
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
-        // 1. Try Brevo HTTP API first (sends to ANY recipient in the world via Port 443)
-        if (brevoApiKey != null && !brevoApiKey.isBlank()) {
+        String provider = normalizeProvider(mailProvider);
+        System.out.println("[MAIL CONFIG] provider=" + provider + " | smtpUserConfigured=" + hasText(fromEmail));
+
+        if ("brevo".equals(provider)) {
+            if (hasText(brevoApiKey)) {
+                boolean sent = sendViaBrevoApi(to, subject, htmlContent);
+                if (sent) return;
+            }
+            throw new RuntimeException("Brevo provider selected but BREVO_API_KEY is missing or invalid");
+        }
+
+        if ("resend".equals(provider)) {
+            if (hasText(resendApiKey)) {
+                boolean sent = sendViaResendApi(to, subject, htmlContent);
+                if (sent) return;
+            }
+            throw new RuntimeException("Resend provider selected but RESEND_API_KEY is missing or invalid");
+        }
+
+        if (hasText(brevoApiKey)) {
             boolean sent = sendViaBrevoApi(to, subject, htmlContent);
             if (sent) return;
         }
 
-        // 2. Try Resend HTTP API
-        if (resendApiKey != null && !resendApiKey.isBlank()) {
+        if (hasText(resendApiKey)) {
             boolean sent = sendViaResendApi(to, subject, htmlContent);
             if (sent) return;
         }
 
-        // Fallback to JavaMailSender SMTP
         try {
             if (javaMailSender != null) {
                 MimeMessage message = javaMailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-                String sender = (fromEmail != null && !fromEmail.isBlank()) ? fromEmail : "noreply@codetogether.com";
+                String sender = hasText(fromEmail) ? fromEmail : "noreply@codetogether.com";
                 helper.setFrom(sender);
                 helper.setTo(to);
                 helper.setSubject(subject);
@@ -65,7 +88,20 @@ public class MailService {
         } catch (Exception ex) {
             System.err.println("[MAIL SMTP ERROR] " + ex.getMessage());
         }
-        throw new RuntimeException("Failed to send email");
+        throw new RuntimeException("Failed to send email. Set MAIL_PROVIDER=brevo or resend, or configure SMTP credentials in Render environment variables.");
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.isBlank();
+    }
+
+    private String normalizeProvider(String provider) {
+        if (provider == null) return "smtp";
+        String normalized = provider.trim().toLowerCase();
+        if (normalized.equals("brevo") || normalized.equals("resend")) {
+            return normalized;
+        }
+        return "smtp";
     }
 
     private boolean sendViaBrevoApi(String to, String subject, String htmlContent) {
@@ -74,7 +110,7 @@ public class MailService {
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
-            String senderEmail = (fromEmail != null && !fromEmail.isBlank()) ? fromEmail : "letscodetogetheredu@gmail.com";
+            String senderEmail = hasText(brevoFrom) ? brevoFrom : "deepakgowrishankar7@gmail.com";
 
             String jsonBody = String.format(
                 "{\"sender\":{\"name\":\"Let's Code Together\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":\"%s\"}",
@@ -110,9 +146,15 @@ public class MailService {
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
+            String senderEmail = hasText(resendFrom) ? resendFrom : fromEmail;
+            if (!hasText(senderEmail)) {
+                System.err.println("[MAIL RESEND API ERROR] RESEND_FROM or EMAIL_USER is required to send messages through Resend");
+                return false;
+            }
+
             String jsonBody = String.format(
-                "{\"from\":\"onboarding@resend.dev\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":\"%s\"}",
-                to, escapeJson(subject), escapeJson(htmlContent)
+                "{\"from\":\"%s\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":\"%s\"}",
+                senderEmail, to, escapeJson(subject), escapeJson(htmlContent)
             );
 
             HttpRequest request = HttpRequest.newBuilder()
