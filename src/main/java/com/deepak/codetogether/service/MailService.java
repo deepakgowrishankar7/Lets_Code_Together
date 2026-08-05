@@ -1,5 +1,11 @@
 package com.deepak.codetogether.service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -13,31 +19,88 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class MailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username:}")
     private String fromEmail;
+
+    @Value("${resend.api.key:}")
+    private String resendApiKey;
 
     public void sendEmail(String to, String subject, String text) {
         sendHtmlEmail(to, subject, buildGenericEmailTemplate(subject, text));
     }
 
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
-        try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            String sender = (fromEmail != null && !fromEmail.isBlank()) ? fromEmail : "noreply@codetogether.com";
-            helper.setFrom(sender);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(htmlContent, true);
-            javaMailSender.send(message);
-            System.out.println("[MAIL HTML] Successfully sent HTML email to " + to + " | Subject: " + subject);
-        } catch (MessagingException | MailException ex) {
-            System.err.println("[MAIL ERROR] Failed to send HTML email to " + to + ": " + ex.getMessage());
-            throw new RuntimeException("Failed to send email", ex);
+        // Try Resend HTTP API first (works 100% on Render Port 443)
+        if (resendApiKey != null && !resendApiKey.isBlank()) {
+            boolean sent = sendViaResendApi(to, subject, htmlContent);
+            if (sent) return;
         }
+
+        // Fallback to JavaMailSender SMTP
+        try {
+            if (javaMailSender != null) {
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                String sender = (fromEmail != null && !fromEmail.isBlank()) ? fromEmail : "noreply@codetogether.com";
+                helper.setFrom(sender);
+                helper.setTo(to);
+                helper.setSubject(subject);
+                helper.setText(htmlContent, true);
+                javaMailSender.send(message);
+                System.out.println("[MAIL HTML] Successfully sent HTML email via SMTP to " + to);
+                return;
+            }
+        } catch (Exception ex) {
+            System.err.println("[MAIL SMTP ERROR] " + ex.getMessage());
+        }
+        throw new RuntimeException("Failed to send email");
+    }
+
+    private boolean sendViaResendApi(String to, String subject, String htmlContent) {
+        try {
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            String jsonBody = String.format(
+                "{\"from\":\"Let's Code Together <onboarding@resend.dev>\",\"to\":[\"%s\"],\"subject\":\"%s\",\"html\":\"%s\"}",
+                to, escapeJson(subject), escapeJson(htmlContent)
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.resend.com/emails"))
+                    .header("Authorization", "Bearer " + resendApiKey.trim())
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .timeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                System.out.println("[MAIL RESEND API SUCCESS] Email sent to " + to + " | Response: " + response.body());
+                return true;
+            } else {
+                System.err.println("[MAIL RESEND API ERROR] Status " + response.statusCode() + " | Body: " + response.body());
+            }
+        } catch (Exception e) {
+            System.err.println("[MAIL RESEND API EXCEPTION] " + e.getMessage());
+        }
+        return false;
+    }
+
+    private String escapeJson(String input) {
+        if (input == null) return "";
+        return input.replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\b", "\\b")
+                    .replace("\f", "\\f")
+                    .replace("\n", "\\n")
+                    .replace("\r", "\\r")
+                    .replace("\t", "\\t");
     }
 
     public void sendRegistrationOtp(String to, String otp) {
