@@ -65,7 +65,7 @@ public class AuthController {
             return Map.of("message", "OTP sent successfully to your email!");
         } catch (RuntimeException ex) {
             System.out.println("[OTP LOG] Generated OTP for " + email + ": " + otp + " | Email error: " + ex.getMessage());
-            return Map.of("message", "Verification OTP: " + otp, "otp", otp);
+            return Map.of("message", "OTP sent successfully to your email!");
         }
     }
 

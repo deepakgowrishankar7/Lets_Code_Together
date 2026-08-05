@@ -25,6 +25,9 @@ public class MailService {
     @Value("${spring.mail.username:}")
     private String fromEmail;
 
+    @Value("${brevo.api.key:}")
+    private String brevoApiKey;
+
     @Value("${resend.api.key:}")
     private String resendApiKey;
 
@@ -33,7 +36,13 @@ public class MailService {
     }
 
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
-        // Try Resend HTTP API first (works 100% on Render Port 443)
+        // 1. Try Brevo HTTP API first (sends to ANY recipient in the world via Port 443)
+        if (brevoApiKey != null && !brevoApiKey.isBlank()) {
+            boolean sent = sendViaBrevoApi(to, subject, htmlContent);
+            if (sent) return;
+        }
+
+        // 2. Try Resend HTTP API
         if (resendApiKey != null && !resendApiKey.isBlank()) {
             boolean sent = sendViaResendApi(to, subject, htmlContent);
             if (sent) return;
@@ -57,6 +66,42 @@ public class MailService {
             System.err.println("[MAIL SMTP ERROR] " + ex.getMessage());
         }
         throw new RuntimeException("Failed to send email");
+    }
+
+    private boolean sendViaBrevoApi(String to, String subject, String htmlContent) {
+        try {
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            String senderEmail = (fromEmail != null && !fromEmail.isBlank()) ? fromEmail : "letscodetogetheredu@gmail.com";
+
+            String jsonBody = String.format(
+                "{\"sender\":{\"name\":\"Let's Code Together\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":\"%s\"}",
+                senderEmail, to, escapeJson(subject), escapeJson(htmlContent)
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                    .header("api-key", brevoApiKey.trim())
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .timeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                System.out.println("[MAIL BREVO API SUCCESS] Email sent to " + to + " | Response: " + response.body());
+                return true;
+            } else {
+                System.err.println("[MAIL BREVO API ERROR] Status " + response.statusCode() + " | Body: " + response.body());
+            }
+        } catch (Exception e) {
+            System.err.println("[MAIL BREVO API EXCEPTION] " + e.getMessage());
+        }
+        return false;
     }
 
     private boolean sendViaResendApi(String to, String subject, String htmlContent) {
