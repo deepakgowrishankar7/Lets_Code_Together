@@ -4676,3 +4676,327 @@ body.light-mode .guest-message-box { background: #ffffff; }
   .my-courses .courses    { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   header input[type="text"] { width: 180px; }
 }
+
+/* ================================================================
+   WORLD-CLASS VS CODE IDE WORKBENCH STYLES (DARK & LIGHT THEMES)
+   ================================================================ */
+.ide-workbench {
+  display: flex;
+  flex-direction: column;
+  background: #090d16;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+body.light-mode .ide-workbench {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.ide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body.light-mode .ide-header {
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+.ide-title-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #38bdf8;
+}
+
+body.light-mode .ide-title-badge {
+  color: #0284c7;
+}
+
+.ide-editor-wrapper {
+  display: flex;
+  position: relative;
+  height: 380px;
+  background: #0b1120;
+  overflow: hidden;
+}
+
+body.light-mode .ide-editor-wrapper {
+  background: #ffffff;
+}
+
+.ide-gutter {
+  width: 50px;
+  padding: 14px 10px 14px 0;
+  background: #090e1a;
+  border-right: 1px solid #1e293b;
+  color: #475569;
+  font-family: var(--font-mono, 'Consolas', monospace);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: right;
+  user-select: none;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  white-space: pre;
+}
+
+body.light-mode .ide-gutter {
+  background: #f1f5f9;
+  border-right-color: #cbd5e1;
+  color: #64748b;
+}
+
+.compiler-editor {
+  flex: 1;
+  height: 100%;
+  padding: 14px 16px;
+  background: transparent !important;
+  color: #f8fafc !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+  font-size: 0.98rem !important;
+  line-height: 1.6 !important;
+  border: none !important;
+  outline: none !important;
+  resize: none;
+  tab-size: 4;
+  white-space: pre;
+  overflow-x: auto;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+body.light-mode .compiler-editor {
+  color: #0f172a !important;
+}
+
+.ide-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px;
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-family: var(--font-sans);
+}
+
+body.light-mode .ide-status-bar {
+  background: #f1f5f9;
+  border-top-color: #e2e8f0;
+  color: #475569;
+}
+
+.ide-status-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ide-divider {
+  color: #334155;
+}
+
+body.light-mode .ide-divider {
+  color: #cbd5e1;
+}
+
+.ide-status-badge {
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.ide-terminal-container {
+  background: #050811;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+body.light-mode .ide-terminal-container {
+  background: #f8fafc;
+  border-top-color: #cbd5e1;
+}
+
+.ide-terminal-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px 0 14px;
+  background: #0b1120;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.light-mode .ide-terminal-tabs {
+  background: #e2e8f0;
+  border-bottom-color: #cbd5e1;
+}
+
+.ide-tab-btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.light-mode .ide-tab-btn {
+  color: #475569;
+}
+
+.ide-tab-btn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.light-mode .ide-tab-btn:hover {
+  color: #0f172a;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.ide-tab-btn.active {
+  color: #38bdf8;
+  background: #050811;
+  border-color: #1e293b;
+}
+
+body.light-mode .ide-tab-btn.active {
+  color: #0284c7;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ide-copy-output-btn {
+  margin-left: auto;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #1e293b;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+body.light-mode .ide-copy-output-btn {
+  color: #334155;
+  background: #cbd5e1;
+}
+
+.ide-copy-output-btn:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+.ide-terminal-body {
+  padding: 14px 18px;
+  min-height: 120px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ide-tab-panel {
+  display: none;
+}
+
+.ide-tab-panel.active {
+  display: block;
+}
+
+.compiler-output {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #38bdf8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+body.light-mode .compiler-output {
+  color: #0369a1;
+}
+
+#compiler-user-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  color: #f8fafc;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+body.light-mode #compiler-user-input {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.ide-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.ide-stat-card {
+  padding: 12px 16px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+body.light-mode .ide-stat-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.ide-stat-label {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ide-stat-val {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #38bdf8;
+}
+
+.ide-stat-val.success {
+  color: #22c55e;
+}
+
+.kbd-shortcut {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  font-weight: normal;
+  margin-left: 4px;
+}

@@ -759,6 +759,95 @@ function toggleVisualizerAreaFullscreen() {
 /* =====================================================
    COMPILER
 ===================================================== */
+function switchIdeTab(tabName) {
+    const panels = {
+        output: $("#ide-tab-output"),
+        stdin: $("#ide-tab-stdin"),
+        stats: $("#ide-tab-stats")
+    };
+    const buttons = {
+        output: $("#tab-btn-output"),
+        stdin: $("#tab-btn-stdin"),
+        stats: $("#tab-btn-stats")
+    };
+
+    Object.keys(panels).forEach(key => {
+        if (panels[key]) panels[key].classList.toggle("active", key === tabName);
+        if (buttons[key]) buttons[key].classList.toggle("active", key === tabName);
+    });
+}
+
+function copyCompilerOutput() {
+    const text = $(".compiler-output")?.textContent;
+    if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("📋 Output copied to clipboard!");
+        });
+    }
+}
+
+function initIdeGutterSync() {
+    const editor = $("#compiler-editor") || $(".compiler-editor");
+    const gutter = $("#ide-gutter");
+    const cursorPosEl = $("#ide-cursor-pos");
+
+    if (!editor || !gutter) return;
+
+    function updateGutter() {
+        const lines = editor.value.split("\n").length;
+        let lineNumbersHtml = "";
+        for (let i = 1; i <= lines; i++) {
+            lineNumbersHtml += i + "\n";
+        }
+        gutter.textContent = lineNumbersHtml;
+        gutter.scrollTop = editor.scrollTop;
+    }
+
+    function updateCursorPos() {
+        if (!cursorPosEl) return;
+        const text = editor.value.substring(0, editor.selectionStart);
+        const lines = text.split("\n");
+        const lineNumber = lines.length;
+        const colNumber = lines[lines.length - 1].length + 1;
+        cursorPosEl.textContent = `Ln ${lineNumber}, Col ${colNumber}`;
+    }
+
+    editor.addEventListener("input", () => {
+        updateGutter();
+        updateCursorPos();
+    });
+
+    editor.addEventListener("scroll", () => {
+        gutter.scrollTop = editor.scrollTop;
+    });
+
+    editor.addEventListener("keyup", updateCursorPos);
+    editor.addEventListener("click", updateCursorPos);
+
+    editor.addEventListener("keydown", e => {
+        if (e.key === "Tab") {
+            e.preventDefault();
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.substring(0, start) + "    " + editor.value.substring(end);
+            editor.selectionStart = editor.selectionEnd = start + 4;
+            updateGutter();
+            updateCursorPos();
+            if (typeof currentRoomId !== "undefined" && currentRoomId) {
+                if (typeof sendRoomCode === "function") sendRoomCode();
+            }
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            e.preventDefault();
+            const runBtn = $(".compiler-run-btn");
+            if (runBtn && !runBtn.disabled) runBtn.click();
+        }
+    });
+
+    updateGutter();
+    updateCursorPos();
+}
+
 function attachCompilerButtonListener() {
     const runBtn = $(".compiler-run-btn");
     const editor = $(".compiler-editor");
@@ -771,6 +860,7 @@ function attachCompilerButtonListener() {
     runBtn.onclick = async () => {
         runBtn.textContent = "Running...";
         runBtn.disabled = true;
+        const startTime = performance.now();
 
         try {
             const res = await fetch("/api/compile", {
@@ -783,12 +873,28 @@ function attachCompilerButtonListener() {
                 })
             });
 
+            const duration = Math.round(performance.now() - startTime);
             const data = await res.json();
             if (!res.ok) {
                 output.textContent = data.error || data.message || `Compiler request failed with status ${res.status}`;
             } else {
                 output.textContent = data.output || data.result || data.message || "No output returned.";
             }
+
+            // Update Stats Tab
+            const timeStat = $("#ide-stat-time");
+            const statusStat = $("#ide-stat-status");
+            const langStat = $("#ide-stat-lang");
+            if (timeStat) timeStat.textContent = `${duration} ms`;
+            if (statusStat) {
+                statusStat.textContent = res.ok ? "0 (Success)" : "1 (Error)";
+                statusStat.className = res.ok ? "ide-stat-val success" : "ide-stat-val error";
+            }
+            if (langStat && langSel) {
+                langStat.textContent = langSel.options[langSel.selectedIndex]?.text || "Java";
+            }
+
+            switchIdeTab("output");
 
             if (typeof sendRoomCode === "function" && currentRoomId) {
                 sendRoomCode(output.textContent);
@@ -799,12 +905,13 @@ function attachCompilerButtonListener() {
                 sendRoomCode(err.message);
             }
         } finally {
-            runBtn.textContent = "Run";
+            runBtn.textContent = "▶ Run (Ctrl+Enter)";
             runBtn.disabled = false;
         }
     };
 }
 attachCompilerButtonListener();
+document.addEventListener("DOMContentLoaded", initIdeGutterSync);
 
 function initAnimatedVideos() {
     const videos = [

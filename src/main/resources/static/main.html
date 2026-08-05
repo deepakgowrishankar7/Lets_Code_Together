@@ -502,42 +502,101 @@ New Message
 
             <!-- Compiler Section -->
             <section id="compiler" class="dashboard-overview compiler-section" style="display:none;">
-    <h2>Online Compiler & Live Session Host</h2>
-    <div id="room-banner" style="display:none; background: rgba(0, 123, 255, 0.15); border: 1px solid #007BFF; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-        <div>
-            <strong style="color: #007BFF;">🌐 Room Link:</strong> <span id="room-link-text" style="font-family: monospace; word-break: break-all;"></span>
+    <div class="ide-workbench">
+        <!-- IDE Top Toolbar -->
+        <div class="ide-header">
+            <div class="ide-title-badge">
+                <span class="ide-icon">💻</span>
+                <span>IDE Workbench</span>
+            </div>
+            <div class="compiler-controls">
+                <label class="compiler-label" for="compiler-language">Language:</label>
+                <select id="compiler-language" class="compiler-select">
+                    <option value="python">🐍 Python 3</option>
+                    <option value="java" selected>☕ Java 21</option>
+                    <option value="cpp">⚡ C++ (GCC)</option>
+                    <option value="c">🛡️ C (GCC)</option>
+                    <option value="javascript">📜 JavaScript (Node.js)</option>
+                    <option value="go">🐹 Go</option>
+                    <option value="ruby">💎 Ruby</option>
+                    <option value="php">🐘 PHP</option>
+                </select>
+                <button class="compiler-run-btn">▶ Run <span class="kbd-shortcut">(Ctrl+Enter)</span></button>
+                <button class="host-room-btn" onclick="hostRoom()">
+                    <span>🌐</span> Host Code Room
+                </button>
+                <button id="toggle-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
+                    <span id="compiler-fullscreen-icon"></span> <span id="compiler-fullscreen-label">Fullscreen</span>
+                </button>
+            </div>
         </div>
-        <button class="edu-btn primary" onclick="copyRoomLink()" style="padding: 6px 14px; font-size: 0.9em;">Copy Link</button>
-    </div>
-    <div class="compiler-card">
-        <div class="compiler-controls" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-    <label class="compiler-label" for="compiler-language">Language:</label>
-    <select id="compiler-language" class="compiler-select">
-        <option value="python">Python</option>
-        <option value="java">Java</option>
-        <option value="cpp">C++</option>
-        <option value="c">C</option>
-        <option value="javascript">JavaScript (Node.js)</option>
-        <option value="go">Go</option>
-        <option value="ruby">Ruby</option>
-        <option value="php">PHP</option>
-    </select>
-    <button class="compiler-run-btn">Run</button>
-    <button class="host-room-btn" onclick="hostRoom()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-        <span>🌐</span> Host Code Room
-    </button>
-    <button id="toggle-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
-  <span id="compiler-fullscreen-icon"></span> <span id="compiler-fullscreen-label">Fullscreen View</span>
-</button>
-</div>
-        <textarea class="compiler-editor" placeholder="Write your code here..."></textarea>
-<label for="compiler-user-input" style="margin-top:10px; display:block;">Input to Program:</label>
-<textarea id="compiler-user-input" placeholder="Enter input values, one per line..." rows="4" style="width: 100%; padding: 10px; margin-bottom: 10px; resize: vertical;"></textarea>
 
+        <!-- Room Link Banner -->
+        <div id="room-banner" style="display:none;" class="ide-room-banner">
+            <div>
+                <strong style="color: #38bdf8;">🌐 Room Link:</strong> <span id="room-link-text" style="font-family: monospace; word-break: break-all;"></span>
+            </div>
+            <button class="edu-btn primary" onclick="copyRoomLink()" style="padding: 6px 14px; font-size: 0.9em;">Copy Link</button>
+        </div>
 
-        <div class="compiler-output-area">
-            <strong>Output:</strong>
-            <pre class="compiler-output">// Output will appear here</pre>
+        <!-- IDE Main Code Editor Area -->
+        <div class="ide-editor-wrapper">
+            <div class="ide-gutter" id="ide-gutter">1</div>
+            <textarea class="compiler-editor" id="compiler-editor" placeholder="Write your code here..." spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off"></textarea>
+        </div>
+
+        <!-- IDE Status Bar -->
+        <div class="ide-status-bar">
+            <div class="ide-status-left">
+                <span id="ide-cursor-pos">Ln 1, Col 1</span>
+                <span class="ide-divider">|</span>
+                <span>UTF-8</span>
+                <span class="ide-divider">|</span>
+                <span>Tab Size: 4</span>
+            </div>
+            <div class="ide-status-right">
+                <span class="ide-status-badge" id="ide-status-indicator">🟢 Ready</span>
+            </div>
+        </div>
+
+        <!-- Integrated Terminal & Console Tabs -->
+        <div class="ide-terminal-container">
+            <div class="ide-terminal-tabs">
+                <button class="ide-tab-btn active" id="tab-btn-output" onclick="switchIdeTab('output')">🖥️ Terminal Output</button>
+                <button class="ide-tab-btn" id="tab-btn-stdin" onclick="switchIdeTab('stdin')">📥 Program Stdin Input</button>
+                <button class="ide-tab-btn" id="tab-btn-stats" onclick="switchIdeTab('stats')">⏱️ Execution Stats</button>
+                <button class="ide-copy-output-btn" onclick="copyCompilerOutput()" title="Copy Output">📋 Copy Output</button>
+            </div>
+
+            <div class="ide-terminal-body">
+                <!-- Output Panel -->
+                <div id="ide-tab-output" class="ide-tab-panel active">
+                    <pre class="compiler-output">$ // Program output will appear here after clicking Run...</pre>
+                </div>
+
+                <!-- Stdin Input Panel -->
+                <div id="ide-tab-stdin" class="ide-tab-panel">
+                    <textarea id="compiler-user-input" placeholder="Enter custom stdin inputs here (one per line)..." rows="4" spellcheck="false"></textarea>
+                </div>
+
+                <!-- Execution Stats Panel -->
+                <div id="ide-tab-stats" class="ide-tab-panel">
+                    <div class="ide-stats-grid">
+                        <div class="ide-stat-card">
+                            <span class="ide-stat-label">Execution Time</span>
+                            <span class="ide-stat-val" id="ide-stat-time">-- ms</span>
+                        </div>
+                        <div class="ide-stat-card">
+                            <span class="ide-stat-label">Exit Status</span>
+                            <span class="ide-stat-val success" id="ide-stat-status">0 (Success)</span>
+                        </div>
+                        <div class="ide-stat-card">
+                            <span class="ide-stat-label">Language Runtime</span>
+                            <span class="ide-stat-val" id="ide-stat-lang">Java 21 LTS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
