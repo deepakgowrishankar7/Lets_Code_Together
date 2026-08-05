@@ -1,0 +1,2211 @@
+<h2>1. Find the Largest of Three Numbers</h2>
+<pre><code>public class LargestOfThree {
+    public static void main(String[] args) {
+        int a = 10, b = 25, c = 15;
+        int max = (a > b) ? (a > c ? a : c) : (b > c ? b : c);
+        System.out.println("Largest: " + max);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Largest: 25
+</pre>
+
+<h2>2. Check if a Number is Even or Odd</h2>
+<pre><code>public class EvenOdd {
+    public static void main(String[] args) {
+        int num = 7;
+        if (num % 2 == 0)
+            System.out.println("Even");
+        else
+            System.out.println("Odd");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Odd
+</pre>
+
+<h2>3. Reverse a Number</h2>
+<pre><code>public class ReverseNumber {
+    public static void main(String[] args) {
+        int num = 1234, rev = 0;
+        while (num != 0) {
+            int digit = num % 10;
+            rev = rev * 10 + digit;
+            num /= 10;
+        }
+        System.out.println("Reversed: " + rev);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Reversed: 4321
+</pre>
+
+<h2>4. Count Digits in a Number</h2>
+<pre><code>public class CountDigits {
+    public static void main(String[] args) {
+        int num = 12345, count = 0;
+        while (num != 0) {
+            num /= 10;
+            count++;
+        }
+        System.out.println("Digits: " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Digits: 5
+</pre>
+
+<h2>5. Sum of Digits</h2>
+<pre><code>public class SumOfDigits {
+    public static void main(String[] args) {
+        int num = 1234, sum = 0;
+        while (num != 0) {
+            sum += num % 10;
+            num /= 10;
+        }
+        System.out.println("Sum: " + sum);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Sum: 10
+</pre>
+<h2>6. Check Leap Year</h2>
+<pre><code>public class LeapYear {
+    public static void main(String[] args) {
+        int year = 2024;
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+            System.out.println(year + " is a leap year.");
+        else
+            System.out.println(year + " is not a leap year.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+2024 is a leap year.
+</pre>
+
+<h2>7. Find Factorial of a Number</h2>
+<pre><code>public class Factorial {
+    public static void main(String[] args) {
+        int num = 5, fact = 1;
+        for (int i = 1; i <= num; i++) {
+            fact *= i;
+        }
+        System.out.println("Factorial: " + fact);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Factorial: 120
+</pre>
+
+<h2>8. Check Prime Number</h2>
+<pre><code>public class PrimeCheck {
+    public static void main(String[] args) {
+        int num = 17;
+        boolean isPrime = true;
+
+        if (num <= 1) isPrime = false;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        if (isPrime)
+            System.out.println(num + " is prime.");
+        else
+            System.out.println(num + " is not prime.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+17 is prime.
+</pre>
+
+<h2>9. Generate Multiplication Table</h2>
+<pre><code>public class MultiplicationTable {
+    public static void main(String[] args) {
+        int num = 7;
+        for (int i = 1; i <= 10; i++) {
+            System.out.println(num + " x " + i + " = " + (num * i));
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+7 x 1 = 7  
+7 x 2 = 14  
+7 x 3 = 21  
+7 x 4 = 28  
+7 x 5 = 35  
+7 x 6 = 42  
+7 x 7 = 49  
+7 x 8 = 56  
+7 x 9 = 63  
+7 x 10 = 70
+</pre>
+
+<h2>10. Calculate Power of a Number</h2>
+<pre><code>public class PowerCalc {
+    public static void main(String[] args) {
+        int base = 2, exponent = 5;
+        int result = 1;
+
+        for (int i = 1; i <= exponent; i++) {
+            result *= base;
+        }
+
+        System.out.println(base + "^" + exponent + " = " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+2^5 = 32
+</pre>
+<h2>11. Swap Two Numbers Without a Temp Variable</h2>
+<pre><code>public class SwapNumbers {
+    public static void main(String[] args) {
+        int a = 5, b = 3;
+        a = a + b;
+        b = a - b;
+        a = a - b;
+        System.out.println("a = " + a + ", b = " + b);
+    }
+}
+</code></pre>
+<pre>
+Output:
+a = 3, b = 5
+</pre>
+
+<h2>12. Check Palindrome Number</h2>
+<pre><code>public class PalindromeNumber {
+    public static void main(String[] args) {
+        int num = 121, reversed = 0, original = num;
+
+        while (num != 0) {
+            int digit = num % 10;
+            reversed = reversed * 10 + digit;
+            num /= 10;
+        }
+
+        if (original == reversed)
+            System.out.println("Palindrome");
+        else
+            System.out.println("Not Palindrome");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Palindrome
+</pre>
+
+<h2>13. Print All Prime Numbers in a Range</h2>
+<pre><code>public class PrimeRange {
+    public static void main(String[] args) {
+        int start = 10, end = 30;
+
+        for (int i = start; i <= end; i++) {
+            boolean isPrime = true;
+            if (i <= 1) continue;
+
+            for (int j = 2; j <= Math.sqrt(i); j++) {
+                if (i % j == 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+
+            if (isPrime)
+                System.out.print(i + " ");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+11 13 17 19 23 29
+</pre>
+
+<h2>14. Find HCF Using Euclidean Algorithm</h2>
+<pre><code>public class HCF {
+    public static void main(String[] args) {
+        int a = 48, b = 18;
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        System.out.println("HCF: " + a);
+    }
+}
+</code></pre>
+<pre>
+Output:
+HCF: 6
+</pre>
+
+<h2>15. Count Occurrences of Digit in a Number</h2>
+<pre><code>public class CountDigit {
+    public static void main(String[] args) {
+        int num = 12213221;
+        int digit = 2, count = 0;
+
+        while (num != 0) {
+            if (num % 10 == digit)
+                count++;
+            num /= 10;
+        }
+
+        System.out.println("Count of " + digit + ": " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Count of 2: 4
+</pre>
+<h2>16. Print Right-Angled Triangle Pattern</h2>
+<pre><code>public class RightTriangle {
+    public static void main(String[] args) {
+        int rows = 5;
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= i; j++)
+                System.out.print("*");
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+*
+**
+***
+****
+*****
+</pre>
+
+<h2>17. Count Vowels in a String</h2>
+<pre><code>public class VowelCount {
+    public static void main(String[] args) {
+        String str = "EduDash Java";
+        int count = 0;
+        str = str.toLowerCase();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if ("aeiou".indexOf(ch) != -1)
+                count++;
+        }
+
+        System.out.println("Vowels: " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Vowels: 5
+</pre>
+
+<h2>18. Reverse a String</h2>
+<pre><code>public class ReverseString {
+    public static void main(String[] args) {
+        String str = "Java";
+        String rev = "";
+
+        for (int i = str.length() - 1; i >= 0; i--) {
+            rev += str.charAt(i);
+        }
+
+        System.out.println("Reversed: " + rev);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Reversed: avaJ
+</pre>
+
+<h2>19. Check Anagram Strings</h2>
+<pre><code>import java.util.Arrays;
+
+public class AnagramCheck {
+    public static void main(String[] args) {
+        String str1 = "listen", str2 = "silent";
+
+        char[] a = str1.toCharArray();
+        char[] b = str2.toCharArray();
+
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        if (Arrays.equals(a, b))
+            System.out.println("Anagram");
+        else
+            System.out.println("Not Anagram");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Anagram
+</pre>
+
+<h2>20. Count Words in a Sentence</h2>
+<pre><code>public class WordCount {
+    public static void main(String[] args) {
+        String sentence = "Java is fun and powerful";
+        String[] words = sentence.trim().split("\\s+");
+        System.out.println("Word count: " + words.length);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Word count: 5
+</pre>
+<h2>21. Find the Largest Element in an Array</h2>
+<pre><code>public class MaxInArray {
+    public static void main(String[] args) {
+        int[] arr = {12, 45, 7, 89, 34};
+        int max = arr[0];
+
+        for (int num : arr) {
+            if (num > max)
+                max = num;
+        }
+
+        System.out.println("Max: " + max);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Max: 89
+</pre>
+
+<h2>22. Sort an Array in Ascending Order</h2>
+<pre><code>import java.util.Arrays;
+
+public class SortArray {
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 1, 3};
+        Arrays.sort(arr);
+
+        for (int num : arr)
+            System.out.print(num + " ");
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 2 3 5 8
+</pre>
+
+<h2>23. Find Duplicate Characters in a String</h2>
+<pre><code>public class DuplicateChars {
+    public static void main(String[] args) {
+        String str = "programming";
+        int[] freq = new int[256];
+
+        for (char ch : str.toCharArray()) {
+            freq[ch]++;
+        }
+
+        for (int i = 0; i < 256; i++) {
+            if (freq[i] > 1)
+                System.out.println((char) i + ": " + freq[i]);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+g: 2  
+r: 2  
+m: 2
+</pre>
+
+<h2>24. Remove All Whitespaces from a String</h2>
+<pre><code>public class RemoveSpaces {
+    public static void main(String[] args) {
+        String str = "Java is powerful";
+        String result = str.replaceAll("\\s", "");
+        System.out.println("Without spaces: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Without spaces: Javaispowerful
+</pre>
+
+<h2>25. Check if Two Strings are Rotations of Each Other</h2>
+<pre><code>public class StringRotation {
+    public static void main(String[] args) {
+        String s1 = "abcd", s2 = "cdab";
+
+        if (s1.length() == s2.length() && (s1 + s1).contains(s2))
+            System.out.println("Rotations");
+        else
+            System.out.println("Not Rotations");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Rotations
+</pre>
+<h2>26. Transpose of a Matrix</h2>
+<pre><code>public class MatrixTranspose {
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6}
+        };
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[][] transpose = new int[cols][rows];
+
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                transpose[j][i] = matrix[i][j];
+
+        for (int[] row : transpose) {
+            for (int val : row)
+                System.out.print(val + " ");
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 4  
+2 5  
+3 6
+</pre>
+
+<h2>27. Frequency of Elements in an Array</h2>
+<pre><code>public class FrequencyCount {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 1, 4, 2};
+        int[] freq = new int[arr.length];
+        boolean[] visited = new boolean[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            if (visited[i]) continue;
+            int count = 1;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i] == arr[j]) {
+                    count++;
+                    visited[j] = true;
+                }
+            }
+            freq[i] = count;
+            System.out.println(arr[i] + " occurs " + count + " times");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 occurs 2 times  
+2 occurs 3 times  
+3 occurs 1 times  
+4 occurs 1 times
+</pre>
+
+<h2>28. Find Missing Number in Array (1 to N)</h2>
+<pre><code>public class MissingNumber {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 4, 5, 6};
+        int n = 6;
+        int total = n * (n + 1) / 2;
+
+        for (int num : arr)
+            total -= num;
+
+        System.out.println("Missing number: " + total);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Missing number: 3
+</pre>
+
+<h2>29. Check if Array is Sorted</h2>
+<pre><code>public class IsSorted {
+    public static void main(String[] args) {
+        int[] arr = {2, 4, 6, 8, 10};
+        boolean sorted = true;
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                sorted = false;
+                break;
+            }
+        }
+
+        System.out.println("Sorted: " + sorted);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Sorted: true
+</pre>
+
+<h2>30. Find Common Elements in Two Arrays</h2>
+<pre><code>public class CommonElements {
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4};
+        int[] b = {3, 4, 5, 6};
+
+        for (int i : a) {
+            for (int j : b) {
+                if (i == j)
+                    System.out.println("Common: " + i);
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Common: 3  
+Common: 4
+</pre>
+<h2>31. Sum of Digits Using Recursion</h2>
+<pre><code>public class RecursiveDigitSum {
+    public static int sumDigits(int n) {
+        if (n == 0) return 0;
+        return n % 10 + sumDigits(n / 10);
+    }
+
+    public static void main(String[] args) {
+        int num = 1234;
+        System.out.println("Sum: " + sumDigits(num));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Sum: 10
+</pre>
+
+<h2>32. Print Numbers from N to 1 Using Recursion</h2>
+<pre><code>public class Countdown {
+    public static void printReverse(int n) {
+        if (n == 0) return;
+        System.out.println(n);
+        printReverse(n - 1);
+    }
+
+    public static void main(String[] args) {
+        printReverse(5);
+    }
+}
+</code></pre>
+<pre>
+Output:
+5  
+4  
+3  
+2  
+1
+</pre>
+
+<h2>33. Check if Number is Armstrong Using Recursion</h2>
+<pre><code>public class ArmstrongRecursive {
+    public static int power(int base, int exp) {
+        if (exp == 0) return 1;
+        return base * power(base, exp - 1);
+    }
+
+    public static int armstrongSum(int num, int digits) {
+        if (num == 0) return 0;
+        return power(num % 10, digits) + armstrongSum(num / 10, digits);
+    }
+
+    public static void main(String[] args) {
+        int num = 153;
+        int digits = String.valueOf(num).length();
+        if (num == armstrongSum(num, digits))
+            System.out.println("Armstrong");
+        else
+            System.out.println("Not Armstrong");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Armstrong
+</pre>
+
+<h2>34. Count Zeros in a Number</h2>
+<pre><code>public class CountZeros {
+    public static void main(String[] args) {
+        int num = 10203040;
+        int count = 0;
+
+        while (num != 0) {
+            if (num % 10 == 0)
+                count++;
+            num /= 10;
+        }
+
+        System.out.println("Zeros: " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Zeros: 4
+</pre>
+
+<h2>35. Find Product of Digits</h2>
+<pre><code>public class ProductOfDigits {
+    public static void main(String[] args) {
+        int num = 234;
+        int product = 1;
+
+        while (num != 0) {
+            product *= num % 10;
+            num /= 10;
+        }
+
+        System.out.println("Product: " + product);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Product: 24
+</pre>
+<h2>36. Check if a String is a Pangram</h2>
+<pre><code>public class PangramCheck {
+    public static void main(String[] args) {
+        String str = "The quick brown fox jumps over the lazy dog";
+        str = str.toLowerCase().replaceAll("[^a-z]", "");
+        boolean[] alphabet = new boolean[26];
+
+        for (char ch : str.toCharArray()) {
+            alphabet[ch - 'a'] = true;
+        }
+
+        boolean isPangram = true;
+        for (boolean present : alphabet) {
+            if (!present) {
+                isPangram = false;
+                break;
+            }
+        }
+
+        System.out.println("Pangram: " + isPangram);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Pangram: true
+</pre>
+
+<h2>37. Print Floyd’s Triangle</h2>
+<pre><code>public class FloydTriangle {
+    public static void main(String[] args) {
+        int n = 5, num = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                System.out.print(num + " ");
+                num++;
+            }
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1  
+2 3  
+4 5 6  
+7 8 9 10  
+11 12 13 14 15
+</pre>
+
+<h2>38. Remove Duplicate Characters from a String</h2>
+<pre><code>public class RemoveDuplicates {
+    public static void main(String[] args) {
+        String str = "programming";
+        StringBuilder result = new StringBuilder();
+        boolean[] seen = new boolean[256];
+
+        for (char ch : str.toCharArray()) {
+            if (!seen[ch]) {
+                seen[ch] = true;
+                result.append(ch);
+            }
+        }
+
+        System.out.println("After removing duplicates: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+After removing duplicates: progamin
+</pre>
+
+<h2>39. Find First Non-Repeating Character</h2>
+<pre><code>public class FirstUniqueChar {
+    public static void main(String[] args) {
+        String str = "swiss";
+        int[] freq = new int[256];
+
+        for (char ch : str.toCharArray())
+            freq[ch]++;
+
+        for (char ch : str.toCharArray()) {
+            if (freq[ch] == 1) {
+                System.out.println("First unique: " + ch);
+                return;
+            }
+        }
+
+        System.out.println("No unique characters");
+    }
+}
+</code></pre>
+<pre>
+Output:
+First unique: w
+</pre>
+
+<h2>40. Merge Two Arrays</h2>
+<pre><code>import java.util.Arrays;
+
+public class MergeArrays {
+    public static void main(String[] args) {
+        int[] a = {1, 3, 5};
+        int[] b = {2, 4, 6};
+        int[] merged = new int[a.length + b.length];
+
+        System.arraycopy(a, 0, merged, 0, a.length);
+        System.arraycopy(b, 0, merged, a.length, b.length);
+
+        Arrays.sort(merged);
+
+        System.out.println("Merged array: " + Arrays.toString(merged));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Merged array: [1, 2, 3, 4, 5, 6]
+</pre>
+<h2>41. Sum of Diagonals in a Square Matrix</h2>
+<pre><code>public class MatrixDiagonalSum {
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        int primary = 0, secondary = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+            primary += matrix[i][i];
+            secondary += matrix[i][matrix.length - 1 - i];
+        }
+
+        System.out.println("Primary: " + primary);
+        System.out.println("Secondary: " + secondary);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Primary: 15  
+Secondary: 15
+</pre>
+
+<h2>42. Count Pairs with Given Sum in Array</h2>
+<pre><code>public class CountPairsSum {
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 7, -1, 5};
+        int sum = 6, count = 0;
+
+        for (int i = 0; i < arr.length; i++)
+            for (int j = i + 1; j < arr.length; j++)
+                if (arr[i] + arr[j] == sum)
+                    count++;
+
+        System.out.println("Total pairs: " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Total pairs: 3
+</pre>
+
+<h2>43. Convert Decimal to Binary</h2>
+<pre><code>public class DecimalToBinary {
+    public static void main(String[] args) {
+        int num = 10;
+        String binary = "";
+
+        while (num > 0) {
+            binary = (num % 2) + binary;
+            num /= 2;
+        }
+
+        System.out.println("Binary: " + binary);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Binary: 1010
+</pre>
+
+<h2>44. Count Frequency of Each Character</h2>
+<pre><code>public class CharFrequency {
+    public static void main(String[] args) {
+        String str = "balloon";
+        int[] freq = new int[256];
+
+        for (char ch : str.toCharArray())
+            freq[ch]++;
+
+        for (char ch : str.toCharArray()) {
+            if (freq[ch] > 0) {
+                System.out.println(ch + ": " + freq[ch]);
+                freq[ch] = 0;
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+b: 1  
+a: 1  
+l: 2  
+o: 2  
+n: 1
+</pre>
+
+<h2>45. Rearrange Array Elements in Alternate High-Low Order</h2>
+<pre><code>import java.util.Arrays;
+
+public class HighLowRearrange {
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 2, 2, 5};
+        Arrays.sort(arr);
+
+        int[] result = new int[arr.length];
+        int i = 0, j = arr.length - 1, k = 0;
+
+        while (i <= j) {
+            if (k % 2 == 0)
+                result[k++] = arr[j--];
+            else
+                result[k++] = arr[i++];
+        }
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+</code></pre>
+<pre>
+Output:
+[5, 1, 3, 2, 2]
+</pre>
+<h2>51. Count Digits Using Recursion</h2>
+<pre><code>public class CountDigitsRecursive {
+    public static int countDigits(int n) {
+        if (n == 0) return 0;
+        return 1 + countDigits(n / 10);
+    }
+
+    public static void main(String[] args) {
+        int num = 12345;
+        System.out.println("Digits: " + countDigits(num));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Digits: 5
+</pre>
+
+<h2>52. Sort Array in Descending Order</h2>
+<pre><code>import java.util.Arrays;
+import java.util.Collections;
+
+public class DescSort {
+    public static void main(String[] args) {
+        Integer[] arr = {5, 1, 3, 9, 2};
+        Arrays.sort(arr, Collections.reverseOrder());
+
+        System.out.println(Arrays.toString(arr));
+    }
+}
+</code></pre>
+<pre>
+Output:
+[9, 5, 3, 2, 1]
+</pre>
+
+<h2>53. Count Number of Words Ending in a Vowel</h2>
+<pre><code>public class WordsEndingVowel {
+    public static void main(String[] args) {
+        String sentence = "We are learning Java with passion";
+        String[] words = sentence.split("\\s+");
+        int count = 0;
+
+        for (String word : words) {
+            char last = word.toLowerCase().charAt(word.length() - 1);
+            if ("aeiou".indexOf(last) != -1)
+                count++;
+        }
+
+        System.out.println("Words ending with vowel: " + count);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Words ending with vowel: 3
+</pre>
+
+<h2>54. Print All Substrings of a String</h2>
+<pre><code>public class AllSubstrings {
+    public static void main(String[] args) {
+        String str = "abc";
+
+        for (int i = 0; i < str.length(); i++) {
+            for (int j = i + 1; j <= str.length(); j++) {
+                System.out.println(str.substring(i, j));
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+a  
+ab  
+abc  
+b  
+bc  
+c
+</pre>
+
+<h2>55. Count Total Vowels, Consonants, Digits, and Spaces</h2>
+<pre><code>public class CharacterCategories {
+    public static void main(String[] args) {
+        String input = "Hello Java 101";
+        int vowels = 0, consonants = 0, digits = 0, spaces = 0;
+
+        for (char ch : input.toLowerCase().toCharArray()) {
+            if ("aeiou".indexOf(ch) != -1) vowels++;
+            else if (Character.isLetter(ch)) consonants++;
+            else if (Character.isDigit(ch)) digits++;
+            else if (ch == ' ') spaces++;
+        }
+
+        System.out.println("Vowels: " + vowels);
+        System.out.println("Consonants: " + consonants);
+        System.out.println("Digits: " + digits);
+        System.out.println("Spaces: " + spaces);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Vowels: 4  
+Consonants: 5  
+Digits: 3  
+Spaces: 2
+</pre>
+<h2>56. Check if a String is Palindrome (Ignoring Case & Spaces)</h2>
+<pre><code>public class CleanPalindrome {
+    public static void main(String[] args) {
+        String str = "A man a plan a canal Panama";
+        str = str.replaceAll("\\s+", "").toLowerCase();
+
+        String rev = new StringBuilder(str).reverse().toString();
+
+        if (str.equals(rev))
+            System.out.println("Palindrome");
+        else
+            System.out.println("Not Palindrome");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Palindrome
+</pre>
+
+<h2>57. Find the Only Non-Repeating Element Using XOR</h2>
+<pre><code>public class UniqueXOR {
+    public static void main(String[] args) {
+        int[] arr = {2, 3, 5, 4, 5, 3, 4};
+        int result = 0;
+
+        for (int num : arr)
+            result ^= num;
+
+        System.out.println("Unique element: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Unique element: 2
+</pre>
+
+<h2>58. Find Sum of All Even Digits in a Number</h2>
+<pre><code>public class EvenDigitSum {
+    public static void main(String[] args) {
+        int num = 482913;
+        int sum = 0;
+
+        while (num != 0) {
+            int digit = num % 10;
+            if (digit % 2 == 0)
+                sum += digit;
+            num /= 10;
+        }
+
+        System.out.println("Sum of even digits: " + sum);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Sum of even digits: 14
+</pre>
+
+<h2>59. Find the Largest Digit in a Number</h2>
+<pre><code>public class LargestDigit {
+    public static void main(String[] args) {
+        int num = 93841;
+        int max = 0;
+
+        while (num != 0) {
+            int digit = num % 10;
+            if (digit > max)
+                max = digit;
+            num /= 10;
+        }
+
+        System.out.println("Largest digit: " + max);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Largest digit: 9
+</pre>
+
+<h2>60. Check if a Number is a Perfect Square</h2>
+<pre><code>public class PerfectSquare {
+    public static void main(String[] args) {
+        int num = 49;
+        int sqrt = (int) Math.sqrt(num);
+
+        if (sqrt * sqrt == num)
+            System.out.println("Perfect square");
+        else
+            System.out.println("Not a perfect square");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Perfect square
+</pre>
+<h2>61. Count Frequency of Each Digit in a Number</h2>
+<pre><code>public class DigitFrequency {
+    public static void main(String[] args) {
+        int num = 122334455;
+        int[] freq = new int[10];
+
+        while (num != 0) {
+            freq[num % 10]++;
+            num /= 10;
+        }
+
+        for (int i = 0; i < 10; i++) {
+            if (freq[i] > 0)
+                System.out.println(i + ": " + freq[i]);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1: 1  
+2: 2  
+3: 2  
+4: 2  
+5: 2
+</pre>
+
+<h2>62. Print Matrix in Spiral Order</h2>
+<pre><code>public class SpiralMatrix {
+    public static void main(String[] args) {
+        int[][] mat = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        int top = 0, bottom = 2, left = 0, right = 2;
+
+        while (top <= bottom && left <= right) {
+            for (int i = left; i <= right; i++)
+                System.out.print(mat[top][i] + " ");
+            top++;
+
+            for (int i = top; i <= bottom; i++)
+                System.out.print(mat[i][right] + " ");
+            right--;
+
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--)
+                    System.out.print(mat[bottom][i] + " ");
+                bottom--;
+            }
+
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--)
+                    System.out.print(mat[i][left] + " ");
+                left++;
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 2 3 6 9 8 7 4 5
+</pre>
+
+<h2>63. Find All Pairs in Array with Difference K</h2>
+<pre><code>public class PairsWithDiff {
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 3, 4, 2};
+        int k = 2;
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (Math.abs(arr[i] - arr[j]) == k)
+                    System.out.println(arr[i] + ", " + arr[j]);
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1, 3  
+5, 3  
+3, 1  
+4, 2  
+2, 4
+</pre>
+
+<h2>64. Find the Longest Word in a Sentence</h2>
+<pre><code>public class LongestWord {
+    public static void main(String[] args) {
+        String sentence = "Java makes development enjoyable";
+        String[] words = sentence.split("\\s+");
+        String longest = "";
+
+        for (String word : words) {
+            if (word.length() > longest.length())
+                longest = word;
+        }
+
+        System.out.println("Longest word: " + longest);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Longest word: development
+</pre>
+
+<h2>65. Find the Sum of All Prime Digits in a Number</h2>
+<pre><code>public class PrimeDigitSum {
+    public static void main(String[] args) {
+        int num = 239457;
+        int sum = 0;
+
+        while (num != 0) {
+            int digit = num % 10;
+            if (digit == 2 || digit == 3 || digit == 5 || digit == 7)
+                sum += digit;
+            num /= 10;
+        }
+
+        System.out.println("Sum of prime digits: " + sum);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Sum of prime digits: 21
+</pre>
+<h2>66. Compress a String (Count Consecutive Characters)</h2>
+<pre><code>public class StringCompressor {
+    public static void main(String[] args) {
+        String str = "aaabbccdee";
+        StringBuilder result = new StringBuilder();
+
+        int count = 1;
+        for (int i = 1; i < str.length(); i++) {
+            if (str.charAt(i) == str.charAt(i - 1))
+                count++;
+            else {
+                result.append(str.charAt(i - 1)).append(count);
+                count = 1;
+            }
+        }
+        result.append(str.charAt(str.length() - 1)).append(count);
+        System.out.println("Compressed: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Compressed: a3b2c2d1e2
+</pre>
+
+<h2>67. Print Sum of Each Row in a Matrix</h2>
+<pre><code>public class RowSumMatrix {
+    public static void main(String[] args) {
+        int[][] mat = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        for (int i = 0; i < mat.length; i++) {
+            int sum = 0;
+            for (int j = 0; j < mat[i].length; j++) {
+                sum += mat[i][j];
+            }
+            System.out.println("Row " + (i + 1) + " sum: " + sum);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Row 1 sum: 6  
+Row 2 sum: 15  
+Row 3 sum: 24
+</pre>
+
+<h2>68. Find the First Repeating Character in a String</h2>
+<pre><code>public class FirstRepeatingChar {
+    public static void main(String[] args) {
+        String str = "programming";
+        boolean[] seen = new boolean[256];
+
+        for (char ch : str.toCharArray()) {
+            if (seen[ch]) {
+                System.out.println("First repeating: " + ch);
+                return;
+            }
+            seen[ch] = true;
+        }
+
+        System.out.println("No repeating characters");
+    }
+}
+</code></pre>
+<pre>
+Output:
+First repeating: r
+</pre>
+
+<h2>69. Find the Smallest Missing Positive Number</h2>
+<pre><code>import java.util.Arrays;
+
+public class SmallestMissingPositive {
+    public static void main(String[] args) {
+        int[] arr = {0, -10, 1, 3, -20};
+        Arrays.sort(arr);
+        int smallest = 1;
+
+        for (int num : arr) {
+            if (num == smallest)
+                smallest++;
+        }
+
+        System.out.println("Smallest missing positive: " + smallest);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Smallest missing positive: 2
+</pre>
+
+<h2>70. Find the Majority Element in an Array</h2>
+<pre><code>public class MajorityElement {
+    public static void main(String[] args) {
+        int[] arr = {2, 2, 1, 2, 3, 2, 2};
+        int count = 0, candidate = -1;
+
+        for (int num : arr) {
+            if (count == 0) {
+                candidate = num;
+                count = 1;
+            } else if (num == candidate) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+
+        count = 0;
+        for (int num : arr) {
+            if (num == candidate)
+                count++;
+        }
+
+        if (count > arr.length / 2)
+            System.out.println("Majority element: " + candidate);
+        else
+            System.out.println("No majority element");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Majority element: 2
+</pre>
+<h2>71. Get Current Date and Time</h2>
+<pre><code>import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class CurrentDateTime {
+    public static void main(String[] args) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        System.out.println("Now: " + now.format(fmt));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Now: 2025-06-23 10:00:00  // (example output)
+</pre>
+
+<h2>72. Calculate Age from Birth Year</h2>
+<pre><code>import java.time.Year;
+
+public class AgeCalculator {
+    public static void main(String[] args) {
+        int birthYear = 2000;
+        int currentYear = Year.now().getValue();
+        int age = currentYear - birthYear;
+        System.out.println("Age: " + age);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Age: 25
+</pre>
+
+<h2>73. Write Text to a File</h2>
+<pre><code>import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteFile {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+            writer.write("Hello from Java!");
+            writer.close();
+            System.out.println("File written.");
+        } catch (IOException e) {
+            System.out.println("Error writing file.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+File written.
+</pre>
+
+<h2>74. Read Text from a File</h2>
+<pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReadFile {
+    public static void main(String[] args) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("output.txt"));
+            String line;
+            while ((line = reader.readLine()) != null)
+                System.out.println(line);
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello from Java!
+</pre>
+
+<h2>75. Count Number of Lines in a File</h2>
+<pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class LineCounter {
+    public static void main(String[] args) {
+        int lines = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("output.txt"));
+            while (reader.readLine() != null)
+                lines++;
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+
+        System.out.println("Total lines: " + lines);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Total lines: 1
+</pre>
+<h2>76. Validate Username and Password</h2>
+<pre><code>import java.util.Scanner;
+
+public class LoginValidation {
+    public static void main(String[] args) {
+        String correctUser = "admin";
+        String correctPass = "1234";
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Username: ");
+        String user = sc.nextLine();
+        System.out.print("Password: ");
+        String pass = sc.nextLine();
+
+        if (user.equals(correctUser) && pass.equals(correctPass))
+            System.out.println("Login successful!");
+        else
+            System.out.println("Invalid credentials.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Username: admin  
+Password: 1234  
+Login successful!
+</pre>
+
+<h2>77. Simulate a Simple ATM Withdrawal</h2>
+<pre><code>import java.util.Scanner;
+
+public class SimpleATM {
+    public static void main(String[] args) {
+        int balance = 1000;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter withdrawal amount: ");
+        int amount = sc.nextInt();
+
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+            System.out.println("Remaining balance: " + balance);
+        } else {
+            System.out.println("Invalid or insufficient funds.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Enter withdrawal amount: 300  
+Withdrawn: 300  
+Remaining balance: 700
+</pre>
+
+<h2>78. Mask Password Input with Asterisks (Console Simulation)</h2>
+<pre><code>import java.io.Console;
+
+public class MaskedPassword {
+    public static void main(String[] args) {
+        Console console = System.console();
+        if (console == null) {
+            System.out.println("Console not available.");
+            return;
+        }
+
+        char[] password = console.readPassword("Enter password: ");
+        System.out.println("Password length: " + password.length);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Enter password: ****  
+Password length: 4
+</pre>
+
+<h2>79. Count Login Attempts (Max 3 Tries)</h2>
+<pre><code>import java.util.Scanner;
+
+public class LoginAttempts {
+    public static void main(String[] args) {
+        String correctUser = "user";
+        String correctPass = "pass";
+        Scanner sc = new Scanner(System.in);
+        int attempts = 0;
+
+        while (attempts < 3) {
+            System.out.print("Username: ");
+            String user = sc.nextLine();
+            System.out.print("Password: ");
+            String pass = sc.nextLine();
+
+            if (user.equals(correctUser) && pass.equals(correctPass)) {
+                System.out.println("Access granted.");
+                return;
+            } else {
+                System.out.println("Try again.");
+                attempts++;
+            }
+        }
+
+        System.out.println("Account locked.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Username: user  
+Password: wrong  
+Try again.  
+...  
+Account locked.
+</pre>
+
+<h2>80. Generate a Random 6-Digit OTP</h2>
+<pre><code>import java.util.Random;
+
+public class OTPGenerator {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int otp = 100000 + rand.nextInt(900000);
+        System.out.println("Your OTP: " + otp);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Your OTP: 483927
+</pre>
+<h2>81. Number Guessing Game</h2>
+<pre><code>import java.util.Scanner;
+import java.util.Random;
+
+public class GuessGame {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int target = rand.nextInt(100) + 1;
+        Scanner sc = new Scanner(System.in);
+        int guess, attempts = 0;
+
+        do {
+            System.out.print("Guess a number (1-100): ");
+            guess = sc.nextInt();
+            attempts++;
+
+            if (guess < target)
+                System.out.println("Too low!");
+            else if (guess > target)
+                System.out.println("Too high!");
+            else
+                System.out.println("Correct in " + attempts + " tries!");
+        } while (guess != target);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Guess a number (1-100): 50  
+Too low!  
+...  
+Correct in 6 tries!
+</pre>
+
+<h2>82. Rock-Paper-Scissors Game</h2>
+<pre><code>import java.util.Scanner;
+import java.util.Random;
+
+public class RPSGame {
+    public static void main(String[] args) {
+        String[] choices = {"rock", "paper", "scissors"};
+        Scanner sc = new Scanner(System.in);
+        Random rand = new Random();
+
+        System.out.print("Enter rock, paper, or scissors: ");
+        String user = sc.nextLine().toLowerCase();
+        String comp = choices[rand.nextInt(3)];
+
+        System.out.println("Computer chose: " + comp);
+
+        if (user.equals(comp))
+            System.out.println("It's a tie!");
+        else if ((user.equals("rock") && comp.equals("scissors")) ||
+                 (user.equals("paper") && comp.equals("rock")) ||
+                 (user.equals("scissors") && comp.equals("paper")))
+            System.out.println("You win!");
+        else
+            System.out.println("You lose!");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Enter rock, paper, or scissors: rock  
+Computer chose: scissors  
+You win!
+</pre>
+
+<h2>83. Simple Quiz App (3 Questions)</h2>
+<pre><code>import java.util.Scanner;
+
+public class QuizApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int score = 0;
+
+        System.out.print("Q1: Capital of India? ");
+        if (sc.nextLine().equalsIgnoreCase("Delhi")) score++;
+
+        System.out.print("Q2: 5 + 3 = ? ");
+        if (sc.nextInt() == 8) score++;
+        sc.nextLine(); // consume newline
+
+        System.out.print("Q3: Java is statically typed? (yes/no) ");
+        if (sc.nextLine().equalsIgnoreCase("yes")) score++;
+
+        System.out.println("Your score: " + score + "/3");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Q1: Capital of India? Delhi  
+Q2: 5 + 3 = ? 8  
+Q3: Java is statically typed? (yes/no) yes  
+Your score: 3/3
+</pre>
+
+<h2>84. Dice Roll Simulator</h2>
+<pre><code>import java.util.Random;
+
+public class DiceRoll {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int die1 = rand.nextInt(6) + 1;
+        int die2 = rand.nextInt(6) + 1;
+
+        System.out.println("You rolled: " + die1 + " and " + die2);
+        System.out.println("Total: " + (die1 + die2));
+    }
+}
+</code></pre>
+<pre>
+Output:
+You rolled: 4 and 6  
+Total: 10
+</pre>
+
+<h2>85. Countdown Timer (Seconds)</h2>
+<pre><code>public class CountdownTimer {
+    public static void main(String[] args) throws InterruptedException {
+        int seconds = 5;
+
+        while (seconds > 0) {
+            System.out.println("Time left: " + seconds + "s");
+            Thread.sleep(1000);
+            seconds--;
+        }
+
+        System.out.println("Time's up!");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Time left: 5s  
+Time left: 4s  
+...  
+Time's up!
+</pre>
+<h2>86. Simple Calculator (Add, Subtract, Multiply, Divide)</h2>
+<pre><code>import java.util.Scanner;
+
+public class Calculator {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter first number: ");
+        double a = sc.nextDouble();
+        System.out.print("Enter operator (+, -, *, /): ");
+        char op = sc.next().charAt(0);
+        System.out.print("Enter second number: ");
+        double b = sc.nextDouble();
+
+        double result = 0;
+        switch (op) {
+            case '+': result = a + b; break;
+            case '-': result = a - b; break;
+            case '*': result = a * b; break;
+            case '/': result = b != 0 ? a / b : 0; break;
+            default: System.out.println("Invalid operator"); return;
+        }
+
+        System.out.println("Result: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Enter first number: 10  
+Enter operator (+, -, *, /): *  
+Enter second number: 5  
+Result: 50.0
+</pre>
+
+<h2>87. Print Calendar for a Given Month and Year</h2>
+<pre><code>import java.time.YearMonth;
+
+public class CalendarPrinter {
+    public static void main(String[] args) {
+        int year = 2025, month = 6;
+        YearMonth ym = YearMonth.of(year, month);
+        int days = ym.lengthOfMonth();
+
+        System.out.println("Calendar for " + ym.getMonth() + " " + year);
+        for (int i = 1; i <= days; i++) {
+            System.out.print(i + "\t");
+            if (i % 7 == 0) System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Calendar for JUNE 2025  
+1	2	3	4	5	6	7  
+8	9	10	11	12	13	14  
+...
+</pre>
+
+<h2>88. Mini To-Do List (Add and View Tasks)</h2>
+<pre><code>import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ToDoList {
+    public static void main(String[] args) {
+        ArrayList<String> tasks = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("1. Add Task\n2. View Tasks\n3. Exit");
+            choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter task: ");
+                    tasks.add(sc.nextLine());
+                    break;
+                case 2:
+                    System.out.println("Your Tasks:");
+                    for (int i = 0; i < tasks.size(); i++)
+                        System.out.println((i + 1) + ". " + tasks.get(i));
+                    break;
+                case 3:
+                    System.out.println("Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 3);
+    }
+}
+</code></pre>
+<pre>
+Output:
+1. Add Task  
+2. View Tasks  
+3. Exit  
+Enter task: Finish Java notes  
+Your Tasks:  
+1. Finish Java notes
+</pre>
+<h2>89. Print All Permutations of a String (Recursion)</h2>
+<pre><code>public class StringPermutations {
+    public static void permute(String str, String result) {
+        if (str.length() == 0) {
+            System.out.println(result);
+            return;
+        }
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            String rest = str.substring(0, i) + str.substring(i + 1);
+            permute(rest, result + ch);
+        }
+    }
+
+    public static void main(String[] args) {
+        permute("abc", "");
+    }
+}
+</code></pre>
+<pre>
+Output:
+abc  
+acb  
+bac  
+bca  
+cab  
+cba
+</pre>
+
+<h2>90. Caesar Cipher Encryption (Shift by 3)</h2>
+<pre><code>public class CaesarCipher {
+    public static void main(String[] args) {
+        String text = "HELLO";
+        int shift = 3;
+        StringBuilder encrypted = new StringBuilder();
+
+        for (char ch : text.toCharArray()) {
+            char c = (char) (((ch - 'A' + shift) % 26) + 'A');
+            encrypted.append(c);
+        }
+
+        System.out.println("Encrypted: " + encrypted);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Encrypted: KHOOR
+</pre>
+
+<h2>91. Reverse Words in a Sentence</h2>
+<pre><code>public class ReverseWords {
+    public static void main(String[] args) {
+        String sentence = "Java is awesome";
+        String[] words = sentence.split(" ");
+        StringBuilder reversed = new StringBuilder();
+
+        for (int i = words.length - 1; i >= 0; i--) {
+            reversed.append(words[i]).append(" ");
+        }
+
+        System.out.println("Reversed: " + reversed.toString().trim());
+    }
+}
+</code></pre>
+<pre>
+Output:
+Reversed: awesome is Java
+</pre>
+
+<h2>92. Simple Chatbot Simulation</h2>
+<pre><code>import java.util.Scanner;
+
+public class SimpleChatbot {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String input;
+
+        System.out.println("Hi! I'm ChatBot. Type 'bye' to exit.");
+
+        while (true) {
+            System.out.print("You: ");
+            input = sc.nextLine().toLowerCase();
+
+            if (input.contains("bye")) {
+                System.out.println("Bot: Goodbye!");
+                break;
+            } else if (input.contains("name")) {
+                System.out.println("Bot: I'm your Java buddy!");
+            } else if (input.contains("how are you")) {
+                System.out.println("Bot: I'm just code, but I'm doing great!");
+            } else {
+                System.out.println("Bot: Tell me more...");
+            }
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+You: what's your name  
+Bot: I'm your Java buddy!  
+You: bye  
+Bot: Goodbye!
+</pre>
+
+<h2>93. Convert Roman Numerals to Integer</h2>
+<pre><code>public class RomanToInteger {
+    public static int value(char r) {
+        switch (r) {
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        String roman = "XIV";
+        int total = 0;
+
+        for (int i = 0; i < roman.length(); i++) {
+            int s1 = value(roman.charAt(i));
+            if (i + 1 < roman.length()) {
+                int s2 = value(roman.charAt(i + 1));
+                if (s1 >= s2)
+                    total += s1;
+                else {
+                    total += s2 - s1;
+                    i++;
+                }
+            } else {
+                total += s1;
+            }
+        }
+
+        System.out.println("Integer: " + total);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Integer: 14
+</pre>
+<h2>94. Create a Simple Bank Account Class</h2>
+<pre><code>class BankAccount {
+    private String owner;
+    private double balance;
+
+    public BankAccount(String owner, double balance) {
+        this.owner = owner;
+        this.balance = balance;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= balance)
+            balance -= amount;
+        else
+            System.out.println("Insufficient funds.");
+    }
+
+    public void display() {
+        System.out.println("Owner: " + owner + ", Balance: " + balance);
+    }
+
+    public static void main(String[] args) {
+        BankAccount acc = new BankAccount("Deepak", 1000);
+        acc.deposit(500);
+        acc.withdraw(300);
+        acc.display();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Owner: Deepak, Balance: 1200.0
+</pre>
+
+<h2>95. Implement a Basic Student Class with GPA</h2>
+<pre><code>class Student {
+    String name;
+    int[] marks;
+
+    public Student(String name, int[] marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public double calculateGPA() {
+        int sum = 0;
+        for (int mark : marks)
+            sum += mark;
+        return sum / (double) marks.length;
+    }
+
+    public static void main(String[] args) {
+        int[] scores = {85, 90, 78, 92};
+        Student s = new Student("Deepak", scores);
+        System.out.println("GPA: " + s.calculateGPA());
+    }
+}
+</code></pre>
+<pre>
+Output:
+GPA: 86.25
+</pre>
+
+<h2>96. Implement a Stack Using an Array</h2>
+<pre><code>class Stack {
+    int[] arr = new int[5];
+    int top = -1;
+
+    public void push(int val) {
+        if (top == arr.length - 1)
+            System.out.println("Stack Overflow");
+        else
+            arr[++top] = val;
+    }
+
+    public void pop() {
+        if (top == -1)
+            System.out.println("Stack Underflow");
+        else
+            top--;
+    }
+
+    public void display() {
+        for (int i = 0; i <= top; i++)
+            System.out.print(arr[i] + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Stack s = new Stack();
+        s.push(10);
+        s.push(20);
+        s.push(30);
+        s.display();
+        s.pop();
+        s.display();
+    }
+}
+</code></pre>
+<pre>
+Output:
+10 20 30  
+10 20
+</pre>
+
+<h2>97. Create a Class to Represent a Book</h2>
+<pre><code>class Book {
+    String title, author;
+    int year;
+
+    public Book(String t, String a, int y) {
+        title = t;
+        author = a;
+        year = y;
+    }
+
+    public void display() {
+        System.out.println(title + " by " + author + " (" + year + ")");
+    }
+
+    public static void main(String[] args) {
+        Book b = new Book("Clean Code", "Robert C. Martin", 2008);
+        b.display();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Clean Code by Robert C. Martin (2008)
+</pre>
+
+<h2>98. Create a Class to Represent a Rectangle</h2>
+<pre><code>class Rectangle {
+    int length, width;
+
+    public Rectangle(int l, int w) {
+        length = l;
+        width = w;
+    }
+
+    public int area() {
+        return length * width;
+    }
+
+    public int perimeter() {
+        return 2 * (length + width);
+    }
+
+    public static void main(String[] args) {
+        Rectangle r = new Rectangle(5, 3);
+        System.out.println("Area: " + r.area());
+        System.out.println("Perimeter: " + r.perimeter());
+    }
+}
+</code></pre>
+<pre>
+Output:
+Area: 15  
+Perimeter: 16
+</pre>

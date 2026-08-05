@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Code Together</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#22c55e">
+    <!-- Link external CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Redirect to login page if user is NOT logged in AND NOT in guest mode
+        const isGuest = localStorage.getItem("isGuest") === "true";
+        const loggedInEmail = localStorage.getItem("loggedInEmail");
+        if (!loggedInEmail && !isGuest) {
+            window.location.href = "index.html";
+        }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Fail:', err));
+            });
+        }
+    </script>
+
+
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>
+                <img src="image/logo.jpg" alt="Logo">
+                Let's Code Together
+            </h2>
+          <nav>
+  <a href="javascript:void(0)" class="nav-link active"
+     data-section="home"
+     onclick="showSection('home')">Home</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="courses"
+     onclick="showSection('courses')">Courses</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="notifications"
+     onclick="openProtectedSection('notifications')">Notifications</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="animated-videos"
+     onclick="showSection('animated-videos')">Animated Videos</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="compiler"
+     onclick="openProtectedSection('compiler')">Compiler</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="visualizer"
+     onclick="openProtectedSection('visualizer')">Visualizer</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="user-communication"
+     onclick="openProtectedSection('user-communication')">User Communication</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="dashboard"
+     onclick="openProtectedSection('dashboard')">Dashboard</a>
+
+  <a href="javascript:void(0)" class="nav-link"
+     data-section="settings"
+     onclick="openProtectedSection('settings')">Settings</a>
+</nav>
+
+
+        </aside>
+        <main class="main-content">
+            <header>
+                <input type="search" id="header-search-courses" name="headerSearchCourses" placeholder="Search courses..." aria-label="Search courses">
+
+<!-- ALERTS -->
+<div class="alerts">
+
+<span id="notification-alert" class="alert-badge" style="display:none">
+New Notification
+</span>
+
+<span id="message-alert" class="alert-badge" style="display:none">
+New Message
+</span>
+
+</div>
+                <div class="profile" style="display: flex; align-items: center; gap: 12px;">
+                    <button id="theme-toggle" class="theme-toggle-btn" title="Toggle light/dark mode">Light Mode</button>
+                    <!-- <img src="image/profile.jpeg" alt="Profile"> -->
+                </div>
+            </header>
+
+            <!-- Home Section -->
+            <section id="home" class="dashboard-overview active-section">
+                <!-- Main Hero Banner -->
+                <div class="edu-hero">
+                    <div class="edu-hero-content">
+                        <div class="hero-badge-pill">⚡ NEXT-GEN COLLABORATIVE LEARNING PLATFORM</div>
+                        <h1>Master Software Engineering & Real-Time Code Collaboration</h1>
+                        <p>
+                            Structured Java, Python, and SQL Masterclasses with step-by-step algorithm visualizers, multi-language online compiler, real-time campus messaging, and live leaderboards.
+                        </p>
+
+                        <div class="edu-hero-actions">
+                            <button class="edu-btn primary" onclick="showSection('courses')">
+                                <span>🚀 Explore Masterclasses</span>
+                            </button>
+                            <button class="edu-btn secondary" onclick="openProtectedSection('compiler')">
+                                <span>💻 Open Live Compiler</span>
+                            </button>
+                            <button class="edu-btn secondary" onclick="showSection('animated-videos')">
+                                <span>🎬 Algorithm Visualizers</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="edu-hero-visuals">
+                        <div class="hero-pill-badge java"><span>☕</span> Java 21+</div>
+                        <div class="hero-pill-badge python"><span>🐍</span> Python 3</div>
+                        <div class="hero-pill-badge sql"><span>📊</span> SQL Analytics</div>
+                        <div class="hero-pill-badge live"><span>🟢</span> Real-Time Sync</div>
+                    </div>
+                </div>
+
+                <!-- Learning Domains Grid -->
+                <div class="learning-domains">
+                    <div class="section-title-row">
+                        <h2>Featured Core Learning Tracks</h2>
+                        <p class="section-subtitle">
+                            Structured curriculum paths engineered for university students and software developers.
+                        </p>
+                    </div>
+
+                    <div class="domain-grid">
+                        <div class="domain-card track-card" onclick="showSection('java-course')">
+                            <div class="track-icon-badge java">☕</div>
+                            <h3>Java 21+ Enterprise Masterclass</h3>
+                            <p>23 concept modules covering OOPs, Generics, Stream API, NIO.2, Multithreading & GC Tuning.</p>
+                            <div class="track-footer"><span>23 Modules • PDF Notes</span> <span>→</span></div>
+                        </div>
+
+                        <div class="domain-card track-card" onclick="showSection('python-course')">
+                            <div class="track-icon-badge python">🐍</div>
+                            <h3>Python 3 Data & Systems</h3>
+                            <p>22 concept modules covering Data Structures, Sorting Algorithms, Generators & LIFO/FIFO Queues.</p>
+                            <div class="track-footer"><span>22 Modules • Visualizer</span> <span>→</span></div>
+                        </div>
+
+                        <div class="domain-card track-card" onclick="showSection('sql-course')">
+                            <div class="track-icon-badge sql">📊</div>
+                            <h3>SQL & Database Architecture</h3>
+                            <p>17 concept modules across 4 stages: DDL/DML, GROUP BY pipelines, INNER/LEFT JOINs & B-Tree Indexes.</p>
+                            <div class="track-footer"><span>17 Modules • Interactive</span> <span>→</span></div>
+                        </div>
+
+                        <div class="domain-card track-card" onclick="openProtectedSection('user-communication')">
+                            <div class="track-icon-badge chat">💬</div>
+                            <h3>Real-Time Campus Messenger</h3>
+                            <p>Public lounge & private student chat with online/away/offline presence, message deletion, and clear chat.</p>
+                            <div class="track-footer"><span>Real-Time Engine</span> <span>→</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4-Step Learning Workflow -->
+                <div class="learning-flow">
+                    <div class="section-title-row">
+                        <h2>How Let's Code Together Works</h2>
+                        <p class="section-subtitle">
+                            An integrated, hands-on learning pipeline designed for deep understanding and mastery.
+                        </p>
+                    </div>
+
+                    <div class="flow-grid">
+                        <div class="flow-step">
+                            <div class="step-number">1</div>
+                            <h3>Master Concepts</h3>
+                            <p>Study structured lessons with code snippets, architecture diagrams, and downloadable PDF guides.</p>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="step-number">2</div>
+                            <h3>Visualize Execution</h3>
+                            <p>Watch step-by-step Divide & Conquer algorithms, recursion trees, and B-Tree index lookups in action.</p>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="step-number">3</div>
+                            <h3>Compile & Share Code</h3>
+                            <p>Write and run code in 8 languages with our multi-language compiler and host collaborative code rooms.</p>
+                        </div>
+
+                        <div class="flow-step">
+                            <div class="step-number">4</div>
+                            <h3>Test & Rank Up</h3>
+                            <p>Complete multi-level quizzes, track personal score history, and compete on the global campus leaderboard.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+                        
+
+            <!-- Courses Section -->
+            <section id="courses" class="my-courses">
+                <h3>Courses</h3>
+
+                <div class="course-category available-courses">
+                    <h4>Available Courses</h4>
+                    <div class="courses">
+                        <div class="course-card" onclick="showSection('java-course')">
+                            <img src="image/cources2.jpeg" alt="Java Programming">
+                            <div>Java Programming</div>
+                        </div>
+                        <div class="course-card" onclick="showSection('python-course')">
+                            <img src="image/cources.jpeg" alt="Python for Beginners">
+                            <div>Python for Beginners</div>
+                        </div>
+                        <div class="course-card" onclick="showSection('sql-course')">
+                            <img src="image/SQL.jpg" alt="SQL for Beginners">
+                            <div>SQL for Beginners</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-category upcoming-courses">
+                    <h4>Upcoming Courses</h4>
+                    <div class="courses">
+                        <div class="course-card upcoming">
+                            <img src="image/c++.jpg" alt="C++ Basics">
+                            <div>C++ Basics</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/cprograming.jpg" alt="C Programming">
+                            <div>C Programming</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/html.webp" alt="HTML Basics">
+                            <div>HTML Basics</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/category1.jpeg" alt="Web Development">
+                            <div>Web Development</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/reactjs.jpg" alt="React.js">
+                            <div>React.js</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/AWS.jpeg" alt="AWS Cloud Essentials">
+                            <div>AWS Cloud Essentials</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/dbms.png" alt="DBMS">
+                            <div>DBMS</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/Data_Structures.jpg" alt="Data Structures">
+                            <div>Data Structures</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/Data_Analysis.jpg" alt="Data Analysis">
+                            <div>Data Analysis</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/nodejs.jpeg" alt="Node.js">
+                            <div>Node.js</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/Figma.webp" alt="Figma">
+                            <div>Figma</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/Ethical_Hacking.jpg" alt="Ethical Hacking">
+                            <div>Ethical Hacking</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/photoshop.jpg" alt="Photoshop">
+                            <div>Photoshop</div>
+                        </div>
+                        <div class="course-card upcoming">
+                            <img src="image/designthinkin.jpeg" alt="Design Thinking">
+                            <div>Design Thinking</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="no-course-message" style="display:none; color:var(--text-main); margin-top:20px; font-size:1.1em;">
+                     No course found
+                </div>
+            </section>
+            <!-- Notifications Section -->
+            <section id="notifications" class="dashboard-overview" style="display:none;">
+                <div class="notif-hero-card">
+                    <div class="notif-hero-content">
+                        <span class="notif-hero-badge">🔔 CAMPUS BROADCAST CENTER</span>
+                        <h2>Notifications & Announcements</h2>
+                        <p>Real-time updates on masterclasses, quiz releases, code room invitations, and campus news.</p>
+                    </div>
+                    <button class="notif-dismiss-all-btn" onclick="dismissAllNotifications()" title="Dismiss All Notifications">
+                        <span>✓ Dismiss All</span>
+                    </button>
+                </div>
+
+                <div id="notification-list" class="notification-list-container">
+                    <!-- Notifications will be inserted here dynamically -->
+                </div>
+
+                <div id="no-notification-message" class="empty-notif-box" style="display:none;"></div>
+            </section>
+
+            <section id="dashboard" class="dashboard-overview" style="display: none;">
+                <!-- Hero Welcome Card -->
+                <div class="dash-hero-card">
+                    <div class="dash-hero-content">
+                        <span class="dash-hero-badge">⚡ ACADEMY DASHBOARD & PERFORMANCE ANALYTICS</span>
+                        <h1 class="dash-hero-title">Welcome back, <span id="dash-user-name">Developer</span>! 👋</h1>
+                        <p class="dash-hero-subtitle">Track your masterclass progress, quiz achievements, algorithm visualizer metrics, and global leaderboard rankings in real time.</p>
+                        
+                        <div class="dash-quick-actions">
+                            <button class="dash-action-btn primary" onclick="showSection('java-course')"><span>☕</span> Resume Java Course</button>
+                            <button class="dash-action-btn secondary" onclick="showSection('python-course')"><span>🐍</span> Open Python Masterclass</button>
+                            <button class="dash-action-btn tertiary" onclick="showSection('animated-videos')"><span>🎬</span> Algorithm Visualizers</button>
+                        </div>
+                    </div>
+                    <div class="dash-hero-illustration">
+                        <div class="glow-orb"></div>
+                        <div class="dash-stat-pill" title="Daily Coding Streak">
+                            <span class="pill-icon">🔥</span>
+                            <div>
+                                <div id="dash-streak-count" class="pill-value">1 Day</div>
+                                <div class="pill-label">Coding Streak</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Metric Cards Grid -->
+                <div class="dash-stats-grid">
+                    <div class="dash-stat-card">
+                        <div class="stat-icon-wrapper blue">📚</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Active Masterclasses</div>
+                            <div class="stat-number">3 <span class="stat-unit">Courses</span></div>
+                            <div class="stat-sub">Java, Python & SQL Mastered</div>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="stat-icon-wrapper emerald">🏆</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Quizzes Completed</div>
+                            <div id="kpi-quizzes-count" class="stat-number">15 <span class="stat-unit">Levels</span></div>
+                            <div class="stat-sub">High Score Performance</div>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="stat-icon-wrapper purple">⚡</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Interactive Visualizers</div>
+                            <div class="stat-number">6 <span class="stat-unit">Engines</span></div>
+                            <div class="stat-sub">B-Trees, Joins & Divide/Conquer</div>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="stat-icon-wrapper gold">🥇</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Campus Standing</div>
+                            <div class="stat-number">Top 5% <span class="stat-unit">Rank</span></div>
+                            <div class="stat-sub">Global Leaderboard Position</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal & Leaderboard Analytics Grid -->
+                <div class="dash-analytics-grid">
+                    <div class="dash-panel-card">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span class="panel-icon">👤</span>
+                                <h3>Your Quiz Score Log</h3>
+                            </div>
+                            <span class="panel-badge">Personal Summary</span>
+                        </div>
+                        <div id="topUsersTable" class="score-dashboard-container">
+                            <!-- Dynamic personal scores injected here -->
+                        </div>
+                    </div>
+
+                    <div class="dash-panel-card">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <span class="panel-icon">👑</span>
+                                <h3>Global Campus Leaderboard</h3>
+                            </div>
+                            <span class="panel-badge highlight">Top Performers</span>
+                        </div>
+                        <div id="scoreDashboardContent" class="score-dashboard-container">
+                            <!-- Dynamic global leaderboard injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="settings" style="display:none;">
+                <div class="settings-header-banner">
+                    <div class="settings-avatar-bubble" id="settings-avatar-bubble">DE</div>
+                    <div class="settings-profile-info">
+                        <h2 id="settings-username" class="settings-profile-name">Developer</h2>
+                        <div id="settings-email" class="settings-profile-email">user@campus.edu</div>
+                        <div class="settings-profile-status">
+                            <span class="status-indicator-dot"></span> Active Student Account · Masterclass Access
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-grid-layout">
+                    <!-- Account Overview & Preferences Card -->
+                    <div class="settings-card">
+                        <div class="card-header-row">
+                            <span class="card-header-icon">👤</span>
+                            <h3>Account Information</h3>
+                        </div>
+                        <div class="settings-field-group">
+                            <div class="setting-item">
+                                <label>User Handle</label>
+                                <div id="settings-username-val" class="setting-value-pill">Developer</div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Registered Email</label>
+                                <div id="settings-email-val" class="setting-value-pill">user@campus.edu</div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Course Tier</label>
+                                <div class="setting-value-pill badge-tier" onclick="showProLearnerInfo()" style="cursor:pointer;" title="Click to view Pro Learner Perks">✨ Pro Learner</div>
+                            </div>
+                            <div class="setting-item">
+                                <label>Security Encryption</label>
+                                <div class="setting-value-pill">🔒 AES-256 JWT Auth</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security & Credentials Form Card -->
+                    <div class="settings-card">
+                        <div class="card-header-row">
+                            <span class="card-header-icon">🔑</span>
+                            <h3>Security & Password</h3>
+                        </div>
+                        <form class="settings-form" onsubmit="return false;">
+                            <div class="input-field-wrapper">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" name="currentPassword" autocomplete="current-password" placeholder="Enter current password..." />
+                            </div>
+                            <div class="input-field-wrapper">
+                                <label for="change-password">New Password</label>
+                                <input type="password" id="change-password" name="newPassword" autocomplete="new-password" placeholder="Enter new password (min. 6 chars)..." />
+                            </div>
+                            <button type="button" class="settings-btn primary" onclick="changePassword()">
+                                <span>🔒 Update Password</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone / Session Logout -->
+                <div class="settings-card danger-card">
+                    <div class="card-header-row">
+                        <span class="card-header-icon">🚪</span>
+                        <h3>Session Control</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 16px 0;">Sign out of your active learning session on this device.</p>
+                    <button class="logout-btn" onclick="logout()">🚪 Sign Out & Logout Session</button>
+                </div>
+            </section>
+
+            <!-- Animated Videos Section -->
+            <section id="animated-videos" class="dashboard-overview compiler-section" style="display:none;">
+                <h2>Animated Videos</h2>
+                <div class="animated-videos-section">
+                    <div class="section-header-with-search">
+                        <div>
+                            <h3>Animated Videos</h3>
+                            <p class="section-subtitle">Browse animated tutorials and algorithm walkthroughs by language.</p>
+                        </div>
+                        <input type="search" id="animated-video-search" name="animatedVideoSearch" placeholder="Search animated videos..." aria-label="Search animated videos" />
+                    </div>
+                    <div class="video-filter-buttons">
+                        <button class="video-language-button active" data-language="java">Java</button>
+                        <button class="video-language-button" data-language="python">Python</button>
+                        <button class="video-language-button" data-language="sql">SQL</button>
+                        <button class="video-language-button" data-language="all">All</button>
+                    </div>
+                    <div id="animated-video-grid" class="video-grid"></div>
+                    <p id="animated-video-empty" class="video-empty" style="display:none;">No videos matched your search.</p>
+                </div>
+            </section>
+
+            <!-- Compiler Section -->
+            <section id="compiler" class="dashboard-overview compiler-section" style="display:none;">
+    <h2>Online Compiler & Live Session Host</h2>
+    <div id="room-banner" style="display:none; background: rgba(0, 123, 255, 0.15); border: 1px solid #007BFF; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div>
+            <strong style="color: #007BFF;">🌐 Room Link:</strong> <span id="room-link-text" style="font-family: monospace; word-break: break-all;"></span>
+        </div>
+        <button class="edu-btn primary" onclick="copyRoomLink()" style="padding: 6px 14px; font-size: 0.9em;">Copy Link</button>
+    </div>
+    <div class="compiler-card">
+        <div class="compiler-controls" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+    <label class="compiler-label" for="compiler-language">Language:</label>
+    <select id="compiler-language" class="compiler-select">
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <option value="cpp">C++</option>
+        <option value="c">C</option>
+        <option value="javascript">JavaScript (Node.js)</option>
+        <option value="go">Go</option>
+        <option value="ruby">Ruby</option>
+        <option value="php">PHP</option>
+    </select>
+    <button class="compiler-run-btn">Run</button>
+    <button class="host-room-btn" onclick="hostRoom()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <span>🌐</span> Host Code Room
+    </button>
+    <button id="toggle-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
+  <span id="compiler-fullscreen-icon"></span> <span id="compiler-fullscreen-label">Fullscreen View</span>
+</button>
+</div>
+        <textarea class="compiler-editor" placeholder="Write your code here..."></textarea>
+<label for="compiler-user-input" style="margin-top:10px; display:block;">Input to Program:</label>
+<textarea id="compiler-user-input" placeholder="Enter input values, one per line..." rows="4" style="width: 100%; padding: 10px; margin-bottom: 10px; resize: vertical;"></textarea>
+
+
+        <div class="compiler-output-area">
+            <strong>Output:</strong>
+            <pre class="compiler-output">// Output will appear here</pre>
+        </div>
+    </div>
+</section>
+<!-- Visualizer Section -->
+<section id="visualizer" class="dashboard-overview compiler-section" style="display:none;">
+  <h2>Code Execution Visualizer</h2>
+
+  <div class="compiler-card">
+    <p>This tool visually demonstrates how code executes line by line.</p>
+    <textarea id="visualizer-editor" class="compiler-editor" placeholder="Write Python code to visualize..."></textarea>
+    
+   <div class="compiler-controls" style="margin-top: 14px;">
+  <label class="compiler-label" for="visualizer-language">Language:</label>
+  <select id="visualizer-language" class="compiler-select">
+  <option value="3">Python</option>
+  <option value="java">Java</option>
+  <option value="cpp">C++</option>
+</select>  
+  <button class="visualizer-run-btn" onclick="runVisualizer()">Visualize</button>
+</div>
+
+    <div class="visualizer-area" id="visualizer-area-container" style="margin-top: 20px; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 245, 160, 0.04); padding: 8px 16px; border-bottom: 1px solid var(--border-faint);">
+        <strong style="border: none; padding: 0; background: transparent; color: var(--jade);">Output & Line-by-Line Execution:</strong>
+        <button onclick="toggleVisualizerAreaFullscreen()" class="btn-secondary" style="padding: 5px 14px; font-size: 12px; background: rgba(34,197,94,0.15); border: 1px solid #22c55e; color: #22c55e; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.2s ease;">🖥️ Fullscreen Visualizer</button>
+      </div>
+      <iframe id="visualizer-frame" width="100%" height="850" frameborder="0" src=""></iframe>
+    </div>
+  </div>
+</section>
+
+
+
+            <!-- Java Course Section -->
+            <section id="java-course" class="course-details-section" style="display:none;">
+                <div class="course-layout">
+                    <nav class="course-sidebar">
+                        <h3>Java Tutorial</h3>
+                        <ul>
+                            <li class="course-topic" onclick="showJavaContent('intro')">Introduction</li>
+                            <li class="course-topic" onclick="showJavaContent('videos')">Videos</li>
+                            <li class="course-topic" onclick="showJavaContent('pdfs')">PDF Notes</li>
+                            <li class="course-topic" onclick="showJavaContent('concepts')">Concepts</li>
+                            <li class="course-topic" onclick="showJavaContent('quiz')">Quiz</li>
+                        </ul>
+                    </nav>
+                    <div class="course-main-content">
+                        <div id="java-content-intro" class="java-content-block" style="display:block;">
+                            <h2>Java Programming — Complete Masterclass Roadmap</h2>
+                            <p>Welcome to the <strong>Master Java Course</strong>! Java is an object-oriented, platform-independent, multi-threaded programming language power-housing enterprise applications, Android development, high-frequency backend services, and cloud architecture worldwide.</p>
+                            
+                            <h3>Curriculum Roadmap</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(0, 123, 255, 0.1); border-left: 4px solid #007BFF; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">1. Fundamentals</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Syntax, Variables, Primitive Types, Operators, Control Flow, and Array basics.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">2. Core & OOP</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Classes, Objects, Inheritance, Encapsulation, Polymorphism, Collections & Exception Handling.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">3. Advanced Java</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Multithreading, Concurrency Locks, Generics, Memory & GC Tuning, NIO.2, JDBC & Transactions.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(111, 66, 193, 0.1); border-left: 4px solid #6f42c1; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">4. Modern Java & Patterns</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Java 8-21+ Lambdas, Stream API, Records, Switch Patterns, Design Patterns, Reflection.</p>
+                                </div>
+                            </div>
+
+                            <h2>Features of Java</h2>
+                            <ul>
+                                <li><strong>Object-Oriented:</strong> Everything in Java revolves around Classes and Objects.</li>
+                                <li><strong>Platform Independent:</strong> Write Once, Run Anywhere (WORA) via the JVM.</li>
+                                <li><strong>Multithreaded & Concurrent:</strong> Built-in support for executing concurrent tasks safely.</li>
+                                <li><strong>High Performance:</strong> Just-In-Time (JIT) compiler optimizes bytecode into native machine code.</li>
+                                <li><strong>Robust & Secure:</strong> Automatic memory management via Garbage Collection and strong type-checking.</li>
+                            </ul>
+
+                            <h2>Hello World Example</h2>
+                            <pre><code>public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</code></pre>
+
+                            <h2>Quick Starter Instructions</h2>
+                            <p>Click on the <strong>Concepts</strong> tab on the left navigation to explore individual topic modules, interactive code examples, and practice problems from beginner to advanced enterprise topics!</p>
+                        </div>
+                        <div id="java-content-videos" class="java-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Java Programming</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="java-content-pdfs" class="java-content-block pdf-section" style="display:none;">
+                            <h2>Java PDF Notes & Guides</h2>
+                            <div class="pdf-links">
+                                <a href="pdfs/Core-java-material_copy.pdf" target="_blank">📄 Core Java Master Guide PDF</a>
+                                <a href="pdfs/java1.pdf" target="_blank">📄 Data Types, Variables, Operators</a>
+                                <a href="pdfs/java2.pdf" target="_blank">📄 Methods & Conditionals</a>
+                                <a href="pdfs/java3.pdf" target="_blank">📄 Loops and Arrays</a>
+                                <a href="pdfs/java4.pdf" target="_blank">📄 Classes and Objects</a>
+                                <a href="pdfs/java5.pdf" target="_blank">📄 Packages & Java API</a>
+                                <a href="pdfs/java6.pdf" target="_blank">📄 Interfaces & Debugging</a>
+                                <a href="pdfs/java7.pdf" target="_blank">📄 Exception Handling & I/O</a>
+                                <a href="pdfs/javanotes5_copy.pdf" target="_blank">📄 Java Notes (David Eck)</a>
+                                <a href="pdfs/LearnJava_copy.pdf" target="_blank">📄 Learn Java by Laura Lemay</a>
+                            </div>
+                        </div>
+                        <div id="java-content-concepts" class="java-content-block" style="display:none;">
+                            <button id="toggle-concept-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
+                                <span id="fullscreen-icon">🖥️</span> <span id="fullscreen-label">Fullscreen View</span>
+                            </button>
+
+                            <h2>Java Concepts</h2>
+                            
+                            <!-- Search bar -->
+                            <input type="text" id="concept-search" placeholder="Search Java concepts (e.g. Streams, Threads, OOP, JDBC)..." style="margin-bottom: 12px; padding: 10px; width: 100%; max-width: 450px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-sidebar); color: var(--text-main);">
+
+                            <!-- Sub-menu -->
+                            <nav class="concepts-submenu" id="concept-buttons">
+                                <button onclick="loadJavaConcept('datatypesandvariables')">Data Types & Variables</button>
+                                <button onclick="loadJavaConcept('operationsandcontrolstatments')">Operators & Control Statements</button>
+                                <button onclick="loadJavaConcept('arrays')">Arrays</button>
+                                <button onclick="loadJavaConcept('strings')">Strings</button>
+                                <button onclick="loadJavaConcept('packages')">Packages</button>
+                                <button onclick="loadJavaConcept('ClassandObjects')">Class & Objects</button>
+                                <button onclick="loadJavaConcept('ConstructorsandMethods')">Constructors & Methods</button>
+                                <button onclick="loadJavaConcept('oops')">OOP Concepts</button>
+                                <button onclick="loadJavaConcept('pojo')">POJO & Bean Class</button>
+                                <button onclick="loadJavaConcept('exception')">Exception Handling</button>
+                                <button onclick="loadJavaConcept('files')">Files & I/O</button>
+                                <button onclick="loadJavaConcept('collections')">Collections Framework</button>
+                                <button onclick="loadJavaConcept('generics')">Generics & Type Safety</button>
+                                <button onclick="loadJavaConcept('multithreading')">Multithreading & Concurrency</button>
+                                <button onclick="loadJavaConcept('jvm-memory')">JVM Memory & GC</button>
+                                <button onclick="loadJavaConcept('nio')">NIO.2 & Serialization</button>
+                                <button onclick="loadJavaConcept('modern-java')">Modern Java (Streams & Lambdas)</button>
+                                <button onclick="loadJavaConcept('jdbc')">JDBC & Transactions</button>
+                                <button onclick="loadJavaConcept('design-patterns')">Design Patterns</button>
+                                <button onclick="loadJavaConcept('reflection-annotations')">Reflection & Annotations</button>
+                                <button onclick="loadJavaConcept('BasicProblems')">Basic Problems</button>
+                                <button onclick="loadJavaConcept('java-problems2')">Concept Problems</button>
+                                <button onclick="loadJavaConcept('java-problems')">Java Problems</button>
+                            </nav>
+
+                            <!-- Content area -->
+                            <div id="java-concept-content">
+                                <p>Select a concept to view details.</p>
+                            </div>
+                        </div>
+                        <div id="java-content-quiz" class="java-content-block" style="display:none;">
+    <h2>Java Quiz Levels</h2>
+    <div class="quiz-level-buttons" data-course="java">
+        <button id="quiz1Btn">Quiz 1 (Beginner)</button>
+        <button id="quiz2Btn">Quiz 2 (Basic)</button>
+        <button id="quiz3Btn">Quiz 3 (Intermediate)</button>
+        <button id="quiz4Btn">Quiz 4 (Advanced)</button>
+        <button id="quiz5Btn">Quiz 5 (Expert)</button>
+    </div>
+    <div id="quizContainer"></div>
+</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Python Course Section -->
+            <section id="python-course" class="course-details-section" style="display:none;">
+                <div class="course-layout">
+                    <nav class="course-sidebar">
+                        <h3>Python Tutorial</h3>
+                        <ul>
+                            <li class="course-topic active" onclick="showPythonContent('intro')">Introduction</li>
+                            <li class="course-topic" onclick="showPythonContent('videos')">Videos</li>
+                            <li class="course-topic" onclick="showPythonContent('pdfs')">PDF Notes</li>
+                            <li class="course-topic" onclick="showPythonContent('basics')">Python Basics</li>
+                            <li class="course-topic" onclick="showPythonContent('quiz')">Quiz</li>
+                        </ul>
+                    </nav>
+                    <div class="course-main-content">
+                        <div id="python-content-intro" class="python-content-block" style="display:block;">
+                            <h2>Python Programming — Masterclass Roadmap</h2>
+                            <p>Welcome to the <strong>Master Python Course</strong>! Python is a high-level, readable, dynamically typed programming language powers web applications, Artificial Intelligence, Data Science, DevOps automation, and web scraping world-wide.</p>
+                            
+                            <h3>Curriculum Roadmap</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(0, 123, 255, 0.1); border-left: 4px solid #007BFF; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">1. Syntax & Data Structures</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Variables, Data Types, Operators, Conditionals, Loops, Functions, Lists, Tuples, Sets, & Dicts.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">2. Core & OOP</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Advanced Collections, Object-Oriented Programming (Classes/Inheritance), File I/O & Exception Handling.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">3. Advanced Python</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Decorators, Functional Tools, Iterators & Generators, Multithreading, Multiprocessing, AsyncIO.</p>
+                                </div>
+                                <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(111, 66, 193, 0.1); border-left: 4px solid #6f42c1; border-radius: 4px;">
+                                    <h4 style="margin: 0 0 6px 0;">4. Architecture & Tooling</h4>
+                                    <p style="font-size: 0.9em; margin:0;">Metaprogramming (Dunder/Metaclasses), Type Hinting, Dataclasses, Virtual Envs & Real-world Projects.</p>
+                                </div>
+                            </div>
+
+                            <h2>Features of Python</h2>
+                            <ul>
+                                <li><strong>Clean & Readable Syntax:</strong> Express concepts in fewer lines of code compared to C++ or Java.</li>
+                                <li><strong>Dynamic & Strongly Typed:</strong> High flexibility with runtime type-checking.</li>
+                                <li><strong>Rich Ecosystem:</strong> Massive standard library and PyPI repository for AI, Data Analysis (Pandas, NumPy), and Web (Django, FastAPI).</li>
+                                <li><strong>Multi-Paradigm:</strong> Supports Object-Oriented, Procedural, and Functional programming paradigms.</li>
+                            </ul>
+
+                            <h2>Hello World Example</h2>
+                            <pre><code>def greet(name: str) -> str:
+    return f"Hello, {name}! Welcome to Python Masterclass."
+
+if __name__ == "__main__":
+    print(greet("Learner"))</code></pre>
+
+                            <h2>Quick Starter Instructions</h2>
+                            <p>Click on the <strong>Python Concepts</strong> tab on the left navigation to explore individual topic modules, code examples, interactive outputs, and real-world projects!</p>
+                        </div>
+                        <div id="python-content-videos" class="python-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Python 3</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="python-content-pdfs" class="python-content-block pdf-section" style="display:none;">
+                            <h2>Python PDF Notes & Guides</h2>
+                            <div class="pdf-links">
+                                <a href="pdfs/python-master-guide.pdf" target="_blank">📄 Python 3 Complete Master Guide PDF</a>
+                                <a href="pdfs/python-data-structures.pdf" target="_blank">📄 Python Data Structures & Collections</a>
+                                <a href="pdfs/python-oop-decorators.pdf" target="_blank">📄 Python OOP, Decorators & AsyncIO</a>
+                            </div>
+                        </div>
+                        <div id="python-content-basics" class="python-content-block" style="display:none;">
+                            <div id="python-content-concepts" class="python-concepts-wrapper">
+                                <button id="toggle-python-concept-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
+                                    <span id="python-fullscreen-icon">🖥️</span> <span id="python-fullscreen-label">Fullscreen View</span>
+                                </button>
+
+                                <h2>Python Concepts</h2>
+                                <input type="text" id="python-concept-search" placeholder="Search Python concepts (e.g. Decorators, AsyncIO, List Comprehensions, Dataclasses)..." style="margin-bottom: 12px; padding: 10px; width: 100%; max-width: 450px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-sidebar); color: var(--text-main);">
+
+                                <nav class="concepts-submenu" id="python-concept-buttons">
+                                    <button onclick="loadPythonConcept('python-introduction')">Python Introduction</button>
+                                    <button onclick="loadPythonConcept('python-variables-datatypes')">Variables & Data Types</button>
+                                    <button onclick="loadPythonConcept('python-operators')">Operators</button>
+                                    <button onclick="loadPythonConcept('python-conditional-statements')">Conditional Statements</button>
+                                    <button onclick="loadPythonConcept('python-loops')">Loops</button>
+                                    <button onclick="loadPythonConcept('python-functions')">Functions</button>
+                                    <button onclick="loadPythonConcept('python-lists')">Lists</button>
+                                    <button onclick="loadPythonConcept('python-tuples')">Tuples</button>
+                                    <button onclick="loadPythonConcept('python-sets')">Sets</button>
+                                    <button onclick="loadPythonConcept('python-dictionaries')">Dictionaries</button>
+                                    <button onclick="loadPythonConcept('python-advanced-structures')">Advanced Structures & Collections</button>
+                                    <button onclick="loadPythonConcept('python-oop')">OOP Concepts</button>
+                                    <button onclick="loadPythonConcept('python-file-handling')">File Handling</button>
+                                    <button onclick="loadPythonConcept('python-exception-handling')">Exception Handling</button>
+                                    <button onclick="loadPythonConcept('python-modules-packages')">Modules & Packages</button>
+                                    <button onclick="loadPythonConcept('python-decorators')">Decorators & Functional</button>
+                                    <button onclick="loadPythonConcept('python-iterators-generators')">Iterators & Generators</button>
+                                    <button onclick="loadPythonConcept('python-concurrency')">Multithreading & AsyncIO</button>
+                                    <button onclick="loadPythonConcept('python-metaprogramming')">Metaprogramming & Dunder</button>
+                                    <button onclick="loadPythonConcept('python-type-hinting')">Type Hinting & Dataclasses</button>
+                                    <button onclick="loadPythonConcept('python-environments-packaging')">Environments & Packaging</button>
+                                    <button onclick="loadPythonConcept('python-projects')">Python Projects</button>
+                                </nav>
+
+                                <div id="python-concept-content">
+                                    <p>Select a topic to view details.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="python-content-quiz" class="python-content-block" style="display:none;">
+                            <h2>Python Quiz Levels</h2>
+                            <div class="quiz-level-buttons" data-course="python">
+                                <button id="pythonQuiz1Btn">Quiz 1 (Beginner)</button>
+                                <button id="pythonQuiz2Btn">Quiz 2 (Basic)</button>
+                                <button id="pythonQuiz3Btn">Quiz 3 (Intermediate)</button>
+                                <button id="pythonQuiz4Btn">Quiz 4 (Advanced)</button>
+                                <button id="pythonQuiz5Btn">Quiz 5 (Expert)</button>
+                            </div>
+                            <div id="pythonQuizContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- C++ Course Section -->
+            <section id="cpp-course" class="course-details-section" style="display:none;">
+                <div class="course-layout">
+                    <nav class="course-sidebar">
+                        <h3>C++ Tutorial</h3>
+                        <ul>
+                            <li class="course-topic active" onclick="showCppContent('intro')">Introduction</li>
+                            <li class="course-topic" onclick="showCppContent('videos')">Videos</li>
+                            <li class="course-topic" onclick="showCppContent('pdfs')">PDF Notes</li>
+                            <li class="course-topic" onclick="showCppContent('oop')">OOP Concepts</li>
+                            <li class="course-topic" onclick="showCppContent('quiz')">Quiz</li>
+                        </ul>
+                    </nav>
+                    <div class="course-main-content">
+                        <div id="cpp-content-intro" class="cpp-content-block" style="display:block;">
+                            <h2>C++ Introduction</h2>
+                            <p>C++ is a powerful, high-performance programming language used for system and application software.</p>
+                        </div>
+                        <div id="cpp-content-videos" class="cpp-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>C++</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="cpp-content-pdfs" class="cpp-content-block" style="display:none;">
+                            <h2>C++ PDF Notes</h2>
+                            <a href="files/cpp-basics.pdf" target="_blank">Download C++ Basics PDF</a>
+                        </div>
+                        <div id="cpp-content-oop" class="cpp-content-block" style="display:none;">
+                            <h2>C++ OOP Concepts</h2>
+                            <p>Learn about classes, objects, inheritance, polymorphism, abstraction, and encapsulation in C++.</p>
+                        </div>
+                        <div id="cpp-content-quiz" class="cpp-content-block" style="display:none;">
+                            <h2>C++ Quiz</h2>
+                            <p>Coming soon...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- C Programming Course Section -->
+
+            <!-- C Programming Course Section -->
+            <section id="c-course" class="course-details-section" style="display:none;">
+                <div class="course-layout">
+                    <nav class="course-sidebar">
+                        <h3>C Programming Tutorial</h3>
+                        <ul>
+                            <li class="course-topic active" onclick="showCContent('intro')">Introduction</li>
+                            <li class="course-topic" onclick="showCContent('videos')">Videos</li>
+                            <li class="course-topic" onclick="showCContent('pdfs')">PDF Notes</li>
+                            <li class="course-topic" onclick="showCContent('basics')">C Basics</li>
+                            <li class="course-topic" onclick="showCContent('quiz')">Quiz</li>
+                        </ul>
+                    </nav>
+                    <div class="course-main-content">
+                        <div id="c-content-intro" class="c-content-block" style="display:block;">
+                            <h2>C Programming Introduction</h2>
+                            <p>C is a foundational programming language used for system and application software...</p>
+                        </div>
+                        <div id="c-content-videos" class="c-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>C Programming</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="c-content-pdfs" class="c-content-block" style="display:none;">
+                            <h2>C Programming PDF Notes</h2>
+                            <a href="files/c-basics.pdf" target="_blank">Download C Basics PDF</a>
+                        </div>
+                        <div id="c-content-basics" class="c-content-block" style="display:none;">
+                            <h2>C Basics</h2>
+                            <p>Learn about variables, data types, loops, and functions in C.</p>
+                        </div>
+                        <div id="c-content-quiz" class="c-content-block" style="display:none;">
+                            <h2>C Programming Quiz</h2>
+                            <p>Coming soon...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HTML Course Section -->
+<section id="html-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>HTML Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showHtmlContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showHtmlContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showHtmlContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showHtmlContent('basics')">HTML Basics</li>
+                <li class="course-topic" onclick="showHtmlContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="html-content-intro" class="html-content-block" style="display:block;">
+                <h2>HTML Introduction</h2>
+                <p>HTML (HyperText Markup Language) is the standard language used to create web pages and structure web content.</p>
+            </div>
+            <div id="html-content-videos" class="html-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>HTML5 & Web Development</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="html-content-pdfs" class="html-content-block" style="display:none;">
+                <h2>HTML PDF Notes</h2>
+                <a href="files/html-basics.pdf" target="_blank">Download HTML Basics PDF</a>
+            </div>
+            <div id="html-content-basics" class="html-content-block" style="display:none;">
+                <h2>HTML Basics</h2>
+                <p>Learn about common HTML elements such as headings, paragraphs, links, images, lists, and tables.</p>
+            </div>
+            <div id="html-content-quiz" class="html-content-block" style="display:none;">
+                <h2>HTML Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+           <!-- SQL Course Section -->
+<section id="sql-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>SQL Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showSqlContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showSqlContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showSqlContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showSqlContent('basics')">SQL Basics</li>
+                <li class="course-topic" onclick="showSqlContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="sql-content-intro" class="sql-content-block" style="display:block;">
+                <h2>SQL & Database Architecture — Masterclass Roadmap</h2>
+                <p>Welcome to the <strong>Master SQL Course</strong>! SQL (Structured Query Language) is the global standard language for interacting with Relational Database Management Systems (RDBMS) like MySQL, PostgreSQL, Oracle, and SQL Server.</p>
+                
+                <h3>Curriculum Roadmap</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0;">
+                    <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(0, 123, 255, 0.1); border-left: 4px solid #007BFF; border-radius: 4px;">
+                        <h4 style="margin: 0 0 6px 0;">1. Fundamentals & DML</h4>
+                        <p style="font-size: 0.9em; margin:0;">RDBMS Concepts, Data Types, SELECT, INSERT, UPDATE, DELETE, Filtering & Grouping.</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745; border-radius: 4px;">
+                        <h4 style="margin: 0 0 6px 0;">2. Relational Design</h4>
+                        <p style="font-size: 0.9em; margin:0;">INNER/LEFT/RIGHT Joins, Subqueries, Primary/Foreign Keys, Normalization (1NF to BCNF).</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 4px;">
+                        <h4 style="margin: 0 0 6px 0;">3. Advanced Analytics</h4>
+                        <p style="font-size: 0.9em; margin:0;">Window Functions (RANK, OVER, LAG/LEAD), CTEs, Recursive Queries, Views & Materialized Views.</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; padding: 12px; background: rgba(111, 66, 193, 0.1); border-left: 4px solid #6f42c1; border-radius: 4px;">
+                        <h4 style="margin: 0 0 6px 0;">4. DB Dev & Security</h4>
+                        <p style="font-size: 0.9em; margin:0;">Stored Procedures, Triggers, Query Optimization (EXPLAIN), Security, JSON & NoSQL.</p>
+                    </div>
+                </div>
+
+                <h2>Key Features of SQL</h2>
+                <ul>
+                    <li><strong>Declarative Language:</strong> You specify <em>what</em> data you want, and the database engine figures out <em>how</em> to retrieve it.</li>
+                    <li><strong>ACID Transactional Guarantees:</strong> Ensures data integrity across concurrent updates.</li>
+                    <li><strong>High-Performance Indexing:</strong> B-Tree & Hash indexes enable millisecond lookups across billions of records.</li>
+                    <li><strong>Analytical Power:</strong> Perform complex business intelligence aggregation and windowing queries natively.</li>
+                </ul>
+
+                <h2>Basic Query Example</h2>
+                <pre><code>SELECT department, COUNT(id) as total_emp, AVG(salary) as avg_sal
+FROM employees
+WHERE status = 'ACTIVE'
+GROUP BY department
+HAVING COUNT(id) >= 5
+ORDER BY avg_sal DESC;</code></pre>
+
+                <h2>Quick Starter Instructions</h2>
+                <p>Click on the <strong>SQL Concepts</strong> tab on the left navigation to explore individual topic modules, table diagrams, interactive SQL queries, and practice exercises!</p>
+            </div>
+            <div id="sql-content-videos" class="sql-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>SQL & Databases</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="sql-content-pdfs" class="sql-content-block pdf-section" style="display:none;">
+                <h2>SQL PDF Notes & Guides</h2>
+                <div class="pdf-links">
+                    <a href="pdfs/sql-master-guide.pdf" target="_blank">📄 SQL Database Master Reference Guide PDF</a>
+                    <a href="pdfs/sql-joins-analytics.pdf" target="_blank">📄 SQL Joins, CTEs & Window Functions</a>
+                    <a href="pdfs/sql-optimization-security.pdf" target="_blank">📄 SQL Query Optimization & Security</a>
+                </div>
+            </div>
+            <div id="sql-content-basics" class="sql-content-block" style="display:none;">
+                <div id="sql-content-concepts" class="sql-concepts-wrapper">
+                    <button id="toggle-sql-concept-fullscreen" class="fullscreen-toggle-btn" title="Toggle fullscreen">
+                        <span id="sql-fullscreen-icon">🖥️</span> <span id="sql-fullscreen-label">Fullscreen View</span>
+                    </button>
+
+                    <h2>SQL Concepts</h2>
+                    <input type="text" id="sql-concept-search" placeholder="Search SQL concepts (e.g. Joins, Window Functions, Triggers, EXPLAIN)..." style="margin-bottom: 12px; padding: 10px; width: 100%; max-width: 450px; border-radius: 6px; border: 1px solid var(--border-main); background: var(--bg-sidebar); color: var(--text-main);">
+
+                    <nav class="concepts-submenu" id="sql-concept-buttons">
+                        <button onclick="loadSqlConcept('sql-introduction')">Introduction & RDBMS</button>
+                        <button onclick="loadSqlConcept('sql-data-types')">Data Types</button>
+                        <button onclick="loadSqlConcept('sql-basic-queries')">Basic Queries (DML/DDL)</button>
+                        <button onclick="loadSqlConcept('sql-aggregate-functions')">Aggregate Functions & Grouping</button>
+                        <button onclick="loadSqlConcept('sql-joins')">Joins & Set Operations</button>
+                        <button onclick="loadSqlConcept('sql-subqueries')">Subqueries & Nested Queries</button>
+                        <button onclick="loadSqlConcept('sql-indexes-constraints')">Indexes & Constraints</button>
+                        <button onclick="loadSqlConcept('sql-normalization')">Normalization & Schema Design</button>
+                        <button onclick="loadSqlConcept('sql-transactions')">Transactions & ACID</button>
+                        <button onclick="loadSqlConcept('sql-advanced-queries')">Advanced Queries & CTEs</button>
+                        <button onclick="loadSqlConcept('sql-window-functions')">Window Functions & Analytics</button>
+                        <button onclick="loadSqlConcept('sql-views-ctes')">Views & Materialized Views</button>
+                        <button onclick="loadSqlConcept('sql-stored-procedures')">Stored Procedures & Functions</button>
+                        <button onclick="loadSqlConcept('sql-triggers')">Triggers & Events</button>
+                        <button onclick="loadSqlConcept('sql-query-optimization')">Query Optimization (EXPLAIN)</button>
+                        <button onclick="loadSqlConcept('sql-security')">Database Security & Grants</button>
+                        <button onclick="loadSqlConcept('sql-json-nosql')">SQL vs NoSQL & JSON Data</button>
+                    </nav>
+
+                    <div id="sql-concept-content">
+                        <p>Select a topic to view details.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="sql-content-quiz" class="sql-content-block" style="display:none;">
+                <h2>SQL Quiz Levels</h2>
+                <div class="quiz-level-buttons" data-course="sql">
+                    <button id="sqlQuiz1Btn">Quiz 1 (Beginner)</button>
+                    <button id="sqlQuiz2Btn">Quiz 2 (Basic)</button>
+                    <button id="sqlQuiz3Btn">Quiz 3 (Intermediate)</button>
+                    <button id="sqlQuiz4Btn">Quiz 4 (Advanced)</button>
+                    <button id="sqlQuiz5Btn">Quiz 5 (Expert)</button>
+                </div>
+                <div id="sqlQuizContainer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+            <!-- React.js Course Section -->
+<section id="react-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>React.js Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showReactContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showReactContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showReactContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showReactContent('basics')">React Basics</li>
+                <li class="course-topic" onclick="showReactContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="react-content-intro" class="react-content-block" style="display:block;">
+                <h2>React.js Introduction</h2>
+                <p>React.js is a popular JavaScript library for building user interfaces and single-page applications.</p>
+            </div>
+            <div id="react-content-videos" class="react-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>React.js</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="react-content-pdfs" class="react-content-block" style="display:none;">
+                <h2>React.js PDF Notes</h2>
+                <a href="files/react-basics.pdf" target="_blank">Download React.js Basics PDF</a>
+            </div>
+            <div id="react-content-basics" class="react-content-block" style="display:none;">
+                <h2>React Basics</h2>
+                <p>Learn about components, JSX, props, state, lifecycle methods, and hooks in React.js.</p>
+            </div>
+            <div id="react-content-quiz" class="react-content-block" style="display:none;">
+                <h2>React.js Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+           
+            <!-- AWS Cloud Course Section -->
+<section id="aws-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>AWS Cloud Essentials</h3>
+            <ul>
+                <li class="course-topic active" onclick="showAwsContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showAwsContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showAwsContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showAwsContent('basics')">AWS Basics</li>
+                <li class="course-topic" onclick="showAwsContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="aws-content-intro" class="aws-content-block" style="display:block;">
+                <h2>AWS Cloud Introduction</h2>
+                <p>AWS (Amazon Web Services) is a comprehensive cloud computing platform that offers a wide range of services such as computing power, storage, and databases.</p>
+            </div>
+            <div id="aws-content-videos" class="aws-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>AWS Cloud</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="aws-content-pdfs" class="aws-content-block" style="display:none;">
+                <h2>AWS Cloud PDF Notes</h2>
+                <a href="files/aws-basics.pdf" target="_blank">Download AWS Basics PDF</a>
+            </div>
+            <div id="aws-content-basics" class="aws-content-block" style="display:none;">
+                <h2>AWS Basics</h2>
+                <p>Learn about EC2, S3, RDS, Lambda, IAM, CloudFront, and more AWS services.</p>
+            </div>
+            <div id="aws-content-quiz" class="aws-content-block" style="display:none;">
+                <h2>AWS Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="dbms-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>DBMS Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showDbmsContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showDbmsContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showDbmsContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showDbmsContent('basics')">DBMS Basics</li>
+                <li class="course-topic" onclick="showDbmsContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="dbms-content-intro" class="dbms-content-block" style="display:block;">
+                <h2>DBMS Introduction</h2>
+                <p>DBMS is software to manage, store, and retrieve data in databases.</p>
+            </div>
+            <div id="dbms-content-videos" class="dbms-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>DBMS</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="dbms-content-pdfs" class="dbms-content-block" style="display:none;">
+                <h2>DBMS PDF Notes</h2>
+                <a href="files/dbms-basics.pdf" target="_blank">Download DBMS Basics PDF</a>
+            </div>
+            <div id="dbms-content-basics" class="dbms-content-block" style="display:none;">
+                <h2>DBMS Basics</h2>
+                <p>Concepts: SQL, Normalization, ER model, Transactions.</p>
+            </div>
+            <div id="dbms-content-quiz" class="dbms-content-block" style="display:none;">
+                <h2>DBMS Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="ds-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Data Structures Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showDsContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showDsContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showDsContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showDsContent('basics')">Data Structures Basics</li>
+                <li class="course-topic" onclick="showDsContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="ds-content-intro" class="ds-content-block" style="display:block;">
+                <h2>Data Structures Introduction</h2>
+                <p>Data Structures help in organizing and storing data efficiently.</p>
+            </div>
+            <div id="ds-content-videos" class="ds-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Data Structures</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="ds-content-pdfs" class="ds-content-block" style="display:none;">
+                <h2>Data Structures PDF Notes</h2>
+                <a href="files/data-structures.pdf" target="_blank">Download Data Structures PDF</a>
+            </div>
+            <div id="ds-content-basics" class="ds-content-block" style="display:none;">
+                <h2>Data Structures Basics</h2>
+                <p>Concepts: Arrays, Linked Lists, Stacks, Queues, Trees, Graphs.</p>
+            </div>
+            <div id="ds-content-quiz" class="ds-content-block" style="display:none;">
+                <h2>Data Structures Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="data-analysis-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Data Analysis Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showDataAnalysisContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showDataAnalysisContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showDataAnalysisContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showDataAnalysisContent('basics')">Data Analysis Basics</li>
+                <li class="course-topic" onclick="showDataAnalysisContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="data-analysis-content-intro" class="data-analysis-content-block" style="display:block;">
+                <h2>Data Analysis Introduction</h2>
+                <p>Data Analysis involves inspecting and transforming data to gain insights.</p>
+            </div>
+            <div id="data-analysis-content-videos" class="data-analysis-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Data Analysis</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="data-analysis-content-pdfs" class="data-analysis-content-block" style="display:none;">
+                <h2>Data Analysis PDF Notes</h2>
+                <a href="files/data-analysis.pdf" target="_blank">Download Data Analysis PDF</a>
+            </div>
+            <div id="data-analysis-content-basics" class="data-analysis-content-block" style="display:none;">
+                <h2>Data Analysis Basics</h2>
+                <p>Concepts: Data Cleaning, Pandas, Visualization, Statistical Analysis.</p>
+            </div>
+            <div id="data-analysis-content-quiz" class="data-analysis-content-block" style="display:none;">
+                <h2>Data Analysis Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="nodejs-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Node.js Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showNodejsContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showNodejsContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showNodejsContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showNodejsContent('basics')">Node.js Basics</li>
+                <li class="course-topic" onclick="showNodejsContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="nodejs-content-intro" class="nodejs-content-block" style="display:block;">
+                <h2>Node.js Introduction</h2>
+                <p>Node.js is a JavaScript runtime used for building server-side applications.</p>
+            </div>
+            <div id="nodejs-content-videos" class="nodejs-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Node.js</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="nodejs-content-pdfs" class="nodejs-content-block" style="display:none;">
+                <h2>Node.js PDF Notes</h2>
+                <a href="files/nodejs-basics.pdf" target="_blank">Download Node.js Basics PDF</a>
+            </div>
+            <div id="nodejs-content-basics" class="nodejs-content-block" style="display:none;">
+                <h2>Node.js Basics</h2>
+                <p>Concepts: Event Loop, Express.js, REST API, MongoDB Integration.</p>
+            </div>
+            <div id="nodejs-content-quiz" class="nodejs-content-block" style="display:none;">
+                <h2>Node.js Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="figma-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Figma Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showFigmaContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showFigmaContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showFigmaContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showFigmaContent('basics')">Figma Basics</li>
+                <li class="course-topic" onclick="showFigmaContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="figma-content-intro" class="figma-content-block" style="display:block;">
+                <h2>Figma Introduction</h2>
+                <p>Figma is a popular web-based design tool used for UI/UX design and prototyping.</p>
+            </div>
+            <div id="figma-content-videos" class="figma-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Figma Design</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="figma-content-pdfs" class="figma-content-block" style="display:none;">
+                <h2>Figma PDF Notes</h2>
+                <a href="files/figma-basics.pdf" target="_blank">Download Figma Basics PDF</a>
+            </div>
+            <div id="figma-content-basics" class="figma-content-block" style="display:none;">
+                <h2>Figma Basics</h2>
+                <p>Concepts: Frames, Components, Prototyping, Design Systems.</p>
+            </div>
+            <div id="figma-content-quiz" class="figma-content-block" style="display:none;">
+                <h2>Figma Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="ethical-hacking-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Ethical Hacking Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showEthicalHackingContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showEthicalHackingContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showEthicalHackingContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showEthicalHackingContent('basics')">Ethical Hacking Basics</li>
+                <li class="course-topic" onclick="showEthicalHackingContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="ethical-hacking-content-intro" class="ethical-hacking-content-block" style="display:block;">
+                <h2>Ethical Hacking Introduction</h2>
+                <p>Ethical hacking involves identifying vulnerabilities in systems and securing them from malicious hackers.</p>
+            </div>
+            <div id="ethical-hacking-content-videos" class="ethical-hacking-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Ethical Hacking</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="ethical-hacking-content-pdfs" class="ethical-hacking-content-block" style="display:none;">
+                <h2>Ethical Hacking PDF Notes</h2>
+                <a href="files/ethical-hacking.pdf" target="_blank">Download Ethical Hacking PDF</a>
+            </div>
+            <div id="ethical-hacking-content-basics" class="ethical-hacking-content-block" style="display:none;">
+                <h2>Ethical Hacking Basics</h2>
+                <p>Concepts: Penetration Testing, Reconnaissance, Vulnerability Scanning, Exploits.</p>
+            </div>
+            <div id="ethical-hacking-content-quiz" class="ethical-hacking-content-block" style="display:none;">
+                <h2>Ethical Hacking Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="photoshop-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Photoshop Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showPhotoshopContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showPhotoshopContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showPhotoshopContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showPhotoshopContent('basics')">Photoshop Basics</li>
+                <li class="course-topic" onclick="showPhotoshopContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="photoshop-content-intro" class="photoshop-content-block" style="display:block;">
+                <h2>Photoshop Introduction</h2>
+                <p>Adobe Photoshop is a powerful graphic editing software used for photo editing and digital art.</p>
+            </div>
+            <div id="photoshop-content-videos" class="photoshop-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Photoshop</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="photoshop-content-pdfs" class="photoshop-content-block" style="display:none;">
+                <h2>Photoshop PDF Notes</h2>
+                <a href="files/photoshop-basics.pdf" target="_blank">Download Photoshop Basics PDF</a>
+            </div>
+            <div id="photoshop-content-basics" class="photoshop-content-block" style="display:none;">
+                <h2>Photoshop Basics</h2>
+                <p>Concepts: Layers, Masks, Tools, Filters, Typography.</p>
+            </div>
+            <div id="photoshop-content-quiz" class="photoshop-content-block" style="display:none;">
+                <h2>Photoshop Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="design-thinking-course" class="course-details-section" style="display:none;">
+    <div class="course-layout">
+        <nav class="course-sidebar">
+            <h3>Design Thinking Tutorial</h3>
+            <ul>
+                <li class="course-topic active" onclick="showDesignThinkingContent('intro')">Introduction</li>
+                <li class="course-topic" onclick="showDesignThinkingContent('videos')">Videos</li>
+                <li class="course-topic" onclick="showDesignThinkingContent('pdfs')">PDF Notes</li>
+                <li class="course-topic" onclick="showDesignThinkingContent('basics')">Design Thinking Basics</li>
+                <li class="course-topic" onclick="showDesignThinkingContent('quiz')">Quiz</li>
+            </ul>
+        </nav>
+        <div class="course-main-content">
+            <div id="design-thinking-content-intro" class="design-thinking-content-block" style="display:block;">
+                <h2>Design Thinking Introduction</h2>
+                <p>Design Thinking is a human-centered problem-solving approach used in innovation and design.</p>
+            </div>
+            <div id="design-thinking-content-videos" class="design-thinking-content-block" style="display:none;">
+    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
+        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
+        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Design Thinking</strong> are currently in production and will be available soon!</p>
+        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
+    </div>
+</div>
+                        <div id="design-thinking-content-pdfs" class="design-thinking-content-block" style="display:none;">
+                <h2>Design Thinking PDF Notes</h2>
+                <a href="files/design-thinking.pdf" target="_blank">Download Design Thinking PDF</a>
+            </div>
+            <div id="design-thinking-content-basics" class="design-thinking-content-block" style="display:none;">
+                <h2>Design Thinking Basics</h2>
+                <p>Phases: Empathize, Define, Ideate, Prototype, Test.</p>
+            </div>
+            <div id="design-thinking-content-quiz" class="design-thinking-content-block" style="display:none;">
+                <h2>Design Thinking Quiz</h2>
+                <p>Coming soon...</p>
+            </div>
+        </div>
+    </div>
+</section>
+            <!-- User Communication Section -->
+            <section id="user-communication" class="user-communication-section" style="display:none;">
+                <div class="chat-app-header">
+                    <div class="chat-app-title">
+                        <span class="chat-title-icon">💬</span>
+                        <div>
+                            <h2>Campus Communication Hub</h2>
+                            <p>Connect, share code, and collaborate in real-time</p>
+                        </div>
+                    </div>
+                    <div class="chat-toggle-buttons">
+                        <button class="toggle-btn active" onclick="showChat('public')">🌐 Public Lounge</button>
+                        <button class="toggle-btn" onclick="showChat('private')">🔒 Direct Messages</button>
+                    </div>
+                </div>
+
+                <!-- Public Chat Section -->
+                <div id="public-chat" class="chat-section-container" style="display:none;">
+                    <div class="channel-header-bar">
+                        <div class="channel-info">
+                            <div class="channel-avatar">#</div>
+                            <div>
+                                <h3># public-campus-lounge</h3>
+                                <div id="typing-status" class="channel-status">🟢 Live Channel · Auto-syncing</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <span class="online-count-badge">● Live</span>
+                            <button class="clear-chat-btn" onclick="clearCurrentChat('public')" title="Clear Public Chat">🗑️ Clear Chat</button>
+                        </div>
+                    </div>
+
+                    <div id="public-chat-messages" class="messenger-messages-box">
+                        <!-- Messages loaded dynamically -->
+                    </div>
+
+                    <div class="messenger-input-bar">
+                        <button class="chat-action-btn" title="Add Emoji" onclick="insertEmoji('public-chat-input', '👋')">😊</button>
+                        <textarea id="public-chat-input" placeholder="Type a message to the community... (Press Enter to send)" rows="1"></textarea>
+                        <button class="chat-send-btn" onclick="sendPublicMessage()">
+                            <span>Send</span>
+                            <span class="send-icon">🚀</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Private Chat Section -->
+                <div id="private-chat" class="chat-section-container" style="display:none;">
+                    <div class="private-chat-grid">
+                        <aside class="private-chat-sidebar">
+                            <div class="sidebar-search-box">
+                                <svg class="search-icon-svg" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" id="private-user-search" placeholder="Search contacts..." oninput="searchUser()" />
+                            </div>
+                            <div class="sidebar-label">ACTIVE CONTACTS</div>
+                            <div id="private-user-list" class="user-list-container">
+                                <!-- User list loaded dynamically -->
+                            </div>
+                        </aside>
+
+                        <section class="private-chat-main">
+                            <div class="channel-header-bar">
+                                <div class="channel-info">
+                                    <div id="private-target-avatar" class="channel-avatar user-avatar-bubble">💬</div>
+                                    <div>
+                                        <h3 id="private-target-name">Direct Messages</h3>
+                                        <div id="selected-user-info" class="channel-status">Select a contact to begin messaging</div>
+                                    </div>
+                                </div>
+                                <div class="channel-actions">
+                                    <button class="clear-chat-btn" onclick="clearCurrentChat('private')" title="Clear Direct Conversation">🗑️ Clear Chat</button>
+                                </div>
+                            </div>
+
+                            <div id="admin-messages" class="admin-announcements-box"></div>
+                            <div id="private-chat-messages" class="messenger-messages-box private-messages"></div>
+
+                            <div class="messenger-input-bar">
+                                <button class="chat-action-btn" title="Add Emoji" onclick="insertEmoji('private-chat-input', '👍')">😊</button>
+                                <textarea id="private-chat-input" placeholder="Message selected user... (Press Enter to send)" rows="1"></textarea>
+                                <button class="chat-send-btn" onclick="sendPrivateMessage()">
+                                    <span>Send</span>
+                                    <span class="send-icon">🚀</span>
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+<div id="guest-message-overlay" style="display:none;">
+  <div class="guest-message-box">
+    <h2>Login Required</h2>
+    <p>
+      This feature is available only for logged-in users.
+      <br />
+      Please login or create an account to continue.
+    </p>
+
+    <div class="guest-actions">
+      <button onclick="goToLogin()">Login</button>
+      <button onclick="closeGuestMessage()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Animation Player Modal (Root Level Overlay) -->
+<div id="animation-player-modal" class="animation-modal-overlay" style="display:none;">
+    <div class="animation-modal-container">
+        <div class="animation-modal-header">
+            <div class="animation-modal-title-group">
+                <span id="anim-modal-badge" class="anim-badge">JAVA</span>
+                <h3 id="anim-modal-title">Algorithm Animation Visualizer</h3>
+            </div>
+            <div class="animation-modal-actions">
+                <button id="anim-modal-fullscreen" class="anim-action-btn" title="Toggle Fullscreen">⛶ Fullscreen</button>
+                <button id="anim-modal-close" class="anim-action-btn close-btn" title="Close">✕ Close</button>
+            </div>
+        </div>
+        <div class="animation-modal-body">
+            <iframe id="anim-modal-iframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+    <!-- Link external JavaScript -->
+      <script src="quizzes.js"></script>
+   <script src="scripts.js" defer></script>
+</body>
+</html>

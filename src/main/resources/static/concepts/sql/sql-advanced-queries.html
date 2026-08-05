@@ -1,0 +1,79 @@
+<div>
+  <h1>SQL Advanced Queries</h1>
+  <p>Advanced SQL techniques help you write powerful, efficient queries for real-world data problems.</p>
+
+  <h2>Views</h2>
+  <p>A view is a saved query that behaves like a virtual table.</p>
+  <pre><code>CREATE VIEW active_customers AS
+SELECT id, name, email
+FROM customers
+WHERE active = TRUE;
+
+SELECT *
+FROM active_customers;
+</code></pre>
+
+  <h2>Common Table Expressions (CTEs)</h2>
+  <p>CTEs make complex queries easier to read by creating named temporary result sets.</p>
+  <pre><code>WITH sales_by_dept AS (
+  SELECT department_id,
+         SUM(amount) AS total_sales
+  FROM sales
+  GROUP BY department_id
+)
+SELECT d.name, s.total_sales
+FROM sales_by_dept s
+JOIN departments d ON d.id = s.department_id;
+</code></pre>
+
+  <h2>Window Functions</h2>
+  <p>Window functions perform calculations across rows related to the current row.</p>
+  <pre><code>SELECT employee_id,
+       department_id,
+       salary,
+       AVG(salary) OVER (PARTITION BY department_id) AS avg_dept_salary,
+       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank
+FROM employees;
+</code></pre>
+
+  <h2>CASE Expressions</h2>
+  <p>Use <code>CASE</code> to apply conditional logic inside queries.</p>
+  <pre><code>SELECT name,
+       salary,
+       CASE
+         WHEN salary &gt;= 100000 THEN 'High'
+         WHEN salary &gt;= 60000 THEN 'Medium'
+         ELSE 'Low'
+       END AS salary_band
+FROM employees;
+</code></pre>
+
+  <h2>Set Operators</h2>
+  <p>Combine query results using <code>UNION</code>, <code>INTERSECT</code>, and <code>EXCEPT</code>.</p>
+  <pre><code>SELECT email FROM users
+UNION
+SELECT email FROM newsletter_subscribers;
+</code></pre>
+
+  <h2>Recursive Queries</h2>
+  <p>Use recursive CTEs to traverse hierarchical data, such as organizational charts.</p>
+  <pre><code>WITH RECURSIVE team_hierarchy AS (
+  SELECT id, manager_id, name, 1 AS level
+  FROM employees
+  WHERE manager_id IS NULL
+  UNION ALL
+  SELECT e.id, e.manager_id, e.name, th.level + 1
+  FROM employees e
+  JOIN team_hierarchy th ON e.manager_id = th.id
+)
+SELECT *
+FROM team_hierarchy;
+</code></pre>
+
+  <h2>Performance Tips</h2>
+  <ul>
+    <li>Use indexes on columns used in <code>WHERE</code>, <code>JOIN</code>, and <code>ORDER BY</code>.</li>
+    <li>Prefer CTEs for readability, but test execution plans for performance.</li>
+    <li>Keep queries simple and break complex logic into smaller steps when possible.</li>
+  </ul>
+</div>

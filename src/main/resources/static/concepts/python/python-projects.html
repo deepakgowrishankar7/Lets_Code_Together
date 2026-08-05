@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Projects</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:white;padding:30px;line-height:1.8}
+.container{max-width:1100px;margin:auto}
+h1,h2,h3{color:#38bdf8}
+.code{background:#1e293b;padding:15px;border-radius:10px;white-space:pre-wrap}
+.note{background:#172554;padding:15px;border-radius:10px}
+table{width:100%;border-collapse:collapse}
+table,th,td{border:1px solid gray;padding:10px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Python Projects</h1>
+
+<p>This chapter combines all Python concepts into real-world projects.</p>
+
+<h2>Project 1: Calculator</h2>
+<div class="code">num1=float(input("Enter First Number: "))
+num2=float(input("Enter Second Number: "))
+
+print("1.Add 2.Subtract 3.Multiply 4.Divide")
+
+choice=int(input())
+
+if choice==1:
+    print(num1+num2)
+elif choice==2:
+    print(num1-num2)
+elif choice==3:
+    print(num1*num2)
+elif choice==4:
+    print(num1/num2)</div>
+
+<h2>Project 2: Student Management System</h2>
+<div class="code">students={}
+
+while True:
+    print("1.Add Student")
+    print("2.View Students")
+    print("3.Exit")
+
+    choice=int(input())
+
+    if choice==1:
+        name=input("Name: ")
+        marks=int(input("Marks: "))
+        students[name]=marks
+
+    elif choice==2:
+        print(students)
+
+    elif choice==3:
+        break</div>
+
+<h2>Project 3: Quiz Application</h2>
+<div class="code">questions={
+"Capital of India":"Delhi",
+"2+2":"4"
+}
+
+score=0
+
+for q in questions:
+    ans=input(q+": ")
+    if ans==questions[q]:
+        score+=1
+
+print("Score:",score)</div>
+
+<h2>Project 4: Password Generator</h2>
+<div class="code">import random,string
+
+password=""
+
+for i in range(8):
+    password+=random.choice(
+    string.ascii_letters+string.digits)
+
+print(password)</div>
+
+<h2>Project 5: Expense Tracker</h2>
+<div class="code">expenses=[]
+
+while True:
+
+    amount=float(input("Expense: "))
+    expenses.append(amount)
+
+    choice=input("Add More(y/n): ")
+
+    if choice=="n":
+        break
+
+print(sum(expenses))</div>
+
+<h2>Project 6: Library Management System</h2>
+<div class="code">books=[]
+
+while True:
+
+    print("1.Add Book")
+    print("2.View Books")
+
+    choice=int(input())
+
+    if choice==1:
+        books.append(input("Book Name: "))
+
+    elif choice==2:
+        print(books)</div>
+
+<h2>Project 7: ATM System</h2>
+<div class="code">balance=5000
+
+while True:
+
+    print("1.Balance")
+    print("2.Withdraw")
+
+    choice=int(input())
+
+    if choice==1:
+        print(balance)
+
+    elif choice==2:
+
+        amount=int(input())
+
+        if amount<=balance:
+            balance-=amount
+            print("Success")
+        else:
+            print("Insufficient Balance")</div>
+
+<h2>Project 8: Contact Book</h2>
+<div class="code">contacts={}
+
+name=input("Name: ")
+number=input("Number: ")
+
+contacts[name]=number
+
+print(contacts)</div>
+
+<h2>Project 9: To-Do List</h2>
+<div class="code">tasks=[]
+
+while True:
+    task=input("Task: ")
+    tasks.append(task)
+    print(tasks)</div>
+
+<h2>Project 10: Banking System</h2>
+<div class="code">class Bank:
+
+    def __init__(self):
+        self.balance=0
+
+    def deposit(self,amount):
+        self.balance+=amount
+
+    def withdraw(self,amount):
+        self.balance-=amount
+
+    def show(self):
+        print(self.balance)
+
+b=Bank()
+b.deposit(1000)
+b.show()</div>
+
+<h2>Resume Projects</h2>
+<ul>
+<li>Calculator</li>
+<li>Quiz Application</li>
+<li>Password Generator</li>
+<li>Expense Tracker</li>
+<li>Student Management System</li>
+<li>Library Management System</li>
+<li>Banking System</li>
+</ul>
+
+<h2>GitHub Structure</h2>
+<div class="code">PythonProjects
+|-- Calculator
+|-- QuizApp
+|-- ExpenseTracker
+|-- StudentManagement
+|-- BankingSystem</div>
+
+<h2>What You Learned</h2>
+<div class="note">
+You have completed:
+Variables, Operators, Conditions, Loops, Functions, Collections, OOP, File Handling, Exception Handling, Modules, Packages and Projects.
+</div>
+
+</div>
+</body>
+</html>

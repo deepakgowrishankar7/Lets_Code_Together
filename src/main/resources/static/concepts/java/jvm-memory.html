@@ -1,0 +1,104 @@
+<h2>JVM Architecture & Memory Management</h2>
+
+<p>
+  The <strong>Java Virtual Machine (JVM)</strong> is the execution engine for Java applications. Understanding JVM architecture, memory allocation, and Garbage Collection (GC) is vital for writing high-performance Java code.
+</p>
+
+<hr>
+
+<h3>1. Architecture of JVM</h3>
+<p>The JVM is composed of three main subsystems:</p>
+<ol>
+  <li><strong>ClassLoader Subsystem:</strong> Loads, links, and initializes <code>.class</code> files.</li>
+  <li><strong>Runtime Data Areas (Memory):</strong> Allocates memory for program execution.</li>
+  <li><strong>Execution Engine:</strong> Executes bytecode via Interpreter, JIT Compiler, and Garbage Collector.</li>
+</ol>
+
+<hr>
+
+<h3>2. JVM Runtime Memory Structure</h3>
+<p>The JVM runtime memory is divided into five key regions:</p>
+
+<table border="1" cellpadding="8" style="width:100%; border-collapse: collapse; margin-top:10px;">
+  <thead>
+    <tr style="background: var(--bg-hover, #2a2a2a);">
+      <th>Memory Region</th>
+      <th>Scope</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Heap Memory</strong></td>
+      <td>Shared by all threads</td>
+      <td>Stores all instantiated objects and instance variables. Divided into Young Generation (Eden, Survivor spaces) and Old Generation.</td>
+    </tr>
+    <tr>
+      <td><strong>Stack Memory</strong></td>
+      <td>Per-thread</td>
+      <td>Stores local variables, method call frames, and primitive values. Destroyed when method execution ends.</td>
+    </tr>
+    <tr>
+      <td><strong>Metaspace</strong></td>
+      <td>Shared by all threads</td>
+      <td>Replaced PermGen in Java 8. Stores class metadata, static fields, and method bytecode. Allocates from native memory.</td>
+    </tr>
+    <tr>
+      <td><strong>PC Registers</strong></td>
+      <td>Per-thread</td>
+      <td>Holds the address of the currently executing JVM instruction for each thread.</td>
+    </tr>
+    <tr>
+      <td><strong>Native Method Stack</strong></td>
+      <td>Per-thread</td>
+      <td>Contains native method information (C/C++ native code execution).</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>3. Garbage Collection (GC) Mechanics</h3>
+<p>
+  Garbage Collection is the automatic process of identifying and reclaiming unreferenced memory from Heap space to prevent OutOfMemory errors.
+</p>
+
+<h4>GC Process: Mark, Sweep, and Compact</h4>
+<ol>
+  <li><strong>Mark:</strong> Identifies which objects are still in use (reachable from GC Roots) and which are unreferenced.</li>
+  <li><strong>Sweep:</strong> Removes unreferenced objects.</li>
+  <li><strong>Compact:</strong> Moves remaining live objects together to eliminate memory fragmentation.</li>
+</ol>
+
+<h4>Popular Java Garbage Collectors</h4>
+<ul>
+  <li><strong>Serial GC:</strong> Single-threaded collector designed for small applications.</li>
+  <li><strong>Parallel GC:</strong> Multi-threaded collector focusing on throughput.</li>
+  <li><strong>G1 GC (Garbage-First):</strong> Low-latency collector default in modern Java (Java 9+).</li>
+  <li><strong>ZGC / Shenandoah:</strong> Ultra-low latency collectors for large heap sizes (gigabytes to terabytes) with pause times under 1 millisecond.</li>
+</ul>
+
+<hr>
+
+<h3>4. Memory Leaks in Java & Prevention</h3>
+<p>
+  Even with Garbage Collection, memory leaks occur when unneeded objects remain reachable through strong references.
+</p>
+
+<h4>Common Causes of Memory Leaks:</h4>
+<ul>
+  <li>Unclosed connections, I/O streams, or readers.</li>
+  <li>Static variables holding references to large objects or collections indefinitely.</li>
+  <li>Unregistered event listeners or callbacks.</li>
+  <li>Incorrect <code>equals()</code> and <code>hashCode()</code> in <code>HashMap</code> keys.</li>
+</ul>
+
+<pre><code>// Preventing Memory Leaks: Use try-with-resources & clear references
+public void processData() {
+    try (BufferedReader reader = new BufferedReader(new FileReader("file.txt"))) {
+        String line = reader.readLine();
+        // File automatically closed when block exits!
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}</code></pre>

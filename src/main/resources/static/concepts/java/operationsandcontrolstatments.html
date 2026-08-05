@@ -1,0 +1,312 @@
+<h2>Java Operations and Control Statements</h2>
+<p>Java provides various operators and control statements to manipulate data and control the flow of the program.</p>
+
+<h3>Types of Operators:</h3>
+<div class="section">
+  <p>Java operators are used to perform operations on variables and values. Here's a beginner-friendly overview with examples and outputs.</p>
+</div>
+<ul>
+    <li><strong>Arithmetic Operators:</strong> +, -, *, /, %</li>
+    <li><strong>Relational Operators:</strong> ==, !=, >, <, >=, <=</li>
+    <li><strong>Logical Operators:</strong> &&, ||, !</li>
+    <li><strong>Assignment Operators:</strong> =, +=, -=, *=, /=</li>
+</ul>
+<!-- Arithmetic Operators -->
+<div class="section">
+  <h2>1. Arithmetic Operators</h2>
+  <p>Used for basic math operations:</p>
+  <ul>
+    <li><strong>+</strong> : Addition</li>
+    <li><strong>-</strong> : Subtraction</li>
+    <li><strong>*</strong> : Multiplication</li>
+    <li><strong>/</strong> : Division</li>
+    <li><strong>%</strong> : Modulus (Remainder)</li>
+  </ul>
+
+  <strong>Example Code:</strong>
+  <pre><code>public class ArithmeticExample {
+    public static void main(String[] args) {
+        int a = 10, b = 3;
+        System.out.println("a + b = " + (a + b));
+        System.out.println("a - b = " + (a - b));
+        System.out.println("a * b = " + (a * b));
+        System.out.println("a / b = " + (a / b));
+        System.out.println("a % b = " + (a % b));
+    }
+}</code></pre>
+
+  <strong>Expected Output:</strong>
+  <pre><code>a + b = 13
+a - b = 7
+a * b = 30
+a / b = 3
+a % b = 1</code></pre>
+</div>
+
+<!-- Relational Operators -->
+<div class="section">
+  <h2>2. Relational Operators</h2>
+  <p>Used to compare values:</p>
+  <ul>
+    <li><strong>==</strong> : Equal to</li>
+    <li><strong>!=</strong> : Not equal to</li>
+    <li><strong>&gt;</strong> : Greater than</li>
+    <li><strong>&lt;</strong> : Less than</li>
+    <li><strong>&gt;=</strong> : Greater than or equal to</li>
+    <li><strong>&lt;=</strong> : Less than or equal to</li>
+  </ul>
+
+  <strong>Example Code:</strong>
+  <pre><code>public class RelationalExample {
+    public static void main(String[] args) {
+        int x = 5, y = 10;
+        System.out.println(x == y);
+        System.out.println(x != y);
+        System.out.println(x > y);
+        System.out.println(x < y);
+        System.out.println(x >= 5);
+        System.out.println(y <= 5);
+    }
+}</code></pre>
+
+  <strong>Expected Output:</strong>
+  <pre><code>false
+true
+false
+true
+true
+false</code></pre>
+</div>
+
+<!-- Logical Operators -->
+<div class="section">
+  <h2>3. Logical Operators</h2>
+  <p>Used to combine boolean expressions:</p>
+  <ul>
+    <li><strong>&&</strong> : Logical AND</li>
+    <li><strong>||</strong> : Logical OR</li>
+    <li><strong>!</strong> : Logical NOT</li>
+  </ul>
+
+  <strong>Example Code:</strong>
+  <pre><code>public class LogicalExample {
+    public static void main(String[] args) {
+        int a = 7, b = 12;
+        System.out.println(a > 5 && b > 10);
+        System.out.println(a < 5 || b > 10);
+        System.out.println(!(a == b));
+    }
+}</code></pre>
+
+  <strong>Expected Output:</strong>
+  <pre><code>true
+true
+true</code></pre>
+</div>
+
+<!-- Assignment Operators -->
+<div class="section">
+  <h2>4. Assignment Operators</h2>
+  <p>Used to assign values to variables:</p>
+  <ul>
+    <li><strong>=</strong> : Assign</li>
+    <li><strong>+=</strong> : Add and assign</li>
+    <li><strong>-=</strong> : Subtract and assign</li>
+    <li><strong>*=</strong> : Multiply and assign</li>
+    <li><strong>/=</strong> : Divide and assign</li>
+  </ul>
+
+  <strong>Example Code:</strong>
+  <pre><code>public class AssignmentExample {
+    public static void main(String[] args) {
+        int a = 10;
+        System.out.println("Original a = " + a);
+        a += 5;
+        System.out.println("After += 5, a = " + a);
+        a -= 3;
+        System.out.println("After -= 3, a = " + a);
+        a *= 2;
+        System.out.println("After *= 2, a = " + a);
+        a /= 4;
+        System.out.println("After /= 4, a = " + a);
+    }
+}</code></pre>
+
+  <strong>Expected Output:</strong>
+  <pre><code>Original a = 10
+After += 5, a = 15
+After -= 3, a = 12
+After *= 2, a = 24
+After /= 4, a = 6</code></pre>
+</div>
+<hr>
+<hr>
+<h1>Java Conditional Statements:</h1>
+<li><strong>Conditional Statements:</strong> if, if-else, else-if ladder, switch</li>
+<li><strong>Looping Statements:</strong> for, while, do-while</li>
+<li><strong>Jump Statements:</strong> break, continue, return</li>
+
+<p><strong>Even or Odd using If-Else:</strong></p>
+<pre>
+import java.util.Scanner;
+public class EvenOddCheck {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter a number:");
+    int num = sc.nextInt();
+    if (num % 2 == 0) {
+        System.out.println("Even number");
+    } else {
+        System.out.println("Odd number");
+    }
+    sc.close();
+  }
+}
+</pre>
+<p><strong>Grading System using Else-If Ladder:</strong></p>
+<pre>
+import java.util.Scanner;
+public class GradeCheck {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter your percentage:");
+    int percentage = sc.nextInt();
+
+    if (percentage > 85)
+        System.out.println("First Class");
+    else if (percentage > 70)
+        System.out.println("Second Class");
+    else if (percentage > 35)
+        System.out.println("Third Class");
+    else
+        System.out.println("Fail");
+    
+    sc.close();
+  }
+}
+</pre>
+<p><strong>Day Type using Switch Case:</strong></p>
+<pre>
+import java.util.Scanner;
+public class DayType {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter a day:");
+    String day = sc.next().toLowerCase();
+
+    switch (day) {
+      case "monday":
+      case "tuesday":
+      case "wednesday":
+      case "thursday":
+      case "friday":
+        System.out.println("Weekday");
+        break;
+      case "saturday":
+      case "sunday":
+        System.out.println("Weekend");
+        break;
+      default:
+        System.out.println("Invalid day");
+    }
+    sc.close();
+  }
+}
+</pre>
+<hr>
+<h2>Java Looping Statements:</h2>
+<p><strong>For Loop - Print Numbers 1 to 5:</strong></p>
+<pre>
+public class ForLoopExample {
+  public static void main(String[] args) {
+    for (int i = 1; i <= 5; i++) {
+        System.out.println(i);
+    }
+  }
+}
+</pre>
+
+<p><strong>While Loop - Sum of Digits:</strong></p>
+<pre>
+import java.util.Scanner;
+public class SumDigits {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter number:");
+    int num = sc.nextInt();
+    int sum = 0;
+    while (num != 0) {
+      sum += num % 10;
+      num /= 10;
+    }
+    System.out.println("Sum of digits: " + sum);
+    sc.close();
+  }
+}
+</pre>
+
+<p><strong>Do-While Loop - Repeat until user enters 0:</strong></p>
+<pre>
+import java.util.Scanner;
+public class DoWhileExample {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int num;
+    do {
+      System.out.println("Enter a number (0 to stop):");
+      num = sc.nextInt();
+    } while (num != 0);
+    System.out.println("Exited loop.");
+    sc.close();
+  }
+}
+</pre>
+<hr>
+<h2>Java Jump Statements:</h2>
+<p><strong>Break Statement - Stop loop at 5:</strong></p>
+<pre>
+public class BreakExample {
+  public static void main(String[] args) {
+    for (int i = 1; i <= 10; i++) {
+      if (i == 5) {
+        break;
+      }
+      System.out.println(i);
+    }
+  }
+}
+</pre>
+
+<p><strong>Continue Statement - Skip even numbers:</strong></p>
+<pre>
+public class ContinueExample {
+  public static void main(String[] args) {
+    for (int i = 1; i <= 10; i++) {
+      if (i % 2 == 0) {
+        continue;
+      }
+      System.out.println(i);
+    }
+  }
+}
+</pre>
+
+<p><strong>Return Statement - Exit from a method early:</strong></p>
+<pre>
+public class ReturnExample {
+  public static void check(int num) {
+    if (num < 0) {
+      System.out.println("Negative number");
+      return;
+    }
+    System.out.println("Positive number");
+  }
+
+  public static void main(String[] args) {
+    check(10);
+    check(-5);
+  }
+}
+</pre>
+
+<hr>

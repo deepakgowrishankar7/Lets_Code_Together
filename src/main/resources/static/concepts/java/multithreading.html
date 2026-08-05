@@ -1,0 +1,150 @@
+<h2>Java Multithreading & Concurrency</h2>
+
+<p>
+  <strong>Multithreading</strong> in Java is a process of executing multiple threads simultaneously to maximize CPU utilization. A thread is a lightweight sub-process, the smallest unit of processing.
+</p>
+
+<h3>Core Concepts: Thread vs Process</h3>
+<ul>
+  <li><strong>Process:</strong> An isolated program in execution with its own memory space.</li>
+  <li><strong>Thread:</strong> A subset of a process that shares memory and resources with other threads of the same process.</li>
+</ul>
+
+<hr>
+
+<h3>1. Creating Threads in Java</h3>
+<p>There are two primary ways to create a thread in Java:</p>
+<ol>
+  <li>By extending the <code>Thread</code> class</li>
+  <li>By implementing the <code>Runnable</code> interface (Recommended)</li>
+</ol>
+
+<h4>Option A: Implementing <code>Runnable</code></h4>
+<pre><code>class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread running: " + Thread.currentThread().getName());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new MyRunnable(), "Worker-1");
+        Thread thread2 = new Thread(new MyRunnable(), "Worker-2");
+        
+        thread1.start();
+        thread2.start();
+    }
+}</code></pre>
+
+<strong>Output:</strong>
+<pre><code>Thread running: Worker-1
+Thread running: Worker-2</code></pre>
+
+<hr>
+
+<h3>2. Thread Life Cycle & States</h3>
+<p>A Java thread can exist in one of the following states (defined in <code>Thread.State</code>):</p>
+<ul>
+  <li><strong>NEW:</strong> Created but not yet started.</li>
+  <li><strong>RUNNABLE:</strong> Executing in the JVM or ready to execute.</li>
+  <li><strong>BLOCKED:</strong> Waiting for a monitor lock to enter a synchronized block/method.</li>
+  <li><strong>WAITING:</strong> Waiting indefinitely for another thread to perform a specific action (`wait()`, `join()`).</li>
+  <li><strong>TIMED_WAITING:</strong> Waiting for a specified time (`sleep(ms)`, `wait(ms)`).</li>
+  <li><strong>TERMINATED:</strong> Finished execution.</li>
+</ul>
+
+<hr>
+
+<h3>3. Synchronization & Thread Safety</h3>
+<p>
+  When multiple threads access shared mutable data, race conditions can occur. Use the <code>synchronized</code> keyword or explicit locks to guarantee mutual exclusion.
+</p>
+
+<pre><code>class Counter {
+    private int count = 0;
+
+    // Synchronized method prevents race condition
+    public synchronized void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+public class SyncExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) counter.increment();
+        });
+
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) counter.increment();
+        });
+
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+
+        System.out.println("Final Count: " + counter.getCount()); // Always 2000
+    }
+}</code></pre>
+
+<hr>
+
+<h3>4. Inter-Thread Communication (`wait`, `notify`)</h3>
+<p>
+  Threads can communicate using <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> methods inside a synchronized context.
+</p>
+
+<pre><code>class SharedResource {
+    private boolean available = false;
+
+    public synchronized void produce() throws InterruptedException {
+        while (available) {
+            wait(); // Wait until consumed
+        }
+        System.out.println("Produced item.");
+        available = true;
+        notify(); // Notify consumer thread
+    }
+
+    public synchronized void consume() throws InterruptedException {
+        while (!available) {
+            wait(); // Wait until produced
+        }
+        System.out.println("Consumed item.");
+        available = false;
+        notify(); // Notify producer thread
+    }
+}</code></pre>
+
+<hr>
+
+<h3>5. Advanced Concurrency: <code>ExecutorService</code> & Concurrent Collections</h3>
+<p>
+  Instead of managing threads manually, Java 5 introduced <code>java.util.concurrent</code> with thread pools, <code>ExecutorService</code>, <code>Future</code>, and high-performance concurrent collections like <code>ConcurrentHashMap</code> and <code>CopyOnWriteArrayList</code>.
+</p>
+
+<pre><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadPoolExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (int i = 1; i <= 5; i++) {
+            final int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Executing Task " + taskId + " on thread: " + Thread.currentThread().getName());
+            });
+        }
+
+        executor.shutdown();
+    }
+}</code></pre>

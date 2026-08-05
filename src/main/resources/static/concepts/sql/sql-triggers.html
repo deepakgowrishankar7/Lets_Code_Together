@@ -1,0 +1,70 @@
+<h2>SQL Triggers & Database Events</h2>
+
+<p>
+  A <strong>Trigger</strong> is a special type of stored program that automatically executes (fires) when a specific event (`INSERT`, `UPDATE`, or `DELETE`) occurs on a table or view.
+</p>
+
+<hr>
+
+<h3>1. Types of Triggers</h3>
+<ul>
+  <li><strong>BEFORE Trigger:</strong> Fires before the data operation is written to disk (used for data validation or default values).</li>
+  <li><strong>AFTER Trigger:</strong> Fires after the data operation completes (used for auditing, logging, or notifications).</li>
+  <li><strong>INSTEAD OF Trigger:</strong> Replaces standard DML execution (commonly used on views).</li>
+</ul>
+
+<hr>
+
+<h3>2. Creating an Audit Log Trigger (`AFTER INSERT`)</h3>
+
+<pre><code>-- Step 1: Create Audit Table
+CREATE TABLE audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    action_type VARCHAR(20),
+    user_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Step 2: Create Trigger for New User Registrations
+DELIMITER //
+
+CREATE TRIGGER trg_user_after_insert
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_logs (action_type, user_id)
+    VALUES ('USER_REGISTERED', NEW.id);
+END //
+
+DELIMITER ;</code></pre>
+
+<hr>
+
+<h3>3. Data Validation Trigger (`BEFORE UPDATE`)</h3>
+<p>
+  Using pseudo-records <code>NEW</code> (new value) and <code>OLD</code> (previous value):
+</p>
+
+<pre><code>-- Prevent updating balance below zero
+DELIMITER //
+
+CREATE TRIGGER trg_prevent_negative_balance
+BEFORE UPDATE ON accounts
+FOR EACH ROW
+BEGIN
+    IF NEW.balance < 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Error: Account balance cannot be negative.';
+    END IF;
+END //
+
+DELIMITER ;</code></pre>
+
+<hr>
+
+<h3>4. Best Practices for Database Triggers</h3>
+<ul>
+  <li>Keep trigger logic lightweight to avoid cascading locks and performance slowdowns.</li>
+  <li>Avoid recursive trigger loops (e.g. Trigger A updates Table B which triggers Table A).</li>
+  <li>Document triggers thoroughly as they execute transparently behind the scenes.</li>
+</ul>

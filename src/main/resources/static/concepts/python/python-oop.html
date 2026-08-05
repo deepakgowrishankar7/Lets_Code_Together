@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Object Oriented Programming in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Object Oriented Programming (OOP) in Python</h1>
+
+<p>
+Object Oriented Programming (OOP) is a programming paradigm that organizes code using classes and objects.
+It helps build reusable, secure, and scalable applications.
+</p>
+
+<hr>
+
+<h2>Why OOP?</h2>
+
+<ul>
+<li>Code Reusability</li>
+<li>Modularity</li>
+<li>Security</li>
+<li>Easy Maintenance</li>
+<li>Real World Modeling</li>
+</ul>
+
+<hr>
+
+<h2>Class and Object</h2>
+
+<p>
+A Class is a blueprint.
+An Object is an instance of a class.
+</p>
+
+<div class="code">
+class Student:
+    pass
+
+s1 = Student()
+
+print(type(s1))
+</div>
+
+<div class="output">
+&lt;class '__main__.Student'&gt;
+</div>
+
+<hr>
+
+<h2>Creating a Class</h2>
+
+<div class="code">
+class Student:
+
+    name = "Deepu"
+
+obj = Student()
+
+print(obj.name)
+</div>
+
+<div class="output">
+Deepu
+</div>
+
+<hr>
+
+<h2>Constructor (__init__)</h2>
+
+<p>
+A constructor initializes object data automatically.
+</p>
+
+<div class="code">
+class Student:
+
+    def __init__(self,name,age):
+
+        self.name = name
+        self.age = age
+
+s1 = Student("Deepu",21)
+
+print(s1.name)
+print(s1.age)
+</div>
+
+<div class="output">
+Deepu
+21
+</div>
+
+<hr>
+
+<h2>Instance Variables</h2>
+
+<div class="code">
+class Employee:
+
+    def __init__(self,name,salary):
+
+        self.name = name
+        self.salary = salary
+
+e1 = Employee("Rahul",50000)
+
+print(e1.name)
+</div>
+
+<div class="output">
+Rahul
+</div>
+
+<hr>
+
+<h2>Methods</h2>
+
+<div class="code">
+class Student:
+
+    def greet(self):
+
+        print("Welcome Student")
+
+s1 = Student()
+
+s1.greet()
+</div>
+
+<div class="output">
+Welcome Student
+</div>
+
+<hr>
+
+<h2>The self Keyword</h2>
+
+<p>
+self refers to the current object.
+It is used to access instance variables and methods.
+</p>
+
+<hr>
+
+<h2>Encapsulation</h2>
+
+<p>
+Encapsulation means binding data and methods together.
+Private variables are used to hide data.
+</p>
+
+<div class="code">
+class Bank:
+
+    def __init__(self):
+
+        self.__balance = 5000
+
+    def showBalance(self):
+
+        print(self.__balance)
+
+b = Bank()
+
+b.showBalance()
+</div>
+
+<div class="output">
+5000
+</div>
+
+<hr>
+
+<h2>Inheritance</h2>
+
+<p>
+Inheritance allows one class to acquire properties of another class.
+</p>
+
+<div class="code">
+class Animal:
+
+    def sound(self):
+
+        print("Animal Sound")
+
+class Dog(Animal):
+
+    pass
+
+d = Dog()
+
+d.sound()
+</div>
+
+<div class="output">
+Animal Sound
+</div>
+
+<hr>
+
+<h2>Types of Inheritance</h2>
+
+<table>
+
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>Single</td>
+<td>One Parent One Child</td>
+</tr>
+
+<tr>
+<td>Multiple</td>
+<td>Multiple Parents</td>
+</tr>
+
+<tr>
+<td>Multilevel</td>
+<td>Chain of Classes</td>
+</tr>
+
+<tr>
+<td>Hierarchical</td>
+<td>One Parent Multiple Children</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Method Overriding</h2>
+
+<div class="code">
+class Animal:
+
+    def sound(self):
+
+        print("Animal Sound")
+
+class Dog(Animal):
+
+    def sound(self):
+
+        print("Bark")
+
+d = Dog()
+
+d.sound()
+</div>
+
+<div class="output">
+Bark
+</div>
+
+<hr>
+
+<h2>super() Method</h2>
+
+<div class="code">
+class Parent:
+
+    def show(self):
+
+        print("Parent Method")
+
+class Child(Parent):
+
+    def show(self):
+
+        super().show()
+
+        print("Child Method")
+
+c = Child()
+
+c.show()
+</div>
+
+<div class="output">
+Parent Method
+Child Method
+</div>
+
+<hr>
+
+<h2>Polymorphism</h2>
+
+<p>
+Polymorphism means one interface, many forms.
+</p>
+
+<div class="code">
+class Cat:
+
+    def sound(self):
+
+        print("Meow")
+
+class Dog:
+
+    def sound(self):
+
+        print("Bark")
+
+animals = [Cat(),Dog()]
+
+for a in animals:
+
+    a.sound()
+</div>
+
+<div class="output">
+Meow
+Bark
+</div>
+
+<hr>
+
+<h2>Abstraction</h2>
+
+<p>
+Abstraction hides implementation details and shows only essential features.
+</p>
+
+<div class="code">
+from abc import ABC,abstractmethod
+
+class Vehicle(ABC):
+
+    @abstractmethod
+    def start(self):
+        pass
+
+class Car(Vehicle):
+
+    def start(self):
+        print("Car Started")
+
+c = Car()
+
+c.start()
+</div>
+
+<div class="output">
+Car Started
+</div>
+
+<hr>
+
+<h2>Real World Example</h2>
+
+<div class="code">
+class Student:
+
+    def __init__(self,name,marks):
+
+        self.name = name
+        self.marks = marks
+
+    def display(self):
+
+        print(self.name,self.marks)
+
+s1 = Student("Deepu",95)
+
+s1.display()
+</div>
+
+<div class="output">
+Deepu 95
+</div>
+
+<hr>
+
+<h2>OOP Pillars</h2>
+
+<table>
+
+<tr>
+<th>Pillar</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Encapsulation</td>
+<td>Data Security</td>
+</tr>
+
+<tr>
+<td>Inheritance</td>
+<td>Code Reuse</td>
+</tr>
+
+<tr>
+<td>Polymorphism</td>
+<td>Flexibility</td>
+</tr>
+
+<tr>
+<td>Abstraction</td>
+<td>Hide Complexity</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Banking Systems</li>
+<li>School Management Systems</li>
+<li>E-Commerce Websites</li>
+<li>Hospital Management</li>
+<li>Game Development</li>
+<li>Mobile Applications</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is OOP?</h3>
+<p>Programming using classes and objects.</p>
+
+<h3>2. Difference between Class and Object?</h3>
+<p>Class is blueprint, object is instance.</p>
+
+<h3>3. What is Constructor?</h3>
+<p>Special method used for initialization.</p>
+
+<h3>4. What is Encapsulation?</h3>
+<p>Binding data and methods together.</p>
+
+<h3>5. What is Inheritance?</h3>
+<p>Acquiring properties of another class.</p>
+
+<h3>6. What is Polymorphism?</h3>
+<p>One interface, many forms.</p>
+
+<h3>7. What is Abstraction?</h3>
+<p>Hiding implementation details.</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Forgetting self parameter</li>
+<li>Wrong constructor syntax</li>
+<li>Confusing inheritance and polymorphism</li>
+<li>Accessing private variables directly</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Create Student Class</li>
+<li>Create Employee Class</li>
+<li>Use Constructor</li>
+<li>Method Overriding Example</li>
+<li>Inheritance Example</li>
+<li>Bank Account Class</li>
+<li>Library Management Class</li>
+<li>Vehicle Class</li>
+<li>Polymorphism Example</li>
+<li>Abstraction Example</li>
+<li>School Management System</li>
+<li>Shopping Cart System</li>
+<li>ATM System</li>
+<li>Hospital Management System</li>
+<li>Mini OOP Project</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Object Oriented Programming helps build scalable applications.
+
+Main Concepts:
+
+• Class
+
+• Object
+
+• Constructor
+
+• Encapsulation
+
+• Inheritance
+
+• Polymorphism
+
+• Abstraction
+
+OOP is one of the most important topics for interviews and real-world development.
+
+</div>
+
+</div>
+
+</body>
+</html>

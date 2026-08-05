@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dictionaries in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Dictionaries in Python</h1>
+
+<p>
+A Dictionary is a collection of key-value pairs.
+Each key is unique and is used to access its corresponding value.
+</p>
+
+<hr>
+
+<h2>Why Use Dictionaries?</h2>
+
+<ul>
+<li>Fast Data Retrieval</li>
+<li>Store Related Information</li>
+<li>Real-world Data Representation</li>
+<li>Efficient Searching</li>
+</ul>
+
+<hr>
+
+<h2>Creating a Dictionary</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21,
+"course":"Python"
+}
+
+print(student)
+</div>
+
+<div class="output">
+{'name':'Deepu','age':21,'course':'Python'}
+</div>
+
+<hr>
+
+<h2>Dictionary Characteristics</h2>
+
+<ul>
+<li>Stores Data as Key-Value Pairs</li>
+<li>Mutable</li>
+<li>Keys Must Be Unique</li>
+<li>Values Can Be Duplicates</li>
+<li>Ordered (Python 3.7+)</li>
+</ul>
+
+<hr>
+
+<h2>Accessing Values</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+print(student["name"])
+</div>
+
+<div class="output">
+Deepu
+</div>
+
+<hr>
+
+<h2>Using get()</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+print(student.get("age"))
+</div>
+
+<div class="output">
+21
+</div>
+
+<hr>
+
+<h2>Adding New Elements</h2>
+
+<div class="code">
+student = {
+"name":"Deepu"
+}
+
+student["age"] = 21
+
+print(student)
+</div>
+
+<div class="output">
+{'name':'Deepu','age':21}
+</div>
+
+<hr>
+
+<h2>Updating Existing Values</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+student["age"] = 22
+
+print(student)
+</div>
+
+<div class="output">
+{'name':'Deepu','age':22}
+</div>
+
+<hr>
+
+<h2>Removing Elements</h2>
+
+<h3>pop()</h3>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+student.pop("age")
+
+print(student)
+</div>
+
+<div class="output">
+{'name':'Deepu'}
+</div>
+
+<hr>
+
+<h3>del</h3>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+del student["age"]
+
+print(student)
+</div>
+
+<div class="output">
+{'name':'Deepu'}
+</div>
+
+<hr>
+
+<h2>Dictionary Methods</h2>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>get()</td>
+<td>Returns Value</td>
+</tr>
+
+<tr>
+<td>keys()</td>
+<td>Returns Keys</td>
+</tr>
+
+<tr>
+<td>values()</td>
+<td>Returns Values</td>
+</tr>
+
+<tr>
+<td>items()</td>
+<td>Returns Key-Value Pairs</td>
+</tr>
+
+<tr>
+<td>pop()</td>
+<td>Removes Key</td>
+</tr>
+
+<tr>
+<td>update()</td>
+<td>Updates Dictionary</td>
+</tr>
+
+<tr>
+<td>clear()</td>
+<td>Removes All Items</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>keys() Method</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+print(student.keys())
+</div>
+
+<div class="output">
+dict_keys(['name','age'])
+</div>
+
+<hr>
+
+<h2>values() Method</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+print(student.values())
+</div>
+
+<div class="output">
+dict_values(['Deepu',21])
+</div>
+
+<hr>
+
+<h2>items() Method</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+print(student.items())
+</div>
+
+<div class="output">
+dict_items([('name','Deepu'),('age',21)])
+</div>
+
+<hr>
+
+<h2>Looping Through Dictionary</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21
+}
+
+for key,value in student.items():
+
+    print(key,value)
+</div>
+
+<div class="output">
+name Deepu
+age 21
+</div>
+
+<hr>
+
+<h2>Nested Dictionary</h2>
+
+<div class="code">
+students = {
+
+1:{
+"name":"Deepu",
+"age":21
+},
+
+2:{
+"name":"Rahul",
+"age":22
+}
+
+}
+
+print(students[1]["name"])
+</div>
+
+<div class="output">
+Deepu
+</div>
+
+<hr>
+
+<h2>Dictionary Comprehension</h2>
+
+<div class="code">
+squares = {
+x:x*x
+for x in range(5)
+}
+
+print(squares)
+</div>
+
+<div class="output">
+{0:0,1:1,2:4,3:9,4:16}
+</div>
+
+<hr>
+
+<h2>Program: Student Information</h2>
+
+<div class="code">
+student = {
+"name":"Deepu",
+"age":21,
+"course":"Python"
+}
+
+for k,v in student.items():
+
+    print(k,":",v)
+</div>
+
+<div class="output">
+name : Deepu
+age : 21
+course : Python
+</div>
+
+<hr>
+
+<h2>Program: Word Frequency Counter</h2>
+
+<div class="code">
+text = "python python java"
+
+words = text.split()
+
+freq = {}
+
+for word in words:
+
+    freq[word] = freq.get(word,0)+1
+
+print(freq)
+</div>
+
+<div class="output">
+{'python':2,'java':1}
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Student Records</li>
+<li>User Profiles</li>
+<li>JSON Data</li>
+<li>Banking Systems</li>
+<li>E-commerce Products</li>
+<li>API Responses</li>
+<li>Configuration Files</li>
+</ul>
+
+<hr>
+
+<h2>Dictionary vs List</h2>
+
+<table>
+
+<tr>
+<th>Dictionary</th>
+<th>List</th>
+</tr>
+
+<tr>
+<td>Uses Keys</td>
+<td>Uses Indexes</td>
+</tr>
+
+<tr>
+<td>Faster Search</td>
+<td>Sequential Search</td>
+</tr>
+
+<tr>
+<td>Key-Value Pairs</td>
+<td>Values Only</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a Dictionary?</h3>
+
+<p>
+A collection of key-value pairs.
+</p>
+
+<h3>2. Can Dictionary Keys Be Duplicates?</h3>
+
+<p>
+No.
+</p>
+
+<h3>3. Difference Between get() and []?</h3>
+
+<p>
+get() avoids KeyError if key doesn't exist.
+</p>
+
+<h3>4. What is Dictionary Comprehension?</h3>
+
+<p>
+A concise way to create dictionaries.
+</p>
+
+<h3>5. Are Dictionaries Mutable?</h3>
+
+<p>
+Yes.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Using Duplicate Keys</li>
+<li>Accessing Missing Keys</li>
+<li>Confusing List with Dictionary</li>
+<li>Wrong Loop Syntax</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Create Student Dictionary</li>
+<li>Update Student Age</li>
+<li>Delete Key</li>
+<li>Display Keys</li>
+<li>Display Values</li>
+<li>Loop Through Dictionary</li>
+<li>Word Frequency Counter</li>
+<li>Employee Management</li>
+<li>Library System</li>
+<li>Phone Book</li>
+<li>Nested Dictionary Example</li>
+<li>Dictionary Comprehension</li>
+<li>Student Marks System</li>
+<li>Bank Account Details</li>
+<li>Inventory Management</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Dictionaries store data using key-value pairs.
+
+Key Concepts:
+
+• Creating Dictionaries
+
+• Accessing Values
+
+• Adding & Updating Data
+
+• Dictionary Methods
+
+• Nested Dictionaries
+
+• Dictionary Comprehension
+
+Dictionaries are one of the most powerful data structures in Python and are widely used in real-world applications.
+
+</div>
+
+</div>
+
+</body>
+</html>

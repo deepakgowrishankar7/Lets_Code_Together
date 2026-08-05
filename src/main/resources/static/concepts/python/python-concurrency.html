@@ -1,0 +1,77 @@
+<h2>Python Concurrency: Multithreading, Multiprocessing & AsyncIO</h2>
+
+<p>
+  Python supports three primary approaches to concurrency: <strong>Multithreading</strong> (for I/O-bound tasks), <strong>Multiprocessing</strong> (for CPU-bound tasks bypassing the GIL), and <strong>AsyncIO</strong> (for high-concurrency async I/O).
+</p>
+
+<hr>
+
+<h3>1. Understanding the GIL (Global Interpreter Lock)</h3>
+<p>
+  The CPython <strong>GIL</strong> ensures only one thread executes Python bytecode at a time. Therefore, <code>threading</code> speeds up I/O-bound operations (network, disk) but does not speed up CPU-bound computation across multiple CPU cores.
+</p>
+
+<hr>
+
+<h3>2. Multithreading (I/O-Bound Tasks)</h3>
+
+<pre><code>import threading
+import time
+
+def fetch_data(url):
+    print(f"Fetching {url}...")
+    time.sleep(1) # Simulating network request delay
+    print(f"Downloaded {url}")
+
+threads = []
+urls = ["https://api1.com", "https://api2.com", "https://api3.com"]
+
+for url in urls:
+    t = threading.Thread(target=fetch_data, args=(url,))
+    threads.append(t)
+    t.start()
+
+for t in threads:
+    t.join() # Wait for all threads to finish
+
+print("All requests completed!")</code></pre>
+
+<hr>
+
+<h3>3. Multiprocessing (CPU-Bound Parallelism)</h3>
+<p>Bypasses the GIL by spawning separate Python interpreter OS processes with independent memory spaces.</p>
+
+<pre><code>from multiprocessing import Pool
+
+def compute_square(x):
+    return x * x
+
+if __name__ == '__main__':
+    with Pool(processes=4) as pool:
+        results = pool.map(compute_square, [10, 20, 30, 40, 50])
+        print("Parallel Computation Results:", results) # [100, 400, 900, 1600, 2500]</code></pre>
+
+<hr>
+
+<h3>4. AsyncIO (`async` / `await`)</h3>
+<p>Single-threaded cooperative multitasking using event loops for high-performance network clients and web servers.</p>
+
+<pre><code>import asyncio
+
+async def fetch_api(service_id, delay):
+    print(f"Start fetch service {service_id}")
+    await asyncio.sleep(delay) # Non-blocking sleep
+    print(f"Finished fetch service {service_id}")
+    return f"Result {service_id}"
+
+async def main():
+    # Run multiple async tasks concurrently
+    results = await asyncio.gather(
+        fetch_api(1, 2),
+        fetch_api(2, 1),
+        fetch_api(3, 1.5)
+    )
+    print("Async Responses:", results)
+
+# Run AsyncIO Event Loop
+asyncio.run(main())</code></pre>

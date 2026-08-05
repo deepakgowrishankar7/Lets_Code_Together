@@ -1,0 +1,181 @@
+<h2>Java Packages</h2>
+
+<p>Packages in Java are used to group related classes and interfaces. They help in avoiding name conflicts and can control access with protected and default access levels.</p>
+
+<h3>Types of Packages:</h3>
+<ul>
+    <li><strong>Built-in Packages:</strong> Java provides many predefined packages (e.g., java.util, java.io).</li>
+    <li><strong>User-defined Packages:</strong> You can create your own packages to group your project classes logically.</li>
+</ul>
+
+<hr>
+
+<h3>1. Using a Built-in Package</h3>
+<p>These packages consist of a large number of classes which are a part of Java API.Some of the commonly used built-in packages are:</p>
+<li><strong>java.lang:</strong>Contains language support classes(e.g classes which defines primitive data types, math operations). This package is automatically imported.</li>
+<p><strong>java.lang Example:</strong>String class,Math class,Integer class,Object class</p>
+<pre>
+    public class Main {
+    public static void main(String[] args) {
+        // String class
+        String message = "Hello, World!";
+        System.out.println(message);
+
+        // Math class
+        int number = 25;
+        double squareRoot = Math.sqrt(number);
+        System.out.println("Square root of " + number + ": " + squareRoot);
+
+        // Integer class
+        String numberString = "123";
+        int parsedNumber = Integer.parseInt(numberString);
+        System.out.println("Parsed number: " + parsedNumber);
+
+        // Object class (implicitly used by all classes)
+        Object obj = new Object();
+        System.out.println("Object: " + obj.toString());
+    }
+}
+</pre>
+<li><strong>java.util:</strong>Contains utility classes(e.g. collections framework, date and time facilities).</li>
+<h4>Example:</h4>
+<pre>
+import java.util.Scanner;
+
+public class InputExample {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter name: ");
+        String name = sc.nextLine();
+        System.out.println("Hello, " + name);
+    }
+}
+</pre>
+<li><strong>java.io:</strong>Contains classes for supporting input / output operations.</li>
+<h4>java.io Example:<h4>(These examples will understand on going concepts)</h4></h4>
+<pre>
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteFileExample {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("example.txt");
+            BufferedWriter buffer = new BufferedWriter(writer);
+            buffer.write("Hello, World!");
+            buffer.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+}
+</pre>
+<li><strong>java.applet:</strong>Contains classes for creating Applets</li>
+<h4>Java.applet Example:</h4>
+<pre>
+import java.applet.Applet;
+import java.awt.Graphics;
+
+public class HelloWorldApplet extends Applet {
+    public void paint(Graphics g) {
+        g.drawString("Hello, World!", 50, 50);
+    }
+}
+</pre>
+<li><strong>java.awt:</strong> Contains classes for implementing Graphical User Interfaces (like Frame, Button, Panel).</li>
+<h4>java.awt Example:</h4>
+<pre><code>import java.awt.Button;
+import java.awt.Frame;
+
+public class AwtExample {
+    public static void main(String[] args) {
+        Frame frame = new Frame("AWT Window Example");
+        Button button = new Button("Click Me");
+        button.setBounds(50, 100, 80, 30);
+        frame.add(button);
+        frame.setSize(300, 300);
+        frame.setLayout(null);
+        System.out.println("AWT Frame initialized with title: " + frame.getTitle());
+    }
+}</code></pre>
+<li><strong>java.net:</strong>Contain classes for supporting networking operations.</li>
+<h4>java.net Example:</h4>
+<pre>
+       import java.io.BufferedReader;
+   import java.io.IOException;
+   import java.io.InputStreamReader;
+   import java.net.HttpURLConnection;
+   import java.net.URL;
+
+   public class HttpURLConnectionExample {
+       public static void main(String[] args) throws IOException {
+           URL url = new URL("https://www.example.com");
+           HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+           connection.setRequestMethod("GET");
+
+           int responseCode = connection.getResponseCode();
+           if (responseCode == HttpURLConnection.HTTP_OK) {
+               BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+               String inputLine;
+               StringBuffer response = new StringBuffer();
+               while ((inputLine = in.readLine()) != null) {
+                   response.append(inputLine);
+               }
+               in.close();
+               System.out.println(response.toString());
+           } else {
+               System.out.println("GET request failed with response code: " + responseCode);
+           }
+       }
+   }
+</pre>
+<h3>2.User-defined Packages:</h3>
+<h4>Creating and Using a User-defined Package</h4>
+<li><strong>Create the package:</strong></li>
+<p>
+
+</p>
+<p>
+    First we create a directory myPackage (name should be same as the name of the package). Then create the MyClass inside the directory with the first statement being the package names.
+</p>
+
+<pre>
+// Name of the package must be same as the directory
+// under which this file is saved
+package myPackage;
+
+public class MyClass
+{
+    public void getNames(String s)
+    {        
+        System.out.println(s);        
+    }
+}
+</pre>
+<li><strong>Use the Class in program:</strong></li>
+<p>Now we will use the <strong>MyClass</strong> class in our program.</p>
+<pre>
+    // import 'MyClass' class from 'names' myPackage 
+import myPackage.MyClass;
+
+public class Geeks {
+   public static void main(String args[]) {  
+     
+      // Initializing the String variable 
+      // with a value 
+      String s = "GeeksforGeeks";
+      
+      // Creating an instance of class MyClass in 
+      // the package.
+      MyClass o = new MyClass();
+      
+      o.getNames(s);
+   }
+}
+</pre>
+
+<p><strong>Conclusion:</strong> Packages help in organizing Java code and prevent class name conflicts, making large-scale applications easier to manage.</p>
+

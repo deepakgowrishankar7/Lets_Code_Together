@@ -1,0 +1,112 @@
+<h2>Java Reflection API & Custom Annotations</h2>
+
+<p>
+  <strong>Reflection</strong> is a mechanism that allows Java programs to inspect and modify the runtime behavior of applications, inspect class details (methods, fields, constructors), and invoke methods dynamically.
+</p>
+
+<hr>
+
+<h3>1. Inspecting Classes at Runtime</h3>
+<p>You can obtain a <code>Class<?></code> reference using `Class.forName()`, `Object.getClass()`, or `Type.class`.</p>
+
+<pre><code>import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class ReflectionDemo {
+    public static void main(String[] args) throws Exception {
+        Class<?> clazz = String.class;
+
+        System.out.println("Class Name: " + clazz.getName());
+        System.out.println("Superclass: " + clazz.getSuperclass().getName());
+
+        System.out.println("\nDeclared Methods count: " + clazz.getDeclaredMethods().length);
+        
+        // Inspect public methods
+        for (Method method : clazz.getMethods()) {
+            if (method.getName().startsWith("to")) {
+                System.out.println("Method: " + method.getName());
+            }
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<h3>2. Dynamic Method Invocation & Private Field Access</h3>
+<p>Reflection allows accessing and modifying <code>private</code> fields or invoking private methods using <code>setAccessible(true)</code>.</p>
+
+<pre><code>import java.lang.reflect.Field;
+
+class SecretVault {
+    private String passcode = "TopSecret123";
+}
+
+public class VaultCracker {
+    public static void main(String[] args) throws Exception {
+        SecretVault vault = new SecretVault();
+
+        // Get private field reference
+        Field field = SecretVault.class.getDeclaredField("passcode");
+
+        // Bypass Java language access checks
+        field.setAccessible(true);
+
+        // Read value
+        String value = (String) field.get(vault);
+        System.out.println("Extracted secret: " + value);
+
+        // Modify value dynamically
+        field.set(vault, "NewHackedPasscode");
+        System.out.println("Updated secret: " + field.get(vault));
+    }
+}</code></pre>
+
+<hr>
+
+<h3>3. Defining Custom Annotations (`@Retention`, `@Target`)</h3>
+<p>
+  Annotations provide metadata about code elements. Custom annotations are declared using <code>@interface</code>.
+</p>
+
+<pre><code>import java.lang.annotation.*;
+
+// Define Custom Annotation
+@Retention(RetentionPolicy.RUNTIME) // Available at runtime via Reflection
+@Target(ElementType.METHOD)         // Can only be applied to methods
+public @interface ExecutionTimer {
+    String description() default "Measures execution time";
+}</code></pre>
+
+<hr>
+
+<h3>4. Processing Custom Annotations via Reflection</h3>
+<p>You can inspect annotations attached to classes or methods and execute logic dynamically (as frameworks like Spring and JUnit do).</p>
+
+<pre><code>import java.lang.reflect.Method;
+
+class Service {
+    @ExecutionTimer(description = "Important Business Calculation")
+    public void calculate() {
+        System.out.println("Performing heavy calculation...");
+    }
+}
+
+public class AnnotationProcessor {
+    public static void main(String[] args) throws Exception {
+        Service service = new Service();
+        Method method = service.getClass().getMethod("calculate");
+
+        // Check if annotation is present
+        if (method.isAnnotationPresent(ExecutionTimer.class)) {
+            ExecutionTimer timer = method.getAnnotation(ExecutionTimer.class);
+            System.out.println("Found annotation with description: " + timer.description());
+
+            long start = System.currentTimeMillis();
+            method.invoke(service); // Execute method dynamically
+            long end = System.currentTimeMillis();
+
+            System.out.println("Execution completed in: " + (end - start) + " ms");
+        }
+    }
+}</code></pre>

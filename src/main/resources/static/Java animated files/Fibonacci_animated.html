@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fibonacci Iterative Visualizer</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #12172a;
+    --panel2: #171d34;
+    --border: rgba(255,255,255,.08);
+    --text: #e9eeff;
+    --muted: #9aa3c7;
+    --accent: #7c9cff;
+    --accent2: #67e8a8;
+    --warn: #ffb86b;
+    --danger: #ff7373;
+    --shadow: 0 18px 50px rgba(0,0,0,.28);
+    --radius: 18px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--mono);
+    background:
+      radial-gradient(circle at top left, rgba(124,156,255,.18), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(103,232,168,.12), transparent 25%),
+      var(--bg);
+    color: var(--text);
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: rgba(10,14,28,.92);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+  }
+
+  .top {
+    display: flex;
+    min-height: 520px;
+  }
+
+  .code-panel {
+    flex: 1;
+    position: relative;
+    background: linear-gradient(180deg, #161b31, #12162a);
+    padding: 18px;
+    overflow: auto;
+    border-right: 1px solid var(--border);
+  }
+
+  .debug-panel {
+    width: 380px;
+    background: linear-gradient(180deg, #11162a, #0f1426);
+    padding: 18px;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .output-panel {
+    background: rgba(255,255,255,.03);
+    border-top: 1px solid var(--border);
+    padding: 14px 18px;
+    min-height: 92px;
+  }
+
+  .panel-title {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .code-line {
+    font-size: 13px;
+    line-height: 1.9;
+    color: #d7defc;
+    white-space: pre;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px;
+    padding: 0 10px;
+    transition: all .2s ease;
+  }
+
+  .code-line.highlight {
+    background: rgba(124,156,255,.16);
+    box-shadow: inset 0 0 0 1px rgba(124,156,255,.22);
+  }
+
+  .kw { color: #c792ea; }
+  .str { color: #9ae6b4; }
+  .num { color: #ffcf88; }
+  .fn { color: #8bb6ff; }
+  .cls { color: #ffe08a; }
+
+  .step-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255,255,255,.03);
+    padding: 14px;
+  }
+
+  .step-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(124,156,255,.16);
+    color: #cfe0ff;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  .step-progress {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .step-title {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .step-desc {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d9dfff;
+    margin-bottom: 14px;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,.07);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width .25s ease;
+  }
+
+  .progress-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .summary-box {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255,255,255,.03);
+    padding: 10px 12px;
+  }
+
+  .summary-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .summary-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .summary-value.updated {
+    color: var(--accent);
+  }
+
+  .explain-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .explain-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #d9dfff;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+  }
+
+  .explain-mark {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    margin-top: 1px;
+    background: rgba(124,156,255,.16);
+    color: #d5e3ff;
+  }
+
+  .truth { color: var(--accent2); font-weight: 800; }
+  .false { color: var(--danger); font-weight: 800; }
+
+  .out-line {
+    font-size: 13px;
+    color: #e9edff;
+    line-height: 1.8;
+    margin: 4px 0;
+  }
+
+  .out-line .out-num {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px 18px;
+    background: rgba(255,255,255,.03);
+    border-top: 1px solid var(--border);
+    font-family: var(--sans);
+  }
+
+  .btn,
+  select {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,.04);
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+
+  .btn:hover,
+  select:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.08);
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, #4f77ff, #7c9cff);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .btn.primary:hover {
+    filter: brightness(1.05);
+  }
+
+  select {
+    padding: 8px 10px;
+    outline: none;
+    background: #1b2140;
+    color: #e9eeff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  select:focus {
+    background: #232a4d;
+    color: #ffffff;
+  }
+
+  select option {
+    background: #1b2140;
+    color: #e9eeff;
+  }
+
+  select option:checked {
+    background: #2f3a66;
+    color: #ffffff;
+  }
+
+  .speed-label,
+  .topic-label,
+  .step-info {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .topic-label {
+    margin-left: auto;
+    padding-left: 12px;
+  }
+
+  .code-wrap {
+    position: relative;
+  }
+
+  .project-badge {
+    position: absolute;
+    right: 18px;
+    bottom: 16px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: rgba(255,255,255,.22);
+    letter-spacing: .08em;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (max-width: 980px) {
+    .top {
+      flex-direction: column;
+    }
+
+    .debug-panel {
+      width: 100%;
+      border-left: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .code-panel {
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topic-label {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div class="code-panel code-wrap">
+      <div id="code-lines"></div>
+      <div class="project-badge">Fibonacci Iterative Visualizer</div>
+    </div>
+
+    <div class="debug-panel">
+      <div class="panel-title">Debug Window</div>
+      <div id="debug-content"></div>
+    </div>
+  </div>
+
+  <div class="output-panel">
+    <div class="panel-title">Output Window</div>
+    <div id="output-lines"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="playBtn" onclick="togglePlay()">&#9654; Play</button>
+    <button class="btn" onclick="resetAnim()">&#8635; Reset</button>
+    <span class="speed-label">Speed:</span>
+    <select id="speedSel">
+      <option value="3000">3 sec</option>
+      <option value="2500">2.5 sec</option>
+      <option value="2000">2 sec</option>
+      <option value="1500">1.5 sec</option>
+      <option value="1000" selected>1 sec</option>
+      <option value="750">0.75 sec</option>
+      <option value="500">0.5 sec</option>
+      <option value="100">0.1 sec</option>
+    </select>
+    <span class="step-info" id="stepInfo">Step 0 / 0</span>
+    <span class="topic-label">Java Program — Fibonacci Sequence Iterative</span>
+  </div>
+</div>
+
+<script>
+const codeLines = [
+  { text: '<span class="kw">public class</span> <span class="cls">FibonacciIterative</span> {', indent: 0 },
+  { text: '  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {', indent: 0 },
+  { text: '    <span class="cls">Scanner</span> sc = <span class="kw">new</span> <span class="cls">Scanner</span>(<span class="cls">System</span>.in);', indent: 0 },
+  { text: '    <span class="kw">int</span> n = sc.nextInt();', indent: 0 },
+  { text: '    <span class="kw">int</span> first = <span class="num">0</span>, second = <span class="num">1</span>;', indent: 0 },
+  { text: '    <span class="kw">int</span> i = <span class="num">1</span>;', indent: 0 },
+  { text: '    <span class="kw">while</span> (i &lt;= n) {', indent: 0 },
+  { text: '      <span class="cls">System</span>.out.print(first + <span class="str">" "</span>);', indent: 0 },
+  { text: '      <span class="kw">int</span> next = first + second;', indent: 0 },
+  { text: '      first = second;', indent: 0 },
+  { text: '      second = next;', indent: 0 },
+  { text: '      i++;', indent: 0 },
+  { text: '    }', indent: 0 },
+  { text: '  }', indent: 0 },
+  { text: '}', indent: 0 },
+];
+
+const steps = [
+  {
+    line: 2,
+    stage: 'Initialize',
+    title: 'Create Scanner',
+    desc: 'The program begins by creating a Scanner object to read the number of terms.',
+    debug: { n: '-', first: '-', second: '-', next: '-', i: '-' },
+    exprs: [{ mark: '1', text: 'Scanner created for input.' }],
+    output: []
+  },
+  {
+    line: 3,
+    stage: 'Input',
+    title: 'Read term count',
+    desc: 'The user enters how many Fibonacci terms to generate. Here we use 7.',
+    debug: { n: '7', first: '-', second: '-', next: '-', i: '-' },
+    exprs: [{ mark: '1', text: 'n = 7' }],
+    output: ['Enter n value', '7']
+  },
+  {
+    line: 4,
+    stage: 'Setup',
+    title: 'Initialize base values',
+    desc: 'Fibonacci starts with 0 and 1.',
+    debug: { n: '7', first: '0', second: '1', next: '-', i: '-' },
+    exprs: [{ mark: '1', text: 'first = 0, second = 1' }],
+    output: ['Enter n value', '7']
+  },
+  {
+    line: 5,
+    stage: 'Setup',
+    title: 'Initialize counter',
+    desc: 'The loop counter starts from 1.',
+    debug: { n: '7', first: '0', second: '1', next: '-', i: '1' },
+    exprs: [{ mark: '1', text: 'i = 1' }],
+    output: ['Enter n value', '7']
+  },
+  {
+    line: 6,
+    stage: 'Loop',
+    title: 'Check loop condition',
+    desc: 'The loop continues while i is less than or equal to n.',
+    debug: { n: '7', first: '0', second: '1', next: '-', i: '1' },
+    exprs: [{ mark: '1', text: '1 <= 7 → <span class="truth">true</span>' }],
+    output: ['Enter n value', '7']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print first term',
+    desc: 'The first term is printed.',
+    debug: { n: '7', first: '0', second: '1', next: '-', i: '1' },
+    exprs: [{ mark: '1', text: 'Printed: 0' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term',
+    desc: 'The next Fibonacci number is the sum of the previous two numbers.',
+    debug: { n: '7', first: '0', second: '1', next: '1', i: '1' },
+    exprs: [{ mark: '1', text: 'next = 0 + 1 = 1' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Shift first value',
+    desc: 'The second value becomes the new first value.',
+    debug: { n: '7', first: '1', second: '1', next: '1', i: '1' },
+    exprs: [{ mark: '1', text: 'first = second = 1' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Shift second value',
+    desc: 'The computed next term becomes the new second value.',
+    debug: { n: '7', first: '1', second: '1', next: '1', i: '1' },
+    exprs: [{ mark: '1', text: 'second = next = 1' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Move to next iteration',
+    desc: 'The loop counter increases by one.',
+    debug: { n: '7', first: '1', second: '1', next: '1', i: '2' },
+    exprs: [{ mark: '1', text: 'i = 2' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 6,
+    stage: 'Loop',
+    title: 'Continue loop',
+    desc: 'The loop runs again for the next term.',
+    debug: { n: '7', first: '1', second: '1', next: '1', i: '2' },
+    exprs: [{ mark: '1', text: '2 <= 7 → <span class="truth">true</span>' }],
+    output: ['Enter n value', '7', '0']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print second term',
+    desc: 'The next Fibonacci term is printed.',
+    debug: { n: '7', first: '1', second: '1', next: '1', i: '2' },
+    exprs: [{ mark: '1', text: 'Printed: 1' }],
+    output: ['Enter n value', '7', '0', '1']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term again',
+    desc: 'The next value is calculated from the current pair.',
+    debug: { n: '7', first: '1', second: '1', next: '2', i: '2' },
+    exprs: [{ mark: '1', text: 'next = 1 + 1 = 2' }],
+    output: ['Enter n value', '7', '0', '1']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Update first',
+    desc: 'The new first value becomes the previous second value.',
+    debug: { n: '7', first: '1', second: '1', next: '2', i: '2' },
+    exprs: [{ mark: '1', text: 'first = 1' }],
+    output: ['Enter n value', '7', '0', '1']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Update second',
+    desc: 'The second value becomes the newly computed term.',
+    debug: { n: '7', first: '1', second: '2', next: '2', i: '2' },
+    exprs: [{ mark: '1', text: 'second = 2' }],
+    output: ['Enter n value', '7', '0', '1']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Advance counter',
+    desc: 'The loop moves forward again.',
+    debug: { n: '7', first: '1', second: '2', next: '2', i: '3' },
+    exprs: [{ mark: '1', text: 'i = 3' }],
+    output: ['Enter n value', '7', '0', '1']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print third term',
+    desc: 'The next term is printed.',
+    debug: { n: '7', first: '1', second: '2', next: '2', i: '3' },
+    exprs: [{ mark: '1', text: 'Printed: 1' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term',
+    desc: 'The new term is calculated again.',
+    debug: { n: '7', first: '1', second: '2', next: '3', i: '3' },
+    exprs: [{ mark: '1', text: 'next = 1 + 2 = 3' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Shift first',
+    desc: 'The first variable is updated.',
+    debug: { n: '7', first: '2', second: '2', next: '3', i: '3' },
+    exprs: [{ mark: '1', text: 'first = 2' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Shift second',
+    desc: 'The second variable is updated.',
+    debug: { n: '7', first: '2', second: '3', next: '3', i: '3' },
+    exprs: [{ mark: '1', text: 'second = 3' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Increment counter',
+    desc: 'The loop counter advances.',
+    debug: { n: '7', first: '2', second: '3', next: '3', i: '4' },
+    exprs: [{ mark: '1', text: 'i = 4' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 6,
+    stage: 'Loop',
+    title: 'Keep going',
+    desc: 'The iterative process continues.',
+    debug: { n: '7', first: '2', second: '3', next: '3', i: '4' },
+    exprs: [{ mark: '1', text: '4 <= 7 → <span class="truth">true</span>' }],
+    output: ['Enter n value', '7', '0', '1', '1']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print next term',
+    desc: 'The current first value is printed.',
+    debug: { n: '7', first: '2', second: '3', next: '3', i: '4' },
+    exprs: [{ mark: '1', text: 'Printed: 2' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term',
+    desc: 'A new next term is produced.',
+    debug: { n: '7', first: '2', second: '3', next: '5', i: '4' },
+    exprs: [{ mark: '1', text: 'next = 2 + 3 = 5' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Update first again',
+    desc: 'The sliding window moves forward.',
+    debug: { n: '7', first: '3', second: '3', next: '5', i: '4' },
+    exprs: [{ mark: '1', text: 'first = 3' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Update second again',
+    desc: 'The second value becomes 5.',
+    debug: { n: '7', first: '3', second: '5', next: '5', i: '4' },
+    exprs: [{ mark: '1', text: 'second = 5' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Advance counter',
+    desc: 'The counter moves to the next iteration.',
+    debug: { n: '7', first: '3', second: '5', next: '5', i: '5' },
+    exprs: [{ mark: '1', text: 'i = 5' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print next term',
+    desc: 'The iterative output keeps building the sequence.',
+    debug: { n: '7', first: '3', second: '5', next: '5', i: '5' },
+    exprs: [{ mark: '1', text: 'Printed: 3' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term',
+    desc: 'Another term is computed.',
+    debug: { n: '7', first: '3', second: '5', next: '8', i: '5' },
+    exprs: [{ mark: '1', text: 'next = 3 + 5 = 8' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Update first',
+    desc: 'The first term shifts to 5.',
+    debug: { n: '7', first: '5', second: '5', next: '8', i: '5' },
+    exprs: [{ mark: '1', text: 'first = 5' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Update second',
+    desc: 'The second term becomes 8.',
+    debug: { n: '7', first: '5', second: '8', next: '8', i: '5' },
+    exprs: [{ mark: '1', text: 'second = 8' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Increase counter',
+    desc: 'The loop counter advances again.',
+    debug: { n: '7', first: '5', second: '8', next: '8', i: '6' },
+    exprs: [{ mark: '1', text: 'i = 6' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print next term',
+    desc: 'Another Fibonacci term is printed.',
+    debug: { n: '7', first: '5', second: '8', next: '8', i: '6' },
+    exprs: [{ mark: '1', text: 'Printed: 5' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5']
+  },
+  {
+    line: 8,
+    stage: 'Compute',
+    title: 'Compute next term',
+    desc: 'The next term is 13.',
+    debug: { n: '7', first: '5', second: '8', next: '13', i: '6' },
+    exprs: [{ mark: '1', text: 'next = 5 + 8 = 13' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5']
+  },
+  {
+    line: 9,
+    stage: 'Shift',
+    title: 'Shift first',
+    desc: 'The first value moves to 8.',
+    debug: { n: '7', first: '8', second: '8', next: '13', i: '6' },
+    exprs: [{ mark: '1', text: 'first = 8' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5']
+  },
+  {
+    line: 10,
+    stage: 'Shift',
+    title: 'Shift second',
+    desc: 'The second value becomes 13.',
+    debug: { n: '7', first: '8', second: '13', next: '13', i: '6' },
+    exprs: [{ mark: '1', text: 'second = 13' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5']
+  },
+  {
+    line: 11,
+    stage: 'Increment',
+    title: 'Advance counter',
+    desc: 'The counter moves on.',
+    debug: { n: '7', first: '8', second: '13', next: '13', i: '7' },
+    exprs: [{ mark: '1', text: 'i = 7' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5']
+  },
+  {
+    line: 7,
+    stage: 'Output',
+    title: 'Print final term',
+    desc: 'The seventh term is printed.',
+    debug: { n: '7', first: '8', second: '13', next: '13', i: '7' },
+    exprs: [{ mark: '1', text: 'Printed: 8' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5', '8']
+  },
+  {
+    line: 6,
+    stage: 'Loop',
+    title: 'Check loop end',
+    desc: 'The condition is checked one last time.',
+    debug: { n: '7', first: '8', second: '13', next: '13', i: '8' },
+    exprs: [{ mark: '1', text: '8 <= 7 → <span class="false">false</span>' }],
+    output: ['Enter n value', '7', '0', '1', '1', '2', '3', '5', '8']
+  }
+];
+
+const debugKeys = ['n', 'first', 'second', 'next', 'i'];
+let currentStep = 0;
+let playing = false;
+let timer = null;
+let prevDebug = {};
+
+function renderCode(highlightLine) {
+  document.getElementById('code-lines').innerHTML = codeLines.map((l, i) =>
+    `<div class="code-line${i === highlightLine ? ' highlight' : ''}">${l.text}</div>`
+  ).join('');
+}
+
+function renderDebug(step, debug) {
+  const el = document.getElementById('debug-content');
+  const percent = Math.round(((currentStep + 1) / steps.length) * 100);
+
+  const grid = debugKeys.map(k => {
+    const changed = prevDebug[k] !== debug[k] && debug[k] !== '-';
+    return `<div class="summary-box">
+      <div class="summary-label">${k}</div>
+      <div class="summary-value${changed ? ' updated' : ''}">${debug[k]}</div>
+    </div>`;
+  }).join('');
+
+  const exprHTML = step.exprs.map(e => `
+    <div class="explain-item">
+      <div class="explain-mark">${e.mark}</div>
+      <div>${e.text}</div>
+    </div>
+  `).join('');
+
+  el.innerHTML = `
+    <div class="step-card">
+      <div class="step-badge-row">
+        <div class="step-badge">${step.stage}</div>
+        <div class="step-progress">Step ${currentStep + 1} / ${steps.length}</div>
+      </div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-desc">${step.desc}</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${percent}%"></div>
+      </div>
+      <div class="progress-label">${percent}% complete</div>
+    </div>
+
+    <div class="summary-grid">
+      ${grid}
+    </div>
+
+    <div class="explain-list">
+      ${exprHTML}
+    </div>
+  `;
+
+  prevDebug = { ...debug };
+}
+
+function renderOutput(lines) {
+  document.getElementById('output-lines').innerHTML = lines.map((l, i) =>
+    `<div class="out-line">${i === 0 ? l : `<span class="out-num">${l}</span>`}</div>`
+  ).join('');
+}
+
+function applyStep(idx) {
+  const s = steps[idx];
+  renderCode(s.line);
+  renderDebug(s, s.debug);
+  renderOutput(s.output);
+  document.getElementById('stepInfo').textContent = `Step ${idx + 1} / ${steps.length}`;
+}
+
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('playBtn').innerHTML = playing ? '&#9646;&#9646; Pause' : '&#9654; Play';
+  if (playing) tick();
+  else clearTimeout(timer);
+}
+
+function tick() {
+  if (!playing) return;
+  if (currentStep >= steps.length - 1) {
+    playing = false;
+    document.getElementById('playBtn').innerHTML = '&#9654; Play';
+    return;
+  }
+  currentStep++;
+  applyStep(currentStep);
+  timer = setTimeout(tick, parseInt(document.getElementById('speedSel').value));
+}
+
+function resetAnim() {
+  playing = false;
+  clearTimeout(timer);
+  currentStep = 0;
+  prevDebug = {};
+  document.getElementById('playBtn').innerHTML = '&#9654; Play';
+  applyStep(0);
+}
+
+applyStep(0);
+</script>
+</body>
+</html>

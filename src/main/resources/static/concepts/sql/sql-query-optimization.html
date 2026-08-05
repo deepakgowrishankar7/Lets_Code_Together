@@ -1,0 +1,64 @@
+<h2>SQL Query Optimization & Performance Tuning</h2>
+
+<p>
+  Query optimization is the process of writing and tuning SQL queries so that the database engine executes them with minimal CPU, memory, and I/O overhead.
+</p>
+
+<hr>
+
+<h3>1. Reading Execution Plans with `EXPLAIN`</h3>
+<p>
+  Prepend <code>EXPLAIN</code> or <code>EXPLAIN ANALYZE</code> before any <code>SELECT</code> query to see how the database optimizer executes it.
+</p>
+
+<pre><code>EXPLAIN ANALYZE 
+SELECT * FROM orders WHERE customer_id = 450 AND order_date >= '2026-01-01';</code></pre>
+
+<strong>Key Terms to Look For:</strong>
+<ul>
+  <li><strong>Full Table Scan (ALL / Seq Scan):</strong> Reads every single row from disk (slow on large tables!).</li>
+  <li><strong>Index Scan / Index Lookup:</strong> Uses a B-Tree index to jump directly to matching rows (fast!).</li>
+  <li><strong>Filter / Rows Examined:</strong> Shows how many rows were checked vs returned.</li>
+</ul>
+
+<hr>
+
+<h3>2. Writing SARGable Queries (Search Argument Able)</h3>
+<p>
+  A query is <strong>SARGable</strong> if the query engine can use an index. Applying functions directly to columns in the <code>WHERE</code> clause destroys index usage!
+</p>
+
+<pre><code>-- ❌ NON-SARGable (Index Disabled due to YEAR() function):
+SELECT * FROM orders WHERE YEAR(order_date) = 2026;
+
+-- ✅ SARGable (Index Enabled using Range comparison):
+SELECT * FROM orders WHERE order_date >= '2026-01-01' AND order_date < '2027-01-01';</code></pre>
+
+<hr>
+
+<h3>3. Avoiding `SELECT *` & N+1 Query Problems</h3>
+<ul>
+  <li><strong>Select Only Required Columns:</strong> Reduces network bandwidth, memory, and allows <em>Covering Index</em> optimization.</li>
+  <li><strong>Avoid N+1 Queries:</strong> Use <code>JOIN</code> or bulk <code>IN (...)</code> queries instead of making N database calls in a loop from code.</li>
+</ul>
+
+<pre><code>-- ❌ Bad: Selecting all columns when only name & email needed
+SELECT * FROM users WHERE status = 'ACTIVE';
+
+-- ✅ Good: Specific columns
+SELECT id, username, email FROM users WHERE status = 'ACTIVE';</code></pre>
+
+<hr>
+
+<h3>4. Covering Indexes</h3>
+<p>
+  A <strong>Covering Index</strong> contains all the fields requested by the query, allowing the database to fulfill the query purely from index RAM without touching table disk blocks!
+</p>
+
+<pre><code>-- Composite index on (department_id, salary)
+CREATE INDEX idx_dept_salary ON employees(department_id, salary);
+
+-- Index covers the query completely!
+SELECT department_id, AVG(salary) 
+FROM employees 
+GROUP BY department_id;</code></pre>

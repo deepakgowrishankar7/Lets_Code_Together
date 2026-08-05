@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>File Handling in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>File Handling in Python</h1>
+
+<p>
+File Handling allows programs to store and retrieve data from files.
+Instead of keeping data only in memory, files provide permanent storage.
+</p>
+
+<hr>
+
+<h2>Why File Handling?</h2>
+
+<ul>
+<li>Store Data Permanently</li>
+<li>Read Existing Data</li>
+<li>Generate Reports</li>
+<li>Save User Information</li>
+<li>Work With Large Data</li>
+</ul>
+
+<hr>
+
+<h2>Opening a File</h2>
+
+<div class="code">
+file = open("sample.txt","r")
+</div>
+
+<p>
+Syntax:
+</p>
+
+<div class="code">
+open(filename, mode)
+</div>
+
+<hr>
+
+<h2>File Modes</h2>
+
+<table>
+
+<tr>
+<th>Mode</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>r</td>
+<td>Read File</td>
+</tr>
+
+<tr>
+<td>w</td>
+<td>Write File</td>
+</tr>
+
+<tr>
+<td>a</td>
+<td>Append File</td>
+</tr>
+
+<tr>
+<td>x</td>
+<td>Create New File</td>
+</tr>
+
+<tr>
+<td>r+</td>
+<td>Read and Write</td>
+</tr>
+
+<tr>
+<td>a+</td>
+<td>Append and Read</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Reading a File</h2>
+
+<div class="code">
+file = open("sample.txt","r")
+
+print(file.read())
+
+file.close()
+</div>
+
+<hr>
+
+<h2>Read One Line</h2>
+
+<div class="code">
+file = open("sample.txt","r")
+
+print(file.readline())
+
+file.close()
+</div>
+
+<hr>
+
+<h2>Read All Lines</h2>
+
+<div class="code">
+file = open("sample.txt","r")
+
+print(file.readlines())
+
+file.close()
+</div>
+
+<hr>
+
+<h2>Writing to a File</h2>
+
+<div class="code">
+file = open("sample.txt","w")
+
+file.write("Welcome to Python")
+
+file.close()
+</div>
+
+<p>
+If file exists, old content will be replaced.
+</p>
+
+<hr>
+
+<h2>Appending Data</h2>
+
+<div class="code">
+file = open("sample.txt","a")
+
+file.write("\nLearning File Handling")
+
+file.close()
+</div>
+
+<p>
+New data is added at the end.
+</p>
+
+<hr>
+
+<h2>Creating a New File</h2>
+
+<div class="code">
+file = open("newfile.txt","x")
+
+file.close()
+</div>
+
+<hr>
+
+<h2>Closing a File</h2>
+
+<div class="code">
+file = open("sample.txt","r")
+
+file.close()
+</div>
+
+<p>
+Always close files to free system resources.
+</p>
+
+<hr>
+
+<h2>Using with Statement</h2>
+
+<p>
+The with statement automatically closes files.
+</p>
+
+<div class="code">
+with open("sample.txt","r") as file:
+
+    print(file.read())
+</div>
+
+<hr>
+
+<h2>Checking File Existence</h2>
+
+<div class="code">
+import os
+
+if os.path.exists("sample.txt"):
+    print("File Exists")
+else:
+    print("File Not Found")
+</div>
+
+<div class="output">
+File Exists
+</div>
+
+<hr>
+
+<h2>Deleting a File</h2>
+
+<div class="code">
+import os
+
+os.remove("sample.txt")
+</div>
+
+<hr>
+
+<h2>Program: Count Characters</h2>
+
+<div class="code">
+with open("sample.txt","r") as file:
+
+    data = file.read()
+
+    print(len(data))
+</div>
+
+<hr>
+
+<h2>Program: Count Words</h2>
+
+<div class="code">
+with open("sample.txt","r") as file:
+
+    data = file.read()
+
+    words = data.split()
+
+    print(len(words))
+</div>
+
+<hr>
+
+<h2>Program: Count Lines</h2>
+
+<div class="code">
+with open("sample.txt","r") as file:
+
+    lines = file.readlines()
+
+    print(len(lines))
+</div>
+
+<hr>
+
+<h2>Working with CSV Files</h2>
+
+<p>
+CSV stands for Comma Separated Values.
+Used to store tabular data.
+</p>
+
+<div class="code">
+import csv
+
+with open("students.csv","r") as file:
+
+    reader = csv.reader(file)
+
+    for row in reader:
+
+        print(row)
+</div>
+
+<hr>
+
+<h2>Writing CSV Data</h2>
+
+<div class="code">
+import csv
+
+with open("students.csv","w",newline="") as file:
+
+    writer = csv.writer(file)
+
+    writer.writerow(["Name","Age"])
+
+    writer.writerow(["Deepu",21])
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Student Management Systems</li>
+<li>Banking Applications</li>
+<li>Inventory Systems</li>
+<li>Log Files</li>
+<li>Data Analysis</li>
+<li>Report Generation</li>
+<li>Configuration Files</li>
+</ul>
+
+<hr>
+
+<h2>Common Errors</h2>
+
+<table>
+
+<tr>
+<th>Error</th>
+<th>Reason</th>
+</tr>
+
+<tr>
+<td>FileNotFoundError</td>
+<td>File Doesn't Exist</td>
+</tr>
+
+<tr>
+<td>PermissionError</td>
+<td>No Permission</td>
+</tr>
+
+<tr>
+<td>IsADirectoryError</td>
+<td>Directory Opened as File</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is File Handling?</h3>
+
+<p>
+Reading and writing data from files.
+</p>
+
+<h3>2. Difference between w and a mode?</h3>
+
+<p>
+w replaces content.
+a adds content at the end.
+</p>
+
+<h3>3. Why use with statement?</h3>
+
+<p>
+Automatically closes files.
+</p>
+
+<h3>4. What is CSV?</h3>
+
+<p>
+Comma Separated Values file.
+</p>
+
+<h3>5. What happens if file doesn't exist in read mode?</h3>
+
+<p>
+FileNotFoundError occurs.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Forgetting close()</li>
+<li>Wrong file path</li>
+<li>Using wrong mode</li>
+<li>Not handling exceptions</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Create a File</li>
+<li>Read File Content</li>
+<li>Append Data</li>
+<li>Count Characters</li>
+<li>Count Words</li>
+<li>Count Lines</li>
+<li>Search Word in File</li>
+<li>Copy File Content</li>
+<li>Merge Two Files</li>
+<li>Create CSV File</li>
+<li>Read CSV Data</li>
+<li>Student Record System</li>
+<li>Inventory File System</li>
+<li>Log File Generator</li>
+<li>Simple Notepad Application</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+File Handling allows permanent data storage.
+
+Key Concepts:
+
+• Opening Files
+
+• Reading Files
+
+• Writing Files
+
+• Appending Data
+
+• File Modes
+
+• CSV Files
+
+• with Statement
+
+File Handling is widely used in real-world applications and is an important skill for Python developers.
+
+</div>
+
+</div>
+
+</body>
+</html>

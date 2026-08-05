@@ -1,0 +1,125 @@
+<h2>Modern Java (Java 8 to Java 21+)</h2>
+
+<p>
+  Java has evolved rapidly since Java 8. Modern Java emphasizes functional programming techniques, immutability, concise syntax, high performance, and pattern matching.
+</p>
+
+<hr>
+
+<h3>1. Lambda Expressions & Functional Interfaces</h3>
+<p>
+  A lambda expression is an anonymous function that can be passed around like a value. A <strong>Functional Interface</strong> contains exactly one abstract method.
+</p>
+
+<pre><code>import java.util.function.*;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        // Predicate: takes an input and returns boolean
+        Predicate<Integer> isEven = n -> n % 2 == 0;
+        
+        // Function: transforms T into R
+        Function<String, Integer> stringLength = str -> str.length();
+
+        // Consumer: takes input and returns nothing
+        Consumer<String> printer = msg -> System.out.println("LOG: " + msg);
+
+        System.out.println("Is 4 even? " + isEven.test(4));
+        System.out.println("Length of 'Java': " + stringLength.apply("Java"));
+        printer.accept("Lambda Functional Demo");
+    }
+}</code></pre>
+
+<hr>
+
+<h3>2. Java Stream API</h3>
+<p>
+  The Stream API is used to process sequences of elements imperatively and declaratively. It supports filtering, mapping, sorting, and reduction.
+</p>
+
+<pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David", "Amanda");
+
+        // Filter names starting with 'A', uppercase them, and collect into a list
+        List<String> result = names.stream()
+                .filter(name -> name.startsWith("A"))
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+
+        System.out.println(result); // [ALICE, AMANDA]
+    }
+}</code></pre>
+
+<hr>
+
+<h3>3. `Optional<T>` to Avoid `NullPointerException`</h3>
+<p>
+  <code>Optional</code> is a container object used to contain non-null values and explicitly handle the absence of a value.
+</p>
+
+<pre><code>import java.util.Optional;
+
+public class OptionalExample {
+    public static void main(String[] args) {
+        Optional<String> name = Optional.ofNullable(getName());
+
+        String defaultName = name.orElse("Guest User");
+        System.out.println("Hello, " + defaultName);
+    }
+
+    static String getName() {
+        return null; // Could return null
+    }
+}</code></pre>
+
+<hr>
+
+<h3>4. Java 14+ Records (Immutable Data Carriers)</h3>
+<p>
+  Records provide a compact syntax to declare classes that are transparent holders for immutable data, eliminating boilerplate getters, `equals()`, `hashCode()`, and `toString()`.
+</p>
+
+<pre><code>// Record declaration (1 line!)
+public record Student(int id, String name, double gpa) {}
+
+public class RecordDemo {
+    public static void main(String[] args) {
+        Student student = new Student(101, "Alex", 3.9);
+
+        System.out.println(student.name()); // Accessor method name()
+        System.out.println(student);        // Student[id=101, name=Alex, gpa=3.9]
+    }
+}</code></pre>
+
+<hr>
+
+<h3>5. Pattern Matching & Switch Expressions (Java 17+)</h3>
+<p>
+  Pattern matching reduces boilerplate when checking types and casting objects. Switch expressions return values and reduce fallthrough bugs.
+</p>
+
+<pre><code>public class PatternMatchingDemo {
+    public static void main(String[] args) {
+        Object obj = "Hello Java 21";
+
+        // Pattern matching for instanceof
+        if (obj instanceof String s) {
+            System.out.println("String length: " + s.length());
+        }
+
+        // Switch expression
+        String day = "MONDAY";
+        int type = switch (day) {
+            case "MONDAY", "FRIDAY" -> 1;
+            case "TUESDAY" -> 2;
+            default -> 0;
+        };
+        System.out.println("Day code: " + type);
+    }
+}</code></pre>

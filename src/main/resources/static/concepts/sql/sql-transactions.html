@@ -1,0 +1,48 @@
+<div>
+  <h1>SQL Transactions</h1>
+  <p>Transactions group SQL statements into a single unit so the database stays correct even if something fails.</p>
+
+  <h2>Why Transactions Exist</h2>
+  <p>Without transactions, partial changes can leave your data inconsistent. Transactions ensure either everything succeeds, or nothing changes.</p>
+
+  <h2>Basic Flow</h2>
+  <pre><code>BEGIN TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+</code></pre>
+
+  <h2>Rollback</h2>
+  <p>If something goes wrong, rollback returns the database to its previous state.</p>
+  <pre><code>BEGIN TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+ROLLBACK;
+</code></pre>
+
+  <h2>Savepoints</h2>
+  <p>Savepoints allow partial rollback inside a transaction.</p>
+  <pre><code>BEGIN TRANSACTION;
+UPDATE inventory SET qty = qty - 1 WHERE product_id = 5;
+SAVEPOINT before_discount;
+UPDATE order_summary SET discount = 20 WHERE order_id = 10;
+ROLLBACK TO before_discount;
+COMMIT;
+</code></pre>
+
+  <h2>ACID Properties</h2>
+  <ul>
+    <li><strong>Atomicity</strong> — all statements succeed or none do.</li>
+    <li><strong>Consistency</strong> — the database moves from one valid state to another.</li>
+    <li><strong>Isolation</strong> — transactions do not interfere with each other.</li>
+    <li><strong>Durability</strong> — committed changes persist even after a crash.</li>
+  </ul>
+
+  <h2>Isolation Levels</h2>
+  <ul>
+    <li><strong>Read Uncommitted</strong> — may see uncommitted changes.</li>
+    <li><strong>Read Committed</strong> — sees only committed data.</li>
+    <li><strong>Repeatable Read</strong> — same query returns same rows in one transaction.</li>
+    <li><strong>Serializable</strong> — behaves as if transactions run one at a time.</li>
+  </ul>
+</div>

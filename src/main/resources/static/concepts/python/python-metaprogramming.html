@@ -1,0 +1,73 @@
+<h2>Python Metaprogramming & Dunder Methods</h2>
+
+<p>
+  <strong>Metaprogramming</strong> is the art of writing code that manipulates, inspects, or generates other code at runtime. Python's object model relies on double-underscore <strong>(Dunder) Magic Methods</strong> and Metaclasses.
+</p>
+
+<hr>
+
+<h3>1. Essential Dunder (Magic) Methods</h3>
+
+<pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    # String representation for developers
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+    # Overloading addition operator '+'
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    # Overloading equality operator '=='
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+v1 = Vector(2, 4)
+v2 = Vector(3, 1)
+v3 = v1 + v2
+
+print("v3:", v3)        # Vector(5, 5)
+print("v1 == v2:", v1 == v2) # False</code></pre>
+
+<hr>
+
+<h3>2. Making Instances Callable (`__call__`)</h3>
+
+<pre><code>class Multiplier:
+    def __init__(self, factor):
+        self.factor = factor
+
+    def __call__(self, number):
+        return number * self.factor
+
+triple = Multiplier(3)
+print("Triple of 7:", triple(7)) # 21 (Instance used like a function!)</code></pre>
+
+<hr>
+
+<h3>3. Metaclasses (`type`)</h3>
+<p>
+  In Python, classes themselves are objects, and their class is a <strong>Metaclass</strong>. By default, the metaclass of all classes is <code>type</code>.
+</p>
+
+<pre><code># Custom Metaclass enforcing uppercase method names
+class UppercaseMethodMeta(type):
+    def __new__(cls, name, bases, dct):
+        uppercase_attr = {}
+        for key, val in dct.items():
+            if not key.startswith('__') and callable(val):
+                uppercase_attr[key.upper()] = val
+            else:
+                uppercase_attr[key] = val
+        return super().__new__(cls, name, bases, uppercase_attr)
+
+class Service(metaclass=UppercaseMethodMeta):
+    def compute(self):
+        return "Computation complete."
+
+s = Service()
+# Method name 'compute' was automatically transformed to 'COMPUTE'!
+print(s.COMPUTE()) # Computation complete.</code></pre>

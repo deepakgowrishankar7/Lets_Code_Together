@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tuples in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Tuples in Python</h1>
+
+<p>
+A Tuple is an ordered collection of elements.
+Unlike Lists, Tuples are immutable, meaning their values cannot be changed after creation.
+</p>
+
+<hr>
+
+<h2>Why Use Tuples?</h2>
+
+<ul>
+<li>Faster than Lists</li>
+<li>Data Protection</li>
+<li>Used for Fixed Data</li>
+<li>Consumes Less Memory</li>
+</ul>
+
+<hr>
+
+<h2>Creating a Tuple</h2>
+
+<div class="code">
+numbers = (10,20,30,40)
+
+print(numbers)
+</div>
+
+<div class="output">
+(10, 20, 30, 40)
+</div>
+
+<hr>
+
+<h2>Tuple Characteristics</h2>
+
+<ul>
+<li>Ordered</li>
+<li>Immutable</li>
+<li>Allows Duplicates</li>
+<li>Can Store Different Data Types</li>
+</ul>
+
+<hr>
+
+<h2>Accessing Tuple Elements</h2>
+
+<div class="code">
+numbers = (10,20,30,40)
+
+print(numbers[0])
+print(numbers[2])
+</div>
+
+<div class="output">
+10
+30
+</div>
+
+<hr>
+
+<h2>Negative Indexing</h2>
+
+<div class="code">
+numbers = (10,20,30,40)
+
+print(numbers[-1])
+</div>
+
+<div class="output">
+40
+</div>
+
+<hr>
+
+<h2>Tuple Slicing</h2>
+
+<div class="code">
+numbers = (10,20,30,40,50)
+
+print(numbers[1:4])
+</div>
+
+<div class="output">
+(20, 30, 40)
+</div>
+
+<hr>
+
+<h2>Tuple Length</h2>
+
+<div class="code">
+numbers = (10,20,30,40)
+
+print(len(numbers))
+</div>
+
+<div class="output">
+4
+</div>
+
+<hr>
+
+<h2>Tuple Methods</h2>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>count()</td>
+<td>Counts occurrences</td>
+</tr>
+
+<tr>
+<td>index()</td>
+<td>Returns position</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>count() Method</h2>
+
+<div class="code">
+numbers = (10,20,10,30)
+
+print(numbers.count(10))
+</div>
+
+<div class="output">
+2
+</div>
+
+<hr>
+
+<h2>index() Method</h2>
+
+<div class="code">
+numbers = (10,20,30)
+
+print(numbers.index(20))
+</div>
+
+<div class="output">
+1
+</div>
+
+<hr>
+
+<h2>Tuple Packing</h2>
+
+<p>
+Storing multiple values into a tuple.
+</p>
+
+<div class="code">
+student = ("Deepu",21,"India")
+
+print(student)
+</div>
+
+<div class="output">
+('Deepu', 21, 'India')
+</div>
+
+<hr>
+
+<h2>Tuple Unpacking</h2>
+
+<p>
+Extracting tuple values into variables.
+</p>
+
+<div class="code">
+student = ("Deepu",21,"India")
+
+name,age,country = student
+
+print(name)
+print(age)
+print(country)
+</div>
+
+<div class="output">
+Deepu
+21
+India
+</div>
+
+<hr>
+
+<h2>Looping Through Tuple</h2>
+
+<div class="code">
+numbers = (10,20,30)
+
+for num in numbers:
+    print(num)
+</div>
+
+<div class="output">
+10
+20
+30
+</div>
+
+<hr>
+
+<h2>Nested Tuple</h2>
+
+<div class="code">
+students = (
+("Deepu",21),
+("Rahul",22)
+)
+
+print(students[0])
+</div>
+
+<div class="output">
+('Deepu', 21)
+</div>
+
+<hr>
+
+<h2>Tuple vs List</h2>
+
+<table>
+
+<tr>
+<th>Tuple</th>
+<th>List</th>
+</tr>
+
+<tr>
+<td>Immutable</td>
+<td>Mutable</td>
+</tr>
+
+<tr>
+<td>()</td>
+<td>[]</td>
+</tr>
+
+<tr>
+<td>Faster</td>
+<td>Slower</td>
+</tr>
+
+<tr>
+<td>Less Memory</td>
+<td>More Memory</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Can We Modify a Tuple?</h2>
+
+<div class="code">
+numbers = (10,20,30)
+
+numbers[0] = 100
+</div>
+
+<div class="output">
+TypeError
+</div>
+
+<p>
+Tuples cannot be modified after creation.
+</p>
+
+<hr>
+
+<h2>Convert Tuple to List</h2>
+
+<div class="code">
+numbers = (10,20,30)
+
+temp = list(numbers)
+
+temp[0] = 100
+
+numbers = tuple(temp)
+
+print(numbers)
+</div>
+
+<div class="output">
+(100, 20, 30)
+</div>
+
+<hr>
+
+<h2>Program: Sum of Tuple Elements</h2>
+
+<div class="code">
+numbers = (10,20,30)
+
+print(sum(numbers))
+</div>
+
+<div class="output">
+60
+</div>
+
+<hr>
+
+<h2>Program: Largest Element</h2>
+
+<div class="code">
+numbers = (10,40,80,20)
+
+print(max(numbers))
+</div>
+
+<div class="output">
+80
+</div>
+
+<hr>
+
+<h2>Program: Smallest Element</h2>
+
+<div class="code">
+numbers = (10,40,80,20)
+
+print(min(numbers))
+</div>
+
+<div class="output">
+10
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Coordinates (x,y)</li>
+<li>Database Records</li>
+<li>Student Information</li>
+<li>Configuration Data</li>
+<li>Geographical Locations</li>
+<li>API Responses</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a Tuple?</h3>
+
+<p>
+An ordered immutable collection.
+</p>
+
+<h3>2. Difference between Tuple and List?</h3>
+
+<p>
+Tuple is immutable while List is mutable.
+</p>
+
+<h3>3. Why are Tuples faster?</h3>
+
+<p>
+Because they are immutable.
+</p>
+
+<h3>4. Can Tuple store different data types?</h3>
+
+<p>
+Yes.
+</p>
+
+<h3>5. What is Tuple Packing?</h3>
+
+<p>
+Storing multiple values in a tuple.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Trying to modify tuple elements</li>
+<li>Confusing tuple with list</li>
+<li>Wrong unpacking count</li>
+<li>Using invalid indexes</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Find Largest Element</li>
+<li>Find Smallest Element</li>
+<li>Calculate Sum</li>
+<li>Count Occurrences</li>
+<li>Find Index</li>
+<li>Tuple Packing</li>
+<li>Tuple Unpacking</li>
+<li>Convert Tuple to List</li>
+<li>Convert List to Tuple</li>
+<li>Nested Tuple Example</li>
+<li>Search Element</li>
+<li>Loop Through Tuple</li>
+<li>Calculate Average</li>
+<li>Merge Tuples</li>
+<li>Reverse Tuple</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Tuples are immutable collections in Python.
+
+Key Concepts:
+
+• Creating Tuples
+
+• Indexing
+
+• Slicing
+
+• Packing
+
+• Unpacking
+
+• Tuple Methods
+
+• Tuple vs List
+
+Tuples are useful when data should not be modified.
+
+</div>
+
+</div>
+
+</body>
+</html>

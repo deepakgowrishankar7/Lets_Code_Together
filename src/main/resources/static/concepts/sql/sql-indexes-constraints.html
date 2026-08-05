@@ -1,0 +1,62 @@
+<div>
+  <h1>SQL Indexes and Constraints</h1>
+  <p>Indexes and constraints help the database enforce rules and find rows quickly. They are essential for reliable, high-performance SQL.</p>
+
+  <h2>Primary Key</h2>
+  <p>A primary key uniquely identifies each row.</p>
+  <pre><code>CREATE TABLE employees (
+  id INT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(150)
+);
+</code></pre>
+
+  <h2>Unique Constraint</h2>
+  <p>Ensures values are unique in a column.</p>
+  <pre><code>CREATE TABLE products (
+  product_id INT PRIMARY KEY,
+  sku VARCHAR(50) UNIQUE,
+  name VARCHAR(120)
+);
+</code></pre>
+
+  <h2>NOT NULL and DEFAULT</h2>
+  <p>Require values and provide defaults.</p>
+  <pre><code>CREATE TABLE users (
+  id INT PRIMARY KEY,
+  username VARCHAR(80) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+</code></pre>
+
+  <h2>Check Constraint</h2>
+  <p>Limits values based on a condition.</p>
+  <pre><code>CREATE TABLE transactions (
+  id INT PRIMARY KEY,
+  amount DECIMAL(10,2) CHECK (amount > 0),
+  status VARCHAR(20) CHECK (status IN ('pending', 'paid', 'cancelled'))
+);
+</code></pre>
+
+  <h2>Foreign Key</h2>
+  <p>Ensures relationships between tables stay valid.</p>
+  <pre><code>CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  customer_id INT,
+  order_date DATE,
+  FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+</code></pre>
+
+  <h2>Indexes</h2>
+  <p>Indexes speed up search and join operations.</p>
+  <pre><code>CREATE INDEX idx_customer_email
+ON customers (email);
+
+CREATE INDEX idx_orders_customer_date
+ON orders (customer_id, order_date);
+</code></pre>
+
+  <h2>When to Use Indexes</h2>
+  <p>Index columns that are frequently searched, joined, or sorted. Avoid indexing every column because each index slows writes.</p>
+</div>

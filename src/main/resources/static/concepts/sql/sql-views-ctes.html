@@ -1,0 +1,86 @@
+<h2>SQL Views, Materialized Views & CTEs</h2>
+
+<p>
+  <strong>Views</strong> and <strong>Common Table Expressions (CTEs)</strong> allow developers to simplify complex queries, enforce security abstractions, and build recursive processing logic.
+</p>
+
+<hr>
+
+<h3>1. Standard SQL Views</h3>
+<p>
+  A <strong>View</strong> is a virtual table based on the result-set of an SQL statement. It contains no physical data of its own.
+</p>
+
+<pre><code>-- Create a View for High-Value Customers
+CREATE VIEW v_high_value_customers AS
+SELECT c.id, c.name, c.email, SUM(o.amount) as total_spent
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id, c.name, c.email
+HAVING SUM(o.amount) >= 5000;
+
+-- Querying the View like a regular table
+SELECT * FROM v_high_value_customers WHERE email LIKE '%@gmail.com';</code></pre>
+
+<hr>
+
+<h3>2. Materialized Views</h3>
+<p>
+  Unlike standard views, a <strong>Materialized View</strong> physically stores the query result on disk for high performance on massive datasets.
+</p>
+
+<pre><code>-- Create Materialized View (PostgreSQL / Oracle)
+CREATE MATERIALIZED VIEW mv_daily_sales_summary AS
+SELECT 
+    DATE(order_date) as sales_date,
+    COUNT(id) as total_orders,
+    SUM(amount) as revenue
+FROM orders
+GROUP BY DATE(order_date);
+
+-- Refresh Materialized View periodically
+REFRESH MATERIALIZED VIEW mv_daily_sales_summary;</code></pre>
+
+<hr>
+
+<h3>3. Common Table Expressions (CTEs)</h3>
+<p>
+  A <strong>CTE</strong> is a temporary named result set defined within the execution scope of a single <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> query using the <code>WITH</code> clause.
+</p>
+
+<pre><code>WITH RegionalSales AS (
+    SELECT region, SUM(amount) as total_sales
+    FROM orders
+    GROUP BY region
+),
+TopRegions AS (
+    SELECT region
+    FROM RegionalSales
+    WHERE total_sales > 100000
+)
+SELECT r.region, o.order_id, o.amount
+FROM orders o
+JOIN TopRegions r ON o.region = r.region;</code></pre>
+
+<hr>
+
+<h3>4. Recursive CTEs (Hierarchical Data)</h3>
+<p>
+  Recursive CTEs allow querying tree structures like organizational charts, category hierarchies, and bill-of-materials.
+</p>
+
+<pre><code>-- Recursive CTE to generate an Employee Hierarchy
+WITH RECURSIVE OrgChart AS (
+    -- Anchor member: Top Manager (no manager_id)
+    SELECT id, name, manager_id, 1 as level
+    FROM employees
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    -- Recursive member: Employees reporting to manager
+    SELECT e.id, e.name, e.manager_id, o.level + 1
+    FROM employees e
+    JOIN OrgChart o ON e.manager_id = o.id
+)
+SELECT * FROM OrgChart ORDER BY level, name;</code></pre>

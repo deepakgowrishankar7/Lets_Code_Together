@@ -1,0 +1,209 @@
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+<h2>Even or odd program:</h2>
+<li>Using if else:</li>
+<pre>
+package assignment1;
+import java.util.Scanner;
+public class Program1 {
+	public static void main(String[] args) {
+	//even or odd programe
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the Number: ");
+		int number=sc.nextInt();
+		System.out.println("The number you enter is: "+number);
+		if (number%2==0) {
+			//if entered number is 12
+			//12 % 2 = 0;so it is even it print if statement block
+			//if entered number is 9,t7hen we get reminder 1 so it in odd
+			//9 % 2 != 0, so it print else statement block
+			System.out.println("You entered number is even");
+		}
+			else {
+				System.out.println("You entered number is odd");
+			}
+		sc.close();
+		}
+	}
+</pre>
+<li>using Switch case:</li>
+<pre>
+package assignment2;
+import java.util.Scanner;
+//even or odd programs by using switch cases
+public class Program1 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);//here in is input source
+		System.out.println("Enter the number: ");
+		int number=sc.nextInt();
+		System.out.println("You entered number is : "+number);
+		int num=number % 2;
+		switch(num) {
+		case 0://if number%2 will get 0 then it was case0
+			System.out.println("It is even");
+			break;
+		case 1:
+			System.out.println("It is odd");
+			break;
+		}
+		sc.close();
+	}
+}
+</pre>
+<hr>
+<h2>Programs on Switch Case:</h2>
+<li><strong>Perfoming arithmetic operations on two numbers:</strong></li>
+<pre>
+package assignment2;
+import java.util.Scanner;
+public class Program2 {
+	
+//perfoming arithmetic operations on two numbers
+	
+	public static void main(String[] args) {
+	Scanner sc =new Scanner(System.in);//here in is input source
+	
+    System.out.println("Enter the first number: ");
+    int firstNumber=sc.nextInt();
+    
+    System.out.println("Enter the second number: ");
+    int secondNumber=sc.nextInt();
+    
+    System.out.println("Enter your target operation:");
+    String operation=sc.next();
+    
+    int result;
+    switch(operation) {
+    case "+":
+    	result = firstNumber+secondNumber;
+    	System.out.println(result);
+    	break;
+    	
+    case "-":
+    	result = firstNumber-secondNumber;
+    	System.out.println(result);
+    	break;
+    	
+    case "%":
+    	result = firstNumber%secondNumber;
+    	System.out.println(result);
+    	break;
+    	
+    case "*":
+    	result=firstNumber*secondNumber;
+    	System.out.println(result);
+    	break;
+    	
+    case "/":
+    	result=firstNumber/secondNumber;
+    	System.out.println(result);
+    	break;
+
+    default:
+    	System.out.println("Invalid operation");
+    }
+    sc.close(); 
+	}
+}    
+</pre>
+<li><strong>Weekday and Weekend Program:</strong></li>
+<pre>
+package assignment2;
+import java.util.Scanner;
+public class Program3 {
+
+	public static void main(String[] args) {
+	Scanner sc=new Scanner(System.in);
+	System.out.println("Enter a day name:");
+	String dayName=sc.next();
+	switch(dayName){
+	
+	case "monday":
+		System.out.println("IT is weekday");
+		break;
+		
+	case "tuesday":
+		System.out.println("IT is weekday");
+		break;
+		
+	case "wednesday":
+		System.out.println("IT is weekday");
+		break;
+		
+	case "thursday":
+		System.out.println("IT is weekday");
+		break;
+		
+	case "friday":
+		System.out.println("IT is weekday");
+		break;
+		
+	case "saturday":
+		System.out.println("IT is weekend");
+		break;
+		
+	case "sunday":
+		System.out.println("IT is weekend");
+		break;
+		
+	default:
+		System.out.println("Invalid dayname");
+		break;
+	}
+	sc.close();
+	}
+}
+</pre>
+<hr>
+<h2>Program on else if:</h2>
+<pre>
+package assignment1;
+import java.util.Scanner;
+public class Program2 {
+//basic program on else if 
+	public static void main(String[] args) {
+	Scanner sc=new Scanner(System.in);
+	System.out.println("Enter the percentage :");
+	int percentage=sc.nextInt();
+	System.out.println("You entered percentage is: "+percentage);
+	if(percentage > 85) 
+		System.out.println("First class");
+		else if(percentage == 35) 
+		System.out.println("Pass");
+		else if(percentage>35&&percentage<70) 
+		System.out.println("Third class");
+		else if(percentage>70&&percentage<85) 
+		System.out.println("Second class");
+		else 
+		System.out.println("Fail");	
+	sc.close();
+	}
+}
+</pre>
+<hr>
+<h2>Program on logical OR and with strings:</h2>
+<pre>
+package assignment1;
+import java.util.Scanner;
+public class Program3 {
+//logical (or) and with strings
+//.equals is used to check the data for strings
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the day name:");
+		String dayName=sc.next();
+		if(dayName.equals("monday")|| 
+		   dayName.equals("Tuesday")||
+		   dayName.equals("Wednesday")||
+		   dayName.equals("Thursday")||
+		   dayName.equals("Friday")) {
+			System.out.println("it's weekday");
+		}
+		else {
+			System.out.println("it's weekend");
+		}
+		sc.close();
+	}
+}
+</pre>

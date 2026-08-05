@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Factorial Visualizer</title>
+<style>
+  :root { --bg:#0b1020; --panel:#12172a; --panel2:#171d34; --border:rgba(255,255,255,.08); --text:#e9eeff; --muted:#9aa3c7; --accent:#7c9cff; --accent2:#67e8a8; --warn:#ffb86b; --danger:#ff7373; --shadow:0 18px 50px rgba(0,0,0,.28); --radius:18px; --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono',monospace; --sans: Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--mono);background:radial-gradient(circle at top left,rgba(124,156,255,.18),transparent 28%),radial-gradient(circle at bottom right,rgba(103,232,168,.12),transparent 25%),var(--bg);color:var(--text);padding:20px}
+  .container{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius);background:rgba(10,14,28,.92);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+  .top{display:flex;min-height:520px}
+  .code-panel{flex:1;position:relative;background:linear-gradient(180deg,#161b31,#12162a);padding:18px;overflow:auto;border-right:1px solid var(--border)}
+  .debug-panel{width:380px;background:linear-gradient(180deg,#11162a,#0f1426);padding:18px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:14px}
+  .output-panel{background:rgba(255,255,255,.03);border-top:1px solid var(--border);padding:14px 18px;min-height:92px}
+  .panel-title{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .code-line{font-size:13px;line-height:1.9;color:#d7defc;white-space:pre;display:flex;align-items:center;gap:8px;border-radius:10px;padding:0 10px;transition:all .2s ease}
+  .code-line.highlight{background:rgba(124,156,255,.16);box-shadow:inset 0 0 0 1px rgba(124,156,255,.22)}
+  .kw{color:#c792ea}.str{color:#9ae6b4}.num{color:#ffcf88}.fn{color:#8bb6ff}.cls{color:#ffe08a}
+  .step-card{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:14px}
+  .step-badge-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .step-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(124,156,255,.16);color:#cfe0ff;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.02em}
+  .step-progress{font-family:var(--sans);font-size:12px;color:var(--muted)}
+  .step-title{font-family:var(--sans);font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.3}
+  .step-desc{font-family:var(--sans);font-size:13px;line-height:1.6;color:#d9dfff;margin-bottom:14px}
+  .progress-bar{width:100%;height:8px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;margin-bottom:6px}
+  .progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s ease}
+  .progress-label{font-family:var(--sans);font-size:12px;color:var(--muted)}
+  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .summary-box{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03);padding:10px 12px}
+  .summary-label{font-family:var(--sans);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+  .summary-value{font-size:18px;font-weight:800;color:var(--text);word-break:break-word}
+  .summary-value.updated{color:var(--accent)}
+  .explain-list{display:flex;flex-direction:column;gap:8px}
+  .explain-item{display:flex;gap:10px;align-items:flex-start;font-family:var(--sans);font-size:13px;line-height:1.5;color:#d9dfff;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.03)}
+  .explain-mark{width:22px;height:22px;flex:0 0 22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px;background:rgba(124,156,255,.16);color:#d5e3ff}
+  .truth{color:var(--accent2);font-weight:800}
+  .out-line{font-size:13px;color:#e9edff;line-height:1.8;margin:4px 0}.out-line .out-num{color:var(--accent);font-weight:800}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(255,255,255,.03);border-top:1px solid var(--border);font-family:var(--sans)}
+  .btn,select{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);color:var(--text);font-size:13px}
+  .btn{padding:9px 16px;cursor:pointer;transition:all .2s ease}
+  .btn.primary{background:linear-gradient(135deg,#4f77ff,#7c9cff);border-color:transparent;color:#fff}
+  select{padding:8px 10px;outline:none;background:#1b2140;color:#e9eeff;appearance:none}
+  .speed-label,.topic-label,.step-info{font-size:12px;color:var(--muted)} .topic-label{margin-left:auto;padding-left:12px}
+  .code-wrap{position:relative}.project-badge{position:absolute;right:18px;bottom:16px;font-family:var(--sans);font-size:12px;color:rgba(255,255,255,.22);letter-spacing:.08em;pointer-events:none;user-select:none}
+  @media (max-width:980px){.top{flex-direction:column}.debug-panel{width:100%;border-left:0;border-top:1px solid var(--border)}.code-panel{border-right:0;border-bottom:1px solid var(--border)}.topic-label{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div class="code-panel code-wrap"><div id="code-lines"></div><div class="project-badge">Factorial Visualizer</div></div>
+    <div class="debug-panel"><div class="panel-title">Debug Window</div><div id="debug-content"></div></div>
+  </div>
+  <div class="output-panel"><div class="panel-title">Output Window</div><div id="output-lines"></div></div>
+  <div class="controls">
+    <button class="btn primary" id="playBtn" onclick="togglePlay()">&#9654; Play</button>
+    <button class="btn" onclick="resetAnim()">&#8635; Reset</button>
+    <span class="speed-label">Speed:</span>
+    <select id="speedSel"><option value="3000">3 sec</option><option value="2500">2.5 sec</option><option value="2000">2 sec</option><option value="1500">1.5 sec</option><option value="1000" selected>1 sec</option><option value="750">0.75 sec</option><option value="500">0.5 sec</option><option value="100">0.1 sec</option></select>
+    <span class="step-info" id="stepInfo">Step 0 / 0</span>
+    <span class="topic-label">Java Program — Factorial</span>
+  </div>
+</div>
+<script>
+const codeLines=[
+  {text:'<span class="kw">public class</span> <span class="cls">Factorial</span> {',indent:0},
+  {text:'  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {',indent:0},
+  {text:'    <span class="cls">Scanner</span> sc = <span class="kw">new</span> <span class="cls">Scanner</span>(<span class="cls">System</span>.in);',indent:0},
+  {text:'    <span class="kw">int</span> n = sc.nextInt();',indent:0},
+  {text:'    <span class="kw">int</span> fact = <span class="num">1</span>;',indent:0},
+  {text:'    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {',indent:0},
+  {text:'      fact *= i;',indent:0},
+  {text:'    }',indent:0},
+  {text:'    <span class="cls">System</span>.out.println(fact);',indent:0},
+  {text:'  }',indent:0},
+  {text:'}',indent:0},
+];
+const steps=[
+  {line:2,stage:'Initialize',title:'Create Scanner',desc:'The program starts by creating a Scanner object.',debug:{n:'-',fact:'-',i:'-'},exprs:[{mark:'1',text:'Scanner created for input.'}],output:[]},
+  {line:3,stage:'Input',title:'Read number',desc:'The user enters the number. Here we use 5.',debug:{n:'5',fact:'-',i:'-'},exprs:[{mark:'1',text:'n = 5'}],output:['Enter n value','5']},
+  {line:4,stage:'Setup',title:'Initialize factorial',desc:'Factorial starts at 1.',debug:{n:'5',fact:'1',i:'-'},exprs:[{mark:'1',text:'fact = 1'}],output:['Enter n value','5']},
+  {line:5,stage:'Loop',title:'Start loop',desc:'The loop runs from 1 to n.',debug:{n:'5',fact:'1',i:'1'},exprs:[{mark:'1',text:'i = 1'}],output:['Enter n value','5']},
+  {line:6,stage:'Multiply',title:'Multiply by 1',desc:'The factorial is multiplied by the current value.',debug:{n:'5',fact:'1',i:'1'},exprs:[{mark:'1',text:'fact = 1 × 1 = 1'}],output:['Enter n value','5']},
+  {line:5,stage:'Loop',title:'Next value',desc:'The loop moves to the next integer.',debug:{n:'5',fact:'1',i:'2'},exprs:[{mark:'1',text:'i = 2'}],output:['Enter n value','5']},
+  {line:6,stage:'Multiply',title:'Multiply by 2',desc:'The factorial gets updated.',debug:{n:'5',fact:'2',i:'2'},exprs:[{mark:'1',text:'fact = 1 × 2 = 2'}],output:['Enter n value','5']},
+  {line:5,stage:'Loop',title:'Next value',desc:'The loop continues.',debug:{n:'5',fact:'2',i:'3'},exprs:[{mark:'1',text:'i = 3'}],output:['Enter n value','5']},
+  {line:6,stage:'Multiply',title:'Multiply by 3',desc:'Another multiplication happens.',debug:{n:'5',fact:'6',i:'3'},exprs:[{mark:'1',text:'fact = 2 × 3 = 6'}],output:['Enter n value','5']},
+  {line:5,stage:'Loop',title:'Next value',desc:'The loop advances.',debug:{n:'5',fact:'6',i:'4'},exprs:[{mark:'1',text:'i = 4'}],output:['Enter n value','5']},
+  {line:6,stage:'Multiply',title:'Multiply by 4',desc:'The factorial keeps growing.',debug:{n:'5',fact:'24',i:'4'},exprs:[{mark:'1',text:'fact = 6 × 4 = 24'}],output:['Enter n value','5']},
+  {line:5,stage:'Loop',title:'Next value',desc:'The loop continues one more time.',debug:{n:'5',fact:'24',i:'5'},exprs:[{mark:'1',text:'i = 5'}],output:['Enter n value','5']},
+  {line:6,stage:'Multiply',title:'Multiply by 5',desc:'The final multiplication happens.',debug:{n:'5',fact:'120',i:'5'},exprs:[{mark:'1',text:'fact = 24 × 5 = 120'}],output:['Enter n value','5']},
+  {line:8,stage:'Output',title:'Print result',desc:'The factorial value is printed.',debug:{n:'5',fact:'120',i:'5'},exprs:[{mark:'✓',text:'120'}],output:['Enter n value','5','120']}
+];
+const debugKeys=['n','fact','i']; let currentStep=0,playing=false,timer=null,prevDebug={};
+function renderCode(highlightLine){document.getElementById('code-lines').innerHTML=codeLines.map((l,i)=>`<div class="code-line${i===highlightLine?' highlight':''}">${l.text}</div>`).join('')}
+function renderDebug(step,debug){const el=document.getElementById('debug-content'); const percent=Math.round(((currentStep+1)/steps.length)*100); const grid=debugKeys.map(k=>{const changed=prevDebug[k]!==debug[k]&&debug[k]!=='-'; return `<div class="summary-box"><div class="summary-label">${k}</div><div class="summary-value${changed?' updated':''}">${debug[k]}</div></div>`}).join(''); const exprHTML=step.exprs.map(e=>`<div class="explain-item"><div class="explain-mark">${e.mark}</div><div>${e.text}</div></div>`).join(''); el.innerHTML=`<div class="step-card"><div class="step-badge-row"><div class="step-badge">${step.stage}</div><div class="step-progress">Step ${currentStep+1} / ${steps.length}</div></div><div class="step-title">${step.title}</div><div class="step-desc">${step.desc}</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div><div class="progress-label">${percent}% complete</div></div><div class="summary-grid">${grid}</div><div class="explain-list">${exprHTML}</div>`; prevDebug={...debug};}
+function renderOutput(lines){document.getElementById('output-lines').innerHTML=lines.map((l,i)=>`<div class="out-line">${i===0?l:`<span class="out-num">${l}</span>`}</div>`).join('')}
+function applyStep(idx){const s=steps[idx]; renderCode(s.line); renderDebug(s,s.debug); renderOutput(s.output); document.getElementById('stepInfo').textContent=`Step ${idx+1} / ${steps.length}`;}
+function togglePlay(){playing=!playing; document.getElementById('playBtn').innerHTML=playing?'&#9646;&#9646; Pause':'&#9654; Play'; if(playing) tick(); else clearTimeout(timer);}
+function tick(){ if(!playing) return; if(currentStep>=steps.length-1){playing=false; document.getElementById('playBtn').innerHTML='&#9654; Play'; return;} currentStep++; applyStep(currentStep); timer=setTimeout(tick,parseInt(document.getElementById('speedSel').value));}
+function resetAnim(){playing=false; clearTimeout(timer); currentStep=0; prevDebug={}; document.getElementById('playBtn').innerHTML='&#9654; Play'; applyStep(0);}
+applyStep(0);
+</script>
+</body>
+</html>

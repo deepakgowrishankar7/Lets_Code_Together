@@ -1,0 +1,103 @@
+<h2>Java I/O, NIO.2 & Serialization</h2>
+
+<p>
+  Java provides rich APIs for reading and writing data to files, memory, and network sockets. Java NIO.2 (`java.nio.file`) introduced non-blocking I/O, channels, buffers, and modern file operations.
+</p>
+
+<hr>
+
+<h3>1. Traditional I/O vs Java NIO</h3>
+<ul>
+  <li><strong>Stream-Oriented I/O (`java.io`):</strong> Reads data byte-by-byte or character-by-character sequentially. Blocking operation.</li>
+  <li><strong>Buffer-Oriented NIO (`java.nio`):</strong> Reads data into buffers through channels. Supports non-blocking operations.</li>
+</ul>
+
+<hr>
+
+<h3>2. Java NIO.2: `Path` and `Files` APIs</h3>
+<p>Java 7+ introduced <code>Path</code> and <code>Files</code> utility classes for intuitive file operations.</p>
+
+<pre><code>import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class NioFileExample {
+    public static void main(String[] args) {
+        Path path = Paths.get("example.txt");
+
+        try {
+            // Write string to file
+            Files.writeString(path, "Hello Java NIO.2 World!\nSecond Line");
+
+            // Read all lines
+            List<String> lines = Files.readAllLines(path);
+            lines.forEach(System.out.println);
+
+            // Check existence
+            System.out.println("File exists? " + Files.exists(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<h3>3. Object Serialization & Deserialization</h3>
+<p>
+  <strong>Serialization</strong> is the mechanism of converting an object's state into a byte stream. <strong>Deserialization</strong> recreates the object from the byte stream.
+</p>
+
+<pre><code>import java.io.*;
+
+// Must implement Serializable marker interface
+class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String username;
+    private transient String password; // 'transient' prevents field from being serialized!
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{username='" + username + "', password='" + password + "'}";
+    }
+}
+
+public class SerializationDemo {
+    public static void main(String[] args) {
+        User user = new User("admin", "SecretPass123!");
+
+        // Serialize Object
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("user.ser"))) {
+            out.writeObject(user);
+            System.out.println("Object serialized successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Deserialize Object
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("user.ser"))) {
+            User deserializedUser = (User) in.readObject();
+            System.out.println("Deserialized: " + deserializedUser);
+            // Password will be null because it was marked transient!
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<h3>4. Channels and Buffers Overview</h3>
+<p>In Java NIO, data is read from a <code>Channel</code> into a <code>Buffer</code>, or written from a <code>Buffer</code> into a <code>Channel</code>.</p>
+<ul>
+  <li><strong>Buffer:</strong> Memory block (`ByteBuffer`, `CharBuffer`, `IntBuffer`). Has `capacity`, `position`, `limit`.</li>
+  <li><strong>Channel:</strong> Connection to an entity capable of I/O operations (`FileChannel`, `SocketChannel`).</li>
+</ul>

@@ -1,0 +1,93 @@
+<h2>SQL Stored Procedures & Functions</h2>
+
+<p>
+  <strong>Stored Procedures</strong> and <strong>User-Defined Functions (UDFs)</strong> are reusable SQL code blocks compiled and stored on the database server for execution efficiency and modularity.
+</p>
+
+<hr>
+
+<h3>1. Stored Procedures (`CREATE PROCEDURE`)</h3>
+<p>
+  Procedures can perform complex transactions, accept input (`IN`) and output (`OUT`) parameters, and execute procedural code.
+</p>
+
+<pre><code>-- MySQL Stored Procedure Example
+DELIMITER //
+
+CREATE PROCEDURE ProcessOrder(
+    IN p_customer_id INT,
+    IN p_amount DECIMAL(10,2),
+    OUT p_status VARCHAR(50)
+)
+BEGIN
+    DECLARE v_balance DECIMAL(10,2);
+
+    -- Get current customer balance
+    SELECT balance INTO v_balance 
+    FROM accounts 
+    WHERE customer_id = p_customer_id;
+
+    IF v_balance >= p_amount THEN
+        -- Deduct balance & create order
+        UPDATE accounts SET balance = balance - p_amount WHERE customer_id = p_customer_id;
+        INSERT INTO orders(customer_id, amount) VALUES (p_customer_id, p_amount);
+        SET p_status = 'SUCCESS';
+    ELSE
+        SET p_status = 'INSUFFICIENT_FUNDS';
+    END IF;
+END //
+
+DELIMITER ;</code></pre>
+
+<h4>Calling a Stored Procedure:</h4>
+<pre><code>CALL ProcessOrder(101, 250.00, @order_status);
+SELECT @order_status; -- Returns 'SUCCESS' or 'INSUFFICIENT_FUNDS'</code></pre>
+
+<hr>
+
+<h3>2. User-Defined Functions (`CREATE FUNCTION`)</h3>
+<p>
+  Functions return a single scalar value or a table result and can be invoked directly inside <code>SELECT</code> statements.
+</p>
+
+<pre><code>-- Function to calculate tax on an amount
+CREATE FUNCTION CalculateTax(amount DECIMAL(10,2), tax_rate DECIMAL(4,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    RETURN amount * (tax_rate / 100);
+END;
+
+-- Using Function in a SELECT query
+SELECT order_id, amount, CalculateTax(amount, 18.0) as gst_amount
+FROM orders;</code></pre>
+
+<hr>
+
+<h3>3. Stored Procedures vs Functions</h3>
+<table border="1" cellpadding="8" style="width:100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background: var(--bg-hover, #2a2a2a);">
+      <th>Feature</th>
+      <th>Stored Procedure</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Invocation</strong></td>
+      <td>Called using <code>CALL</code> or <code>EXEC</code></td>
+      <td>Used inside <code>SELECT</code> statements</td>
+    </tr>
+    <tr>
+      <td><strong>Return Value</strong></td>
+      <td>Can return 0, 1, or multiple parameters (`OUT`)</td>
+      <td>Must return exactly one scalar or table value</td>
+    </tr>
+    <tr>
+      <td><strong>Transactions</strong></td>
+      <td>Can start, commit, or rollback transactions</td>
+      <td>Cannot manage transactions inside functions</td>
+    </tr>
+  </tbody>
+</table>

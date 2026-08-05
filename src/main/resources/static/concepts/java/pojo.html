@@ -1,0 +1,193 @@
+<h2>POJO and Java Bean Classes in Java</h2>
+
+<p>
+In Java, <strong>POJO (Plain Old Java Object)</strong> and <strong>Java Bean</strong> are both used to represent data in object form. They are simple classes but follow slightly different rules. They are widely used in enterprise applications, frameworks, and databases.
+</p>
+
+<hr>
+
+<h3>1. What is a POJO Class?</h3>
+
+<ul>
+  <li><strong>POJO</strong> stands for <u>Plain Old Java Object</u>.</li>
+  <li>It is a simple Java class used to represent data.</li>
+  <li>It can have fields, constructors, getters, setters, methods.</li>
+  <li>It doesn't follow any strict naming or access rules.</li>
+  <li>Used widely in frameworks like Hibernate, Spring, etc.</li>
+</ul>
+
+<h4>Example: POJO Class</h4>
+<pre>
+public class Student {
+    public String name;
+    public int age;
+
+    public Student() {}
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void printDetails() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s = new Student("Ravi", 20);
+        s.printDetails();
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Name: Ravi, Age: 20
+</pre>
+
+<hr>
+
+<h3>2. What is a Java Bean Class?</h3>
+
+<ul>
+  <li>A <strong>Java Bean</strong> is a special type of POJO that follows specific rules.</li>
+  <li>All fields must be <code>private</code>.</li>
+  <li>It must provide <code>public getters and setters</code>.</li>
+  <li>Must have a <code>no-arg constructor</code>.</li>
+  <li>It should be <code>serializable</code> (optional but recommended).</li>
+</ul>
+
+<h4>Example: Java Bean</h4>
+<pre>
+import java.io.Serializable;
+
+public class Employee implements Serializable {
+    private String name;
+    private double salary;
+
+    public Employee() {} // no-arg constructor
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+}
+
+public class BeanTest {
+    public static void main(String[] args) {
+        Employee emp = new Employee();
+        emp.setName("Anjali");
+        emp.setSalary(45000.50);
+
+        System.out.println("Name: " + emp.getName());
+        System.out.println("Salary: " + emp.getSalary());
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Name: Anjali
+Salary: 45000.5
+</pre>
+
+<hr>
+
+<h3>3. Key Differences: POJO vs Java Bean</h3>
+<table border="1" cellpadding="6">
+  <tr>
+    <th>Feature</th>
+    <th>POJO</th>
+    <th>Java Bean</th>
+  </tr>
+  <tr>
+    <td>Definition</td>
+    <td>Plain old class used to hold data</td>
+    <td>Class following JavaBean conventions</td>
+  </tr>
+  <tr>
+    <td>Access Modifiers</td>
+    <td>Fields can be public, protected, or private</td>
+    <td>Fields must be private</td>
+  </tr>
+  <tr>
+    <td>Constructors</td>
+    <td>Can have any constructors</td>
+    <td>Must have a no-argument constructor</td>
+  </tr>
+  <tr>
+    <td>Getters/Setters</td>
+    <td>Optional</td>
+    <td>Required</td>
+  </tr>
+  <tr>
+    <td>Serializable</td>
+    <td>Optional</td>
+    <td>Recommended</td>
+  </tr>
+  <tr>
+    <td>Use Case</td>
+    <td>General-purpose data holder</td>
+    <td>Used in frameworks, JSP, Spring, etc.</td>
+  </tr>
+</table>
+
+<hr>
+
+<h3>4. Real-life Use of Java Beans</h3>
+<p>JavaBeans are used in:</p>
+<ul>
+  <li>JSP to pass values between pages using get/set</li>
+  <li>Spring Framework for dependency injection</li>
+  <li>Hibernate for ORM (Object Relational Mapping)</li>
+  <li>JavaFX and Java GUI tools for binding and data models</li>
+</ul>
+
+<hr>
+
+<h3>5. Simple Practice Program: POJO + Bean</h3>
+<pre>
+public class Product {
+    private String name;
+    private double price;
+
+    public Product() {}
+
+    public void setName(String name) { this.name = name; }
+    public void setPrice(double price) { this.price = price; }
+
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+}
+
+public class Shop {
+    public static void main(String[] args) {
+        Product p = new Product();
+        p.setName("Mobile");
+        p.setPrice(15000);
+
+        System.out.println(p.getName() + " - ₹" + p.getPrice());
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Mobile - ₹15000.0
+</pre>
+
+<p><strong>Conclusion:</strong> POJO and Bean classes help separate logic and data in Java. Beans are stricter and ideal for frameworks, while POJOs are general-purpose containers.</p>
+

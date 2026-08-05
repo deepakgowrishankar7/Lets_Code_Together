@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Python Operators</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Python Operators</h1>
+
+<p>
+Operators are special symbols used to perform operations on variables and values.
+</p>
+
+<h2>Types of Operators</h2>
+
+<ul>
+<li>Arithmetic Operators</li>
+<li>Assignment Operators</li>
+<li>Comparison Operators</li>
+<li>Logical Operators</li>
+<li>Bitwise Operators</li>
+<li>Membership Operators</li>
+<li>Identity Operators</li>
+</ul>
+
+<hr>
+
+<h2>1. Arithmetic Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>+</td>
+<td>Addition</td>
+</tr>
+
+<tr>
+<td>-</td>
+<td>Subtraction</td>
+</tr>
+
+<tr>
+<td>*</td>
+<td>Multiplication</td>
+</tr>
+
+<tr>
+<td>/</td>
+<td>Division</td>
+</tr>
+
+<tr>
+<td>%</td>
+<td>Modulus</td>
+</tr>
+
+<tr>
+<td>**</td>
+<td>Power</td>
+</tr>
+
+<tr>
+<td>//</td>
+<td>Floor Division</td>
+</tr>
+
+</table>
+
+<div class="code">
+a = 10
+b = 3
+
+print(a+b)
+print(a-b)
+print(a*b)
+print(a/b)
+print(a%b)
+print(a**b)
+print(a//b)
+</div>
+
+<div class="output">
+13
+7
+30
+3.333333
+1
+1000
+3
+</div>
+
+<hr>
+
+<h2>2. Assignment Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Example</th>
+</tr>
+
+<tr>
+<td>=</td>
+<td>x = 10</td>
+</tr>
+
+<tr>
+<td>+=</td>
+<td>x += 5</td>
+</tr>
+
+<tr>
+<td>-=</td>
+<td>x -= 5</td>
+</tr>
+
+<tr>
+<td>*=</td>
+<td>x *= 5</td>
+</tr>
+
+<tr>
+<td>/=</td>
+<td>x /= 5</td>
+</tr>
+
+</table>
+
+<div class="code">
+x = 10
+
+x += 5
+
+print(x)
+</div>
+
+<div class="output">
+15
+</div>
+
+<hr>
+
+<h2>3. Comparison Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>==</td>
+<td>Equal To</td>
+</tr>
+
+<tr>
+<td>!=</td>
+<td>Not Equal To</td>
+</tr>
+
+<tr>
+<td>></td>
+<td>Greater Than</td>
+</tr>
+
+<tr>
+<td><</td>
+<td>Less Than</td>
+</tr>
+
+<tr>
+<td>>=</td>
+<td>Greater Than Equal</td>
+</tr>
+
+<tr>
+<td><=</td>
+<td>Less Than Equal</td>
+</tr>
+
+</table>
+
+<div class="code">
+a = 10
+b = 20
+
+print(a == b)
+print(a != b)
+print(a < b)
+print(a > b)
+</div>
+
+<div class="output">
+False
+True
+True
+False
+</div>
+
+<hr>
+
+<h2>4. Logical Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>and</td>
+<td>Returns True if both conditions are True</td>
+</tr>
+
+<tr>
+<td>or</td>
+<td>Returns True if any condition is True</td>
+</tr>
+
+<tr>
+<td>not</td>
+<td>Reverses result</td>
+</tr>
+
+</table>
+
+<div class="code">
+x = True
+y = False
+
+print(x and y)
+print(x or y)
+print(not x)
+</div>
+
+<div class="output">
+False
+True
+False
+</div>
+
+<hr>
+
+<h2>5. Bitwise Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>&</td>
+<td>AND</td>
+</tr>
+
+<tr>
+<td>|</td>
+<td>OR</td>
+</tr>
+
+<tr>
+<td>^</td>
+<td>XOR</td>
+</tr>
+
+<tr>
+<td>~</td>
+<td>NOT</td>
+</tr>
+
+<tr>
+<td><<</td>
+<td>Left Shift</td>
+</tr>
+
+<tr>
+<td>>></td>
+<td>Right Shift</td>
+</tr>
+
+</table>
+
+<div class="code">
+a = 5
+b = 3
+
+print(a & b)
+print(a | b)
+</div>
+
+<div class="output">
+1
+7
+</div>
+
+<hr>
+
+<h2>6. Membership Operators</h2>
+
+<p>
+Used to check whether a value exists in a sequence.
+</p>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>in</td>
+<td>Value exists</td>
+</tr>
+
+<tr>
+<td>not in</td>
+<td>Value does not exist</td>
+</tr>
+
+</table>
+
+<div class="code">
+numbers = [10,20,30]
+
+print(20 in numbers)
+print(50 in numbers)
+</div>
+
+<div class="output">
+True
+False
+</div>
+
+<hr>
+
+<h2>7. Identity Operators</h2>
+
+<p>
+Used to compare memory locations.
+</p>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>is</td>
+<td>Same object</td>
+</tr>
+
+<tr>
+<td>is not</td>
+<td>Different object</td>
+</tr>
+
+</table>
+
+<div class="code">
+x = [1,2]
+y = x
+
+print(x is y)
+</div>
+
+<div class="output">
+True
+</div>
+
+<hr>
+
+<h2>Real World Example</h2>
+
+<div class="code">
+age = 20
+
+if age >= 18:
+    print("Eligible to Vote")
+</div>
+
+<div class="output">
+Eligible to Vote
+</div>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. Difference between == and is ?</h3>
+
+<p>
+== compares values.
+is compares memory location.
+</p>
+
+<h3>2. What is Floor Division?</h3>
+
+<p>
+Returns integer result after division.
+</p>
+
+<h3>3. What is Modulus Operator?</h3>
+
+<p>
+Returns remainder.
+</p>
+
+<h3>4. Which operator is used for power?</h3>
+
+<p>
+** operator.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+
+<li>Using = instead of ==</li>
+
+<li>Confusing is with ==</li>
+
+<li>Wrong logical conditions</li>
+
+<li>Division by zero</li>
+
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+
+<li>Add two numbers.</li>
+
+<li>Find remainder.</li>
+
+<li>Check voting eligibility.</li>
+
+<li>Calculate square using **.</li>
+
+<li>Check value exists in list.</li>
+
+<li>Compare two variables.</li>
+
+<li>Use logical operators.</li>
+
+<li>Find largest of two numbers.</li>
+
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Operators perform operations on data.
+
+Python supports Arithmetic, Assignment,
+Comparison, Logical, Bitwise,
+Membership and Identity operators.
+
+Understanding operators is important because
+they are used in almost every Python program.
+
+</div>
+
+</div>
+
+</body>
+</html>

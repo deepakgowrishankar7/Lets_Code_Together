@@ -1,0 +1,58 @@
+<h2>SQL Database Security & Permissions</h2>
+
+<p>
+  Database Security involves controlling access rights, enforcing Principle of Least Privilege, preventing SQL Injection, and protecting sensitive data.
+</p>
+
+<hr>
+
+<h3>1. User Management & Granting Permissions (`GRANT`, `REVOKE`)</h3>
+
+<pre><code>-- Create a database user
+CREATE USER 'app_developer'@'%' IDENTIFIED BY 'SecurePass#2026';
+
+-- Grant specific privileges on specific database
+GRANT SELECT, INSERT, UPDATE ON mydatabase.* TO 'app_developer'@'%';
+
+-- Apply privilege changes
+FLUSH PRIVILEGES;
+
+-- Revoke dangerous DELETE permission
+REVOKE DELETE ON mydatabase.* FROM 'app_developer'@'%';</code></pre>
+
+<hr>
+
+<h3>2. Preventing SQL Injection Attacks</h3>
+<p>
+  <strong>SQL Injection (SQLi)</strong> occurs when untrusted user inputs are concatenated directly into raw SQL strings, allowing attackers to manipulate queries.
+</p>
+
+<pre><code>-- ❌ VULNERABLE SQL String (Malicious input: "admin' OR '1'='1")
+String sql = "SELECT * FROM users WHERE username = '" + userInput + "'";
+// Resulting query: SELECT * FROM users WHERE username = 'admin' OR '1'='1' (Bypasses authentication!)
+
+-- ✅ SECURE SQL: Prepared Statements / Parameterized Queries
+PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+stmt.setString(1, userInput); // Input treated strictly as literal data!</code></pre>
+
+<hr>
+
+<h3>3. Row-Level Security (RLS)</h3>
+<p>
+  Row-Level Security restricts which rows a user can access based on security policies (supported in PostgreSQL and SQL Server).
+</p>
+
+<pre><code>-- PostgreSQL Row Level Security Example
+ALTER TABLE tenant_data ENABLE ROW LEVEL SECURITY;
+
+-- Create policy allowing users to see only their tenant data
+CREATE POLICY tenant_isolation_policy ON tenant_data
+    USING (tenant_id = CURRENT_SETTING('app.current_tenant'));</code></pre>
+
+<hr>
+
+<h3>4. Data Encryption & Obfuscation</h3>
+<ul>
+  <li><strong>Encryption at Rest:</strong> Encrypting database files and backups on disk (TDE - Transparent Data Encryption).</li>
+  <li><strong>Hashing Sensitive Data:</strong> Storing passwords as salted cryptographic hashes (BCrypt/Argon2) rather than plaintext.</li>
+</ul>

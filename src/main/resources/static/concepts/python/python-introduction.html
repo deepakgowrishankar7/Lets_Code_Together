@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Python</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    padding:30px;
+    line-height:1.8;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1,h2,h3{
+    color:#38bdf8;
+}
+
+.code{
+    background:#1e293b;
+    padding:15px;
+    border-radius:10px;
+    overflow-x:auto;
+}
+
+.output{
+    background:#111827;
+    padding:15px;
+    border-left:5px solid #22c55e;
+    border-radius:10px;
+}
+
+.note{
+    background:#172554;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table,th,td{
+    border:1px solid gray;
+}
+
+th,td{
+    padding:10px;
+    text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Introduction to Python</h1>
+
+<hr>
+
+<h2>What is Python?</h2>
+
+<p>
+Python is a high-level, interpreted, object-oriented programming language
+created by Guido van Rossum and released in 1991.
+</p>
+
+<p>
+Python is famous for its simple syntax and readability.
+It is one of the most popular programming languages in the world.
+</p>
+
+<h2>Why Learn Python?</h2>
+
+<ul>
+<li>Easy to Learn</li>
+<li>Simple Syntax</li>
+<li>Huge Community Support</li>
+<li>Used in AI and Machine Learning</li>
+<li>Used in Data Science</li>
+<li>Used in Web Development</li>
+<li>Used in Automation</li>
+<li>High Demand in Industry</li>
+</ul>
+
+<h2>Installing Python (Detailed)</h2>
+
+<p>Follow the steps for your operating system. We include verification and basic setup for development.</p>
+
+<h3>Windows</h3>
+<ol>
+<li>Download the latest installer from <a href="https://www.python.org/downloads/">python.org/downloads</a>.</li>
+<li>Run the installer and check "Add Python to PATH" before clicking Install.</li>
+<li>Open PowerShell and verify: <code>python --version</code> and <code>pip --version</code>.</li>
+</ol>
+
+<h3>macOS</h3>
+<ol>
+<li>Install via Homebrew (recommended): <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code> then <code>brew install python</code>.</li>
+<li>Or download the installer from <a href="https://www.python.org/downloads/">python.org</a>.</li>
+<li>Verify: <code>python3 --version</code> and <code>pip3 --version</code>.</li>
+</ol>
+
+<h3>Linux (Ubuntu/Debian)</h3>
+<pre class="code"><code>sudo apt update
+sudo apt install python3 python3-pip
+python3 --version
+pip3 --version</code></pre>
+
+<h2>Creating a Virtual Environment</h2>
+<p>Use virtual environments to isolate project dependencies.</p>
+<pre class="code"><code>python -m venv venv
+# activate on Windows PowerShell
+venv\Scripts\Activate.ps1
+# activate on macOS/Linux
+source venv/bin/activate
+
+pip install --upgrade pip
+</code></pre>
+
+<h2>Installing Packages with pip</h2>
+<pre class="code"><code>pip install requests
+pip install flask
+pip freeze  # list installed packages
+</code></pre>
+
+<h2>Verify Installation</h2>
+
+<div class="code">
+python --version
+</div>
+
+<h2>Your First Python Program</h2>
+
+<div class="code">
+print("Hello World")
+</div>
+
+<h2>Run a Script</h2>
+<pre class="code"><code>python hello.py
+# or on some systems: python3 hello.py
+</code></pre>
+
+<h2>How Python Executes Code</h2>
+
+<ol>
+<li>Source Code (.py)</li>
+<li>Byte Code Compilation</li>
+<li>Python Virtual Machine (PVM)</li>
+<li>Output Generated</li>
+</ol>
+
+<h2>Quick Concepts (Rough)</h2>
+<ul>
+<li><strong>Variables</strong> — store values: <code>x = 5</code></li>
+<li><strong>Data Types</strong> — numbers, strings, lists, dicts</li>
+<li><strong>Control Flow</strong> — <code>if</code>, <code>for</code>, <code>while</code></li>
+<li><strong>Functions</strong> — reusable code blocks: <code>def fn():</code></li>
+<li><strong>Modules</strong> — import libraries using <code>import</code></li>
+<li><strong>Files</strong> — read/write using <code>open()</code></li>
+</ul>
+
+<h2>Practice</h2>
+<ol>
+<li>Create a virtual environment and activate it.</li>
+<li>Install <code>requests</code> and write a script to fetch a web page.</li>
+<li>Try a small script that reads/writes a file.</li>
+</ol>
+
+<h2>Summary</h2>
+
+<div class="note">
+Python is a versatile, beginner-friendly language. After installation, practice with small scripts, use virtualenv for projects, and explore libraries for web, data, and automation.
+</div>
+
+</div>
+
+</body>
+</html>

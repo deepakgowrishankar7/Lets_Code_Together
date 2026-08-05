@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Conditional Statements in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Conditional Statements in Python</h1>
+
+<p>
+Conditional statements are used to make decisions in a program.
+They execute different blocks of code depending on whether a condition is True or False.
+</p>
+
+<hr>
+
+<h2>Why Do We Need Conditional Statements?</h2>
+
+<ul>
+<li>Decision Making</li>
+<li>User Authentication</li>
+<li>Validation</li>
+<li>Grading Systems</li>
+<li>Loan Approval Systems</li>
+<li>Game Logic</li>
+</ul>
+
+<hr>
+
+<h2>1. if Statement</h2>
+
+<p>
+The <b>if</b> statement executes code only when the condition is True.
+</p>
+
+<div class="code">
+age = 20
+
+if age >= 18:
+    print("Eligible to Vote")
+</div>
+
+<h3>Output</h3>
+
+<div class="output">
+Eligible to Vote
+</div>
+
+<hr>
+
+<h2>Syntax of if Statement</h2>
+
+<div class="code">
+if condition:
+    statement
+</div>
+
+<hr>
+
+<h2>2. if else Statement</h2>
+
+<p>
+Used when there are two possible outcomes.
+</p>
+
+<div class="code">
+age = 15
+
+if age >= 18:
+    print("Eligible")
+else:
+    print("Not Eligible")
+</div>
+
+<div class="output">
+Not Eligible
+</div>
+
+<hr>
+
+<h2>Syntax of if else</h2>
+
+<div class="code">
+if condition:
+    statement
+else:
+    statement
+</div>
+
+<hr>
+
+<h2>3. elif Statement</h2>
+
+<p>
+elif stands for "else if".
+It is used when multiple conditions need to be checked.
+</p>
+
+<div class="code">
+marks = 82
+
+if marks >= 90:
+    print("A+")
+elif marks >= 75:
+    print("A")
+elif marks >= 60:
+    print("B")
+else:
+    print("C")
+</div>
+
+<div class="output">
+A
+</div>
+
+<hr>
+
+<h2>Syntax of elif</h2>
+
+<div class="code">
+if condition:
+    statement
+
+elif condition:
+    statement
+
+else:
+    statement
+</div>
+
+<hr>
+
+<h2>4. Nested if Statement</h2>
+
+<p>
+An if statement inside another if statement is called a nested if.
+</p>
+
+<div class="code">
+age = 20
+license = True
+
+if age >= 18:
+    if license:
+        print("Can Drive")
+</div>
+
+<div class="output">
+Can Drive
+</div>
+
+<hr>
+
+<h2>Comparison Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>==</td>
+<td>Equal To</td>
+</tr>
+
+<tr>
+<td>!=</td>
+<td>Not Equal To</td>
+</tr>
+
+<tr>
+<td>></td>
+<td>Greater Than</td>
+</tr>
+
+<tr>
+<td><</td>
+<td>Less Than</td>
+</tr>
+
+<tr>
+<td>>=</td>
+<td>Greater Than or Equal</td>
+</tr>
+
+<tr>
+<td><=</td>
+<td>Less Than or Equal</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Logical Operators</h2>
+
+<table>
+
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>and</td>
+<td>Both conditions must be True</td>
+</tr>
+
+<tr>
+<td>or</td>
+<td>At least one condition must be True</td>
+</tr>
+
+<tr>
+<td>not</td>
+<td>Reverse the result</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Program: Even or Odd</h2>
+
+<div class="code">
+num = 8
+
+if num % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
+</div>
+
+<div class="output">
+Even
+</div>
+
+<hr>
+
+<h2>Program: Largest of Two Numbers</h2>
+
+<div class="code">
+a = 10
+b = 25
+
+if a > b:
+    print(a)
+else:
+    print(b)
+</div>
+
+<div class="output">
+25
+</div>
+
+<hr>
+
+<h2>Program: Largest of Three Numbers</h2>
+
+<div class="code">
+a = 10
+b = 40
+c = 25
+
+if a>b and a>c:
+    print(a)
+elif b>c:
+    print(b)
+else:
+    print(c)
+</div>
+
+<div class="output">
+40
+</div>
+
+<hr>
+
+<h2>Program: Positive, Negative or Zero</h2>
+
+<div class="code">
+num = -5
+
+if num > 0:
+    print("Positive")
+elif num < 0:
+    print("Negative")
+else:
+    print("Zero")
+</div>
+
+<div class="output">
+Negative
+</div>
+
+<hr>
+
+<h2>Program: Voting Eligibility</h2>
+
+<div class="code">
+age = 19
+
+if age >= 18:
+    print("Eligible to Vote")
+else:
+    print("Not Eligible")
+</div>
+
+<div class="output">
+Eligible to Vote
+</div>
+
+<hr>
+
+<h2>Program: Grade Calculator</h2>
+
+<div class="code">
+marks = 92
+
+if marks >= 90:
+    print("Grade A+")
+elif marks >= 80:
+    print("Grade A")
+elif marks >= 70:
+    print("Grade B")
+elif marks >= 60:
+    print("Grade C")
+else:
+    print("Fail")
+</div>
+
+<div class="output">
+Grade A+
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Login Systems</li>
+<li>Banking Applications</li>
+<li>ATM Machines</li>
+<li>Student Result Systems</li>
+<li>E-Commerce Discounts</li>
+<li>Game Development</li>
+<li>Loan Approval Systems</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is the difference between if and elif?</h3>
+
+<p>
+if starts checking conditions.
+elif checks additional conditions if previous ones fail.
+</p>
+
+<h3>2. What is a nested if statement?</h3>
+
+<p>
+An if statement inside another if statement.
+</p>
+
+<h3>3. Which operator checks equality?</h3>
+
+<p>
+==
+</p>
+
+<h3>4. Can we have multiple elif blocks?</h3>
+
+<p>
+Yes, we can use multiple elif blocks.
+</p>
+
+<h3>5. Is else mandatory?</h3>
+
+<p>
+No, else is optional.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Using = instead of ==</li>
+<li>Incorrect indentation</li>
+<li>Missing colon (:)</li>
+<li>Wrong logical conditions</li>
+<li>Using elif without if</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Check Even or Odd</li>
+<li>Check Positive or Negative</li>
+<li>Find Largest of Two Numbers</li>
+<li>Find Largest of Three Numbers</li>
+<li>Voting Eligibility</li>
+<li>Grade Calculator</li>
+<li>Leap Year Program</li>
+<li>Simple Calculator</li>
+<li>Password Verification</li>
+<li>Loan Approval System</li>
+<li>Age Category Finder</li>
+<li>Traffic Signal Program</li>
+<li>Electricity Bill Calculator</li>
+<li>Discount Calculator</li>
+<li>ATM Withdrawal Validation</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+Conditional statements are used for decision making in Python.
+
+Python provides:
+<ul>
+<li>if</li>
+<li>if else</li>
+<li>elif</li>
+<li>nested if</li>
+</ul>
+
+These statements are used in almost every real-world application.
+</div>
+
+</div>
+
+</body>
+</html>

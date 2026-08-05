@@ -1,0 +1,201 @@
+<h2>Java Collections Framework</h2>
+
+<p>
+The <strong>Java Collections Framework</strong> is a set of classes and interfaces that implement commonly reusable data structures like List, Set, Map, and Queue. It provides a way to store, access, and manipulate groups of objects efficiently.
+</p>
+
+<h3>Main Interfaces in Collections:</h3>
+<ul>
+  <li><strong>List</strong> – Ordered, allows duplicates (e.g., ArrayList, LinkedList)</li>
+  <li><strong>Set</strong> – Unordered, no duplicates (e.g., HashSet, TreeSet)</li>
+  <li><strong>Map</strong> – Key-value pairs (e.g., HashMap, TreeMap)</li>
+  <li><strong>Queue</strong> – FIFO order (e.g., LinkedList, PriorityQueue)</li>
+</ul>
+
+<hr>
+
+<h3>1. List Example (ArrayList)</h3>
+<p><strong>List</strong> stores elements in the order they were added and allows duplicates.</p>
+<pre>
+import java.util.ArrayList;
+
+public class ListExample {
+    public static void main(String[] args) {
+        ArrayList<String> fruits = new ArrayList<>();
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Mango");
+
+        System.out.println(fruits);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+[Apple, Banana, Mango]
+</pre>
+
+<hr>
+
+<h3>2. Set Example (HashSet)</h3>
+<p><strong>Set</strong> does not allow duplicate values and does not maintain insertion order.</p>
+<pre>
+import java.util.HashSet;
+
+public class SetExample {
+    public static void main(String[] args) {
+        HashSet<String> colors = new HashSet<>();
+        colors.add("Red");
+        colors.add("Green");
+        colors.add("Red"); // duplicate
+
+        System.out.println(colors);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+[Red, Green]
+</pre>
+
+<hr>
+
+<h3>3. Map Example (HashMap)</h3>
+<p><strong>Map</strong> stores key-value pairs. Keys are unique.</p>
+<pre>
+import java.util.HashMap;
+
+public class MapExample {
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1, "A");
+        map.put(2, "B");
+        map.put(3, "C");
+
+        System.out.println(map);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+{1=A, 2=B, 3=C}
+</pre>
+
+<hr>
+
+<h3>4. Queue Example (LinkedList)</h3>
+<p><strong>Queue</strong> follows FIFO (First In First Out).</p>
+<pre>
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class QueueExample {
+    public static void main(String[] args) {
+        Queue<String> tasks = new LinkedList<>();
+        tasks.add("Task1");
+        tasks.add("Task2");
+
+        System.out.println("Next: " + tasks.peek());
+        tasks.remove();
+        System.out.println("After removing: " + tasks);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Next: Task1
+After removing: [Task2]
+</pre>
+
+<hr>
+
+<h3>5. Iterating Collections (For-each loop)</h3>
+<pre>
+import java.util.ArrayList;
+
+public class LoopExample {
+    public static void main(String[] args) {
+        ArrayList<Integer> nums = new ArrayList<>();
+        nums.add(10);
+        nums.add(20);
+        nums.add(30);
+
+        for (int n : nums) {
+            System.out.println(n);
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+10
+20
+30
+</pre>
+
+<hr>
+
+<h3>6. Useful Methods in Collection Classes</h3>
+<ul>
+  <li><code>add()</code> – Add an element</li>
+  <li><code>remove()</code> – Remove an element</li>
+  <li><code>contains()</code> – Check if element exists</li>
+  <li><code>size()</code> – Get size of collection</li>
+  <li><code>clear()</code> – Remove all elements</li>
+  <li><code>isEmpty()</code> – Check if collection is empty</li>
+</ul>
+
+<hr>
+
+<h3>7. Sorting Collections</h3>
+<pre>
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class SortExample {
+    public static void main(String[] args) {
+        ArrayList<String> names = new ArrayList<>();
+        names.add("Zara");
+        names.add("Anil");
+        names.add("John");
+
+        Collections.sort(names);
+        System.out.println(names);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+[Anil, John, Zara]
+</pre>
+
+<hr>
+
+<h3>8. Convert Array to List</h3>
+<pre>
+import java.util.Arrays;
+import java.util.List;
+
+public class ConvertArrayToList {
+    public static void main(String[] args) {
+        String[] animals = {"Dog", "Cat", "Horse"};
+        List<String> list = Arrays.asList(animals);
+
+        System.out.println(list);
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+[Dog, Cat, Horse]
+</pre>
+
+<p><strong>Conclusion:</strong> The Java Collections Framework simplifies working with data groups. Choosing the right collection depends on your needs (ordering, uniqueness, key-value storage, etc.).</p>
+

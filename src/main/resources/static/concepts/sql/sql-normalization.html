@@ -1,0 +1,63 @@
+<div>
+  <h1>SQL Normalization</h1>
+  <p>Normalization organizes data into tables so it is clean, consistent, and easy to maintain.</p>
+
+  <h2>Why Normalize?</h2>
+  <p>Normalization prevents duplicate data, reduces errors, and makes updates safer.</p>
+
+  <h2>First Normal Form (1NF)</h2>
+  <p>A table is in 1NF when each column has atomic values and each row is unique.</p>
+  <pre><code>CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  order_date DATE,
+  customer_id INT
+);
+</code></pre>
+
+  <h2>Second Normal Form (2NF)</h2>
+  <p>2NF means the table is in 1NF and every non-key column depends on the whole primary key.</p>
+
+  <h2>Third Normal Form (3NF)</h2>
+  <p>3NF means the table is in 2NF and non-key columns depend only on the primary key, not on other non-key columns.</p>
+
+  <h2>Boyce-Codd Normal Form (BCNF)</h2>
+  <p>BCNF is a stricter version of 3NF that removes remaining dependency issues.</p>
+
+  <h2>Normalization Example</h2>
+  <p>Bad design with duplicate data:</p>
+  <pre><code>order_id | customer_name | customer_email | product_name | product_price
+</code></pre>
+
+  <p>Better design with normalized tables:</p>
+  <pre><code>CREATE TABLE customers (
+  id INT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
+
+CREATE TABLE products (
+  id INT PRIMARY KEY,
+  name VARCHAR(100),
+  price DECIMAL(8,2)
+);
+
+CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  customer_id INT,
+  order_date DATE,
+  FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE TABLE order_items (
+  order_id INT,
+  product_id INT,
+  quantity INT,
+  PRIMARY KEY (order_id, product_id),
+  FOREIGN KEY (order_id) REFERENCES orders(id),
+  FOREIGN KEY (product_id) REFERENCES products(id)
+);
+</code></pre>
+
+  <h2>When to Denormalize</h2>
+  <p>Denormalization can improve read performance in large data systems but may increase redundancy. Use it only when necessary for performance.</p>
+</div>

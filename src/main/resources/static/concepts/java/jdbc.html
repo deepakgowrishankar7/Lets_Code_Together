@@ -1,0 +1,105 @@
+<h2>Java Database Connectivity (JDBC)</h2>
+
+<p>
+  <strong>JDBC</strong> is a Java API that defines how a client application may access a relational database. It provides methods to query and update data in a database using SQL statements.
+</p>
+
+<hr>
+
+<h3>1. Architecture & Steps to Connect JDBC</h3>
+<p>Connecting Java to a database involves 5 standard steps:</p>
+<ol>
+  <li><strong>Register Driver:</strong> Load the database driver (`Class.forName("org.h2.Driver")` or automatic loading).</li>
+  <li><strong>Create Connection:</strong> `DriverManager.getConnection(url, username, password)`</li>
+  <li><strong>Create Statement:</strong> Create `Statement` or `PreparedStatement`.</li>
+  <li><strong>Execute Query/Update:</strong> Execute SQL (`executeQuery` or `executeUpdate`).</li>
+  <li><strong>Close Connection:</strong> Close resources using try-with-resources.</li>
+</ol>
+
+<hr>
+
+<h3>2. `PreparedStatement` vs `Statement`</h3>
+<p>
+  Always prefer <code>PreparedStatement</code> over <code>Statement</code>. PreparedStatement pre-compiles SQL queries, boosts execution speed for repeated queries, and <strong>prevents SQL Injection attacks</strong>.
+</p>
+
+<pre><code>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class JdbcExample {
+    private static final String URL = "jdbc:h2:mem:testdb";
+    private static final String USER = "sa";
+    private static final String PASS = "";
+
+    public static void main(String[] args) {
+        String sql = "SELECT id, username, email FROM users WHERE role = ?";
+
+        // Use try-with-resources for automatic closing of Connection, Statement, and ResultSet
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Bind parameter
+            stmt.setString(1, "ADMIN");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String username = rs.getString("username");
+                    String email = rs.getString("email");
+
+                    System.out.println("User [" + id + "]: " + username + " (" + email + ")");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<h3>3. Transaction Management (`commit`, `rollback`)</h3>
+<p>
+  By default, JDBC connections operate in <strong>auto-commit mode</strong> (every individual SQL statement is treated as a transaction). For atomic multi-step operations (e.g. money transfers), disable auto-commit.
+</p>
+
+<pre><code>public void transferMoney(Connection conn, int fromAcc, int toAcc, double amount) throws SQLException {
+    try {
+        // Step 1: Disable Auto-Commit
+        conn.setAutoCommit(false);
+
+        // Step 2: Deduct money from account A
+        PreparedStatement deduct = conn.prepareStatement("UPDATE accounts SET balance = balance - ? WHERE id = ?");
+        deduct.setDouble(1, amount);
+        deduct.setInt(2, fromAcc);
+        deduct.executeUpdate();
+
+        // Step 3: Add money to account B
+        PreparedStatement add = conn.prepareStatement("UPDATE accounts SET balance = balance + ? WHERE id = ?");
+        add.setDouble(1, amount);
+        add.setInt(2, toAcc);
+        add.executeUpdate();
+
+        // Step 4: Commit Transaction if everything succeeded
+        conn.commit();
+        System.out.println("Transaction committed successfully!");
+
+    } catch (Exception e) {
+        // Step 5: Rollback Transaction on error
+        conn.rollback();
+        System.err.println("Transaction failed! Changes rolled back.");
+    } finally {
+        conn.setAutoCommit(true);
+    }
+}</code></pre>
+
+<hr>
+
+<h3>4. Connection Pooling (HikariCP Overview)</h3>
+<p>
+  Opening and closing physical database connections is expensive. In production systems, <strong>Connection Pools</strong> (such as HikariCP or Apache DBCP) maintain a pool of reusable connections, eliminating connection latency.
+</p>

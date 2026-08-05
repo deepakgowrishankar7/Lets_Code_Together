@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lists in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Lists in Python</h1>
+
+<p>
+A List is a collection of items stored in a single variable.
+Lists are ordered, changeable, and allow duplicate values.
+</p>
+
+<hr>
+
+<h2>Creating a List</h2>
+
+<div class="code">
+numbers = [10,20,30,40]
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 20, 30, 40]
+</div>
+
+<hr>
+
+<h2>Characteristics of Lists</h2>
+
+<ul>
+<li>Ordered</li>
+<li>Mutable (Can Change)</li>
+<li>Allows Duplicates</li>
+<li>Can Store Different Data Types</li>
+</ul>
+
+<hr>
+
+<h2>Accessing List Elements</h2>
+
+<div class="code">
+numbers = [10,20,30,40]
+
+print(numbers[0])
+print(numbers[2])
+</div>
+
+<div class="output">
+10
+30
+</div>
+
+<hr>
+
+<h2>Negative Indexing</h2>
+
+<div class="code">
+numbers = [10,20,30,40]
+
+print(numbers[-1])
+</div>
+
+<div class="output">
+40
+</div>
+
+<hr>
+
+<h2>List Slicing</h2>
+
+<div class="code">
+numbers = [10,20,30,40,50]
+
+print(numbers[1:4])
+</div>
+
+<div class="output">
+[20, 30, 40]
+</div>
+
+<hr>
+
+<h2>Updating Elements</h2>
+
+<div class="code">
+numbers = [10,20,30]
+
+numbers[1] = 100
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 100, 30]
+</div>
+
+<hr>
+
+<h2>Adding Elements</h2>
+
+<h3>append()</h3>
+
+<div class="code">
+numbers = [10,20]
+
+numbers.append(30)
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 20, 30]
+</div>
+
+<h3>insert()</h3>
+
+<div class="code">
+numbers = [10,20]
+
+numbers.insert(1,15)
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 15, 20]
+</div>
+
+<hr>
+
+<h2>Removing Elements</h2>
+
+<h3>remove()</h3>
+
+<div class="code">
+numbers = [10,20,30]
+
+numbers.remove(20)
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 30]
+</div>
+
+<h3>pop()</h3>
+
+<div class="code">
+numbers = [10,20,30]
+
+numbers.pop()
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 20]
+</div>
+
+<hr>
+
+<h2>List Methods</h2>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>append()</td>
+<td>Add Item</td>
+</tr>
+
+<tr>
+<td>insert()</td>
+<td>Insert Item</td>
+</tr>
+
+<tr>
+<td>remove()</td>
+<td>Remove Item</td>
+</tr>
+
+<tr>
+<td>pop()</td>
+<td>Remove by Index</td>
+</tr>
+
+<tr>
+<td>sort()</td>
+<td>Sort List</td>
+</tr>
+
+<tr>
+<td>reverse()</td>
+<td>Reverse List</td>
+</tr>
+
+<tr>
+<td>count()</td>
+<td>Count Occurrences</td>
+</tr>
+
+<tr>
+<td>index()</td>
+<td>Find Position</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Sorting a List</h2>
+
+<div class="code">
+numbers = [50,10,40,20]
+
+numbers.sort()
+
+print(numbers)
+</div>
+
+<div class="output">
+[10, 20, 40, 50]
+</div>
+
+<hr>
+
+<h2>Reversing a List</h2>
+
+<div class="code">
+numbers = [1,2,3,4]
+
+numbers.reverse()
+
+print(numbers)
+</div>
+
+<div class="output">
+[4, 3, 2, 1]
+</div>
+
+<hr>
+
+<h2>Looping Through a List</h2>
+
+<div class="code">
+numbers = [10,20,30]
+
+for num in numbers:
+    print(num)
+</div>
+
+<div class="output">
+10
+20
+30
+</div>
+
+<hr>
+
+<h2>Nested Lists</h2>
+
+<div class="code">
+students = [
+["Deepu",21],
+["Rahul",22]
+]
+
+print(students[0])
+</div>
+
+<div class="output">
+['Deepu', 21]
+</div>
+
+<hr>
+
+<h2>List Comprehension</h2>
+
+<p>
+A shorter way to create lists.
+</p>
+
+<div class="code">
+numbers = [x*x for x in range(5)]
+
+print(numbers)
+</div>
+
+<div class="output">
+[0, 1, 4, 9, 16]
+</div>
+
+<hr>
+
+<h2>Program: Sum of List Elements</h2>
+
+<div class="code">
+numbers = [10,20,30]
+
+print(sum(numbers))
+</div>
+
+<div class="output">
+60
+</div>
+
+<hr>
+
+<h2>Program: Largest Element</h2>
+
+<div class="code">
+numbers = [10,50,20,90]
+
+print(max(numbers))
+</div>
+
+<div class="output">
+90
+</div>
+
+<hr>
+
+<h2>Program: Smallest Element</h2>
+
+<div class="code">
+numbers = [10,50,20,90]
+
+print(min(numbers))
+</div>
+
+<div class="output">
+10
+</div>
+
+<hr>
+
+<h2>Program: Count Occurrences</h2>
+
+<div class="code">
+numbers = [10,20,10,30,10]
+
+print(numbers.count(10))
+</div>
+
+<div class="output">
+3
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Student Records</li>
+<li>Shopping Cart</li>
+<li>Employee Data</li>
+<li>Marks Management</li>
+<li>Inventory Systems</li>
+<li>Game Development</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a List?</h3>
+
+<p>
+An ordered mutable collection.
+</p>
+
+<h3>2. Can Lists store different data types?</h3>
+
+<p>
+Yes.
+</p>
+
+<h3>3. Difference between append() and insert()?</h3>
+
+<p>
+append() adds at end.
+insert() adds at specific position.
+</p>
+
+<h3>4. What is List Comprehension?</h3>
+
+<p>
+A concise way to create lists.
+</p>
+
+<h3>5. Are Lists mutable?</h3>
+
+<p>
+Yes.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Index Out of Range</li>
+<li>Wrong Slicing</li>
+<li>Using remove() on missing value</li>
+<li>Modifying list while iterating</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Find Largest Number</li>
+<li>Find Smallest Number</li>
+<li>Sum All Elements</li>
+<li>Average of List</li>
+<li>Count Even Numbers</li>
+<li>Count Odd Numbers</li>
+<li>Reverse List</li>
+<li>Sort List</li>
+<li>Remove Duplicates</li>
+<li>Search Element</li>
+<li>Merge Two Lists</li>
+<li>Copy a List</li>
+<li>Find Second Largest</li>
+<li>Find Frequency of Elements</li>
+<li>Create List using Comprehension</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Lists are one of the most commonly used data structures in Python.
+
+Key Concepts:
+
+• Creating Lists
+
+• Indexing
+
+• Slicing
+
+• Updating Elements
+
+• List Methods
+
+• Nested Lists
+
+• List Comprehension
+
+Lists are widely used in real-world applications and are essential for Python programming.
+
+</div>
+
+</div>
+
+</body>
+</html>

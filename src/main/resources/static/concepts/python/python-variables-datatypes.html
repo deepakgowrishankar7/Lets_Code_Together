@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Variables and Data Types</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#0f172a;
+    color:white;
+    padding:30px;
+    line-height:1.8;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1,h2,h3{
+    color:#38bdf8;
+}
+
+.code{
+    background:#1e293b;
+    padding:15px;
+    border-radius:10px;
+    overflow-x:auto;
+}
+
+.output{
+    background:#111827;
+    padding:15px;
+    border-left:5px solid #22c55e;
+    border-radius:10px;
+}
+
+.note{
+    background:#172554;
+    padding:15px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table,th,td{
+    border:1px solid gray;
+}
+
+th,td{
+    padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Variables and Data Types in Python</h1>
+
+<h2>What is a Variable?</h2>
+
+<p>
+A variable is a container used to store data.
+</p>
+
+<div class="code">
+name = "Deepu"
+age = 21
+</div>
+
+<h2>Variable Naming Rules</h2>
+
+<ul>
+<li>Must start with a letter or underscore</li>
+<li>Cannot start with numbers</li>
+<li>Cannot contain special characters</li>
+<li>Case sensitive</li>
+</ul>
+
+<h2>Valid Variables</h2>
+
+<div class="code">
+name
+student_name
+_age
+salary2025
+</div>
+
+<h2>Invalid Variables</h2>
+
+<div class="code">
+2name
+@salary
+student-name
+</div>
+
+<h2>Python Data Types</h2>
+
+<table>
+
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>int</td>
+<td>Integer values</td>
+</tr>
+
+<tr>
+<td>float</td>
+<td>Decimal values</td>
+</tr>
+
+<tr>
+<td>str</td>
+<td>Text values</td>
+</tr>
+
+<tr>
+<td>bool</td>
+<td>True or False</td>
+</tr>
+
+<tr>
+<td>list</td>
+<td>Collection of items</td>
+</tr>
+
+<tr>
+<td>tuple</td>
+<td>Immutable collection</td>
+</tr>
+
+<tr>
+<td>set</td>
+<td>Unique values</td>
+</tr>
+
+<tr>
+<td>dict</td>
+<td>Key value pairs</td>
+</tr>
+
+</table>
+
+<h2>Integer Example</h2>
+
+<div class="code">
+age = 21
+print(age)
+</div>
+
+<div class="output">
+21
+</div>
+
+<h2>Float Example</h2>
+
+<div class="code">
+salary = 25000.75
+print(salary)
+</div>
+
+<div class="output">
+25000.75
+</div>
+
+<h2>String Example</h2>
+
+<div class="code">
+name = "Deepu"
+print(name)
+</div>
+
+<div class="output">
+Deepu
+</div>
+
+<h2>Boolean Example</h2>
+
+<div class="code">
+isStudent = True
+print(isStudent)
+</div>
+
+<div class="output">
+True
+</div>
+
+<h2>Checking Data Type</h2>
+
+<div class="code">
+age = 21
+
+print(type(age))
+</div>
+
+<div class="output">
+<class 'int'>
+</div>
+
+<h2>Dynamic Typing</h2>
+
+<p>
+Python automatically determines the type of variable.
+</p>
+
+<div class="code">
+x = 10
+x = "Hello"
+
+print(x)
+</div>
+
+<div class="output">
+Hello
+</div>
+
+<h2>Multiple Variable Assignment</h2>
+
+<div class="code">
+a,b,c = 10,20,30
+
+print(a)
+print(b)
+print(c)
+</div>
+
+<div class="output">
+10
+20
+30
+</div>
+
+<h2>User Input Example</h2>
+
+<div class="code">
+name = input("Enter Name : ")
+
+print(name)
+</div>
+
+<h2>Type Conversion</h2>
+
+<div class="code">
+age = "21"
+
+age = int(age)
+
+print(age)
+</div>
+
+<div class="output">
+21
+</div>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a variable?</h3>
+<p>A container used to store data.</p>
+
+<h3>2. Is Python statically typed?</h3>
+<p>No, Python is dynamically typed.</p>
+
+<h3>3. What is type() function?</h3>
+<p>Used to determine the data type.</p>
+
+<h3>4. Difference between int and float?</h3>
+
+<table>
+<tr>
+<th>int</th>
+<th>float</th>
+</tr>
+
+<tr>
+<td>Whole Number</td>
+<td>Decimal Number</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>10.5</td>
+</tr>
+</table>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Using invalid variable names</li>
+<li>Forgetting type conversion</li>
+<li>Using reserved keywords as variables</li>
+<li>Case sensitivity errors</li>
+</ul>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Store your name and print it.</li>
+<li>Store age and display it.</li>
+<li>Take user input and print it.</li>
+<li>Convert string to integer.</li>
+<li>Display type of different variables.</li>
+</ol>
+
+<h2>Summary</h2>
+
+<div class="note">
+Variables store data in Python.
+Python supports int, float, string, boolean, list,
+tuple, set and dictionary data types.
+Python is dynamically typed and easy to use.
+</div>
+
+</div>
+
+</body>
+</html>

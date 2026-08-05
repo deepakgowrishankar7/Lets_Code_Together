@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Loops in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Loops in Python</h1>
+
+<p>
+Loops are used to execute a block of code repeatedly.
+They help avoid writing the same code multiple times.
+</p>
+
+<hr>
+
+<h2>Why Use Loops?</h2>
+
+<ul>
+<li>Reduce Code Repetition</li>
+<li>Process Large Amounts of Data</li>
+<li>Perform Iterative Tasks</li>
+<li>Increase Code Efficiency</li>
+</ul>
+
+<hr>
+
+<h2>Types of Loops in Python</h2>
+
+<ul>
+<li>for Loop</li>
+<li>while Loop</li>
+</ul>
+
+<hr>
+
+<h2>1. for Loop</h2>
+
+<p>
+A for loop is used to iterate over a sequence.
+</p>
+
+<div class="code">
+for i in range(5):
+    print(i)
+</div>
+
+<div class="output">
+0
+1
+2
+3
+4
+</div>
+
+<hr>
+
+<h2>Using range()</h2>
+
+<div class="code">
+for i in range(1,6):
+    print(i)
+</div>
+
+<div class="output">
+1
+2
+3
+4
+5
+</div>
+
+<hr>
+
+<h2>Loop Through a String</h2>
+
+<div class="code">
+name = "Python"
+
+for ch in name:
+    print(ch)
+</div>
+
+<div class="output">
+P
+y
+t
+h
+o
+n
+</div>
+
+<hr>
+
+<h2>Loop Through a List</h2>
+
+<div class="code">
+numbers = [10,20,30,40]
+
+for n in numbers:
+    print(n)
+</div>
+
+<div class="output">
+10
+20
+30
+40
+</div>
+
+<hr>
+
+<h2>2. while Loop</h2>
+
+<p>
+A while loop executes as long as the condition remains True.
+</p>
+
+<div class="code">
+i = 1
+
+while i <= 5:
+    print(i)
+    i += 1
+</div>
+
+<div class="output">
+1
+2
+3
+4
+5
+</div>
+
+<hr>
+
+<h2>Infinite Loop</h2>
+
+<div class="code">
+while True:
+    print("Hello")
+</div>
+
+<p>
+⚠ This loop runs forever unless stopped manually.
+</p>
+
+<hr>
+
+<h2>break Statement</h2>
+
+<p>
+Used to terminate a loop immediately.
+</p>
+
+<div class="code">
+for i in range(10):
+
+    if i == 5:
+        break
+
+    print(i)
+</div>
+
+<div class="output">
+0
+1
+2
+3
+4
+</div>
+
+<hr>
+
+<h2>continue Statement</h2>
+
+<p>
+Skips the current iteration and continues with the next one.
+</p>
+
+<div class="code">
+for i in range(5):
+
+    if i == 2:
+        continue
+
+    print(i)
+</div>
+
+<div class="output">
+0
+1
+3
+4
+</div>
+
+<hr>
+
+<h2>pass Statement</h2>
+
+<p>
+pass does nothing and acts as a placeholder.
+</p>
+
+<div class="code">
+for i in range(5):
+
+    if i == 2:
+        pass
+
+    print(i)
+</div>
+
+<div class="output">
+0
+1
+2
+3
+4
+</div>
+
+<hr>
+
+<h2>Nested Loops</h2>
+
+<p>
+A loop inside another loop is called a nested loop.
+</p>
+
+<div class="code">
+for i in range(3):
+
+    for j in range(3):
+
+        print(i,j)
+</div>
+
+<div class="output">
+0 0
+0 1
+0 2
+1 0
+1 1
+1 2
+2 0
+2 1
+2 2
+</div>
+
+<hr>
+
+<h2>Program: Sum of First 10 Numbers</h2>
+
+<div class="code">
+sum = 0
+
+for i in range(1,11):
+    sum += i
+
+print(sum)
+</div>
+
+<div class="output">
+55
+</div>
+
+<hr>
+
+<h2>Program: Multiplication Table</h2>
+
+<div class="code">
+num = 5
+
+for i in range(1,11):
+    print(num * i)
+</div>
+
+<div class="output">
+5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+</div>
+
+<hr>
+
+<h2>Program: Factorial</h2>
+
+<div class="code">
+num = 5
+fact = 1
+
+for i in range(1,num+1):
+    fact *= i
+
+print(fact)
+</div>
+
+<div class="output">
+120
+</div>
+
+<hr>
+
+<h2>Program: Fibonacci Series</h2>
+
+<div class="code">
+a = 0
+b = 1
+
+for i in range(10):
+
+    print(a)
+
+    c = a + b
+    a = b
+    b = c
+</div>
+
+<div class="output">
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+</div>
+
+<hr>
+
+<h2>Program: Prime Number</h2>
+
+<div class="code">
+num = 7
+
+count = 0
+
+for i in range(1,num+1):
+
+    if num % i == 0:
+        count += 1
+
+if count == 2:
+    print("Prime")
+else:
+    print("Not Prime")
+</div>
+
+<div class="output">
+Prime
+</div>
+
+<hr>
+
+<h2>Pattern Programs</h2>
+
+<h3>Pattern 1</h3>
+
+<div class="code">
+for i in range(5):
+
+    for j in range(i+1):
+        print("*",end="")
+
+    print()
+</div>
+
+<div class="output">
+*
+**
+***
+****
+*****
+</div>
+
+<hr>
+
+<h3>Pattern 2</h3>
+
+<div class="code">
+for i in range(1,6):
+
+    for j in range(1,i+1):
+        print(j,end=" ")
+
+    print()
+</div>
+
+<div class="output">
+1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Data Processing</li>
+<li>Automation Scripts</li>
+<li>Game Development</li>
+<li>Machine Learning</li>
+<li>File Handling</li>
+<li>Database Operations</li>
+<li>Report Generation</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. Difference between for and while?</h3>
+
+<p>
+for is used when iterations are known.
+while is used when condition-based repetition is required.
+</p>
+
+<h3>2. What does break do?</h3>
+
+<p>
+Terminates the loop immediately.
+</p>
+
+<h3>3. What does continue do?</h3>
+
+<p>
+Skips current iteration.
+</p>
+
+<h3>4. What is a nested loop?</h3>
+
+<p>
+A loop inside another loop.
+</p>
+
+<h3>5. What causes an infinite loop?</h3>
+
+<p>
+A condition that never becomes False.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Infinite loops</li>
+<li>Wrong indentation</li>
+<li>Forgetting to update loop variable</li>
+<li>Incorrect loop conditions</li>
+<li>Using break incorrectly</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Print numbers 1 to 100</li>
+<li>Print even numbers</li>
+<li>Print odd numbers</li>
+<li>Sum of N numbers</li>
+<li>Factorial</li>
+<li>Prime Number</li>
+<li>Palindrome Number</li>
+<li>Reverse Number</li>
+<li>Fibonacci Series</li>
+<li>Multiplication Table</li>
+<li>Star Pattern</li>
+<li>Number Pattern</li>
+<li>Armstrong Number</li>
+<li>Perfect Number</li>
+<li>Strong Number</li>
+<li>Count Digits</li>
+<li>Sum of Digits</li>
+<li>LCM Program</li>
+<li>HCF Program</li>
+<li>Leap Year Program</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Loops help execute code repeatedly.
+
+Python provides:
+
+• for loop
+
+• while loop
+
+• break
+
+• continue
+
+• pass
+
+Loops are essential for solving real-world problems and writing efficient programs.
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<h2>Python Iterators, Generators & Context Managers</h2>
+
+<p>
+  <strong>Generators</strong> provide memory-efficient lazy evaluation for large data sequences using the <code>yield</code> keyword. <strong>Context Managers</strong> handle automatic setup and cleanup of external resources.
+</p>
+
+<hr>
+
+<h3>1. Iterators vs Iterables</h3>
+<p>An <strong>Iterable</strong> is an object that returns an <strong>Iterator</strong> via `__iter__()`. An Iterator yields values one by one using `__next__()`.</p>
+
+<pre><code>numbers = [10, 20, 30]
+iterator = iter(numbers)
+
+print(next(iterator)) # 10
+print(next(iterator)) # 20
+print(next(iterator)) # 30
+# next(iterator) -> Raises StopIteration exception!</code></pre>
+
+<hr>
+
+<h3>2. Generators & `yield` Keyword</h3>
+<p>
+  Generators compute items on-the-fly, allowing you to process datasets that are too large to fit in RAM.
+</p>
+
+<pre><code>def fibonacci_generator(limit):
+    a, b = 0, 1
+    count = 0
+    while count < limit:
+        yield a # Pause function & emit value
+        a, b = b, a + b
+        count += 1
+
+# Consuming generator
+for num in fibonacci_generator(7):
+    print(num, end=" ") # 0 1 1 2 3 5 8</code></pre>
+
+<hr>
+
+<h3>3. Custom Context Managers (`__enter__` & `__exit__`)</h3>
+<p>
+  Context Managers handle resource allocation and cleanup automatically using the <code>with</code> statement (e.g. closing files, releasing thread locks, database connections).
+</p>
+
+<pre><code>class DatabaseConnectionManager:
+    def __init__(self, db_name):
+        self.db_name = db_name
+
+    def __enter__(self):
+        print(f"🔌 Connecting to database '{self.db_name}'...")
+        return "ActiveConnection"
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"🔒 Safely closing database connection to '{self.db_name}'.")
+        return True # Suppress exceptions if needed
+
+# Usage with context manager
+with DatabaseConnectionManager("prod_db") as conn:
+    print("Executing database query using:", conn)</code></pre>
+
+<hr>
+
+<h3>4. `@contextmanager` Decorator</h3>
+<p>Using <code>contextlib.contextmanager</code> to write context managers with generator syntax:</p>
+
+<pre><code>from contextlib import contextmanager
+
+@contextmanager
+def temporary_file_logger(file_name):
+    print(f"Opening log file {file_name}")
+    file = open(file_name, "w")
+    try:
+        yield file
+    finally:
+        print(f"Closing log file {file_name}")
+        file.close()
+
+with temporary_file_logger("app.log") as f:
+    f.write("Log entry recorded.\n")</code></pre>

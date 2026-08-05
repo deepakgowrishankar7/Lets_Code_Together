@@ -1,0 +1,71 @@
+<div>
+  <h1>SQL Basic Queries</h1>
+  <p>Basic queries let you ask the database for exactly the data you need. Start simple, then add filters, sorting, and limits.</p>
+
+  <h2>SELECT Columns</h2>
+  <p>Use <code>SELECT</code> to choose columns, and <code>FROM</code> to choose the table.</p>
+  <pre><code>SELECT first_name, last_name
+FROM employees;
+</code></pre>
+
+  <h2>Select All Columns</h2>
+  <pre><code>SELECT *
+FROM employees;
+</code></pre>
+
+  <h2>Use Aliases</h2>
+  <p>Aliases make results easier to read.</p>
+  <pre><code>SELECT first_name AS first,
+       last_name AS last,
+       salary AS pay
+FROM employees;
+</code></pre>
+
+  <h2>Filter Rows with WHERE</h2>
+  <pre><code>SELECT *
+FROM employees
+WHERE department = 'Sales';
+</code></pre>
+
+  <h2>Common WHERE Conditions</h2>
+  <ul>
+    <li><code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code></li>
+    <li><code>BETWEEN 10000 AND 50000</code></li>
+    <li><code>IN ('Sales', 'IT')</code></li>
+    <li><code>LIKE 'A%'</code></li>
+    <li><code>IS NULL</code> or <code>IS NOT NULL</code></li>
+  </ul>
+  <pre><code>SELECT name, salary
+FROM employees
+WHERE salary >= 50000
+  AND department IN ('IT', 'Sales');
+</code></pre>
+
+  <h2>Sort Results</h2>
+  <pre><code>SELECT name, salary
+FROM employees
+ORDER BY salary DESC;
+</code></pre>
+
+  <h2>Limit Rows</h2>
+  <pre><code>SELECT *
+FROM employees
+ORDER BY hired_date DESC
+LIMIT 5;
+</code></pre>
+
+  <h2>Skip Rows with OFFSET</h2>
+  <pre><code>SELECT *
+FROM employees
+ORDER BY id
+LIMIT 10 OFFSET 10;
+</code></pre>
+
+  <h2>Remove Duplicates</h2>
+  <pre><code>SELECT DISTINCT department
+FROM employees;
+</code></pre>
+
+  <h2>Understand Query Order</h2>
+  <p>The database processes <code>FROM</code> first, then <code>WHERE</code>, then <code>SELECT</code>. That means filtering happens before selecting the final columns.</p>
+</div>

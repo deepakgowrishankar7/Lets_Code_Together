@@ -1,0 +1,107 @@
+<h2>Java Generics & Type Safety</h2>
+
+<p>
+  <strong>Generics</strong> were introduced in Java 5 to enable types (classes and interfaces) to be parameters when defining classes, interfaces, and methods. Generics enforce type safety at compile time and eliminate explicit casting.
+</p>
+
+<hr>
+
+<h3>1. Why Generics?</h3>
+<p>Before Generics, collections stored raw <code>Object</code>s, requiring manual casting and risking runtime <code>ClassCastException</code>s:</p>
+
+<pre><code>// WITHOUT Generics (Unsafe)
+List list = new ArrayList();
+list.add("Hello");
+String s = (String) list.get(0); // Explicit cast required
+
+// WITH Generics (Type-Safe)
+List<String> safeList = new ArrayList<>();
+safeList.add("Hello");
+String str = safeList.get(0); // Compile-time safety, no cast needed!</code></pre>
+
+<hr>
+
+<h3>2. Generic Classes & Interfaces</h3>
+<p>You can create custom classes that work with any object type:</p>
+
+<pre><code>public class Box<T> {
+    private T item;
+
+    public void set(T item) {
+        this.item = item;
+    }
+
+    public T get() {
+        return item;
+    }
+
+    public static void main(String[] args) {
+        Box<Integer> intBox = new Box<>();
+        intBox.set(100);
+        System.out.println("Box integer: " + intBox.get());
+
+        Box<String> strBox = new Box<>();
+        strBox.set("Java Generics");
+        System.out.println("Box string: " + strBox.get());
+    }
+}</code></pre>
+
+<hr>
+
+<h3>3. Bounded Type Parameters</h3>
+<p>
+  You can restrict the types that can be passed to a type parameter using <code>extends</code>.
+</p>
+
+<pre><code>// Restrict T to Number or its subclasses (Integer, Double, etc.)
+public class MathUtils {
+    public static <T extends Number> double doubleValue(T number) {
+        return number.doubleValue();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(doubleValue(42));    // Works with Integer
+        System.out.println(doubleValue(3.1415)); // Works with Double
+        // doubleValue("String"); // COMPILE ERROR! String is not a Number.
+    }
+}</code></pre>
+
+<hr>
+
+<h3>4. Wildcards in Generics (`?`, `? extends T`, `? super T`)</h3>
+<p>
+  Wildcards (`?`) represent unknown types in generic parameters:
+</p>
+<ul>
+  <li><strong>Unbounded Wildcard (`<?>`):</strong> Accepts any type.</li>
+  <li><strong>Upper Bounded Wildcard (`<? extends T>`):</strong> Accepts T or any subclass of T (Read-only / Producer).</li>
+  <li><strong>Lower Bounded Wildcard (`<? super T>`):</strong> Accepts T or any superclass of T (Consumer).</li>
+</ul>
+
+<pre><code>import java.util.List;
+
+public class WildcardDemo {
+    // Upper Bounded Wildcard: accepts List of Number or subclasses (Integer, Double)
+    public static double sumOfList(List<? extends Number> list) {
+        double sum = 0.0;
+        for (Number n : list) {
+            sum += n.doubleValue();
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> integers = List.of(10, 20, 30);
+        List<Double> doubles = List.of(1.5, 2.5, 3.5);
+
+        System.out.println("Integer Sum: " + sumOfList(integers)); // 60.0
+        System.out.println("Double Sum: " + sumOfList(doubles));   // 7.5
+    }
+}</code></pre>
+
+<hr>
+
+<h3>5. Type Erasure</h3>
+<p>
+  Java Generics are implemented via <strong>Type Erasure</strong>. The JVM compiler removes all generic type information at compile time and inserts necessary casts, ensuring backward compatibility with older Java versions.
+</p>

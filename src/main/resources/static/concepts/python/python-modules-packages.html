@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Modules and Packages</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:white;padding:30px;line-height:1.8}
+.container{max-width:1100px;margin:auto}
+h1,h2,h3{color:#38bdf8}
+.code{background:#1e293b;padding:15px;border-radius:10px;white-space:pre-wrap}
+.output{background:#111827;padding:15px;border-left:5px solid #22c55e;border-radius:10px}
+.note{background:#172554;padding:15px;border-radius:10px}
+table{width:100%;border-collapse:collapse}
+table,th,td{border:1px solid gray;padding:10px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Modules and Packages in Python</h1>
+
+<p>Modules and Packages help organize code into reusable and manageable components.</p>
+
+<h2>What is a Module?</h2>
+<p>A module is a Python file containing functions, classes, and variables.</p>
+
+<div class="code">import math
+print(math.sqrt(25))</div>
+<div class="output">5.0</div>
+
+<h2>Advantages of Modules</h2>
+<ul>
+<li>Code Reusability</li>
+<li>Better Organization</li>
+<li>Easier Maintenance</li>
+<li>Modular Programming</li>
+</ul>
+
+<h2>Import Statement</h2>
+<div class="code">import math
+print(math.factorial(5))</div>
+<div class="output">120</div>
+
+<h2>Import Specific Functions</h2>
+<div class="code">from math import sqrt
+print(sqrt(64))</div>
+<div class="output">8.0</div>
+
+<h2>Import Multiple Functions</h2>
+<div class="code">from math import sqrt,factorial,pow</div>
+
+<h2>Alias Names</h2>
+<div class="code">import math as m
+print(m.sqrt(36))</div>
+<div class="output">6.0</div>
+
+<h2>Built-in Modules</h2>
+<table>
+<tr><th>Module</th><th>Purpose</th></tr>
+<tr><td>math</td><td>Mathematics</td></tr>
+<tr><td>random</td><td>Random Values</td></tr>
+<tr><td>datetime</td><td>Date and Time</td></tr>
+<tr><td>os</td><td>Operating System</td></tr>
+<tr><td>sys</td><td>System Information</td></tr>
+<tr><td>statistics</td><td>Statistics</td></tr>
+</table>
+
+<h2>Math Module</h2>
+<div class="code">import math
+print(math.sqrt(81))
+print(math.factorial(5))
+print(math.pi)</div>
+
+<h2>Random Module</h2>
+<div class="code">import random
+print(random.randint(1,10))
+print(random.choice(["Red","Blue","Green"]))</div>
+
+<h2>Datetime Module</h2>
+<div class="code">from datetime import datetime
+print(datetime.now())</div>
+
+<h2>OS Module</h2>
+<div class="code">import os
+print(os.getcwd())</div>
+
+<h2>Sys Module</h2>
+<div class="code">import sys
+print(sys.version)</div>
+
+<h2>Creating Custom Modules</h2>
+<div class="code"># calculator.py
+def add(a,b):
+    return a+b
+
+# main.py
+import calculator
+print(calculator.add(10,20))</div>
+
+<h2>What is a Package?</h2>
+<p>A package is a collection of related modules organized in folders.</p>
+
+<div class="code">project/
+|
+|-- calculator/
+|   |-- __init__.py
+|   |-- addition.py
+|   |-- subtraction.py</div>
+
+<h2>__init__.py</h2>
+<p>Used to identify a folder as a Python package.</p>
+
+<h2>Importing from Packages</h2>
+<div class="code">from calculator.addition import add
+print(add(10,20))</div>
+
+<h2>Module vs Package</h2>
+<table>
+<tr><th>Module</th><th>Package</th></tr>
+<tr><td>Single Python File</td><td>Collection of Modules</td></tr>
+<tr><td>.py file</td><td>Folder Structure</td></tr>
+<tr><td>Small Unit</td><td>Large Organization</td></tr>
+</table>
+
+<h2>Real World Applications</h2>
+<ul>
+<li>Django Projects</li>
+<li>Flask Applications</li>
+<li>Machine Learning Systems</li>
+<li>Automation Scripts</li>
+<li>Enterprise Applications</li>
+</ul>
+
+<h2>Interview Questions</h2>
+<ol>
+<li>What is a Module?</li>
+<li>What is a Package?</li>
+<li>Difference between Module and Package?</li>
+<li>What is __init__.py?</li>
+<li>Difference between import and from import?</li>
+<li>What is a custom module?</li>
+<li>Name some built-in modules.</li>
+<li>Why are modules important?</li>
+<li>What is namespace?</li>
+<li>What is aliasing?</li>
+</ol>
+
+<h2>Practice Programs</h2>
+<ol>
+<li>Create Calculator Module</li>
+<li>Create Student Package</li>
+<li>Use Math Module</li>
+<li>Random Password Generator</li>
+<li>Lottery Number Generator</li>
+<li>Date Calculator</li>
+<li>Employee Package</li>
+<li>File Utility Package</li>
+<li>Banking Package</li>
+<li>Mini Inventory System</li>
+</ol>
+
+<h2>Summary</h2>
+<div class="note">
+Modules improve code reusability. Packages help organize multiple modules into larger applications. These concepts are heavily used in professional Python development.
+</div>
+
+</div>
+</body>
+</html>

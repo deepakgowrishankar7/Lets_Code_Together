@@ -1,0 +1,276 @@
+ <h1>Constructors in Java</h1>
+
+  <div class="section">
+    <p>In Java, a <strong>constructor</strong> is a special method used to initialize objects. It is automatically called when an object is created and sets initial values for object attributes.</p>
+  </div>
+
+  <div class="section">
+    <h2>Key Features of Constructors</h2>
+    <ul>
+      <li><strong>Same Name as Class:</strong> The constructor must have the same name as the class.</li>
+      <li><strong>No Return Type:</strong> Constructors do not have a return type.</li>
+      <li><strong>Automatically Invoked:</strong> Called automatically when an object is created.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Types of Constructors</h2>
+
+    <h3>1. Default Constructor</h3>
+    <p>If no constructor is defined, Java provides one automatically.</p>
+    <pre><code>class Car {
+    String brand;
+
+    // Default Constructor
+    Car() {
+        brand = "Unknown";
+    }
+
+    void display() {
+        System.out.println("Brand: " + brand);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car(); // Default constructor is called
+        car.display();
+    }
+}</code></pre>
+    <div class="output">Output:
+Brand: Unknown</div>
+  </div>
+
+  <div class="section">
+    <h3>2. Parameterized Constructor</h3>
+    <p>Allows passing values at the time of object creation.</p>
+    <pre><code>class Car {
+    String brand;
+
+    // Parameterized Constructor
+    Car(String brandName) {
+        brand = brandName;
+    }
+
+    void display() {
+        System.out.println("Brand: " + brand);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car("Toyota");
+        car.display();
+    }
+}</code></pre>
+    <strong>Output:</strong>
+    <pre><code>Brand: Toyota</code></pre>
+  </div>
+  
+
+  <div class="section">
+    <h3>3. Constructor Overloading</h3>
+    <p>Multiple constructors can exist in a class with different parameter lists.</p>
+    <pre><code>class Car {
+    String brand;
+    int year;
+
+    // Default Constructor
+    Car() {
+        brand = "Unknown";
+        year = 0;
+    }
+
+    // Parameterized Constructor
+    Car(String brandName, int manufactureYear) {
+        brand = brandName;
+        year = manufactureYear;
+    }
+
+    void display() {
+        System.out.println("Brand: " + brand + ", Year: " + year);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car car1 = new Car(); // Calls default constructor
+        Car car2 = new Car("Honda", 2022); // Calls parameterized constructor
+
+        car1.display();
+        car2.display();
+    }
+}</code></pre>
+<pre>
+Output:
+Brand: Unknown, Year: 0  
+Brand: Honda, Year: 2022</pre>
+  </div>
+
+  <div class="section">
+    <h2>Important Notes</h2>
+    <ul>
+      <li>If no constructor is defined, Java provides a default one.</li>
+      <li>Constructors can call each other using <code>this()</code>.</li>
+      <li>Constructors are <strong>not inherited</strong> but can be called via <code>super()</code> in subclasses.</li>
+    </ul>
+    <div class="note">💡 Constructors are essential for initializing an object with valid default or custom values.</div>
+  </div>
+<hr>
+<h1>Java Methods</h1>
+<p>Java Methods are blocks of code that perform a specific task. All methods must belong to a class and help in improving code reusability and organization.</p>
+
+<h2>Example: Creating and Using a Method</h2>
+<pre><code>public class student {
+    public void printMessage() {
+        System.out.println("Hello, student!");
+    }
+
+    public static void main(String[] args) {
+        student obj = new student();
+        obj.printMessage(); 
+    }
+}</code></pre>
+<pre>
+Output:
+Hello, student!</pre>
+
+<h2>Syntax of a Method</h2>
+<pre><code>&lt;access_modifier&gt; &lt;return_type&gt; &lt;method_name&gt;(parameters) {
+    // body
+}</code></pre>
+
+<h2>Key Components of a Method</h2>
+<ul>
+  <li><strong>Modifier:</strong> Access level (public, private, etc.)</li>
+  <li><strong>Return Type:</strong> Type of value returned or void</li>
+  <li><strong>Method Name:</strong> Should start with a verb, camelCase</li>
+  <li><strong>Parameters:</strong> Optional list of inputs</li>
+  <li><strong>Method Body:</strong> Code to execute</li>
+</ul>
+
+<h2>Types of Methods in Java</h2>
+<h3>1. Predefined Methods</h3>
+<p>Methods provided by Java libraries like <code>Math.random()</code>.</p>
+<h3>2. User-defined Methods</h3>
+<p>Custom methods written by the programmer.</p>
+
+<h2>Ways to Create Methods</h2>
+<h3>1. Instance Method</h3>
+<pre><code>void methodName() {
+    // body
+}</code></pre>
+<h3>2. Static Method</h3>
+<pre><code>static void methodName() {
+    // body
+}</code></pre>
+
+<h2>Method Signature</h2>
+<p>Includes method name and parameter list.</p>
+<pre><code>max(int x, int y)</code></pre>
+
+<h2>Method Naming Conventions</h2>
+<ul>
+  <li>Start with a verb in lowercase</li>
+  <li>Use camelCase for multiple words (e.g., <code>findSum</code>)</li>
+</ul>
+
+<h2>Example: Method Calling</h2>
+<pre><code>class Add {
+    public int addTwoInt(int a, int b) {
+        return a + b;
+    }
+}
+
+class code {
+    public static void main(String[] args) {
+        Add a = new Add();
+        int res = a.addTwoInt(1, 2);
+        System.out.println("Sum: " + res);
+    }
+}</code></pre>
+<pre>
+Output:
+Sum: 3</pre>
+
+<h2>Calling Methods in Different Ways</h2>
+<pre><code>class Test {
+    public static int i = 0;
+
+    Test() {
+        i++;
+    }
+
+    public static int get() {
+        return i;
+    }
+
+    public int m1() {
+        System.out.println("Inside m1");
+        this.m2();
+        return 1;
+    }
+
+    public void m2() {
+        System.out.println("In m2");
+    }
+}
+
+class Geeks {
+    public static void main(String[] args) {
+        Test obj = new Test();
+        int i = obj.m1();
+        System.out.println("Control returned after m1: " + i);
+        int o = Test.get();
+        System.out.println("No of instances created: " + o);
+    }
+}</code></pre>
+<pre>
+Output:
+Inside m1
+In m2
+Control returned after m1: 1
+No of instances created: 1</pre>>
+
+<h2>Accessor and Mutator (Getter and Setter)</h2>
+<pre><code>public class Geeks {
+    private int num;
+    private String name;
+
+    public int getNumber() { return num; }
+    public String getName() { return name; }
+
+    public void setNumber(int num) { this.num = num; }
+    public void setName(String name) { this.name = name; }
+
+    public void printDetails() {
+        System.out.println("Number: " + num);
+        System.out.println("Name: " + name);
+    }
+
+    public static void main(String[] args) {
+        code g = new code();
+        g.setNumber(123);
+        g.setName("GFG Write");
+        g.printDetails();
+    }
+}</code></pre>
+<pre>
+Output:
+Number: 123
+Name: GFG Write
+</pre>>
+
+<h2>Advantages of Methods</h2>
+<ul>
+  <li>Reusability</li>
+  <li>Abstraction</li>
+  <li>Encapsulation</li>
+  <li>Modularity</li>
+  <li>Customization</li>
+  <li>Improved performance</li>
+</ul>
+
+<div class="note">
+  💡 Tip: Use methods to organize your code and improve clarity and reusability.
+</div>

@@ -1,0 +1,77 @@
+<h2>SQL Window Functions & Analytical Queries</h2>
+
+<p>
+  <strong>Window Functions</strong> perform calculations across a set of table rows related to the current row without collapsing rows into a single summary output (unlike <code>GROUP BY</code>).
+</p>
+
+<hr>
+
+<h3>1. Syntax of Window Functions</h3>
+<pre><code>FUNCTION_NAME() OVER (
+    [PARTITION BY partition_column]
+    [ORDER BY sort_column]
+    [ROWS|RANGE frame_specification]
+)</code></pre>
+
+<hr>
+
+<h3>2. Ranking Functions (`ROW_NUMBER`, `RANK`, `DENSE_RANK`)</h3>
+
+<p>Consider an <code>employees</code> table with departments and salaries:</p>
+
+<pre><code>SELECT 
+    name, 
+    department, 
+    salary,
+    ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as row_num,
+    RANK()       OVER (PARTITION BY department ORDER BY salary DESC) as rank_num,
+    DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) as dense_rank_num
+FROM employees;</code></pre>
+
+<strong>Key Differences:</strong>
+<ul>
+  <li><strong>ROW_NUMBER():</strong> Assigns unique sequential integers (1, 2, 3, 4).</li>
+  <li><strong>RANK():</strong> Assigns rank with gaps for ties (1, 2, 2, 4).</li>
+  <li><strong>DENSE_RANK():</strong> Assigns rank without gaps for ties (1, 2, 2, 3).</li>
+</ul>
+
+<hr>
+
+<h3>3. Value Functions (`LEAD`, `LAG`)</h3>
+<p>
+  <code>LAG()</code> accesses data from a previous row, and <code>LEAD()</code> accesses data from a subsequent row without requiring self-joins.
+</p>
+
+<pre><code>-- Calculate month-over-month sales growth
+SELECT 
+    month,
+    sales,
+    LAG(sales, 1) OVER (ORDER BY month) as prev_month_sales,
+    sales - LAG(sales, 1) OVER (ORDER BY month) as monthly_growth
+FROM monthly_sales;</code></pre>
+
+<strong>Expected Output:</strong>
+<pre><code>+-------+-------+------------------+----------------+
+| month | sales | prev_month_sales | monthly_growth |
++-------+-------+------------------+----------------+
+| Jan   | 10000 | NULL             | NULL           |
+| Feb   | 12500 | 10000            | +2500          |
+| Mar   | 15000 | 12500            | +2500          |
++-------+-------+------------------+----------------+</code></pre>
+
+<hr>
+
+<h3>4. Running Total & Moving Average</h3>
+<p>You can accumulate sums or averages dynamically using window frames:</p>
+
+<pre><code>-- Running total of sales per customer
+SELECT 
+    order_id,
+    customer_id,
+    amount,
+    SUM(amount) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) as cumulative_spent
+FROM orders;</code></pre>

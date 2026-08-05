@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & FAQ - CodeTogether</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sora', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            background: url('image/backgroundimage.avif') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.85) 0%, rgba(15, 23, 42, 0.75) 100%);
+            z-index: 0;
+        }
+        .page {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .navbar img {
+            height: 36px;
+            border-radius: 6px;
+        }
+        .navbar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            margin-left: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        .navbar nav a:hover {
+            color: #007BFF;
+        }
+        .container {
+            flex: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+        }
+        .faq-card {
+            background: rgba(8, 15, 30, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .faq-card h3 {
+            font-size: 1.2rem;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        .faq-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .btn-back-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .btn-back:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="navbar">
+            <img src="image/logo.jpg" alt="Logo">
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="help.html" style="color:#007BFF;">Help</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <h1 class="title">Help Center & FAQ</h1>
+            <p class="subtitle">Find quick answers and instructions to help you navigate CodeTogether.</p>
+
+            <div class="faq-card">
+                <h3>🔑 How do I register or sign in?</h3>
+                <p>Click "Register" on the main page, type your email, and click "Send OTP". Enter the received OTP and your chosen password. If testing locally without an email server, the OTP will be displayed in the dev response alert.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>🔗 How do I host a code room & share a link?</h3>
+                <p>Open the Compiler section in your dashboard and click the <strong>"Host Code Room"</strong> button. A unique shareable room URL (e.g. <code>main.html?room=CT-ROOM-...</code>) will be generated and copied to your clipboard. Anyone clicking this link will open your room!</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>👤 What is Guest Mode?</h3>
+                <p>Guest Mode lets you explore courses and documentation without creating an account. Features like Compiler, Visualizer, Real-Time Chat, and Dashboard tracking require signing in.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>💻 How do I compile code with stdin?</h3>
+                <p>Navigate to the Compiler section, choose your programming language (Python, Java, C++, C, JavaScript, Go, etc.), enter any input values in the "Input Values" textarea, and click "Run".</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>🔒 How do I reset my password if forgotten?</h3>
+                <p>Click "Forgot password?" on the login popup, enter your registered email, and submit. You will receive an OTP and be redirected to the Reset Password page.</p>
+            </div>
+
+            <div class="btn-back-wrapper">
+                <a href="index.html" class="btn-back">← Back to CodeTogether</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

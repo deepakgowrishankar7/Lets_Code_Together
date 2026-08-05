@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sets in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Sets in Python</h1>
+
+<p>
+A Set is an unordered collection of unique elements.
+Sets automatically remove duplicate values.
+</p>
+
+<hr>
+
+<h2>Why Use Sets?</h2>
+
+<ul>
+<li>Store Unique Values</li>
+<li>Fast Searching</li>
+<li>Mathematical Operations</li>
+<li>Remove Duplicates Easily</li>
+</ul>
+
+<hr>
+
+<h2>Creating a Set</h2>
+
+<div class="code">
+numbers = {10,20,30,40}
+
+print(numbers)
+</div>
+
+<div class="output">
+{10, 20, 30, 40}
+</div>
+
+<hr>
+
+<h2>Set Characteristics</h2>
+
+<ul>
+<li>Unordered</li>
+<li>Unique Elements Only</li>
+<li>Mutable</li>
+<li>No Indexing</li>
+</ul>
+
+<hr>
+
+<h2>Duplicate Values</h2>
+
+<div class="code">
+numbers = {10,20,20,30,30,40}
+
+print(numbers)
+</div>
+
+<div class="output">
+{10,20,30,40}
+</div>
+
+<p>
+Duplicates are automatically removed.
+</p>
+
+<hr>
+
+<h2>Adding Elements</h2>
+
+<h3>add()</h3>
+
+<div class="code">
+numbers = {10,20,30}
+
+numbers.add(40)
+
+print(numbers)
+</div>
+
+<div class="output">
+{10,20,30,40}
+</div>
+
+<hr>
+
+<h3>update()</h3>
+
+<div class="code">
+numbers = {10,20}
+
+numbers.update([30,40,50])
+
+print(numbers)
+</div>
+
+<div class="output">
+{10,20,30,40,50}
+</div>
+
+<hr>
+
+<h2>Removing Elements</h2>
+
+<h3>remove()</h3>
+
+<div class="code">
+numbers = {10,20,30}
+
+numbers.remove(20)
+
+print(numbers)
+</div>
+
+<div class="output">
+{10,30}
+</div>
+
+<p>
+Throws an error if element does not exist.
+</p>
+
+<hr>
+
+<h3>discard()</h3>
+
+<div class="code">
+numbers = {10,20,30}
+
+numbers.discard(50)
+
+print(numbers)
+</div>
+
+<div class="output">
+{10,20,30}
+</div>
+
+<p>
+No error if element is missing.
+</p>
+
+<hr>
+
+<h3>pop()</h3>
+
+<div class="code">
+numbers = {10,20,30}
+
+numbers.pop()
+
+print(numbers)
+</div>
+
+<div class="output">
+Random element removed
+</div>
+
+<hr>
+
+<h3>clear()</h3>
+
+<div class="code">
+numbers = {10,20,30}
+
+numbers.clear()
+
+print(numbers)
+</div>
+
+<div class="output">
+set()
+</div>
+
+<hr>
+
+<h2>Looping Through a Set</h2>
+
+<div class="code">
+numbers = {10,20,30}
+
+for num in numbers:
+    print(num)
+</div>
+
+<div class="output">
+10
+20
+30
+</div>
+
+<hr>
+
+<h2>Membership Test</h2>
+
+<div class="code">
+numbers = {10,20,30}
+
+print(20 in numbers)
+</div>
+
+<div class="output">
+True
+</div>
+
+<hr>
+
+<h2>Union Operation</h2>
+
+<p>
+Combines all unique elements.
+</p>
+
+<div class="code">
+A = {1,2,3}
+B = {3,4,5}
+
+print(A.union(B))
+</div>
+
+<div class="output">
+{1,2,3,4,5}
+</div>
+
+<hr>
+
+<h2>Intersection Operation</h2>
+
+<p>
+Returns common elements.
+</p>
+
+<div class="code">
+A = {1,2,3}
+B = {2,3,4}
+
+print(A.intersection(B))
+</div>
+
+<div class="output">
+{2,3}
+</div>
+
+<hr>
+
+<h2>Difference Operation</h2>
+
+<div class="code">
+A = {1,2,3}
+B = {2,3,4}
+
+print(A.difference(B))
+</div>
+
+<div class="output">
+{1}
+</div>
+
+<hr>
+
+<h2>Symmetric Difference</h2>
+
+<div class="code">
+A = {1,2,3}
+B = {2,3,4}
+
+print(A.symmetric_difference(B))
+</div>
+
+<div class="output">
+{1,4}
+</div>
+
+<hr>
+
+<h2>Subset</h2>
+
+<div class="code">
+A = {1,2}
+B = {1,2,3,4}
+
+print(A.issubset(B))
+</div>
+
+<div class="output">
+True
+</div>
+
+<hr>
+
+<h2>Superset</h2>
+
+<div class="code">
+A = {1,2,3,4}
+B = {1,2}
+
+print(A.issuperset(B))
+</div>
+
+<div class="output">
+True
+</div>
+
+<hr>
+
+<h2>Convert List to Set</h2>
+
+<div class="code">
+numbers = [10,20,20,30,30]
+
+result = set(numbers)
+
+print(result)
+</div>
+
+<div class="output">
+{10,20,30}
+</div>
+
+<hr>
+
+<h2>Program: Remove Duplicates</h2>
+
+<div class="code">
+numbers = [1,2,2,3,3,4]
+
+unique = list(set(numbers))
+
+print(unique)
+</div>
+
+<div class="output">
+[1,2,3,4]
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Removing Duplicate Records</li>
+<li>Database Queries</li>
+<li>Student Attendance Systems</li>
+<li>Social Media Friend Suggestions</li>
+<li>Search Engines</li>
+<li>Data Analysis</li>
+</ul>
+
+<hr>
+
+<h2>Set Operations Summary</h2>
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Method</th>
+</tr>
+
+<tr>
+<td>Union</td>
+<td>union()</td>
+</tr>
+
+<tr>
+<td>Intersection</td>
+<td>intersection()</td>
+</tr>
+
+<tr>
+<td>Difference</td>
+<td>difference()</td>
+</tr>
+
+<tr>
+<td>Symmetric Difference</td>
+<td>symmetric_difference()</td>
+</tr>
+
+<tr>
+<td>Subset</td>
+<td>issubset()</td>
+</tr>
+
+<tr>
+<td>Superset</td>
+<td>issuperset()</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a Set?</h3>
+
+<p>
+An unordered collection of unique elements.
+</p>
+
+<h3>2. Does Set allow duplicates?</h3>
+
+<p>
+No.
+</p>
+
+<h3>3. Can we access elements using index?</h3>
+
+<p>
+No.
+</p>
+
+<h3>4. Difference between remove() and discard()?</h3>
+
+<p>
+remove() throws error if value doesn't exist.
+discard() does not.
+</p>
+
+<h3>5. What is Union?</h3>
+
+<p>
+Combines unique elements from both sets.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Trying to access by index</li>
+<li>Expecting order in sets</li>
+<li>Using remove() for missing elements</li>
+<li>Forgetting duplicates are removed</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Remove Duplicates from List</li>
+<li>Union of Two Sets</li>
+<li>Intersection of Two Sets</li>
+<li>Difference Between Sets</li>
+<li>Symmetric Difference</li>
+<li>Subset Check</li>
+<li>Superset Check</li>
+<li>Add Elements</li>
+<li>Remove Elements</li>
+<li>Search Element</li>
+<li>Count Unique Values</li>
+<li>Convert List to Set</li>
+<li>Convert Set to List</li>
+<li>Student Attendance System</li>
+<li>Unique Number Generator</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Sets are unordered collections of unique values.
+
+Key Concepts:
+
+• Creating Sets
+
+• Adding Elements
+
+• Removing Elements
+
+• Union
+
+• Intersection
+
+• Difference
+
+• Symmetric Difference
+
+Sets are useful when uniqueness and fast searching are required.
+
+</div>
+
+</div>
+
+</body>
+</html>

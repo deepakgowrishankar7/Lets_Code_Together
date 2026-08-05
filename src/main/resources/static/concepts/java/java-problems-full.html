@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>50 Important Java Problems</title>
+</head>
+<body>
+<h1>50 Important Java Problems with Code and Output</h1>
+
+<h3>1. Check Positive or Negative</h3>
+<pre>import java.util.Scanner;
+
+public class PositiveNegative {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a number: ");
+        int n = sc.nextInt();
+        if (n > 0)
+            System.out.println("Positive");
+        else if (n < 0)
+            System.out.println("Negative");
+        else
+            System.out.println("Zero");
+        sc.close();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Enter a number: -5
+Negative</pre>
+
+<h3>2. Print Numbers from 1 to 10</h3>
+<pre>public class PrintNumbers {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 10; i++) {
+            System.out.println(i);
+        }
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre>
+
+<h3>3. Print Even Numbers from 1 to 20</h3>
+<pre>public class EvenNumbers {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 20; i++) {
+            if (i % 2 == 0)
+                System.out.println(i);
+        }
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>2
+4
+6
+8
+10
+12
+14
+16
+18
+20</pre>
+
+<h3>4. Find Largest Element in Array</h3>
+<pre>public class LargestInArray {
+    public static void main(String[] args) {
+        int[] arr = {10, 25, 30, 15};
+        int max = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > max)
+                max = arr[i];
+        }
+        System.out.println("Largest: " + max);
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Largest: 30</pre>
+
+<h3>5. Count Vowels in a String</h3>
+<pre>import java.util.Scanner;
+
+public class CountVowels {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String s = sc.nextLine().toLowerCase();
+        int count = 0;
+        for (char c : s.toCharArray()) {
+            if ("aeiou".indexOf(c) != -1)
+                count++;
+        }
+        System.out.println("Vowels: " + count);
+        sc.close();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Enter a string: Hello World
+Vowels: 3</pre>
+
+<h3>16. Write to File</h3>
+<pre>import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileWriteExample {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("test.txt");
+            writer.write("Hello File!");
+            writer.close();
+            System.out.println("Written successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing file.");
+        }
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Written successfully.</pre>
+
+<h3>15. Exception Handling with try-catch</h3>
+<pre>public class ExceptionExample {
+    public static void main(String[] args) {
+        try {
+            int a = 10 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Error: / by zero</pre>
+
+<h3>14. Using ArrayList</h3>
+<pre>import java.util.ArrayList;
+
+public class ArrayListExample {
+    public static void main(String[] args) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Java");
+        list.add("Python");
+        list.add("C++");
+        System.out.println(list);
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>[Java, Python, C++]</pre>
+
+<h3>13. Encapsulation Example</h3>
+<pre>class Employee {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+public class EncapsulationTest {
+    public static void main(String[] args) {
+        Employee e = new Employee();
+        e.setName("Anjali");
+        System.out.println(e.getName());
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Anjali</pre>
+
+<h3>12. Abstract Class Example</h3>
+<pre>abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+}
+
+public class AbstractExample {
+    public static void main(String[] args) {
+        Shape s = new Circle();
+        s.draw();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Drawing Circle</pre>
+
+<h3>11. Method Overriding</h3>
+<pre>class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Cat extends Animal {
+    void sound() {
+        System.out.println("Meow");
+    }
+}
+
+public class OverrideTest {
+    public static void main(String[] args) {
+        Animal a = new Cat();
+        a.sound();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Meow</pre>
+
+<h3>10. Method Overloading</h3>
+<pre>class AddNumbers {
+    int add(int a, int b) {
+        return a + b;
+    }
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+public class OverloadTest {
+    public static void main(String[] args) {
+        AddNumbers obj = new AddNumbers();
+        System.out.println(obj.add(2, 3));
+        System.out.println(obj.add(1, 2, 3));
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>5
+6</pre>
+
+<h3>9. Inheritance Example</h3>
+<pre>class Animal {
+    void eat() {
+        System.out.println("This animal eats food.");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks.");
+    }
+}
+
+public class InheritanceTest {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.eat();
+        d.bark();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>This animal eats food.
+Dog barks.</pre>
+
+<h3>8. Create Class and Object</h3>
+<pre>class Student {
+    String name = "Ravi";
+    int age = 20;
+
+    void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class StudentTest {
+    public static void main(String[] args) {
+        Student s = new Student();
+        s.display();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Name: Ravi, Age: 20</pre>
+
+<h3>7. Check Even or Odd using Method</h3>
+<pre>public class EvenOddMethod {
+    static void checkEvenOdd(int num) {
+        if (num % 2 == 0)
+            System.out.println("Even");
+        else
+            System.out.println("Odd");
+    }
+
+    public static void main(String[] args) {
+        checkEvenOdd(7);
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Odd</pre>
+
+<h3>6. Reverse a String</h3>
+<pre>import java.util.Scanner;
+
+public class ReverseString {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String str = sc.nextLine();
+        String rev = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            rev += str.charAt(i);
+        }
+        System.out.println("Reversed: " + rev);
+        sc.close();
+    }
+}</pre>
+<strong>Output:</strong>
+<pre>Enter a string: Java
+Reversed: avaJ</pre>
+</body></html>

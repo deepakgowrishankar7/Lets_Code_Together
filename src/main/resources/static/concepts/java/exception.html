@@ -1,0 +1,168 @@
+<h2>Java Exception Handling</h2>
+
+<p>
+In Java, an <strong>exception</strong> is an event that disrupts the normal flow of the program. It is an object that describes an error condition. Java provides a robust mechanism to handle runtime errors, known as <strong>Exception Handling</strong>.
+</p>
+
+<h3>Why Use Exception Handling?</h3>
+<ul>
+  <li>To prevent program crashes</li>
+  <li>To handle errors gracefully</li>
+  <li>To separate error handling logic from normal logic</li>
+</ul>
+
+<hr>
+
+<h3>1. Types of Exceptions</h3>
+<ul>
+  <li><strong>Checked Exceptions</strong> – Caught during compile time (e.g., IOException, SQLException)</li>
+  <li><strong>Unchecked Exceptions</strong> – Caught at runtime (e.g., ArithmeticException, NullPointerException)</li>
+  <li><strong>Error</strong> – Serious issues like OutOfMemoryError (not usually handled)</li>
+</ul>
+
+<hr>
+
+<h3>2. Basic try-catch Example</h3>
+<pre>
+public class TryCatchExample {
+    public static void main(String[] args) {
+        try {
+            int a = 10 / 0; // will throw ArithmeticException
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero!");
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Cannot divide by zero!
+</pre>
+
+<hr>
+
+<h3>3. Multiple catch Blocks</h3>
+<pre>
+public class MultiCatch {
+    public static void main(String[] args) {
+        try {
+            String s = null;
+            System.out.println(s.length());
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer error!");
+        } catch (Exception e) {
+            System.out.println("General error occurred.");
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Null pointer error!
+</pre>
+
+<hr>
+
+<h3>4. finally Block</h3>
+<p>The <code>finally</code> block always runs, whether or not an exception is caught.</p>
+<pre>
+public class FinallyExample {
+    public static void main(String[] args) {
+        try {
+            int[] arr = new int[3];
+            System.out.println(arr[5]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Index error!");
+        } finally {
+            System.out.println("This block always runs.");
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Index error!
+This block always runs.
+</pre>
+
+<hr>
+
+<h3>5. throw Keyword</h3>
+<p><code>throw</code> is used to explicitly throw an exception.</p>
+<pre>
+public class ThrowExample {
+    public static void main(String[] args) {
+        int age = 15;
+        if (age < 18) {
+            throw new ArithmeticException("Not eligible to vote");
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Exception in thread "main" java.lang.ArithmeticException: Not eligible to vote
+</pre>
+
+<hr>
+
+<h3>6. throws Keyword</h3>
+<p><code>throws</code> is used in method declaration to indicate that method might throw an exception.</p>
+<pre>
+import java.io.*;
+
+public class ThrowsExample {
+    public static void main(String[] args) throws IOException {
+        throw new IOException("IO Error");
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Exception in thread "main" java.io.IOException: IO Error
+</pre>
+
+<hr>
+
+<h3>7. Custom Exception (User-defined)</h3>
+<pre>
+class MyException extends Exception {
+    public MyException(String message) {
+        super(message);
+    }
+}
+
+public class CustomExample {
+    public static void main(String[] args) {
+        try {
+            throw new MyException("This is a custom exception");
+        } catch (MyException e) {
+            System.out.println("Caught: " + e.getMessage());
+        }
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Caught: This is a custom exception
+</pre>
+
+<hr>
+
+<h3>8. Common Exceptions in Java</h3>
+<ul>
+  <li><strong>ArithmeticException</strong> – Divide by zero</li>
+  <li><strong>NullPointerException</strong> – Accessing object that is null</li>
+  <li><strong>ArrayIndexOutOfBoundsException</strong> – Invalid array index</li>
+  <li><strong>NumberFormatException</strong> – Invalid number conversion</li>
+  <li><strong>IOException</strong> – Error during input/output</li>
+</ul>
+
+<p><strong>Conclusion:</strong> Exception handling is an essential feature in Java that ensures graceful handling of runtime errors, keeping programs safe and user-friendly.</p>
+

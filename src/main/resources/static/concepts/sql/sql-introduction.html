@@ -1,0 +1,100 @@
+﻿<div>
+  <h1>Introduction to SQL</h1>
+  <p>SQL (Structured Query Language) is the standard language for working with relational databases. It allows you to create, read, update, and delete data and to define the structure and rules of the database.</p>
+
+  <h2>Relational Database Basics</h2>
+  <p>Relational databases store data in tables made of rows and columns. Tables are linked using keys (primary keys and foreign keys) so you can model relationships between entities.</p>
+
+  <h2>Core SQL Categories</h2>
+  <ul>
+    <li><strong>DDL</strong> (Data Definition Language): <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code> — define schema.</li>
+    <li><strong>DML</strong> (Data Manipulation Language): <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> — read and modify data.</li>
+    <li><strong>DCL</strong> (Data Control Language): <code>GRANT</code>, <code>REVOKE</code> — manage permissions.</li>
+    <li><strong>TCL</strong> (Transaction Control Language): <code>COMMIT</code>, <code>ROLLBACK</code> — manage transactions.</li>
+  </ul>
+
+  <h2>Example Table</h2>
+  <pre><code>CREATE TABLE employees (
+  id INT PRIMARY KEY,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  department VARCHAR(50),
+  salary DECIMAL(10,2)
+);
+</code></pre>
+
+  <h2>Simple SELECT Query</h2>
+  <pre><code>SELECT first_name, last_name
+FROM employees
+WHERE department = 'Sales';
+</code></pre>
+
+  <h2>How SQL Works (High Level)</h2>
+  <ol>
+    <li>You write a SQL statement describing the data you want.</li>
+    <li>The database parses and optimizes the query.</li>
+    <li>The query runs and returns rows (or changes data for write queries).</li>
+  </ol>
+
+  <h2>Installing a Database (Quick Guide)</h2>
+  <p>There are many SQL engines. Below are quick installation and verification steps for three common choices: MySQL, PostgreSQL, and SQLite. Choose the one you prefer — examples in this course work across them with minor syntax differences.</p>
+
+  <h3>MySQL (Windows / macOS / Linux)</h3>
+  <ol>
+    <li>Download MySQL Community Server from <a href="https://dev.mysql.com/downloads/">dev.mysql.com</a>.</li>
+    <li>Run the installer or follow your OS package manager instructions.</li>
+    <li>Start the MySQL service (varies by OS).</li>
+    <li>Verify installation in a terminal: <code>mysql --version</code>.</li>
+    <li>Connect to server: <code>mysql -u root -p</code> and enter the root password.</li>
+  </ol>
+
+  <h3>PostgreSQL (Windows / macOS / Linux)</h3>
+  <ol>
+    <li>Download the installer from <a href="https://www.postgresql.org/download/">postgresql.org</a> or use your package manager.</li>
+    <li>Install and start the PostgreSQL service.</li>
+    <li>Verify: <code>psql --version</code>.</li>
+    <li>Connect: <code>psql -U postgres</code> and enter your password.</li>
+  </ol>
+
+  <h3>SQLite (lightweight, no server)</h3>
+  <ol>
+    <li>SQLite is often preinstalled. Verify with: <code>sqlite3 --version</code>.</li>
+    <li>Create a database file and open it: <code>sqlite3 mydb.sqlite</code>.</li>
+    <li>SQLite is ideal for quick local experiments and for embedding in apps.</li>
+  </ol>
+
+  <h2>Basic Quickstart (Create DB, Table, Insert, Select)</h2>
+  <p>The SQL shown below works in MySQL and PostgreSQL (SQLite may have minor syntax differences):</p>
+  <pre><code>-- create database (server engines)
+CREATE DATABASE school;
+USE school; -- MySQL. For Postgres: \c school
+
+-- create table
+CREATE TABLE students (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  grade INT
+);
+
+-- insert rows
+INSERT INTO students (name, grade) VALUES ('Asha', 10), ('Sam', 9);
+
+-- read rows
+SELECT * FROM students;
+</code></pre>
+
+  <h2>Connecting from Python (example using SQLite)</h2>
+  <pre><code>import sqlite3
+conn = sqlite3.connect('school.sqlite')
+cur = conn.cursor()
+cur.execute('CREATE TABLE IF NOT EXISTS students (id INTEGER PRIMARY KEY, name TEXT, grade INTEGER)')
+cur.execute("INSERT INTO students (name, grade) VALUES ('Asha', 10)")
+conn.commit()
+for row in cur.execute('SELECT * FROM students'):
+    print(row)
+conn.close()
+</code></pre>
+
+  <h2>Next Steps</h2>
+  <p>Proceed to the topics in this course: data types, queries, joins, aggregation, subqueries, indexing, transactions, normalization, and advanced queries. Each lesson will include examples, exercises, and short quizzes.</p>
+</div>

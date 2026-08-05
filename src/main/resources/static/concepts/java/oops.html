@@ -1,0 +1,270 @@
+<h2>Java OOPs Concepts</h2>
+
+<p>Java is an Object-Oriented Programming (OOP) language. OOP helps in writing modular, reusable, and scalable code. It organizes the program using <strong>objects</strong> and <strong>classes</strong>.</p>
+
+<h3>Main Concepts of OOP in Java:</h3>
+<ul>
+  <li><strong>1. Class and Object</strong></li>
+  <li><strong>2. Inheritance</strong></li>
+  <li><strong>3. Encapsulation</strong></li>
+  <li><strong>4. Polymorphism</strong></li>
+  <li><strong>5. Abstraction</strong></li>
+</ul>
+
+<hr>
+
+<h3>1. Class and Object</h3>
+<p>A <strong>class</strong> is a blueprint or template from which objects are created. An <strong>object</strong> is an instance of a class.</p>
+
+<pre>
+class Car {
+    String brand = "Honda";
+    int speed = 120;
+
+    void display() {
+        System.out.println("Brand: " + brand);
+        System.out.println("Speed: " + speed + " km/h");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.display();
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Brand: Honda
+Speed: 120 km/h
+</pre>
+
+<hr>
+
+<h3>2. Inheritance</h3>
+<p>Inheritance allows one class (child) to inherit the properties and methods of another class (parent).</p>
+
+<pre>
+class Animal {
+    void sound() {
+        System.out.println("Animal makes sound");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.sound();  // inherited
+        d.bark();   // own
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Animal makes sound
+Dog barks
+</pre>
+
+<hr>
+
+<h3>3. Encapsulation</h3>
+<p>Encapsulation means binding data (variables) and code (methods) together and keeping them safe from outside access using <code>private</code> access modifier.</p>
+
+<pre>
+class Student {
+    private String name;
+
+    public void setName(String n) {
+        name = n;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class EncapsulationExample {
+    public static void main(String[] args) {
+        Student s = new Student();
+        s.setName("Ravi");
+        System.out.println(s.getName());
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Ravi
+</pre>
+
+<hr>
+
+<h3>4. Polymorphism</h3>
+<p>Polymorphism means "many forms". Java supports two types:</p>
+<ul>
+  <li><strong>Compile-time (Method Overloading)</strong></li>
+  <li><strong>Run-time (Method Overriding)</strong></li>
+</ul>
+
+<h4>Method Overloading Example:</h4>
+<pre>
+class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+public class OverloadTest {
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        System.out.println(calc.add(2, 3));
+        System.out.println(calc.add(1, 2, 3));
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+5
+6
+</pre>
+
+<h4>Method Overriding Example:</h4>
+<pre>
+class Bank {
+    int getInterestRate() {
+        return 5;
+    }
+}
+
+class SBI extends Bank {
+    int getInterestRate() {
+        return 7;
+    }
+}
+
+public class OverrideTest {
+    public static void main(String[] args) {
+        SBI bank = new SBI();
+        System.out.println("Interest Rate: " + bank.getInterestRate() + "%");
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Interest Rate: 7%
+</pre>
+
+<hr>
+
+<h3>5. Abstraction</h3>
+<p>Abstraction is hiding the internal details and showing only functionality. It is achieved using <strong>abstract classes</strong> or <strong>interfaces</strong>.</p>
+
+<h4>Abstract Class Example:</h4>
+<pre>
+abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+}
+
+public class AbstractTest {
+    public static void main(String[] args) {
+        Shape s = new Circle();
+        s.draw();
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Drawing Circle
+</pre>
+
+<h4>Interface Example:</h4>
+<pre>
+interface Animal {
+    void makeSound();
+}
+
+class Cat implements Animal {
+    public void makeSound() {
+        System.out.println("Meow");
+    }
+}
+
+public class InterfaceTest {
+    public static void main(String[] args) {
+        Animal a = new Cat();
+        a.makeSound();
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Meow
+</pre>
+
+<hr>
+
+<h3>Real-World Example using all Concepts</h3>
+<pre>
+abstract class Vehicle {
+    String brand = "Generic";
+
+    abstract void drive();
+}
+
+class Bike extends Vehicle {
+    void drive() {
+        System.out.println(brand + " bike is driving");
+    }
+}
+
+class HeroBike extends Bike {
+    String model = "Splendor";
+
+    void showModel() {
+        System.out.println("Model: " + model);
+    }
+}
+
+public class OopsExample {
+    public static void main(String[] args) {
+        HeroBike hb = new HeroBike();
+        hb.brand = "Hero";
+        hb.drive();
+        hb.showModel();
+    }
+}
+</pre>
+
+<strong>Output:</strong>
+<pre>
+Hero bike is driving
+Model: Splendor
+</pre>
+
+<hr>
+
+<h3>Video Tutorial</h3>
+<p><strong>Conclusion:</strong> Mastering OOPs is crucial in Java. It helps to design clean, modular, and reusable code using objects and classes.</p>

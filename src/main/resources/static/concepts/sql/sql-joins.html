@@ -1,0 +1,68 @@
+<div>
+  <h1>SQL Joins</h1>
+  <p>Joins combine data from multiple tables using common columns. This is how relational databases let you answer real questions.</p>
+
+  <h2>Example Tables</h2>
+  <pre><code>customers
++----+----------+
+| id | name     |
++----+----------+
+|  1 | Asha     |
+|  2 | Sam      |
++----+----------+
+
+orders
++----+-------------+-------------+
+| id | customer_id | order_date  |
++----+-------------+-------------+
+| 10 |           1 | 2026-06-01  |
+| 11 |           2 | 2026-06-02  |
++----+-------------+-------------+
+</code></pre>
+
+  <h2>INNER JOIN</h2>
+  <p>Returns rows that match in both tables.</p>
+  <pre><code>SELECT c.name, o.order_date
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id;
+</code></pre>
+
+  <h2>LEFT JOIN</h2>
+  <p>Returns all rows from the left table and matching rows from the right table.</p>
+  <pre><code>SELECT c.name, o.order_date
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id;
+</code></pre>
+
+  <h2>RIGHT JOIN</h2>
+  <p>Returns all rows from the right table and matching rows from the left table.</p>
+  <pre><code>SELECT c.name, o.order_date
+FROM customers c
+RIGHT JOIN orders o ON c.id = o.customer_id;
+</code></pre>
+
+  <h2>FULL OUTER JOIN</h2>
+  <p>Returns rows when there is a match in either table.</p>
+  <pre><code>SELECT c.name, o.order_date
+FROM customers c
+FULL OUTER JOIN orders o ON c.id = o.customer_id;
+</code></pre>
+
+  <h2>CROSS JOIN</h2>
+  <p>Returns every combination of rows from both tables.</p>
+  <pre><code>SELECT c.name, o.order_date
+FROM customers c
+CROSS JOIN orders o;
+</code></pre>
+
+  <h2>Self Join</h2>
+  <p>Join a table to itself. Useful for hierarchical or related data in the same table.</p>
+  <pre><code>SELECT e1.name AS employee,
+       e2.name AS manager
+FROM employees e1
+LEFT JOIN employees e2 ON e1.manager_id = e2.id;
+</code></pre>
+
+  <h2>Using Aliases</h2>
+  <p>Aliases make joins easier to read and avoid ambiguity.</p>
+</div>

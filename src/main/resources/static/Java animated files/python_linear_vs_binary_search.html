@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Python Linear vs Binary Search Visualizer</title>
+<style>
+:root { --bg:#0b1020; --panel:#12172a; --panel2:#171d34; --border:rgba(255,255,255,.08); --text:#e9eeff; --muted:#9aa3c7; --accent:#7c9cff; --accent2:#67e8a8; --warn:#ffb86b; --danger:#ff7373; --shadow:0 18px 50px rgba(0,0,0,.28); --radius:18px; --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; --sans: Inter,ui-sans-serif,system-ui,sans-serif; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--mono);background:radial-gradient(circle at top left,rgba(124,156,255,.18),transparent 28%),radial-gradient(circle at bottom right,rgba(103,232,168,.12),transparent 25%),var(--bg);color:var(--text);padding:20px}
+.container{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius);background:rgba(10,14,28,.92);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+.top{display:flex;min-height:520px}
+.code-panel{flex:1;position:relative;background:linear-gradient(180deg,#161b31,#12162a);padding:18px;overflow:auto;border-right:1px solid var(--border)}
+.debug-panel{width:380px;background:linear-gradient(180deg,#11162a,#0f1426);padding:18px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:14px}
+.output-panel{background:rgba(255,255,255,.03);border-top:1px solid var(--border);padding:14px 18px;min-height:92px}
+.panel-title{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.code-line{font-size:13px;line-height:1.9;color:#d7defc;white-space:pre;display:flex;align-items:center;gap:8px;border-radius:10px;padding:0 10px;transition:all .2s ease}
+.code-line.highlight{background:rgba(124,156,255,.16);box-shadow:inset 0 0 0 1px rgba(124,156,255,.22)}
+.kw{color:#c792ea}.str{color:#9ae6b4}.num{color:#ffcf88}.fn{color:#8bb6ff}.cls{color:#ffe08a}
+.step-card{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:14px}
+.step-badge-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.step-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(124,156,255,.16);color:#cfe0ff;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.02em}
+.step-progress{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.step-title{font-family:var(--sans);font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.3}
+.step-desc{font-family:var(--sans);font-size:13px;line-height:1.6;color:#d9dfff;margin-bottom:14px}
+.progress-bar{width:100%;height:8px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;margin-bottom:6px}
+.progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s ease}
+.progress-label{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary-box{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03);padding:10px 12px}
+.summary-label{font-family:var(--sans);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.summary-value{font-size:18px;font-weight:800;color:var(--text);word-break:break-word}
+.summary-value.updated{color:var(--accent)}
+.explain-list{display:flex;flex-direction:column;gap:8px}
+.explain-item{display:flex;gap:10px;align-items:flex-start;font-family:var(--sans);font-size:13px;line-height:1.5;color:#d9dfff;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.03)}
+.explain-mark{width:22px;height:22px;flex:0 0 22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px;background:rgba(124,156,255,.16);color:#d5e3ff}
+.truth{color:var(--accent2);font-weight:800}.false{color:var(--danger);font-weight:800}
+.out-line{font-size:13px;color:#e9edff;line-height:1.8;margin:4px 0}.out-line .out-num{color:var(--accent);font-weight:800}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:rgba(255,255,255,.03);border-top:1px solid var(--border);font-family:var(--sans)}
+.btn,select{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);color:var(--text);font-size:13px}
+.btn{padding:9px 16px;cursor:pointer;transition:all .2s ease}
+.btn.primary{background:linear-gradient(135deg,#4f77ff,#7c9cff);border-color:transparent;color:#fff}
+select{padding:8px 10px;outline:none;background:#1b2140;color:#e9eeff}
+.speed-label,.topic-label,.step-info{font-size:12px;color:var(--muted)}
+.topic-label{margin-left:auto;padding-left:12px}
+.code-wrap{position:relative}
+.project-badge{position:absolute;right:18px;bottom:16px;font-family:var(--sans);font-size:12px;color:rgba(255,255,255,.22);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div class="code-panel code-wrap">
+      <div id="code-lines"></div>
+      <div class="project-badge">Python Binary Search Visualizer</div>
+    </div>
+    <div class="debug-panel">
+      <div class="panel-title">Debug Window</div>
+      <div id="debug-content"></div>
+    </div>
+  </div>
+  <div class="output-panel">
+    <div class="panel-title">Output Window</div>
+    <div id="output-lines"></div>
+  </div>
+  <div class="controls">
+    <button class="btn primary" id="playBtn" onclick="togglePlay()">&#9654; Play</button>
+    <button class="btn" onclick="resetAnim()">&#8635; Reset</button>
+    <span class="speed-label">Speed:</span>
+    <select id="speedSel"><option value="2500">2.5 sec</option><option value="1500" selected>1.5 sec</option><option value="1000">1 sec</option><option value="500">0.5 sec</option></select>
+    <span class="step-info" id="stepInfo">Step 0 / 0</span>
+    <span class="topic-label">Python 3 — Binary Search Algorithm</span>
+  </div>
+</div>
+<script>
+const codeLines=[
+  {text:'<span class="kw">def</span> <span class="fn">binary_search</span>(arr, target):',indent:0},
+  {text:'    low, high = <span class="num">0</span>, <span class="fn">len</span>(arr) - <span class="num">1</span>',indent:4},
+  {text:'    <span class="kw">while</span> low &lt;= high:',indent:4},
+  {text:'        mid = (low + high) // <span class="num">2</span>',indent:8},
+  {text:'        <span class="kw">if</span> arr[mid] == target:',indent:8},
+  {text:'            <span class="kw">return</span> mid  <span class="str"># Found target index</span>',indent:12},
+  {text:'        <span class="kw">elif</span> arr[mid] &lt; target:',indent:8},
+  {text:'            low = mid + <span class="num">1</span>',indent:12},
+  {text:'        <span class="kw">else</span>:',indent:8},
+  {text:'            high = mid - <span class="num">1</span>',indent:12},
+  {text:'    <span class="kw">return</span> -<span class="num">1</span>',indent:4},
+  {text:'',indent:0},
+  {text:'numbers = [<span class="num">5</span>, <span class="num">12</span>, <span class="num">25</span>, <span class="num">38</span>, <span class="num">49</span>, <span class="num">63</span>, <span class="num">77</span>, <span class="num">88</span>, <span class="num">99</span>]',indent:0},
+  {text:'result = binary_search(numbers, <span class="num">77</span>)',indent:0},
+  {text:'<span class="fn">print</span>(<span class="str">f"Target 77 found at index: {result}"</span>)',indent:0}
+];
+
+const steps=[
+  {line:12,stage:'Setup',title:'Initialize Sorted List',desc:'Python list initialized with 9 ordered integer elements.',debug:{arr:'[5, 12, 25, 38, 49, 63, 77, 88, 99]',target:'77',low:'-',high:'-',mid:'-'},exprs:[{mark:'1',text:'Target value = 77'}],output:[]},
+  {line:1,stage:'Function Call',title:'Set Pointers',desc:'Low set to 0, High set to length - 1 (8).',debug:{arr:'[5...99]',target:'77',low:'0',high:'8',mid:'-'},exprs:[{mark:'1',text:'low = 0, high = 8'}],output:[]},
+  {line:2,stage:'Loop Condition',title:'Evaluate low <= high',desc:'0 <= 8 is True. Continue binary search loop.',debug:{arr:'[5...99]',target:'77',low:'0',high:'8',mid:'-'},exprs:[{mark:'1',text:'0 <= 8 -> <span class="truth">True</span>'}],output:[]},
+  {line:3,stage:'Mid Calculation',title:'Calculate Midpoint',desc:'mid = (0 + 8) // 2 = 4 (arr[4] = 49).',debug:{arr:'[5...99]',target:'77',low:'0',high:'8',mid:'4'},exprs:[{mark:'1',text:'arr[4] = 49'}],output:[]},
+  {line:6,stage:'Branch Right',title:'Target 77 > arr[4] (49)',desc:'49 < 77 is True. Shift low pointer to mid + 1 (5).',debug:{arr:'[5...99]',target:'77',low:'5',high:'8',mid:'4'},exprs:[{mark:'1',text:'49 < 77 -> <span class="truth">True</span> (Move Low to index 5)'}],output:[]},
+  {line:2,stage:'Loop Condition',title:'Evaluate low <= high',desc:'5 <= 8 is True. Second iteration.',debug:{arr:'[5...99]',target:'77',low:'5',high:'8',mid:'4'},exprs:[{mark:'1',text:'5 <= 8 -> <span class="truth">True</span>'}],output:[]},
+  {line:3,stage:'Mid Calculation',title:'Recompute Midpoint',desc:'mid = (5 + 8) // 2 = 6 (arr[6] = 77).',debug:{arr:'[5...99]',target:'77',low:'5',high:'8',mid:'6'},exprs:[{mark:'1',text:'arr[6] = 77'}],output:[]},
+  {line:4,stage:'Match Found',title:'Target 77 == arr[6]',desc:'Element matches! Return index 6.',debug:{arr:'[5...99]',target:'77',low:'5',high:'8',mid:'6'},exprs:[{mark:'1',text:'arr[6] == 77 -> <span class="truth">Match Found!</span>'}],output:[]},
+  {line:14,stage:'Output Result',title:'Print Target Index',desc:'Function returns index 6.',debug:{arr:'[5...99]',target:'77',low:'5',high:'8',mid:'6'},exprs:[{mark:'1',text:'Return value: 6'}],output:['Target 77 found at index: 6']}
+];
+
+let currentStep=0,playing=false,timer=null,prevDebug={};
+function renderCode(h){document.getElementById('code-lines').innerHTML=codeLines.map((l,i)=>`<div class="code-line${i===h?' highlight':''}">${l.text}</div>`).join('')}
+function renderDebug(s,d){const p=Math.round(((currentStep+1)/steps.length)*100),keys=['arr','target','low','high','mid']; document.getElementById('debug-content').innerHTML=`<div class="step-card"><div class="step-badge-row"><div class="step-badge">${s.stage}</div><div class="step-progress">Step ${currentStep+1} / ${steps.length}</div></div><div class="step-title">${s.title}</div><div class="step-desc">${s.desc}</div><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="progress-label">${p}% complete</div></div><div class="summary-grid">${keys.map(x=>`<div class="summary-box"><div class="summary-label">${x}</div><div class="summary-value${prevDebug[x]!==d[x]&&d[x]!=='-'?' updated':''}">${d[x]}</div></div>`).join('')}</div><div class="explain-list">${s.exprs.map(e=>`<div class="explain-item"><div class="explain-mark">${e.mark}</div><div>${e.text}</div></div>`).join('')}</div>`; prevDebug={...d};}
+function renderOutput(lines){document.getElementById('output-lines').innerHTML=lines.map((l,i)=>`<div class="out-line">${i===0?l:`<span class="out-num">${l}</span>`}</div>`).join('')}
+function applyStep(i){const s=steps[i]; renderCode(s.line); renderDebug(s,s.debug); renderOutput(s.output); document.getElementById('stepInfo').textContent=`Step ${i+1} / ${steps.length}`}
+function togglePlay(){playing=!playing;document.getElementById('playBtn').innerHTML=playing?'&#9646;&#9646; Pause':'&#9654; Play'; if(playing) tick(); else clearTimeout(timer)}
+function tick(){if(!playing)return; if(currentStep>=steps.length-1){playing=false;document.getElementById('playBtn').innerHTML='&#9654; Play';return;} currentStep++; applyStep(currentStep); timer=setTimeout(tick,parseInt(document.getElementById('speedSel').value));}
+function resetAnim(){playing=false; clearTimeout(timer); currentStep=0; prevDebug={}; document.getElementById('playBtn').innerHTML='&#9654; Play'; applyStep(0);}
+applyStep(0);
+</script>
+</body>
+</html>

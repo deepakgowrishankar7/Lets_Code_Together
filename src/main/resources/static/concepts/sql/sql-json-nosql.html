@@ -1,0 +1,81 @@
+<h2>SQL vs NoSQL & JSON in Relational Databases</h2>
+
+<p>
+  Modern RDBMS engines (MySQL 8+, PostgreSQL, SQL Server) support native <strong>JSON Data Types</strong>, bridging the gap between structured relational tables and flexible document storage.
+</p>
+
+<hr>
+
+<h3>1. Relational (SQL) vs Document (NoSQL) Comparison</h3>
+<table border="1" cellpadding="8" style="width:100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background: var(--bg-hover, #2a2a2a);">
+      <th>Aspect</th>
+      <th>SQL (Relational)</th>
+      <th>NoSQL (Document / Key-Value)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Schema</strong></td>
+      <td>Pre-defined, rigid schema with tables & columns</td>
+      <td>Dynamic, schema-less (JSON/BSON documents)</td>
+    </tr>
+    <tr>
+      <td><strong>ACID Compliance</strong></td>
+      <td>Strong transactional consistency (ACID)</td>
+      <td>BASE model (Eventually consistent / Tunable)</td>
+    </tr>
+    <tr>
+      <td><strong>Scaling</strong></td>
+      <td>Vertical scaling (CPU/RAM) & Read Replicas</td>
+      <td>Horizontal scaling across sharded clusters</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>2. Storing & Querying JSON in SQL</h3>
+<p>You can store unstructured or semi-structured data directly inside a table column marked as <code>JSON</code> or <code>JSONB</code>.</p>
+
+<pre><code>-- Create table with JSON column
+CREATE TABLE user_profiles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50),
+    attributes JSON
+);
+
+-- Insert JSON documents
+INSERT INTO user_profiles (username, attributes) 
+VALUES (
+    'sarah_dev', 
+    '{"age": 28, "skills": ["SQL", "Java", "Docker"], "settings": {"theme": "dark", "notifications": true}}'
+);</code></pre>
+
+<hr>
+
+<h3>3. Extracting JSON Fields with Functions (`->>`, `JSON_EXTRACT`)</h3>
+
+<pre><code>-- Extract JSON fields using shorthand operators (PostgreSQL / MySQL)
+SELECT 
+    username,
+    attributes->>'$.age' as age,
+    attributes->>'$.settings.theme' as theme
+FROM user_profiles
+WHERE attributes->>'$.settings.notifications' = 'true';</code></pre>
+
+<strong>Expected Output:</strong>
+<pre><code>+-----------+-----+-------+
+| username  | age | theme |
++-----------+-----+-------+
+| sarah_dev | 28  | dark  |
++-----------+-----+-------+</code></pre>
+
+<hr>
+
+<h3>4. Functional Indexes on JSON Fields</h3>
+<p>You can create B-Tree indexes on specific JSON paths to speed up lookups over millions of JSON documents:</p>
+
+<pre><code>-- Create index on nested JSON field
+CREATE INDEX idx_user_theme ON user_profiles ((CAST(attributes->>'$.settings.theme' AS CHAR(10))));</code></pre>

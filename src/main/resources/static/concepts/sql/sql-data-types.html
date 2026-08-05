@@ -1,0 +1,62 @@
+<div>
+  <h1>SQL Data Types</h1>
+  <p>Data types tell the database what kind of values a column can store. Choosing the right type keeps your data accurate, efficient, and easy to query.</p>
+
+  <h2>Why Data Types Matter</h2>
+  <p>Good column types improve performance, prevent bad data, and help the database optimize storage. They also make queries behave predictably.</p>
+
+  <h2>Numeric Types</h2>
+  <ul>
+    <li><code>INT</code> — whole numbers like <code>1</code>, <code>42</code>, <code>-7</code>.</li>
+    <li><code>SMALLINT</code> — smaller whole numbers for less storage.</li>
+    <li><code>DECIMAL(p, s)</code> — exact decimal values, good for money. <code>DECIMAL(10,2)</code> stores up to 10 digits with 2 after the decimal.</li>
+    <li><code>FLOAT</code> / <code>REAL</code> — approximate numbers for scientific data, not ideal for money.</li>
+  </ul>
+
+  <h2>Text Types</h2>
+  <ul>
+    <li><code>CHAR(n)</code> — fixed-length strings. Always stored with exactly <code>n</code> characters.</li>
+    <li><code>VARCHAR(n)</code> — variable-length strings. Use this for names, emails, and flexible text.</li>
+    <li><code>TEXT</code> — long text, such as articles or comments.</li>
+  </ul>
+
+  <h2>Date and Time Types</h2>
+  <ul>
+    <li><code>DATE</code> — calendar dates like <code>'2026-06-05'</code>.</li>
+    <li><code>TIME</code> — time of day like <code>'14:30:00'</code>.</li>
+    <li><code>DATETIME</code> / <code>TIMESTAMP</code> — date and time together.</li>
+  </ul>
+
+  <h2>Special Types</h2>
+  <ul>
+    <li><code>BOOLEAN</code> — true or false values.</li>
+    <li><code>ENUM</code> — a fixed set of values, such as <code>'small'</code>, <code>'medium'</code>, <code>'large'</code>.</li>
+    <li><code>JSON</code> — structured JSON data inside a column.</li>
+    <li><code>BLOB</code> — binary data such as images or files.</li>
+  </ul>
+
+  <h2>NULL vs Empty</h2>
+  <p><code>NULL</code> means unknown or missing data. It is different from an empty string (<code>''</code>) or zero (<code>0</code>).</p>
+
+  <h2>Practical Example</h2>
+  <pre><code>CREATE TABLE products (
+  product_id INT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  category VARCHAR(50),
+  price DECIMAL(8, 2) NOT NULL,
+  in_stock BOOLEAN DEFAULT TRUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+</code></pre>
+
+  <h2>Choosing the Right Type</h2>
+  <ul>
+    <li>Use <code>INT</code> for counts and IDs.</li>
+    <li>Use <code>DECIMAL</code> for money so values stay exact.</li>
+    <li>Use <code>VARCHAR</code> for names and text fields that change size.</li>
+    <li>Use <code>DATE</code> or <code>DATETIME</code> for times and dates.</li>
+  </ul>
+
+  <h2>Type Comparison</h2>
+  <p><strong>CHAR</strong> always uses fixed storage, while <strong>VARCHAR</strong> uses only as much space as needed. Use <code>CHAR</code> for codes of fixed length, like country codes.</p>
+</div>

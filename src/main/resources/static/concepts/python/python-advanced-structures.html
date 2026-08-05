@@ -1,0 +1,72 @@
+<h2>Python Advanced Data Structures & Comprehensions</h2>
+
+<p>
+  Beyond basic lists and dictionaries, Python offers powerful list comprehensions, generator expressions, and specialized data structures in the <code>collections</code> and <code>itertools</code> modules.
+</p>
+
+<hr>
+
+<h3>1. Comprehensions (List, Set, Dict)</h3>
+<p>Comprehensions provide a concise way to create collections from existing iterables.</p>
+
+<pre><code># List Comprehension
+squares = [x**2 for x in range(10) if x % 2 == 0]
+print("Squares:", squares) # [0, 4, 16, 36, 64]
+
+# Set Comprehension (Unique values)
+unique_lengths = {len(word) for word in ["apple", "banana", "kiwi", "apple"]}
+print("Unique lengths:", unique_lengths) # {5, 6, 4}
+
+# Dict Comprehension
+char_count = {char: "hello".count(char) for char in set("hello")}
+print("Char count:", char_count) # {'h': 1, 'e': 1, 'l': 2, 'o': 1}</code></pre>
+
+<hr>
+
+<h3>2. The `collections` Module</h3>
+
+<h4>A. `defaultdict` (Automatic default value for missing keys)</h4>
+<pre><code>from collections import defaultdict
+
+# Grouping items by category automatically
+category_items = defaultdict(list)
+category_items['fruits'].append('apple')
+category_items['fruits'].append('banana')
+
+print(category_items['fruits'])  # ['apple', 'banana']
+print(category_items['unknown']) # [] (No KeyError!)</code></pre>
+
+<h4>B. `Counter` (Frequency Counting)</h4>
+<pre><code>from collections import Counter
+
+words = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+counts = Counter(words)
+
+print(counts.most_common(2)) # [('apple', 3), ('banana', 2)]</code></pre>
+
+<h4>C. `namedtuple` & `deque`</h4>
+<pre><code>from collections import namedtuple, deque
+
+# namedtuple: Tuple with named fields
+Point = namedtuple('Point', ['x', 'y'])
+p = Point(10, 20)
+print(f"Point X: {p.x}, Y: {p.y}")
+
+# deque: Double-ended queue with O(1) appends & pops from both ends
+queue = deque(["left", "center"])
+queue.append("right")
+queue.appendleft("start")
+print("Deque:", queue) # deque(['start', 'left', 'center', 'right'])</code></pre>
+
+<hr>
+
+<h3>3. High-Performance Iteration with `itertools`</h3>
+<pre><code>import itertools
+
+# Infinite Counting & Cycle
+counter = itertools.count(start=1, step=2) # 1, 3, 5, 7...
+
+# Combinations and Permutations
+items = ['A', 'B', 'C']
+combos = list(itertools.combinations(items, 2))
+print("Combinations (2 of 3):", combos) # [('A', 'B'), ('A', 'C'), ('B', 'C')]</code></pre>

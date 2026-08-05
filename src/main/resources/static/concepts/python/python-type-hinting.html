@@ -1,0 +1,59 @@
+<h2>Python Type Hinting & Dataclasses</h2>
+
+<p>
+  Python 3.5+ introduced <strong>Type Hints</strong> (`PEP 484`) to enable static type analysis, IDE autocompletion, and robust contract definitions without compromising dynamic typing flexibility.
+</p>
+
+<hr>
+
+<h3>1. Basic & Advanced Type Hints (`typing`)</h3>
+
+<pre><code>from typing import List, Dict, Optional, Union, Callable
+
+def process_scores(names: List[str], scores: Dict[str, float]) -> Optional[float]:
+    if not scores:
+        return None
+    return sum(scores.values()) / len(scores)
+
+# Union types & Callable
+Handler = Callable[[str, int], bool]
+DataValue = Union[int, float, str]
+
+def parse_val(value: DataValue) -> str:
+    return f"Value: {value}"</code></pre>
+
+<hr>
+
+<h3>2. Modern Python 3.10+ Union Pipe Operator (`|`)</h3>
+
+<pre><code># Python 3.10+ syntax (cleaner than typing.Union)
+def calculate_price(price: int | float, discount: float | None = None) -> float:
+    if discount:
+        return price * (1 - discount)
+    return float(price)
+
+print(calculate_price(100, 0.15)) # 85.0</code></pre>
+
+<hr>
+
+<h3>3. Python `dataclasses` (Boilerplate-Free Data Classes)</h3>
+<p>
+  The <code>@dataclass</code> decorator automatically generates `__init__()`, `__repr__()`, and `__eq__()` methods based on type annotations.
+</p>
+
+<pre><code>from dataclasses import dataclass, field
+from datetime import datetime
+
+@dataclass(order=True)
+class Employee:
+    id: int
+    name: str
+    salary: float
+    skills: list[str] = field(default_factory=list)
+    created_at: datetime = field(default_factory=datetime.now)
+
+emp1 = Employee(id=101, name="Alex", salary=85000.0, skills=["Python", "SQL"])
+emp2 = Employee(id=102, name="Bob", salary=92000.0)
+
+print(emp1)
+# Output: Employee(id=101, name='Alex', salary=85000.0, skills=['Python', 'SQL'], created_at=...)</code></pre>

@@ -1,0 +1,54 @@
+<div>
+  <h1>SQL Aggregate Functions</h1>
+  <p>Aggregate functions summarize many rows into a single result. They are essential for reports and analytics.</p>
+
+  <h2>COUNT</h2>
+  <p>Counts rows or non-null values.</p>
+  <pre><code>SELECT COUNT(*) AS total_orders
+FROM orders;
+</code></pre>
+
+  <h2>SUM / AVG</h2>
+  <p>Use <code>SUM</code> for totals and <code>AVG</code> for averages.</p>
+  <pre><code>SELECT SUM(amount) AS total_sales,
+       AVG(amount) AS average_order
+FROM orders;
+</code></pre>
+
+  <h2>MIN / MAX</h2>
+  <pre><code>SELECT MIN(price) AS lowest_price,
+       MAX(price) AS highest_price
+FROM products;
+</code></pre>
+
+  <h2>GROUP BY</h2>
+  <p>Group rows together before aggregating.</p>
+  <pre><code>SELECT department,
+       COUNT(*) AS employee_count,
+       AVG(salary) AS average_salary
+FROM employees
+GROUP BY department;
+</code></pre>
+
+  <h2>HAVING</h2>
+  <p>Filter groups after aggregation. This is like <code>WHERE</code>, but works on grouped results.</p>
+  <pre><code>SELECT department,
+       COUNT(*) AS employee_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;
+</code></pre>
+
+  <h2>DISTINCT with Aggregates</h2>
+  <pre><code>SELECT COUNT(DISTINCT department) AS unique_departments
+FROM employees;
+</code></pre>
+
+  <h2>Ordering Aggregated Results</h2>
+  <pre><code>SELECT department,
+       SUM(sales) AS total_sales
+FROM sales
+GROUP BY department
+ORDER BY total_sales DESC;
+</code></pre>
+</div>

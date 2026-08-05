@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Exception Handling</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:white;padding:30px;line-height:1.8}
+.container{max-width:1100px;margin:auto}
+h1,h2,h3{color:#38bdf8}
+.code{background:#1e293b;padding:15px;border-radius:10px;white-space:pre-wrap}
+.output{background:#111827;padding:15px;border-left:5px solid #22c55e;border-radius:10px}
+.note{background:#172554;padding:15px;border-radius:10px}
+table{width:100%;border-collapse:collapse}
+table,th,td{border:1px solid gray}
+th,td{padding:10px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Exception Handling in Python</h1>
+
+<p>Exception Handling is the process of handling runtime errors so the program continues executing gracefully instead of crashing.</p>
+
+<h2>What is an Exception?</h2>
+<p>An exception is an unexpected event that occurs during program execution.</p>
+
+<div class="code">print(10/0)</div>
+<div class="output">ZeroDivisionError</div>
+
+<h2>Why Exception Handling?</h2>
+<ul>
+<li>Prevents program crashes</li>
+<li>Improves reliability</li>
+<li>Provides better user experience</li>
+<li>Handles invalid input safely</li>
+<li>Protects application flow</li>
+</ul>
+
+<h2>Program Without Exception Handling</h2>
+<div class="code">num1 = 10
+num2 = 0
+print(num1/num2)
+print("Program Ended")</div>
+
+<h2>Basic try-except</h2>
+<div class="code">try:
+    print(10/0)
+except:
+    print("Error Occurred")</div>
+<div class="output">Error Occurred</div>
+
+<h2>Handling Specific Exceptions</h2>
+<div class="code">try:
+    print(10/0)
+except ZeroDivisionError:
+    print("Cannot divide by zero")</div>
+
+<h2>Multiple Exceptions</h2>
+<div class="code">try:
+    numbers=[10,20,30]
+    print(numbers[5])
+except IndexError:
+    print("Invalid Index")
+except ValueError:
+    print("Invalid Value")</div>
+
+<h2>Multiple Exceptions in One Block</h2>
+<div class="code">try:
+    value=int("abc")
+except (ValueError,TypeError):
+    print("Conversion Error")</div>
+
+<h2>else Block</h2>
+<div class="code">try:
+    print(10/2)
+except:
+    print("Error")
+else:
+    print("Success")</div>
+
+<h2>finally Block</h2>
+<div class="code">try:
+    print(10/2)
+finally:
+    print("Always Executes")</div>
+
+<h2>Exception Object</h2>
+<div class="code">try:
+    print(10/0)
+except ZeroDivisionError as e:
+    print(e)</div>
+
+<h2>Nested Try Blocks</h2>
+<div class="code">try:
+    try:
+        print(10/0)
+    except ZeroDivisionError:
+        print("Inner Exception")
+except:
+    print("Outer Exception")</div>
+
+<h2>Common Exceptions</h2>
+<table>
+<tr><th>Exception</th><th>Description</th></tr>
+<tr><td>ZeroDivisionError</td><td>Division by zero</td></tr>
+<tr><td>ValueError</td><td>Invalid value</td></tr>
+<tr><td>TypeError</td><td>Wrong data type</td></tr>
+<tr><td>IndexError</td><td>Invalid index</td></tr>
+<tr><td>KeyError</td><td>Missing dictionary key</td></tr>
+<tr><td>FileNotFoundError</td><td>File missing</td></tr>
+</table>
+
+<h2>File Exception Example</h2>
+<div class="code">try:
+    file=open("sample.txt","r")
+except FileNotFoundError:
+    print("File Not Found")</div>
+
+<h2>Raise Keyword</h2>
+<div class="code">age=-5
+if age < 0:
+    raise ValueError("Age cannot be negative")</div>
+
+<h2>Custom Exceptions</h2>
+<div class="code">class InvalidAgeError(Exception):
+    pass
+
+age=-1
+if age < 0:
+    raise InvalidAgeError("Invalid Age")</div>
+
+<h2>ATM Custom Exception Project</h2>
+<div class="code">class InsufficientBalance(Exception):
+    pass
+
+balance=1000
+withdraw=2000
+
+if withdraw > balance:
+    raise InsufficientBalance("Insufficient Balance")</div>
+
+<h2>Login Validation Example</h2>
+<div class="code">username=""
+
+try:
+    if username=="":
+        raise ValueError("Username Cannot Be Empty")
+except ValueError as e:
+    print(e)</div>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Handle specific exceptions</li>
+<li>Use finally for cleanup</li>
+<li>Avoid empty except blocks</li>
+<li>Log errors in real projects</li>
+<li>Create custom exceptions when needed</li>
+</ul>
+
+<h2>Interview Questions</h2>
+<ol>
+<li>What is Exception Handling?</li>
+<li>Difference between Error and Exception?</li>
+<li>What is finally block?</li>
+<li>What is raise keyword?</li>
+<li>What are custom exceptions?</li>
+<li>Can finally exist without except?</li>
+<li>What is exception propagation?</li>
+<li>Why avoid generic except?</li>
+<li>Difference between throw/raise concepts?</li>
+<li>How are exceptions useful in real applications?</li>
+</ol>
+
+<h2>Practice Programs</h2>
+<ol>
+<li>Division Calculator</li>
+<li>Input Validation</li>
+<li>File Handling Exceptions</li>
+<li>ATM System</li>
+<li>Student Marks Validation</li>
+<li>Password Validation</li>
+<li>Bank Account Project</li>
+<li>Custom Age Exception</li>
+<li>Dictionary Key Validation</li>
+<li>CSV Error Handling</li>
+</ol>
+
+<h2>Summary</h2>
+<div class="note">
+Exception Handling is essential for building robust software. Python provides try, except, else, finally, raise, and custom exceptions to handle runtime errors effectively.
+</div>
+
+</div>
+</body>
+</html>

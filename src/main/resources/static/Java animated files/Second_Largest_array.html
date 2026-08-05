@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bubble Sort Visualizer</title>
+<style>
+:root { --bg:#0b1020; --panel:#12172a; --border:rgba(255,255,255,.08); --text:#e9eeff; --muted:#9aa3c7; --accent:#7c9cff; --accent2:#67e8a8; --danger:#ff7373; --shadow:0 18px 50px rgba(0,0,0,.28); --radius:18px; --mono: ui-monospace,Menlo,Monaco,Consolas,monospace; --sans: Inter,system-ui,sans-serif; }
+*{box-sizing:border-box;margin:0;padding:0} body{font-family:var(--mono);background:var(--bg);color:var(--text);padding:20px}
+.container{max-width:1200px;margin:0 auto;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#0f1426;box-shadow:var(--shadow)} .top{display:flex;min-height:520px}
+.code-panel{flex:1;padding:18px;border-right:1px solid var(--border);background:linear-gradient(180deg,#161b31,#12162a);overflow:auto}
+.debug-panel{width:380px;padding:18px;border-left:1px solid var(--border);background:linear-gradient(180deg,#11162a,#0f1426);display:flex;flex-direction:column;gap:14px}
+.output-panel{border-top:1px solid var(--border);padding:14px 18px;background:rgba(255,255,255,.03);min-height:92px}
+.panel-title{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.code-line{font-size:13px;line-height:1.9;color:#d7defc;white-space:pre;padding:0 10px;border-radius:10px}
+.code-line.highlight{background:rgba(124,156,255,.16)}
+.kw{color:#c792ea}.num{color:#ffcf88}.cls{color:#ffe08a}.fn{color:#8bb6ff}
+.step-card,.summary-box,.explain-item{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03)}
+.step-card{padding:14px}.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary-box{padding:10px 12px}
+.summary-label,.step-progress,.progress-label{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.summary-value{font-size:18px;font-weight:800}.summary-value.updated{color:var(--accent)}
+.step-badge-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.step-badge{padding:6px 10px;border-radius:999px;background:rgba(124,156,255,.16);font-family:var(--sans);font-weight:700;font-size:12px}
+.step-title{font-family:var(--sans);font-size:18px;font-weight:800;margin-bottom:8px}.step-desc{font-family:var(--sans);font-size:13px;line-height:1.6;color:#d9dfff;margin-bottom:14px}
+.progress-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:6px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.explain-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.explain-item{display:flex;gap:10px;padding:10px 12px;font-family:var(--sans);font-size:13px;line-height:1.5;color:#d9dfff}.explain-mark{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(124,156,255,.16);font-weight:800}
+.out-line{font-size:13px;line-height:1.8;color:#e9edff}.out-num{color:var(--accent);font-weight:800}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 18px;border-top:1px solid var(--border);background:rgba(255,255,255,.03);font-family:var(--sans)}
+.btn,select{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);color:var(--text);font-size:13px}.btn{padding:9px 16px;cursor:pointer}.btn.primary{background:linear-gradient(135deg,#4f77ff,#7c9cff);border-color:transparent;color:#fff}
+.topic-label,.speed-label,.step-info{font-size:12px;color:var(--muted)} .topic-label{margin-left:auto}
+@media (max-width:980px){.top{flex-direction:column}.debug-panel{width:100%;border-left:0;border-top:1px solid var(--border)}.code-panel{border-right:0;border-bottom:1px solid var(--border)}.topic-label{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div class="code-panel"><div id="code-lines"></div></div>
+    <div class="debug-panel"><div class="panel-title">Debug Window</div><div id="debug-content"></div></div>
+  </div>
+  <div class="output-panel"><div class="panel-title">Output Window</div><div id="output-lines"></div></div>
+  <div class="controls">
+    <button class="btn primary" id="playBtn" onclick="togglePlay()">&#9654; Play</button>
+    <button class="btn" onclick="resetAnim()">&#8635; Reset</button>
+    <span class="speed-label">Speed:</span>
+    <select id="speedSel"><option value="1000" selected>1 sec</option><option value="500">0.5 sec</option><option value="100">0.1 sec</option></select>
+    <span class="step-info" id="stepInfo">Step 0 / 0</span>
+    <span class="topic-label">Java Program — Bubble Sort</span>
+  </div>
+</div>
+<script>
+const codeLines=[
+{text:'<span class="kw">public class</span> <span class="cls">BubbleSort</span> {',indent:0},
+{text:'  <span class="kw">public static void</span> <span class="fn">main</span>(<span class="cls">String</span>[] args) {',indent:0},
+{text:'    <span class="kw">int</span>[] a = {5, 1, 4, 2, 8};',indent:0},
+{text:'    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; a.length - <span class="num">1</span>; i++) {',indent:0},
+{text:'      <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; a.length - i - <span class="num">1</span>; j++) {',indent:0},
+{text:'        <span class="kw">if</span> (a[j] &gt; a[j+1]) {',indent:0},
+{text:'          <span class="kw">int</span> temp = a[j];',indent:0},
+{text:'          a[j] = a[j+1];',indent:0},
+{text:'          a[j+1] = temp;',indent:0},
+{text:'        }',indent:0},
+{text:'      }',indent:0},
+{text:'    }',indent:0},
+{text:'    <span class="cls">System</span>.out.println(<span class="str">"Sorted"</span>);',indent:0},
+{text:'  }',indent:0},
+{text:'}',indent:0},
+];
+const steps=[
+{line:2,stage:'Setup',title:'Create array',desc:'The unsorted array is initialized.',debug:{a:'[5,1,4,2,8]',i:'-',j:'-'},exprs:[{mark:'1',text:'Array loaded.'}],output:[]},
+{line:3,stage:'Outer loop',title:'Pass 1',desc:'Bubble sort starts the first pass.',debug:{a:'[5,1,4,2,8]',i:'0',j:'-'},exprs:[{mark:'1',text:'i = 0'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 5 and 1',desc:'5 is greater than 1, so they swap.',debug:{a:'[1,5,4,2,8]',i:'0',j:'0'},exprs:[{mark:'1',text:'5 > 1 → true'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 5 and 4',desc:'5 is greater than 4, so they swap.',debug:{a:'[1,4,5,2,8]',i:'0',j:'1'},exprs:[{mark:'1',text:'5 > 4 → true'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 5 and 2',desc:'5 is greater than 2, so they swap.',debug:{a:'[1,4,2,5,8]',i:'0',j:'2'},exprs:[{mark:'1',text:'5 > 2 → true'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 5 and 8',desc:'5 is not greater than 8.',debug:{a:'[1,4,2,5,8]',i:'0',j:'3'},exprs:[{mark:'1',text:'5 > 8 → false'}],output:[]},
+{line:3,stage:'Outer loop',title:'Pass 2',desc:'The next pass continues sorting.',debug:{a:'[1,4,2,5,8]',i:'1',j:'-'},exprs:[{mark:'1',text:'i = 1'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 1 and 4',desc:'Already in order.',debug:{a:'[1,4,2,5,8]',i:'1',j:'0'},exprs:[{mark:'1',text:'1 > 4 → false'}],output:[]},
+{line:4,stage:'Inner loop',title:'Compare 4 and 2',desc:'4 is greater than 2, so they swap.',debug:{a:'[1,2,4,5,8]',i:'1',j:'1'},exprs:[{mark:'1',text:'4 > 2 → true'}],output:[]},
+{line:11,stage:'Output',title:'Sorted array',desc:'The array is now sorted.',debug:{a:'[1,2,4,5,8]',i:'1',j:'1'},exprs:[{mark:'✓',text:'Sorted'}],output:['[1,2,4,5,8]']}
+];
+let currentStep=0,playing=false,timer=null,prevDebug={};
+function renderCode(h){document.getElementById('code-lines').innerHTML=codeLines.map((l,i)=>`<div class="code-line${i===h?' highlight':''}">${l.text}</div>`).join('')}
+function renderDebug(s,d){const p=Math.round(((currentStep+1)/steps.length)*100),keys=['a','i','j']; document.getElementById('debug-content').innerHTML=`<div class="step-card"><div class="step-badge-row"><div class="step-badge">${s.stage}</div><div class="step-progress">Step ${currentStep+1} / ${steps.length}</div></div><div class="step-title">${s.title}</div><div class="step-desc">${s.desc}</div><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="progress-label">${p}% complete</div></div><div class="summary-grid">${keys.map(x=>`<div class="summary-box"><div class="summary-label">${x}</div><div class="summary-value${prevDebug[x]!==d[x]&&d[x]!=='-'?' updated':''}">${d[x]}</div></div>`).join('')}</div><div class="explain-list">${s.exprs.map(e=>`<div class="explain-item"><div class="explain-mark">${e.mark}</div><div>${e.text}</div></div>`).join('')}</div>`; prevDebug={...d};}
+function renderOutput(lines){document.getElementById('output-lines').innerHTML=lines.map((l,i)=>`<div class="out-line">${i===0?l:`<span class="out-num">${l}</span>`}</div>`).join('')}
+function applyStep(i){const s=steps[i]; renderCode(s.line); renderDebug(s,s.debug); renderOutput(s.output); document.getElementById('stepInfo').textContent=`Step ${i+1} / ${steps.length}`}
+function togglePlay(){playing=!playing;document.getElementById('playBtn').innerHTML=playing?'&#9646;&#9646; Pause':'&#9654; Play'; if(playing) tick(); else clearTimeout(timer)}
+function tick(){if(!playing)return; if(currentStep>=steps.length-1){playing=false;document.getElementById('playBtn').innerHTML='&#9654; Play';return;} currentStep++; applyStep(currentStep); timer=setTimeout(tick,parseInt(document.getElementById('speedSel').value));}
+function resetAnim(){playing=false; clearTimeout(timer); currentStep=0; prevDebug={}; document.getElementById('playBtn').innerHTML='&#9654; Play'; applyStep(0)}
+applyStep(0);
+</script>
+</body>
+</html>

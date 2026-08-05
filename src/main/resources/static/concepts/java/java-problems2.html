@@ -1,0 +1,1266 @@
+<h2>1. Hello World</h2>
+<pre><code>// This is the most basic Java program
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello, World!
+</pre>
+<pre>
+Syntax Note:
+System.out.println is used to print text to the console.
+</pre>
+
+<h2>2. If-Else Example</h2>
+<pre><code>// Checks if the number is even or odd
+public class CheckEvenOdd {
+    public static void main(String[] args) {
+        int num = 5;
+        if (num % 2 == 0)
+            System.out.println("Even");
+        else
+            System.out.println("Odd");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Odd
+</pre>
+<pre>
+Syntax Note:
+The if-else block evaluates a condition and executes different code based on true/false.
+</pre>
+<h2>3. Switch Case</h2>
+<pre><code>// Demonstrates use of switch to match multiple conditions
+public class SwitchExample {
+    public static void main(String[] args) {
+        int day = 3;
+        switch (day) {
+            case 1: System.out.println("Monday"); break;
+            case 2: System.out.println("Tuesday"); break;
+            case 3: System.out.println("Wednesday"); break;
+            default: System.out.println("Another Day");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Wednesday
+</pre>
+<pre>
+Syntax Note:
+Switch evaluates the expression and matches the value to a case.
+</pre>
+
+<h2>4. For Loop</h2>
+<pre><code>// Prints numbers from 1 to 5 using a for loop
+public class ForLoopDemo {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Number: " + i);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Number: 1
+Number: 2
+Number: 3
+Number: 4
+Number: 5
+</pre>
+<pre>
+Syntax Note:
+for(initialization; condition; increment) is used to repeat code a fixed number of times.
+</pre>
+
+<h2>5. While Loop</h2>
+<pre><code>// Prints numbers from 1 to 3 using a while loop
+public class WhileLoopDemo {
+    public static void main(String[] args) {
+        int i = 1;
+        while (i <= 3) {
+            System.out.println(i);
+            i++;
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1
+2
+3
+</pre>
+<pre>
+Syntax Note:
+The while loop checks the condition first, then runs the loop body.
+</pre>
+<h2>6. Do-While Loop</h2>
+<pre><code>// This loop executes at least once before checking the condition
+public class DoWhileDemo {
+    public static void main(String[] args) {
+        int i = 1;
+        do {
+            System.out.println("Value: " + i);
+            i++;
+        } while (i <= 3);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Value: 1
+Value: 2
+Value: 3
+</pre>
+<pre>
+Syntax Note:
+do-while loop runs the body first, then checks the condition after each iteration.
+</pre>
+
+<h2>7. Array Traversal</h2>
+<pre><code>// Prints all elements in an array
+public class ArrayDemo {
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 30, 40};
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println("Element " + i + ": " + arr[i]);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Element 0: 10
+Element 1: 20
+Element 2: 30
+Element 3: 40
+</pre>
+<pre>
+Syntax Note:
+Arrays in Java use zero-based indexing and are accessed with arr[index].
+</pre>
+
+<h2>8. Enhanced For Loop</h2>
+<pre><code>// Loops through all array elements without an index
+public class ForEachDemo {
+    public static void main(String[] args) {
+        String[] names = {"Alice", "Bob", "Charlie"};
+        for (String name : names) {
+            System.out.println("Hello, " + name);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello, Alice
+Hello, Bob
+Hello, Charlie
+</pre>
+<pre>
+Syntax Note:
+The enhanced for loop (for-each) simplifies iteration over arrays or collections.
+</pre>
+<h2>9. String Concatenation</h2>
+<pre><code>// Combines two strings using the + operator
+public class StringConcat {
+    public static void main(String[] args) {
+        String first = "Edu";
+        String second = "Dash";
+        String result = first + second;
+        System.out.println("Combined: " + result);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Combined: EduDash
+</pre>
+<pre>
+Syntax Note:
+You can concatenate strings using the + operator in Java.
+</pre>
+
+<h2>10. String Methods</h2>
+<pre><code>// Demonstrates built-in methods for string handling
+public class StringMethods {
+    public static void main(String[] args) {
+        String text = "JavaIsAwesome";
+        System.out.println(text.length());
+        System.out.println(text.toUpperCase());
+        System.out.println(text.substring(0, 4));
+    }
+}
+</code></pre>
+<pre>
+Output:
+13
+JAVAISAWESOME
+Java
+</pre>
+<pre>
+Syntax Note:
+String methods include length(), toUpperCase(), substring(), etc.
+</pre>
+
+<h2>11. Scanner Input</h2>
+<pre><code>// Accepts user input from the keyboard
+import java.util.Scanner;
+
+public class ScannerInput {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine();
+        System.out.println("Hello, " + name + "!");
+        sc.close();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Enter your name: Deepak  
+Hello, Deepak!
+</pre>
+<pre>
+Syntax Note:
+The Scanner class reads user input. Always remember to close the scanner!
+</pre>
+<h2>12. Simple Class Example</h2>
+<pre><code>// Defines a class with a method
+public class Greet {
+    void sayHello() {
+        System.out.println("Welcome to Java OOP!");
+    }
+
+    public static void main(String[] args) {
+        Greet g = new Greet(); // creating object
+        g.sayHello(); // calling method
+    }
+}
+</code></pre>
+<pre>
+Output:
+Welcome to Java OOP!
+</pre>
+<pre>
+Syntax Note:
+Use class to define structure; methods contain behavior.
+</pre>
+
+<h2>13. Constructor Example</h2>
+<pre><code>// Demonstrates constructor usage
+public class Student {
+    String name;
+
+    // Constructor
+    Student(String n) {
+        name = n;
+    }
+
+    public void showName() {
+        System.out.println("Name: " + name);
+    }
+
+    public static void main(String[] args) {
+        Student s = new Student("Deepak");
+        s.showName();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Name: Deepak
+</pre>
+<pre>
+Syntax Note:
+Constructors initialize objects and share the same name as the class.
+</pre>
+
+<h2>14. Encapsulation (Getters & Setters)</h2>
+<pre><code>// Uses private variables and public access methods
+public class Book {
+    private String title;
+
+    public void setTitle(String t) {
+        title = t;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public static void main(String[] args) {
+        Book b = new Book();
+        b.setTitle("Java Basics");
+        System.out.println("Book: " + b.getTitle());
+    }
+}
+</code></pre>
+<pre>
+Output:
+Book: Java Basics
+</pre>
+<pre>
+Syntax Note:
+Encapsulation hides data using private variables and exposes access via public methods.
+</pre>
+<h2>15. Inheritance Example</h2>
+<pre><code>// Child class inherits from a parent class
+class Animal {
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.sound();  // inherited method
+        d.bark();   // own method
+    }
+}
+</code></pre>
+<pre>
+Output:
+Animal makes a sound  
+Dog barks
+</pre>
+<pre>
+Syntax Note:
+Use 'extends' to inherit properties and behaviors from a superclass.
+</pre>
+
+<h2>16. Method Overloading</h2>
+<pre><code>// Same method name, different parameters
+public class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    double add(double a, double b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        Calculator c = new Calculator();
+        System.out.println(c.add(5, 10));
+        System.out.println(c.add(3.5, 2.5));
+    }
+}
+</code></pre>
+<pre>
+Output:
+15  
+6.0
+</pre>
+<pre>
+Syntax Note:
+Overloading means defining multiple methods with the same name but different parameter lists.
+</pre>
+
+<h2>17. Method Overriding</h2>
+<pre><code>// Subclass modifies behavior of inherited method
+class Vehicle {
+    void run() {
+        System.out.println("Vehicle is running");
+    }
+}
+
+class Bike extends Vehicle {
+    @Override
+    void run() {
+        System.out.println("Bike is running safely");
+    }
+
+    public static void main(String[] args) {
+        Bike b = new Bike();
+        b.run();  // overridden method
+    }
+}
+</code></pre>
+<pre>
+Output:
+Bike is running safely
+</pre>
+<pre>
+Syntax Note:
+Overriding occurs when a subclass provides a new implementation for a method from the superclass.
+</pre>
+<h2>18. Abstract Class Example</h2>
+<pre><code>// Abstract class defines a general template for child classes
+abstract class Shape {
+    abstract void draw(); // abstract method
+    void printType() {
+        System.out.println("This is a shape.");
+    }
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+
+    public static void main(String[] args) {
+        Shape s = new Circle();
+        s.draw();
+        s.printType();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Drawing Circle  
+This is a shape.
+</pre>
+<pre>
+Syntax Note:
+An abstract class can have both abstract methods (no body) and regular methods.
+</pre>
+
+<h2>19. Interface Implementation</h2>
+<pre><code>// A class implements an interface using 'implements' keyword
+interface Printable {
+    void print();
+}
+
+class Document implements Printable {
+    public void print() {
+        System.out.println("Printing Document...");
+    }
+
+    public static void main(String[] args) {
+        Document d = new Document();
+        d.print();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Printing Document...
+</pre>
+<pre>
+Syntax Note:
+An interface defines a contract; implementing classes must define all interface methods.
+</pre>
+
+<h2>20. Static Keyword</h2>
+<pre><code>// Static members belong to the class, not instances
+public class Counter {
+    static int count = 0;
+
+    Counter() {
+        count++;
+        System.out.println("Counter: " + count);
+    }
+
+    public static void main(String[] args) {
+        new Counter();
+        new Counter();
+        new Counter();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Counter: 1  
+Counter: 2  
+Counter: 3
+</pre>
+<pre>
+Syntax Note:
+Static variables are shared among all objects of a class and retain their values.
+</pre>
+<h2>21. Java Package Example</h2>
+<pre><code>// Defines a class in a custom package (save in /myapp/MainClass.java)
+package myapp;
+
+public class MainClass {
+    public static void main(String[] args) {
+        System.out.println("Package Demo");
+    }
+}
+</code></pre>
+<pre>
+Output:
+Package Demo
+</pre>
+<pre>
+Syntax Note:
+Packages group related classes; use 'package' at the top of your file.
+</pre>
+
+<h2>22. Public and Private Access</h2>
+<pre><code>// Demonstrates use of access modifiers
+public class AccessExample {
+    public int publicVar = 10;
+    private int privateVar = 20;
+
+    public void show() {
+        System.out.println("Public: " + publicVar);
+        System.out.println("Private: " + privateVar);
+    }
+
+    public static void main(String[] args) {
+        AccessExample obj = new AccessExample();
+        obj.show();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Public: 10  
+Private: 20
+</pre>
+<pre>
+Syntax Note:
+Public members are accessible everywhere; private ones are only visible within the same class.
+</pre>
+
+<h2>23. Final Variable</h2>
+<pre><code>// 'final' makes variables constant
+public class FinalDemo {
+    public static void main(String[] args) {
+        final int MAX_VALUE = 100;
+        System.out.println("Max allowed: " + MAX_VALUE);
+
+        // MAX_VALUE = 200; // Error: can't reassign a final variable
+    }
+}
+</code></pre>
+<pre>
+Output:
+Max allowed: 100
+</pre>
+<pre>
+Syntax Note:
+The 'final' keyword makes variables immutable once assigned.
+</pre>
+<h2>24. Try-Catch Block</h2>
+<pre><code>// Handles division by zero gracefully
+public class TryCatchExample {
+    public static void main(String[] args) {
+        try {
+            int result = 10 / 0; // causes ArithmeticException
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero!");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Cannot divide by zero!
+</pre>
+<pre>
+Syntax Note:
+try-catch blocks catch exceptions and prevent program crashes.
+</pre>
+
+<h2>25. Finally Block</h2>
+<pre><code>// 'finally' always executes, regardless of exception
+public class FinallyExample {
+    public static void main(String[] args) {
+        try {
+            int[] arr = {1, 2, 3};
+            System.out.println(arr[5]); // ArrayIndexOutOfBounds
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid index!");
+        } finally {
+            System.out.println("Cleanup done.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Invalid index!  
+Cleanup done.
+</pre>
+<pre>
+Syntax Note:
+The finally block always executes — even if an exception is thrown or caught.
+</pre>
+
+<h2>26. Custom Exception</h2>
+<pre><code>// Creates and uses a user-defined exception
+class AgeException extends Exception {
+    AgeException(String message) {
+        super(message);
+    }
+}
+
+public class CustomExceptionDemo {
+    public static void main(String[] args) {
+        int age = 15;
+        try {
+            if (age < 18)
+                throw new AgeException("Underage - Access Denied");
+            else
+                System.out.println("Access Granted");
+        } catch (AgeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Underage - Access Denied
+</pre>
+<pre>
+Syntax Note:
+You can create custom exceptions by extending the Exception class.
+</pre>
+<h2>27. ArrayList Example</h2>
+<pre><code>// A resizable array from java.util package
+import java.util.ArrayList;
+
+public class ArrayListDemo {
+    public static void main(String[] args) {
+        ArrayList<String> fruits = new ArrayList<>();
+        fruits.add("Apple");
+        fruits.add("Mango");
+        fruits.add("Banana");
+
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Apple  
+Mango  
+Banana
+</pre>
+<pre>
+Syntax Note:
+ArrayList stores elements dynamically and maintains order.
+</pre>
+
+<h2>28. HashMap Example</h2>
+<pre><code>// Stores key-value pairs like a dictionary
+import java.util.HashMap;
+
+public class HashMapDemo {
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1, "Java");
+        map.put(2, "Python");
+
+        System.out.println("ID 1: " + map.get(1));
+    }
+}
+</code></pre>
+<pre>
+Output:
+ID 1: Java
+</pre>
+<pre>
+Syntax Note:
+HashMap stores pairs using .put(key, value) and retrieves using .get(key).
+</pre>
+
+<h2>29. HashSet Example</h2>
+<pre><code>// A collection that does not allow duplicates
+import java.util.HashSet;
+
+public class HashSetDemo {
+    public static void main(String[] args) {
+        HashSet<String> languages = new HashSet<>();
+        languages.add("Java");
+        languages.add("C++");
+        languages.add("Java"); // duplicate, will be ignored
+
+        for (String lang : languages) {
+            System.out.println(lang);
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Java  
+C++
+</pre>
+<pre>
+Syntax Note:
+HashSet is unordered and ensures no duplicate elements.
+</pre>
+<h2>30. Write to a File</h2>
+<pre><code>// Writes data to a text file
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteToFile {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+            writer.write("Hello, Java File I/O!");
+            writer.close();
+            System.out.println("Data written successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Data written successfully.
+</pre>
+<pre>
+Syntax Note:
+FileWriter creates or overwrites a file; always close it to flush data.
+</pre>
+
+<h2>31. Read from a File (FileReader)</h2>
+<pre><code>// Reads and prints content from a text file
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReadFile {
+    public static void main(String[] args) {
+        try {
+            FileReader reader = new FileReader("output.txt");
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                System.out.print((char) ch);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello, Java File I/O!
+</pre>
+<pre>
+Syntax Note:
+FileReader reads characters one at a time; wrap with BufferedReader for line-by-line reading.
+</pre>
+
+<h2>32. Read File with BufferedReader</h2>
+<pre><code>// Reads file line by line
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class BufferedRead {
+    public static void main(String[] args) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("output.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("Read error!");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello, Java File I/O!
+</pre>
+<pre>
+Syntax Note:
+BufferedReader improves performance and allows easy line-by-line file reading.
+</pre>
+<h2>33. Basic Thread Creation</h2>
+<pre><code>// Creates a thread by extending Thread class
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running...");
+    }
+
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start(); // starts the new thread
+    }
+}
+</code></pre>
+<pre>
+Output:
+Thread is running...
+</pre>
+<pre>
+Syntax Note:
+start() triggers the run() method of a thread; don’t call run() directly.
+</pre>
+
+<h2>34. Runnable Interface</h2>
+<pre><code>// Implements thread using Runnable for more flexibility
+class MyTask implements Runnable {
+    public void run() {
+        System.out.println("Runnable thread is active.");
+    }
+
+    public static void main(String[] args) {
+        Thread t = new Thread(new MyTask());
+        t.start();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Runnable thread is active.
+</pre>
+<pre>
+Syntax Note:
+Runnable interface separates the thread logic from the thread object itself.
+</pre>
+
+<h2>35. Synchronization Example</h2>
+<pre><code>// Synchronizes access to prevent race conditions
+class Bank {
+    int balance = 1000;
+
+    synchronized void withdraw(int amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient funds");
+        }
+    }
+}
+
+public class SyncDemo {
+    public static void main(String[] args) {
+        Bank b = new Bank();
+
+        Thread t1 = new Thread(() -> b.withdraw(700));
+        Thread t2 = new Thread(() -> b.withdraw(500));
+
+        t1.start();
+        t2.start();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Withdrawn: 700  
+Insufficient funds
+</pre>
+<pre>
+Syntax Note:
+The 'synchronized' keyword locks access so only one thread enters the method at a time.
+</pre>
+
+<h2>36. Lambda Expression</h2>
+<pre><code>// Simplifies functional interfaces (like Runnable)
+public class LambdaDemo {
+    public static void main(String[] args) {
+        Runnable task = () -> System.out.println("Running via lambda!");
+        new Thread(task).start();
+    }
+}
+</code></pre>
+<pre>
+Output:
+Running via lambda!
+</pre>
+<pre>
+Syntax Note:
+Lambdas replace anonymous inner classes for functional interfaces (interfaces with one method).
+</pre>
+<h2>37. Streams with Filter</h2>
+<pre><code>// Uses stream to filter elements from a list
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamFilterDemo {
+    public static void main(String[] args) {
+        List<Integer> nums = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+        nums.stream()
+            .filter(n -> n % 2 == 0)
+            .forEach(System.out::println);
+    }
+}
+</code></pre>
+<pre>
+Output:
+2  
+4  
+6
+</pre>
+<pre>
+Syntax Note:
+The stream() API enables functional-style data operations like filtering, mapping, and reducing.
+</pre>
+
+<h2>38. Stream Map Example</h2>
+<pre><code>// Transforms elements using map()
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamMapDemo {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("edu", "dash", "java");
+
+        names.stream()
+             .map(String::toUpperCase)
+             .forEach(System.out::println);
+    }
+}
+</code></pre>
+<pre>
+Output:
+EDU  
+DASH  
+JAVA
+</pre>
+<pre>
+Syntax Note:
+map() transforms each element in the stream.
+</pre>
+
+<h2>39. Method Reference</h2>
+<pre><code>// Method reference simplifies lambda expressions
+import java.util.Arrays;
+import java.util.List;
+
+public class MethodRefDemo {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("Hello", "World", "Java");
+        words.forEach(System.out::println); // equivalent to words.forEach(w -> System.out.println(w));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Hello  
+World  
+Java
+</pre>
+<pre>
+Syntax Note:
+Method reference is a shorthand for lambda — uses :: to refer to existing methods.
+</pre>
+<h2>40. Recursion Example (Factorial)</h2>
+<pre><code>// Uses recursion to calculate factorial of a number
+public class Factorial {
+    static int fact(int n) {
+        if (n == 0) return 1;
+        return n * fact(n - 1);
+    }
+
+    public static void main(String[] args) {
+        int num = 5;
+        System.out.println("Factorial of " + num + " is: " + fact(num));
+    }
+}
+</code></pre>
+<pre>
+Output:
+Factorial of 5 is: 120
+</pre>
+<pre>
+Syntax Note:
+Recursion is a function calling itself with a smaller input until a base case is reached.
+</pre>
+
+<h2>41. Bubble Sort</h2>
+<pre><code>// Sorts an array using bubble sort algorithm
+public class BubbleSort {
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 8, 3, 1};
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // swap
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+
+        for (int val : arr)
+            System.out.print(val + " ");
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 2 3 5 8
+</pre>
+<pre>
+Syntax Note:
+Bubble sort repeatedly compares and swaps adjacent elements to sort the array.
+</pre>
+
+<h2>42. Wrapper Class Example</h2>
+<pre><code>// Demonstrates autoboxing and unboxing
+public class WrapperExample {
+    public static void main(String[] args) {
+        int num = 10;
+        Integer obj = num; // autoboxing
+        int val = obj;     // unboxing
+
+        System.out.println("Wrapped: " + obj);
+        System.out.println("Primitive: " + val);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Wrapped: 10  
+Primitive: 10
+</pre>
+<pre>
+Syntax Note:
+Wrapper classes (Integer, Double, etc.) convert primitives into objects and vice versa.
+</pre>
+<h2>43. Enum Example</h2>
+<pre><code>// Defines a set of constant values using enum
+enum Day {
+    MONDAY, TUESDAY, WEDNESDAY
+}
+
+public class EnumExample {
+    public static void main(String[] args) {
+        Day today = Day.TUESDAY;
+        System.out.println("Today is: " + today);
+    }
+}
+</code></pre>
+<pre>
+Output:
+Today is: TUESDAY
+</pre>
+<pre>
+Syntax Note:
+Enums are special data types that represent fixed sets of constants.
+</pre>
+
+<h2>44. Varargs (Variable Arguments)</h2>
+<pre><code>// Accepts variable number of arguments
+public class VarargsDemo {
+    public static void printNumbers(int... nums) {
+        for (int n : nums) {
+            System.out.print(n + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        printNumbers(10, 20, 30, 40);
+    }
+}
+</code></pre>
+<pre>
+Output:
+10 20 30 40
+</pre>
+<pre>
+Syntax Note:
+Varargs (int... x) allows methods to accept any number of arguments of the same type.
+</pre>
+
+<h2>45. Command-Line Arguments</h2>
+<pre><code>// Reads arguments passed to the program during execution
+public class CommandLineDemo {
+    public static void main(String[] args) {
+        if (args.length > 0) {
+            System.out.println("First argument: " + args[0]);
+        } else {
+            System.out.println("No arguments provided.");
+        }
+    }
+}
+</code></pre>
+<pre>
+Output (when run with "java CommandLineDemo Hello"):
+First argument: Hello
+</pre>
+<pre>
+Syntax Note:
+Command-line arguments are passed as a String array to main().
+</pre>
+<h2>46. Star Pyramid Pattern</h2>
+<pre><code>// Prints a centered pyramid of stars
+public class StarPyramid {
+    public static void main(String[] args) {
+        int rows = 5;
+        for (int i = 1; i <= rows; i++) {
+            for (int j = i; j < rows; j++)
+                System.out.print(" ");
+            for (int k = 1; k <= (2 * i - 1); k++)
+                System.out.print("*");
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+    *  
+   ***  
+  *****  
+ *******  
+*********
+</pre>
+<pre>
+Syntax Note:
+Nested loops control spacing and star count to form a symmetric pyramid.
+</pre>
+
+<h2>47. Inverted Number Triangle</h2>
+<pre><code>// Prints numbers in decreasing triangle pattern
+public class InvertedNumberTriangle {
+    public static void main(String[] args) {
+        int rows = 5;
+        for (int i = rows; i >= 1; i--) {
+            for (int j = 1; j <= i; j++)
+                System.out.print(j + " ");
+            System.out.println();
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+1 2 3 4 5  
+1 2 3 4  
+1 2 3  
+1 2  
+1
+</pre>
+<pre>
+Syntax Note:
+Outer loop controls rows; inner loop prints increasing numbers up to i.
+</pre>
+
+<h2>48. Prime Number Check</h2>
+<pre><code>// Checks if a number is prime
+public class PrimeCheck {
+    public static void main(String[] args) {
+        int num = 29;
+        boolean isPrime = true;
+
+        if (num <= 1) isPrime = false;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        if (isPrime)
+            System.out.println(num + " is a prime number.");
+        else
+            System.out.println(num + " is not a prime number.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+29 is a prime number.
+</pre>
+<pre>
+Syntax Note:
+A prime number has no divisors other than 1 and itself; loop up to √n for efficiency.
+</pre>
+<h2>49. Palindrome String Check</h2>
+<pre><code>// Checks if a string reads the same forward and backward
+public class PalindromeCheck {
+    public static void main(String[] args) {
+        String str = "level";
+        String reversed = "";
+
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed += str.charAt(i);
+        }
+
+        if (str.equals(reversed))
+            System.out.println(str + " is a palindrome.");
+        else
+            System.out.println(str + " is not a palindrome.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+level is a palindrome.
+</pre>
+<pre>
+Syntax Note:
+A palindrome is a string that remains the same when reversed.
+</pre>
+
+<h2>50. Armstrong Number Check</h2>
+<pre><code>// Checks if a number is an Armstrong number
+public class ArmstrongNumber {
+    public static void main(String[] args) {
+        int num = 153, original = num, result = 0;
+
+        while (original != 0) {
+            int digit = original % 10;
+            result += Math.pow(digit, 3); // 3 is the number of digits
+            original /= 10;
+        }
+
+        if (result == num)
+            System.out.println(num + " is an Armstrong number.");
+        else
+            System.out.println(num + " is not an Armstrong number.");
+    }
+}
+</code></pre>
+<pre>
+Output:
+153 is an Armstrong number.
+</pre>
+<pre>
+Syntax Note:
+An Armstrong number equals the sum of its digits raised to the power of the number of digits.
+</pre>
+
+<h2>51. Fibonacci Series</h2>
+<pre><code>// Prints the first 10 numbers in the Fibonacci sequence
+public class FibonacciSeries {
+    public static void main(String[] args) {
+        int n = 10, a = 0, b = 1;
+
+        System.out.print("Fibonacci: ");
+        for (int i = 1; i <= n; i++) {
+            System.out.print(a + " ");
+            int next = a + b;
+            a = b;
+            b = next;
+        }
+    }
+}
+</code></pre>
+<pre>
+Output:
+Fibonacci: 0 1 1 2 3 5 8 13 21 34
+</pre>
+<pre>
+Syntax Note:
+Each Fibonacci number is the sum of the two preceding ones, starting from 0 and 1.
+</pre>

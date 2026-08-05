@@ -1,0 +1,205 @@
+<h1>Java Data Types</h1>
+
+  <div class="section">
+    <p>In Java, data types are categorized into two main types: <span class="highlight">Primitive Data Types</span> and <span class="highlight">Non-Primitive (Reference) Data Types</span>. Here's a concise breakdown:</p>
+  </div>
+
+  <div class="section">
+    <h2>1. Primitive Data Types</h2>
+    <p>These are the most basic data types in Java, predefined by the language. They store simple values.</p>
+
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Default Value</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>byte</td>
+        <td>1 byte (8 bits)</td>
+        <td>0</td>
+        <td>Stores small integers (-128 to 127).</td>
+      </tr>
+      <tr>
+        <td>short</td>
+        <td>2 bytes</td>
+        <td>0</td>
+        <td>Stores medium integers (-32,768 to 32,767).</td>
+      </tr>
+      <tr>
+        <td>int</td>
+        <td>4 bytes</td>
+        <td>0</td>
+        <td>Stores integers (-2<sup>31</sup> to 2<sup>31</sup>-1).</td>
+      </tr>
+      <tr>
+        <td>long</td>
+        <td>8 bytes</td>
+        <td>0L</td>
+        <td>Stores large integers (-2<sup>63</sup> to 2<sup>63</sup>-1).</td>
+      </tr>
+      <tr>
+        <td>float</td>
+        <td>4 bytes</td>
+        <td>0.0f</td>
+        <td>Stores decimal numbers (single precision).</td>
+      </tr>
+      <tr>
+        <td>double</td>
+        <td>8 bytes</td>
+        <td>0.0d</td>
+        <td>Stores decimal numbers (double precision).</td>
+      </tr>
+      <tr>
+        <td>char</td>
+        <td>2 bytes</td>
+        <td>'\u0000'</td>
+        <td>Stores a single character (Unicode).</td>
+      </tr>
+      <tr>
+        <td>boolean</td>
+        <td>1 bit</td>
+        <td>false</td>
+        <td>Stores true or false.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>2. Non-Primitive (Reference) Data Types</h2>
+    <p>These are more complex and include objects, arrays, and classes. They reference memory locations rather than storing the actual data.</p>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+      <li><code>String name = "Hello";</code></li>
+      <li><code>int[] numbers = {1, 2, 3};</code></li>
+      <li><code>MyClass obj = new MyClass();</code></li>
+      <li><code>interface Animal { void sound(); }</code></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Key Differences Between Primitive and Non-Primitive Types</h2>
+    <ul>
+      <li><strong>Primitive types</strong> are predefined and store values directly.</li>
+      <li><strong>Non-primitive types</strong> are created by the programmer and store references to objects in memory.</li>
+      <li>Non-primitive types can be <code>null</code>, while primitive types cannot.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <p>Java's strong typing ensures that each variable is explicitly declared with a data type, making the code robust and less error-prone.</p>
+  </div>
+<strong>Example Code</strong>
+<pre>
+    public class DataTypesExample {
+    public static void main(String[] args) {
+        // Primitive types
+        int age = 25;
+        double salary = 50000.75;
+        char grade = 'A';
+        boolean isJavaFun = true;
+
+        // Non-primitive types
+        String name = "John Doe";
+        int[] numbers = {1, 2, 3, 4, 5};
+
+        // Output
+        System.out.println("Age: " + age);
+        System.out.println("Salary: " + salary);
+        System.out.println("Grade: " + grade);
+        System.out.println("Is Java fun? " + isJavaFun);
+        System.out.println("Name: " + name);
+        System.out.println("Numbers: " + java.util.Arrays.toString(numbers));
+    }
+}
+
+</pre>
+ <h1>Java Variables</h1>
+
+  <div class="section">
+    <p>In Java, variables are containers used to store data values. They are fundamental to programming and come in different types based on the kind of data they hold. Here's a concise overview:</p>
+  </div>
+
+  <div class="section">
+    <h2>1. Declaring Variables</h2>
+    <p>A variable in Java is declared with a specific data type, followed by its name.</p>
+    <pre><code>int age = 25; // 'age' is a variable of type int</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>2. Types of Variables</h2>
+
+    <h3 class="highlight">a. Local Variables</h3>
+    <ul>
+      <li>Declared inside a method, constructor, or block.</li>
+      <li>Only accessible within the scope where they are defined.</li>
+      <li>Must be initialized before use.</li>
+    </ul>
+    <pre><code>void display() {
+    int localVar = 10; // Local variable
+    System.out.println(localVar);
+}</code></pre>
+
+    <h3 class="highlight">b. Instance Variables</h3>
+    <ul>
+      <li>Declared inside a class but outside any method.</li>
+      <li>Belong to an instance of the class (each object has its own copy).</li>
+      <li>Default values are assigned if not explicitly initialized.</li>
+    </ul>
+    <pre><code>class Person {
+    String name; // Instance variable
+    int age;
+}</code></pre>
+
+    <h3 class="highlight">c. Static Variables</h3>
+    <ul>
+      <li>Declared with the <code>static</code> keyword.</li>
+      <li>Shared among all instances of the class (only one copy exists).</li>
+      <li>Can be accessed without creating an object.</li>
+    </ul>
+    <pre><code>class Example {
+    static int count = 0; // Static variable
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>3. Data Types</h2>
+    <p>Java variables can hold different types of data:</p>
+    <ul>
+      <li><strong>Primitive Types:</strong> <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>boolean</code>, etc.</li>
+      <li><strong>Reference Types:</strong> Objects, arrays, or instances of classes.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. Naming Rules</h2>
+    <ul>
+      <li>Must start with a letter, <code>$</code>, or <code>_</code>.</li>
+      <li>Cannot use reserved keywords.</li>
+      <li>Should be meaningful and follow <code>camelCase</code> convention.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Example</h2>
+    <p>This program demonstrates all three types of variables in action:</p>
+    <pre><code>public class VariablesExample {
+    static int staticVar = 100; // Static variable
+
+    String instanceVar = "Hello"; // Instance variable
+
+    public void method() {
+        int localVar = 50; // Local variable
+        System.out.println("Local Variable: " + localVar);
+    }
+
+    public static void main(String[] args) {
+        VariablesExample obj = new VariablesExample();
+        obj.method();
+        System.out.println("Instance Variable: " + obj.instanceVar);
+        System.out.println("Static Variable: " + staticVar);
+    }
+}</code></pre>
+  </div>

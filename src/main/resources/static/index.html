@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Code Together</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#22c55e">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Fail:', err));
+            });
+        }
+    </script>
+
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('image/backgroundimage.avif') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        body {
+           -webkit-user-select: none; /* Chrome, Safari */
+           -moz-user-select: none;    /* Firefox */
+           -ms-user-select: none;     /* Internet Explorer/Edge */
+            user-select: none;         /* Standard */
+}
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: transparent;
+        }
+        .navbar img {
+            height: 40px;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            right: 0;
+            background: #007BFF;
+            transition: width 0.3s ease;
+        }
+        .navbar a:hover::after {
+            width: 100%;
+            left: 0;
+            background: #007BFF;
+        }
+        .navbar a:hover {
+            color: #007BFF;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease;
+        }
+        .content.move-left {
+            transform: translateX(-20%);
+        }
+        .content h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 3em;
+            color: #fff;
+        }
+        .form-container {
+            display: none;
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 300px;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            transform: translateX(100%);
+            opacity: 0;
+            z-index: 2000; /* ensure above other overlays */
+        }
+        .form-container.show {
+            display: block;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .form-container h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #fff;
+            text-align: center;
+        }
+        .form-container .input-group {
+            position: relative;
+            margin: 20px 0;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            outline: none;
+            box-sizing: border-box;
+            background-color: black;
+            color: white;
+        }
+        .form-container label {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0 5px;
+            color: #aaa;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        .form-container input:focus + label,
+        .form-container input:not(:placeholder-shown) + label {
+            top: 0;
+            left: 15px;
+            font-size: 0.8em;
+            color: #007BFF;
+        }
+        .form-container button {
+            padding: 15px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .form-container button.admin-btn {
+            background-color: #28a745;
+            margin-top: 10px;
+        }
+        .form-container button.admin-btn:hover {
+            background-color: #1e7e34;
+        }
+        .form-container .forgot-password {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .form-container .forgot-password:hover {
+            text-decoration: underline;
+        }
+        .form-container .switch-form {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .form-container .switch-form:hover {
+            text-decoration: underline;
+        }
+        .form-container p {
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background-color: black;
+            color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @media (max-width: 900px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 8px;
+            }
+            .navbar a {
+                padding: 8px 12px;
+                width: auto;
+                text-align: center;
+                display: inline-block;
+            }
+            .content {
+                text-align: center;
+                padding: 24px 12px;
+            }
+            .form-container {
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 92%;
+                max-width: 420px;
+                height: auto;
+                right: auto;
+                padding: 18px;
+                box-sizing: border-box;
+            }
+            .modal-content {
+                width: 94%;
+            }
+            .form-container input,
+            .form-container button {
+                font-size: 1rem;
+            }
+            .guest-btn {
+                width: 90%;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+        .success-message {
+            display: none;
+            color: white;
+            background-color: black;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .success-message.show {
+            display: block;
+        }
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 10px;
+            text-align: center;
+        }
+        #logo {
+           pointer-events: none;
+       }
+       .guest-btn {
+  margin-top: 30px;
+  padding: 14px 40px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+
+  /* 🖤 Glassy Black Look */
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.05);
+
+  transition: all 0.3s ease;
+}
+.guest-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.9),
+    inset 0 0 12px rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px) scale(1.04);
+}
+.guest-btn:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.25),
+    0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="image/logo.jpg" id="logo" alt="Logo" draggable="false" ondragstart="return false" oncontextmenu="return false" style="pointer-events:none;">
+        <div>
+            <a href="#" onclick="toggleLoginForm()">Login</a>
+            <a href="#" onclick="toggleRegisterForm()">Register</a>
+            <a href="#" onclick="goToAdminLogin()">Admin Login</a>
+            <a href="#" onclick="toggleModal()">Privacy Policy</a>
+            <a href="about.html">About</a>
+            <a href="help.html">Help</a>
+        </div>
+    </div>
+    <div class="content" id="content">
+        <h1>Welcome to Our Website</h1>
+        <p>"Let's code together"</p>
+        <button class="guest-btn" onclick="goWithoutLogin()">
+    Let’s Go
+</button>
+
+        <div id="successMessage" class="success-message">Registered successfully!</div>
+        <div id="forgotPasswordSuccessMessage" class="success-message">Link sent successfully!</div>
+    </div>
+    <div class="form-container" id="loginForm">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="loginUser(event)">
+            <div class="input-group">
+                <input type="email" name="email" id="login-email" placeholder=" " autocomplete="username" required>
+                <label for="login-email">Email</label>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" id="login-password" placeholder=" " autocomplete="current-password" required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit">Login</button>
+            <div id="loginErrorMessage" class="error-message"></div>
+            <a href="#" class="forgot-password" onclick="toggleForgotPasswordForm(); return false;">Forgot password?</a>
+        </form>
+    </div>
+  <div class="form-container" id="registerForm">
+    <h2>Register</h2>
+    <form id="registerFormElement">
+        <div class="input-group">
+            <input type="text" name="username" id="reg-username" placeholder=" " autocomplete="username" required>
+            <label for="reg-username">Username</label>
+        </div>
+        <div class="input-group" style="position: relative;">
+            <input type="email" name="email" id="reg-email" placeholder=" " required>
+            <label for="reg-email">Email</label>
+            <a href="#" onclick="sendOTP()" style="position: absolute; right: 0; bottom: -25px; font-size: 1em; color: #007BFF; text-decoration: none; cursor: pointer;">Send OTP</a>
+        </div>
+        <div class="input-group" style="margin-top: 25px;">
+            <input type="text" name="otp" id="reg-otp" placeholder=" " required>
+            <label for="reg-otp">Enter OTP</label>
+        </div>
+        <div class="input-group">
+            <input type="password" name="password" id="reg-password" placeholder=" " autocomplete="new-password" required>
+            <label for="reg-password">Password</label>
+            
+        </div>
+        <button type="submit">Register</button>
+        <div id="registerErrorMessage" class="error-message"></div>
+    </form>
+</div>
+
+
+    <div class="form-container" id="forgotPasswordForm">
+        <h2>Forgot Password</h2>
+        <p>We will send a link to your email to reset your password.</p>
+        <form id="forgotPasswordFormElement">
+            <div class="input-group">
+                <input type="email" name="email" id="forgot-email" placeholder=" " required>
+                <label for="forgot-email">Email</label>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleModal()">&times;</span>
+            <h2>Privacy Policy</h2>
+            <p>This is the privacy policy content. It explains how we handle your data and protect your privacy.</p>
+        </div>
+    </div>
+    <script>
+        async function sendOTP() {
+            const email = document.getElementById('reg-email').value.trim();
+            if (!email) {
+                alert("Please enter email before requesting OTP");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message || "OTP sent successfully.");
+                } else {
+                    alert("Failed to send OTP: " + (data.message || "Unknown error"));
+                }
+            } catch (error) {
+                alert("Error sending OTP.");
+            }
+        }
+        function toggleLoginForm() {
+            var loginForm = document.getElementById('loginForm');
+            var registerForm = document.getElementById('registerForm');
+            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            var content = document.getElementById('content');
+            if (loginForm.classList.contains('show')) {
+                loginForm.classList.remove('show');
+                content.classList.remove('move-left');
+            } else {
+                loginForm.classList.add('show');
+                registerForm.classList.remove('show');
+                forgotPasswordForm.classList.remove('show');
+                content.classList.add('move-left');
+            }
+        }
+
+        function toggleRegisterForm() {
+            var registerForm = document.getElementById('registerForm');
+            var loginForm = document.getElementById('loginForm');
+            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            var content = document.getElementById('content');
+            if (registerForm.classList.contains('show')) {
+                registerForm.classList.remove('show');
+                content.classList.remove('move-left');
+            } else {
+                registerForm.classList.add('show');
+                loginForm.classList.remove('show');
+                forgotPasswordForm.classList.remove('show');
+                content.classList.add('move-left');
+            }
+        }
+
+        function toggleForgotPasswordForm() {
+            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            var loginForm = document.getElementById('loginForm');
+            var registerForm = document.getElementById('registerForm');
+            var content = document.getElementById('content');
+            if (!forgotPasswordForm) return;
+
+            if (forgotPasswordForm.classList.contains('show')) {
+                forgotPasswordForm.classList.remove('show');
+                content.classList.remove('move-left');
+            } else {
+                // ensure the form is visible above everything
+                forgotPasswordForm.style.zIndex = 2000;
+                forgotPasswordForm.classList.add('show');
+                if (loginForm) loginForm.classList.remove('show');
+                if (registerForm) registerForm.classList.remove('show');
+                content.classList.add('move-left');
+            }
+        }
+
+        function toggleModal() {
+            var modal = document.getElementById('privacyModal');
+            if (modal.style.display === "block") {
+                modal.style.display = "none";
+            } else {
+                modal.style.display = "block";
+            }
+        }
+
+        /* ------------------------------------------------------------------
+           Login redirection helpers
+           - goToLogin from guest overlays should navigate to index.html and
+             remember that the login form needs to be shown automatically
+        ------------------------------------------------------------------ */
+        function markOpenLogin() {
+            // use session storage so flag expires on tab close
+            sessionStorage.setItem("openLogin", "true");
+        }
+
+        function handleAutoLogin() {
+            const shouldOpen = sessionStorage.getItem("openLogin");
+            if (shouldOpen) {
+                // clear before toggling so reloading won't loop
+                sessionStorage.removeItem("openLogin");
+                toggleLoginForm();
+            }
+        }
+
+        /* call on page load */
+        document.addEventListener("DOMContentLoaded", handleAutoLogin);
+
+        document.getElementById('forgotPasswordFormElement').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+
+            try {
+                const response = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    const emailValue = document.getElementById('forgot-email').value.trim();
+                    alert(data.message || "OTP sent successfully.");
+                    window.location.href = `resetpassword.html?email=${encodeURIComponent(emailValue)}`;
+                } else {
+                    alert("Error: " + data.message);
+                }
+            } catch (error) {
+                alert("Error processing response");
+            }
+        });
+
+            document.getElementById('registerFormElement').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            const otp = document.getElementById('reg-otp').value.trim();
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, otp })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('successMessage').classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.remove('show');
+                        toggleRegisterForm();
+                        toggleLoginForm();
+                    }, 1500);
+                } else {
+                    document.getElementById('registerErrorMessage').textContent = data.message;
+                    document.getElementById('registerErrorMessage').classList.add('show');
+                }
+            } catch (error) {
+                alert('An error occurred while processing your request.');
+            }
+        });
+
+
+
+        function logout() {
+            localStorage.removeItem('loggedInEmail');
+            window.location.href = 'index.html'; // or your landing page
+        }
+
+        function goToAdminLogin() {
+            window.location.href = 'admin.html';
+        }
+
+        const loggedInEmail = localStorage.getItem('loggedInEmail');
+
+         document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+    });
+    document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+      e.preventDefault();
+    }
+  });
+   document.getElementById('logo').addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+  logo.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+  });
+  async function loginUser(event) {
+    event.preventDefault(); // prevent form from submitting normally
+
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+    const errorMsg = document.getElementById("loginErrorMessage");
+
+    try {
+            const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("loggedInEmail", email);
+        localStorage.setItem("loggedInUserName", data.userName);
+        localStorage.removeItem("isGuest");
+        window.location.href = "main.html"; // redirect to dashboard
+      } else {
+        errorMsg.textContent = data.message || "Login failed";
+      }
+    } catch (error) {
+      errorMsg.textContent = "Error connecting to server.";
+    }
+  }
+  function goWithoutLogin() {
+  // clear any existing login credentials
+  localStorage.removeItem("loggedInEmail");
+  localStorage.removeItem("loggedInUserName");
+  // set guest mode flag
+  localStorage.setItem("isGuest", "true");
+  // let dashboard know we just entered as guest (for welcome message)
+  try { sessionStorage.setItem("justGuest", "true"); } catch(e) {}
+  alert("You are now in guest mode. Some features will require login.");
+  window.location.href = "main.html";
+}
+
+</script>
+    
+</body>
+</html>

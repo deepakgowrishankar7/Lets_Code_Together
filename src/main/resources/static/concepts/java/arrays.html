@@ -1,0 +1,148 @@
+
+<h1>Java Arrays</h1>
+
+<div class="section">
+  <p>An <strong>array</strong> in Java is a container object that holds a fixed number of values of a single type. It's used when you want to store multiple values in one variable instead of declaring separate variables for each value.</p>
+</div>
+
+<ul>
+  <li><strong>Definition:</strong> An array is a fixed-length, indexed collection of elements of the same data type.</li>
+
+  <li><strong>Why Arrays?</strong> Efficient to group related data together and process them using loops.</li>
+
+  <li><strong>Syntax:</strong> <code>datatype[] arrayName;</code> or <code>datatype arrayName[];</code></li>
+
+  <li><strong>Declaration + Initialization (Static):</strong> 
+    <code>int[] marks = {85, 90, 78};</code>
+  </li>
+
+  <li><strong>Declaration + Initialization (Dynamic):</strong>
+    <code>int[] marks = new int[3];</code> → creates an array with default values
+  </li>
+
+  <li><strong>Access Elements:</strong> <code>marks[0]</code>, <code>marks[1]</code>...</li>
+
+  <li><strong>Update Elements:</strong> <code>marks[2] = 100;</code></li>
+
+  <li><strong>Array Length:</strong> <code>marks.length</code> gives number of elements</li>
+
+  <li><strong>Default Values:</strong> 
+    <ul>
+      <li>int, byte, short, long → 0</li>
+      <li>float, double → 0.0</li>
+      <li>boolean → false</li>
+      <li>char → '\u0000'</li>
+      <li>Object types (String, etc) → null</li>
+    </ul>
+  </li>
+
+  <li><strong>Looping through Arrays:</strong> Use <code>for</code>, <code>while</code>, or <code>for-each</code></li>
+
+  <li><strong>Enhanced For Loop:</strong> 
+    <code>for(int mark : marks) { System.out.println(mark); }</code>
+  </li>
+
+  <li><strong>Two-Dimensional Array:</strong> <code>int[][] matrix = new int[2][3];</code></li>
+
+  <li><strong>Jagged Arrays:</strong> 2D arrays with varying column sizes: <code>new int[3][];</code></li>
+
+  <li><strong>ArrayIndexOutOfBoundsException:</strong> Runtime error if accessing an invalid index</li>
+
+  <li><strong>Array Cloning:</strong> <code>int[] copy = marks.clone();</code></li>
+
+  <li><strong>Sorting Arrays:</strong> <code>Arrays.sort(marks);</code> from <code>java.util</code> package</li>
+
+  <li><strong>Printing Arrays:</strong> <code>System.out.println(Arrays.toString(marks));</code></li>
+
+  <li><strong>When to Use:</strong> Use arrays when data size is known and fixed (e.g., student marks, prices, IDs)</li>
+</ul>
+
+<!-- Example 1D Array -->
+<div class="section">
+  <h2>Example 1: One-Dimensional Array</h2>
+  <pre><code>
+import java.util.Arrays;
+
+public class ArrayExample {
+    public static void main(String[] args) {
+        int[] scores = {75, 80, 90};
+
+        System.out.println("First Score: " + scores[0]);
+        System.out.println("All Scores: " + Arrays.toString(scores));
+
+        // Loop through array
+        for (int i = 0; i < scores.length; i++) {
+            System.out.println("Score at index " + i + ": " + scores[i]);
+        }
+    }
+}
+  </code></pre>
+
+  <strong>Output:</strong>
+  <pre><code>
+First Score: 75
+All Scores: [75, 80, 90]
+Score at index 0: 75
+Score at index 1: 80
+Score at index 2: 90
+  </code></pre>
+</div>
+
+<!-- Example 2D Array -->
+<div class="section">
+  <h2>Example 2: Two-Dimensional Array</h2>
+  <pre><code>
+public class TwoDArrayExample {
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2},
+            {3, 4}
+        };
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+  </code></pre>
+
+  <strong>Output:</strong>
+  <pre><code>
+1 2
+3 4
+  </code></pre>
+</div>
+
+<!-- Common Mistake -->
+<div class="section">
+  <h2>Common Error: Index Out of Bounds</h2>
+  <pre><code>
+public class ErrorExample {
+    public static void main(String[] args) {
+        int[] arr = new int[3];
+        System.out.println(arr[3]); // Error: Index 3 is out of bounds for length 3
+    }
+}
+  </code></pre>
+</div>
+
+
+<h3>Array Operations</h3>
+<ul>
+    <li>Accessing Elements: <code>arr[index]</code></li>
+    <li>Updating Elements: <code>arr[index] = value;</code></li>
+    <li>Finding Length: <code>arr.length</code></li>
+    <li>Iterating with Loops: <code>for, for-each</code></li>
+</ul>
+
+<h3>Why Use Arrays?</h3>
+<ul>
+    <li>Efficient way to handle large amounts of data</li>
+    <li>Useful for loops and collections</li>
+    <li>Foundational structure for more complex data types</li>
+</ul>
+
+<hr>

@@ -1,0 +1,62 @@
+<h2>Python Environments, Pip & Packaging</h2>
+
+<p>
+  Isolated <strong>Virtual Environments</strong> prevent dependency conflicts across projects, while standard packaging tools like <code>pip</code> and <code>pyproject.toml</code> manage dependencies.
+</p>
+
+<hr>
+
+<h3>1. Managing Virtual Environments (`venv`)</h3>
+
+<pre><code># Step 1: Create virtual environment named 'venv'
+python -m venv venv
+
+# Step 2: Activate virtual environment
+# Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# macOS / Linux:
+source venv/bin/activate
+
+# Step 3: Deactivate when finished
+deactivate</code></pre>
+
+<hr>
+
+<h3>2. Package Management with `pip` & `requirements.txt`</h3>
+
+<pre><code># Install third-party packages
+pip install requests pandas
+
+# Save exact environment dependencies to file
+pip freeze > requirements.txt
+
+# Install dependencies from requirements file on a new machine
+pip install -r requirements.txt</code></pre>
+
+<hr>
+
+<h3>3. Modern Python Packaging (`pyproject.toml`)</h3>
+<p>
+  Modern Python projects use <code>pyproject.toml</code> as the unified build specification file (replacing legacy `setup.py`).
+</p>
+
+<pre><code>[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my_custom_package"
+version = "0.1.0"
+authors = [
+    { name="Developer Name", email="dev@example.com" },
+]
+description = "A high-performance utility library"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.28.0",
+]</code></pre>
+
+<h4>Building Wheel Packages:</h4>
+<pre><code>pip install build
+python -m build # Generates dist/my_custom_package-0.1.0-py3-none-any.whl</code></pre>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Functions in Python</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+padding:30px;
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+h1,h2,h3{
+color:#38bdf8;
+}
+
+.code{
+background:#1e293b;
+padding:15px;
+border-radius:10px;
+overflow-x:auto;
+margin:15px 0;
+}
+
+.output{
+background:#111827;
+padding:15px;
+border-left:5px solid #22c55e;
+border-radius:10px;
+margin:15px 0;
+}
+
+.note{
+background:#172554;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin:20px 0;
+}
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:10px;
+text-align:left;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Functions in Python</h1>
+
+<p>
+Functions are reusable blocks of code used to perform specific tasks.
+They help reduce code duplication and improve readability.
+</p>
+
+<hr>
+
+<h2>Why Functions?</h2>
+
+<ul>
+<li>Code Reusability</li>
+<li>Reduce Duplication</li>
+<li>Easy Maintenance</li>
+<li>Improves Readability</li>
+<li>Modular Programming</li>
+</ul>
+
+<hr>
+
+<h2>Function Syntax</h2>
+
+<div class="code">
+def function_name():
+    statement
+</div>
+
+<hr>
+
+<h2>Simple Function</h2>
+
+<div class="code">
+def greet():
+    print("Welcome to Python")
+
+greet()
+</div>
+
+<div class="output">
+Welcome to Python
+</div>
+
+<hr>
+
+<h2>Function with Parameters</h2>
+
+<div class="code">
+def greet(name):
+    print("Hello", name)
+
+greet("Deepu")
+</div>
+
+<div class="output">
+Hello Deepu
+</div>
+
+<hr>
+
+<h2>Function with Multiple Parameters</h2>
+
+<div class="code">
+def add(a,b):
+    print(a+b)
+
+add(10,20)
+</div>
+
+<div class="output">
+30
+</div>
+
+<hr>
+
+<h2>Return Statement</h2>
+
+<p>
+The return statement sends a value back to the caller.
+</p>
+
+<div class="code">
+def add(a,b):
+    return a+b
+
+result = add(10,20)
+
+print(result)
+</div>
+
+<div class="output">
+30
+</div>
+
+<hr>
+
+<h2>Difference Between print() and return</h2>
+
+<table>
+
+<tr>
+<th>print()</th>
+<th>return</th>
+</tr>
+
+<tr>
+<td>Displays output</td>
+<td>Sends value back</td>
+</tr>
+
+<tr>
+<td>Cannot reuse result</td>
+<td>Can reuse result</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Default Arguments</h2>
+
+<div class="code">
+def greet(name="Guest"):
+    print("Hello",name)
+
+greet()
+greet("Deepu")
+</div>
+
+<div class="output">
+Hello Guest
+Hello Deepu
+</div>
+
+<hr>
+
+<h2>Keyword Arguments</h2>
+
+<div class="code">
+def student(name,age):
+
+    print(name)
+    print(age)
+
+student(age=21,name="Deepu")
+</div>
+
+<div class="output">
+Deepu
+21
+</div>
+
+<hr>
+
+<h2>Variable Length Arguments (*args)</h2>
+
+<div class="code">
+def total(*numbers):
+
+    print(sum(numbers))
+
+total(10,20)
+total(10,20,30,40)
+</div>
+
+<div class="output">
+30
+100
+</div>
+
+<hr>
+
+<h2>Keyword Variable Arguments (**kwargs)</h2>
+
+<div class="code">
+def student(**details):
+
+    print(details)
+
+student(name="Deepu",age=21)
+</div>
+
+<div class="output">
+{'name':'Deepu','age':21}
+</div>
+
+<hr>
+
+<h2>Lambda Function</h2>
+
+<p>
+Lambda is an anonymous function.
+</p>
+
+<div class="code">
+square = lambda x : x*x
+
+print(square(5))
+</div>
+
+<div class="output">
+25
+</div>
+
+<hr>
+
+<h2>Recursion</h2>
+
+<p>
+A function calling itself is called recursion.
+</p>
+
+<div class="code">
+def display(n):
+
+    if n==0:
+        return
+
+    print(n)
+
+    display(n-1)
+
+display(5)
+</div>
+
+<div class="output">
+5
+4
+3
+2
+1
+</div>
+
+<hr>
+
+<h2>Factorial Using Recursion</h2>
+
+<div class="code">
+def factorial(n):
+
+    if n==1:
+        return 1
+
+    return n * factorial(n-1)
+
+print(factorial(5))
+</div>
+
+<div class="output">
+120
+</div>
+
+<hr>
+
+<h2>Program: Even or Odd Using Function</h2>
+
+<div class="code">
+def check(num):
+
+    if num%2==0:
+        return "Even"
+
+    return "Odd"
+
+print(check(10))
+</div>
+
+<div class="output">
+Even
+</div>
+
+<hr>
+
+<h2>Program: Largest Number</h2>
+
+<div class="code">
+def largest(a,b):
+
+    if a>b:
+        return a
+
+    return b
+
+print(largest(10,20))
+</div>
+
+<div class="output">
+20
+</div>
+
+<hr>
+
+<h2>Program: Area of Circle</h2>
+
+<div class="code">
+def area(radius):
+
+    return 3.14 * radius * radius
+
+print(area(5))
+</div>
+
+<div class="output">
+78.5
+</div>
+
+<hr>
+
+<h2>Scope of Variables</h2>
+
+<h3>Local Variable</h3>
+
+<div class="code">
+def test():
+
+    x = 10
+
+    print(x)
+
+test()
+</div>
+
+<div class="output">
+10
+</div>
+
+<h3>Global Variable</h3>
+
+<div class="code">
+x = 100
+
+def test():
+
+    print(x)
+
+test()
+</div>
+
+<div class="output">
+100
+</div>
+
+<hr>
+
+<h2>Real World Applications</h2>
+
+<ul>
+<li>Banking Systems</li>
+<li>Web Applications</li>
+<li>Game Development</li>
+<li>Data Science</li>
+<li>Machine Learning</li>
+<li>Automation Scripts</li>
+</ul>
+
+<hr>
+
+<h2>Interview Questions</h2>
+
+<h3>1. What is a function?</h3>
+
+<p>
+A reusable block of code that performs a specific task.
+</p>
+
+<h3>2. What is recursion?</h3>
+
+<p>
+A function calling itself.
+</p>
+
+<h3>3. Difference between parameter and argument?</h3>
+
+<p>
+Parameter → Variable in function definition.
+Argument → Value passed during function call.
+</p>
+
+<h3>4. What is lambda function?</h3>
+
+<p>
+A small anonymous function.
+</p>
+
+<h3>5. What are *args and **kwargs?</h3>
+
+<p>
+Used to accept variable number of arguments.
+</p>
+
+<hr>
+
+<h2>Common Mistakes</h2>
+
+<ul>
+<li>Forgetting return statement</li>
+<li>Incorrect indentation</li>
+<li>Infinite recursion</li>
+<li>Wrong number of arguments</li>
+<li>Confusing parameter and argument</li>
+</ul>
+
+<hr>
+
+<h2>Practice Programs</h2>
+
+<ol>
+<li>Add two numbers using function</li>
+<li>Subtract two numbers</li>
+<li>Multiply two numbers</li>
+<li>Find largest number</li>
+<li>Check even or odd</li>
+<li>Factorial using recursion</li>
+<li>Prime number using function</li>
+<li>Palindrome using function</li>
+<li>Area of Circle</li>
+<li>Simple Calculator</li>
+<li>Fibonacci using recursion</li>
+<li>Student Grade Calculator</li>
+<li>Power of Number</li>
+<li>Reverse Number</li>
+<li>Count Digits</li>
+</ol>
+
+<hr>
+
+<h2>Summary</h2>
+
+<div class="note">
+
+Functions help organize code into reusable blocks.
+
+Python supports:
+
+• Normal Functions
+
+• Functions with Parameters
+
+• Return Values
+
+• Default Arguments
+
+• *args
+
+• **kwargs
+
+• Lambda Functions
+
+• Recursion
+
+Functions are one of the most important concepts in Python programming.
+
+</div>
+
+</div>
+
+</body>
+</html>
