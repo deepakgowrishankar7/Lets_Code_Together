@@ -110,7 +110,7 @@ public class MailService {
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
-            String senderEmail = hasText(brevoFrom) ? brevoFrom : "letscodetogetheredu@gmail.com";
+            String senderEmail = hasText(brevoFrom) ? brevoFrom : "deepakgowrishankar7@gmail.com";
 
             java.util.Map<String, Object> payload = java.util.Map.of(
                 "sender", java.util.Map.of("name", "Let's Code Together", "email", senderEmail),
