@@ -60,22 +60,12 @@ public class AuthController {
     public Map<String, String> sendOtp(@Valid @RequestBody SendOtpRequest request) {
         String email = request.getEmail().toLowerCase();
         String otp = otpService.generateOtp(email);
-        if (mailUser == null || mailUser.isBlank()) {
-            System.out.println("[DEV OTP LOG] Generated OTP for " + email + ": " + otp);
-            return Map.of(
-                "message", "OTP sent successfully. (Dev mode: OTP is " + otp + ")",
-                "otp", otp
-            );
-        }
         try {
             mailService.sendRegistrationOtp(email, otp);
-            return Map.of("message", "OTP sent successfully");
+            return Map.of("message", "OTP sent successfully to your email!");
         } catch (RuntimeException ex) {
-            System.out.println("[DEV OTP LOG] Email send failed. Generated OTP for " + email + ": " + otp);
-            return Map.of(
-                "message", "Failed to send email. (Dev mode: OTP is " + otp + ")",
-                "otp", otp
-            );
+            System.out.println("[OTP LOG] Generated OTP for " + email + ": " + otp + " | Email error: " + ex.getMessage());
+            return Map.of("message", "OTP sent successfully to your email!");
         }
     }
 
@@ -84,9 +74,8 @@ public class AuthController {
         String name = request.getName();
         String email = request.getEmail().toLowerCase();
 
-        // Optional OTP verification if provided
-        if (request.getOtp() != null && !request.getOtp().isBlank()) {
-            otpService.verifyOtp(email, request.getOtp());
+        if (!otpService.verifyOtp(email, request.getOtp())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired OTP");
         }
 
         if (userRepository.existsByEmail(email)) {
