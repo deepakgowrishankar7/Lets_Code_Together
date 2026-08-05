@@ -533,10 +533,11 @@ New Message
 
         <!-- Room Link Banner -->
         <div id="room-banner" style="display:none;" class="ide-room-banner">
-            <div>
-                <strong style="color: #38bdf8;">🌐 Room Link:</strong> <span id="room-link-text" style="font-family: monospace; word-break: break-all;"></span>
+            <div class="ide-room-info">
+                <span class="ide-room-tag">🌐 LIVE ROOM ACTIVE</span>
+                <span id="room-link-text" class="ide-room-url"></span>
             </div>
-            <button class="edu-btn primary" onclick="copyRoomLink()" style="padding: 6px 14px; font-size: 0.9em;">Copy Link</button>
+            <button class="ide-room-copy-btn" onclick="copyRoomLink()">📋 Copy Link</button>
         </div>
 
         <!-- IDE Main Code Editor Area -->
@@ -571,7 +572,15 @@ New Message
             <div class="ide-terminal-body">
                 <!-- Output Panel -->
                 <div id="ide-tab-output" class="ide-tab-panel active">
-                    <pre class="compiler-output">$ // Program output will appear here after clicking Run...</pre>
+                    <div class="terminal-console-wrapper">
+                        <div class="terminal-console-header">
+                            <span class="term-dot red"></span>
+                            <span class="term-dot yellow"></span>
+                            <span class="term-dot green"></span>
+                            <span class="term-title">Console Output Window</span>
+                        </div>
+                        <pre class="compiler-output">❯ // Execution output will appear here after clicking Run...</pre>
+                    </div>
                 </div>
 
                 <!-- Stdin Input Panel -->
