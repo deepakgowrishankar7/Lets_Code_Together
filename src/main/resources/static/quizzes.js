@@ -790,53 +790,80 @@ function downloadQuizCertificate(userName, courseTitle, score, total) {
    QUIZ ANTI-CHEATING PROTECTION (DISABLE COPY, CUT, RIGHT-CLICK & SCREENSHOTS)
    ================================================================ */
 function initQuizAntiCheating() {
-    // Block Right Click (Context Menu) on Quiz area
-    document.addEventListener("contextmenu", (e) => {
-        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
-            e.preventDefault();
-            alert("⚠️ Right-click and copying are disabled during Quizzes!");
+    const quizSelector = "#quizzes, .quiz-container, .quiz-modal, .quiz-card, .quiz-question, .quiz-option, #quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz, .course-details-section";
+
+    // Instant Text Selection Clearer
+    document.addEventListener("selectionchange", () => {
+        if (window.getSelection && window.getSelection().toString().length > 0) {
+            const sel = window.getSelection();
+            if (sel.anchorNode) {
+                const node = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode;
+                if (node.closest(quizSelector)) {
+                    sel.removeAllRanges();
+                }
+            }
         }
     });
 
-    // Block Copy and Cut operations on Quiz area
-    document.addEventListener("copy", (e) => {
-        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
+    // Block selectstart
+    window.addEventListener("selectstart", (e) => {
+        if (e.target.closest(quizSelector)) {
             e.preventDefault();
+            return false;
+        }
+    }, true);
+
+    // Block Right Click (Context Menu)
+    window.addEventListener("contextmenu", (e) => {
+        if (e.target.closest(quizSelector)) {
+            e.preventDefault();
+            if (window.getSelection) window.getSelection().removeAllRanges();
+            return false;
+        }
+    }, true);
+
+    // Block Copy and Cut operations
+    window.addEventListener("copy", (e) => {
+        if (e.target.closest(quizSelector) || document.querySelector(".quiz-question")) {
+            e.preventDefault();
+            if (e.clipboardData) e.clipboardData.setData("text/plain", "");
+            if (window.getSelection) window.getSelection().removeAllRanges();
             alert("⚠️ Copying text is disabled during Quizzes!");
+            return false;
         }
-    });
+    }, true);
 
-    document.addEventListener("cut", (e) => {
-        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
+    window.addEventListener("cut", (e) => {
+        if (e.target.closest(quizSelector)) {
             e.preventDefault();
+            return false;
         }
-    });
+    }, true);
 
-    // Block Key Combos (Ctrl+C, Ctrl+U, Ctrl+S, Ctrl+P, PrintScreen) during active quiz
-    document.addEventListener("keydown", (e) => {
-        const activeQuiz = e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card") || 
-                           document.querySelector(".quiz-modal, .quiz-container");
-        if (activeQuiz) {
+    // Block Shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, Ctrl+P, PrintScreen, Win+Shift+S)
+    window.addEventListener("keydown", (e) => {
+        const isQuizActive = document.querySelector(".quiz-question, #quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+        if (isQuizActive) {
             const isCtrl = e.ctrlKey || e.metaKey;
             
-            // Block Ctrl+C (Copy), Ctrl+U (View Source), Ctrl+S (Save), Ctrl+P (Print)
-            if (isCtrl && ["c", "u", "s", "p"].includes(e.key.toLowerCase())) {
+            if (isCtrl && ["c", "u", "s", "p", "a"].includes(e.key.toLowerCase())) {
                 e.preventDefault();
-                alert("⚠️ Copying and saving are disabled during Quizzes!");
+                if (window.getSelection) window.getSelection().removeAllRanges();
+                alert("⚠️ Copying and selecting are disabled during Quizzes!");
                 return false;
             }
 
-            // Block PrintScreen key
-            if (e.key === "PrintScreen") {
+            // Block PrintScreen & Snipping Tool
+            if (e.key === "PrintScreen" || e.keyCode === 44 || (isCtrl && e.shiftKey && e.key.toLowerCase() === "s")) {
                 e.preventDefault();
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(""); // Clear clipboard
                 }
-                alert("⚠️ Screenshots are disabled during Quizzes!");
+                alert("⚠️ Screenshots and Snipping Tool are disabled during Quizzes!");
                 return false;
             }
         }
-    });
+    }, true);
 }
 
 if (document.readyState === "loading") {
