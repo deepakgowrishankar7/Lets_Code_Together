@@ -112,10 +112,14 @@ public class MailService {
 
             String senderEmail = hasText(brevoFrom) ? brevoFrom : "letscodetogetheredu@gmail.com";
 
-            String jsonBody = String.format(
-                "{\"sender\":{\"name\":\"Let's Code Together\",\"email\":\"%s\"},\"to\":[{\"email\":\"%s\"}],\"subject\":\"%s\",\"htmlContent\":\"%s\"}",
-                senderEmail, to, escapeJson(subject), escapeJson(htmlContent)
+            java.util.Map<String, Object> payload = java.util.Map.of(
+                "sender", java.util.Map.of("name", "Let's Code Together", "email", senderEmail),
+                "to", java.util.List.of(java.util.Map.of("email", to)),
+                "subject", subject,
+                "htmlContent", htmlContent
             );
+
+            String jsonBody = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(payload);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
