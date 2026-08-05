@@ -43,10 +43,10 @@ function showSection(sectionId) {
     target.classList.add("active-section");
     setActiveSidebar(sectionId);
 
-    // Show top course search bar ONLY on courses & home sections
+    // Show top course search bar ONLY on courses section
     const headerSearch = $("#header-search-courses");
     if (headerSearch) {
-        if (sectionId === 'courses' || sectionId === 'home') {
+        if (sectionId === 'courses') {
             headerSearch.style.display = "inline-block";
         } else {
             headerSearch.style.display = "none";

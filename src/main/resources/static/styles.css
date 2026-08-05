@@ -5142,3 +5142,11 @@ body.light-mode .compiler-output {
   background: #0d1117 !important;
   color: #3fb950 !important;
 }
+
+/* Quiz Anti-Cheating & Text Selection Prevention */
+#quizzes, .quiz-container, .quiz-modal, .quiz-card, .quiz-question-box {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}

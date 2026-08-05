@@ -786,4 +786,63 @@ function downloadQuizCertificate(userName, courseTitle, score, total) {
   a.click();
 }
 
+/* ================================================================
+   QUIZ ANTI-CHEATING PROTECTION (DISABLE COPY, CUT, RIGHT-CLICK & SCREENSHOTS)
+   ================================================================ */
+function initQuizAntiCheating() {
+    // Block Right Click (Context Menu) on Quiz area
+    document.addEventListener("contextmenu", (e) => {
+        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
+            e.preventDefault();
+            alert("⚠️ Right-click and copying are disabled during Quizzes!");
+        }
+    });
+
+    // Block Copy and Cut operations on Quiz area
+    document.addEventListener("copy", (e) => {
+        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
+            e.preventDefault();
+            alert("⚠️ Copying text is disabled during Quizzes!");
+        }
+    });
+
+    document.addEventListener("cut", (e) => {
+        if (e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card")) {
+            e.preventDefault();
+        }
+    });
+
+    // Block Key Combos (Ctrl+C, Ctrl+U, Ctrl+S, Ctrl+P, PrintScreen) during active quiz
+    document.addEventListener("keydown", (e) => {
+        const activeQuiz = e.target.closest("#quizzes, .quiz-container, .quiz-modal, .quiz-card") || 
+                           document.querySelector(".quiz-modal, .quiz-container");
+        if (activeQuiz) {
+            const isCtrl = e.ctrlKey || e.metaKey;
+            
+            // Block Ctrl+C (Copy), Ctrl+U (View Source), Ctrl+S (Save), Ctrl+P (Print)
+            if (isCtrl && ["c", "u", "s", "p"].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+                alert("⚠️ Copying and saving are disabled during Quizzes!");
+                return false;
+            }
+
+            // Block PrintScreen key
+            if (e.key === "PrintScreen") {
+                e.preventDefault();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(""); // Clear clipboard
+                }
+                alert("⚠️ Screenshots are disabled during Quizzes!");
+                return false;
+            }
+        }
+    });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initQuizAntiCheating);
+} else {
+    initQuizAntiCheating();
+}
+
 
