@@ -789,8 +789,15 @@ function attachCompilerButtonListener() {
             } else {
                 output.textContent = data.output || data.result || data.message || "No output returned.";
             }
+
+            if (typeof sendRoomCode === "function" && currentRoomId) {
+                sendRoomCode(output.textContent);
+            }
         } catch (err) {
             output.textContent = err.message;
+            if (typeof sendRoomCode === "function" && currentRoomId) {
+                sendRoomCode(err.message);
+            }
         } finally {
             runBtn.textContent = "Run";
             runBtn.disabled = false;
@@ -2002,12 +2009,17 @@ function startRoomSync(roomId) {
     fetchRoomCode();
 }
 
-function sendRoomCode() {
+let currentRoomOutput = "";
+
+function sendRoomCode(outputOverride) {
     if (!currentRoomId) return;
     const editor = $(".compiler-editor");
     const langSelect = $("#compiler-language");
     const code = editor ? editor.value : "";
     const lang = langSelect ? langSelect.value : "python";
+    if (typeof outputOverride === "string") {
+        currentRoomOutput = outputOverride;
+    }
 
     fetch("/api/room/sync", {
         method: "POST",
@@ -2016,6 +2028,7 @@ function sendRoomCode() {
             roomId: currentRoomId,
             code: code,
             language: lang,
+            output: currentRoomOutput,
             senderId: currentClientSessionId
         })
     }).catch(() => {});
@@ -2026,19 +2039,27 @@ function fetchRoomCode() {
     fetch(`/api/room/sync?roomId=${encodeURIComponent(currentRoomId)}`)
         .then(r => r.json())
         .then(data => {
-            if (data && data.status !== "empty" && data.senderId !== currentClientSessionId) {
+            if (data && data.status !== "empty") {
                 const editor = $(".compiler-editor");
                 const langSelect = $("#compiler-language");
-                if (editor && typeof data.code === "string" && editor.value !== data.code) {
-                    const start = editor.selectionStart;
-                    const end = editor.selectionEnd;
-                    editor.value = data.code;
-                    if (document.activeElement === editor) {
-                        editor.setSelectionRange(start, end);
+                const outputEl = $(".compiler-output");
+
+                if (data.senderId !== currentClientSessionId) {
+                    if (editor && typeof data.code === "string" && editor.value !== data.code) {
+                        const start = editor.selectionStart;
+                        const end = editor.selectionEnd;
+                        editor.value = data.code;
+                        if (document.activeElement === editor) {
+                            editor.setSelectionRange(start, end);
+                        }
+                    }
+                    if (langSelect && data.language && langSelect.value !== data.language) {
+                        langSelect.value = data.language;
                     }
                 }
-                if (langSelect && data.language && langSelect.value !== data.language) {
-                    langSelect.value = data.language;
+
+                if (outputEl && typeof data.output === "string" && data.output.trim().length > 0 && outputEl.textContent !== data.output) {
+                    outputEl.textContent = data.output;
                 }
             }
         })
