@@ -6002,5 +6002,51 @@ body.light-mode .compiler-output {
       content: "🗑️" !important;
       font-size: 0.95rem !important;
     }
+
+    /* 7. Fullscreen Course Concepts Container Spacing Overrides to Stretch to Edge */
+    #java-content-concepts:fullscreen,
+    #python-content-concepts:fullscreen,
+    #sql-content-concepts:fullscreen,
+    #java-content-concepts:-webkit-full-screen,
+    #python-content-concepts:-webkit-full-screen,
+    #sql-content-concepts:-webkit-full-screen {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      padding: 16px 10px !important; /* Minimal margins for text */
+      margin: 0 !important;
+      box-sizing: border-box !important;
+      background: #0b1020 !important;
+      overflow-y: auto !important; /* Scrollable viewport */
+    }
+    
+    body.light-mode #java-content-concepts:fullscreen,
+    body.light-mode #python-content-concepts:fullscreen,
+    body.light-mode #sql-content-concepts:fullscreen,
+    body.light-mode #java-content-concepts:-webkit-full-screen,
+    body.light-mode #python-content-concepts:-webkit-full-screen,
+    body.light-mode #sql-content-concepts:-webkit-full-screen {
+      background: #ffffff !important;
+    }
+
+    /* 8. Ensure code pre blocks scroll horizontally and don't clip on mobile */
+    pre, .course-main-content pre {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      white-space: pre !important; /* Prevent text wrapping */
+      word-break: normal !important;
+      word-wrap: normal !important;
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    pre code, .course-main-content pre code {
+      white-space: pre !important;
+      word-break: normal !important;
+      word-wrap: normal !important;
+      display: inline-block !important;
+    }
   }
 }
