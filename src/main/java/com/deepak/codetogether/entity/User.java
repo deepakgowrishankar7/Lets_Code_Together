@@ -17,6 +17,9 @@ public class User {
 
     private String name;
 
+    @Column(name = "username", unique = true)
+    private String username;
+
     @Column(unique = true)
     private String email;
 
@@ -45,6 +48,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

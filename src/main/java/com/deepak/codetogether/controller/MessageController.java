@@ -179,11 +179,16 @@ public class MessageController {
     }
 
     @GetMapping("/users")
-    public List<String> getUsers() {
+    public List<Map<String, String>> getUsers() {
         return userRepository.findAll().stream()
-                .filter(u -> u != null)
-                .map(u -> u.getName())
-                .filter(name -> name != null)
+                .filter(u -> u != null && u.getName() != null)
+                .map(u -> {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("name", u.getName());
+                    map.put("username", u.getUsername() != null ? u.getUsername() : u.getName().toLowerCase().replaceAll("\\s+", ""));
+                    map.put("email", u.getEmail());
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
 

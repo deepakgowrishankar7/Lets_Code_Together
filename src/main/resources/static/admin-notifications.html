@@ -1634,7 +1634,8 @@ function downloadBlob(content, fileName, mimeType) {
 /* LOGOUT */
 function adminLogout(){
   localStorage.removeItem("adminSession");
-  location.href="admin.html";
+  localStorage.removeItem("jwtToken");
+  location.href="index.html";
 }
 
 /* THEME */

@@ -59,11 +59,26 @@ function showSection(sectionId) {
     if (sectionId === 'dashboard') {
         populateDashboard();
     }
+    if (sectionId === 'java-course') {
+        showJavaContent('intro');
+    }
+    if (sectionId === 'python-course') {
+        showPythonContent('intro');
+    }
+    if (sectionId === 'sql-course') {
+        showSqlContent('intro');
+    }
 }
 
 function setActiveSidebar(sectionId) {
     $$(".sidebar .nav-link").forEach(link => link.classList.remove("active"));
-    const active = document.querySelector(`.sidebar .nav-link[data-section="${sectionId}"]`);
+
+    let parentNavSection = sectionId;
+    if (sectionId.includes('-course') || sectionId.includes('course-') || sectionId.includes('video-player')) {
+        parentNavSection = 'courses';
+    }
+
+    const active = document.querySelector(`.sidebar .nav-link[data-section="${parentNavSection}"]`);
     if (active) active.classList.add("active");
 }
 
@@ -725,7 +740,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Default Section / Room Link Check */
     if (!checkRoomInUrl()) {
-        showSection("home");
+        openProtectedSection("dashboard");
     }
     localStorage.removeItem('isLoggedIn');
 });
@@ -1102,10 +1117,11 @@ function initAnimatedVideos() {
 /* =====================================================
    DYNAMIC CODING STREAK ENGINE
 ===================================================== */
-function updateCodingStreak() {
+function updateCodingStreak(recordActivity = false) {
     try {
         const username = localStorage.getItem("loggedInUserName") || state.username || "guest";
-        const todayStr = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         
         const lastDateKey = `streak_last_date_${username}`;
         const countKey = `streak_count_${username}`;
@@ -1118,18 +1134,21 @@ function updateCodingStreak() {
             localStorage.setItem(lastDateKey, todayStr);
             localStorage.setItem(countKey, "1");
         } else if (lastDate !== todayStr) {
-            const last = new Date(lastDate);
-            const today = new Date(todayStr);
-            const diffTime = Math.abs(today - last);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const pL = lastDate.split('-').map(Number);
+            const pT = todayStr.split('-').map(Number);
+            const dLast = new Date(pL[0], pL[1] - 1, pL[2]);
+            const dToday = new Date(pT[0], pT[1] - 1, pT[2]);
+            const diffDays = Math.round((dToday - dLast) / (1000 * 60 * 60 * 24));
 
             if (diffDays === 1) {
                 currentCount += 1;
+                localStorage.setItem(lastDateKey, todayStr);
+                localStorage.setItem(countKey, currentCount.toString());
             } else if (diffDays > 1) {
                 currentCount = 1;
+                localStorage.setItem(lastDateKey, todayStr);
+                localStorage.setItem(countKey, "1");
             }
-            localStorage.setItem(lastDateKey, todayStr);
-            localStorage.setItem(countKey, currentCount.toString());
         }
 
         const streakEl = document.getElementById("dash-streak-count");
@@ -1151,6 +1170,283 @@ function updateCodingStreak() {
  */
 let _lastLeaderboardHash = null;
 let _lastPersonalScoreHash = null;
+let _activeQuizLangFilter = 'All';
+let _cachedPersonalScores = [];
+
+let _activeLeaderboardLangFilter = 'Java';
+let _cachedLeaderboardScores = [];
+
+function setQuizLangFilter(lang) {
+    _activeQuizLangFilter = lang;
+    renderFilteredQuizScores();
+}
+
+function renderFilteredQuizScores() {
+    const topUsersContainer = document.getElementById("topUsersTable");
+    const filterBar = document.getElementById("quiz-lang-filter-bar");
+    if (!topUsersContainer) return;
+
+    if (!_cachedPersonalScores || !_cachedPersonalScores.length) {
+        topUsersContainer.innerHTML = `<div class="dash-empty-state">No quiz scores recorded yet. Take a quiz to see your history!</div>`;
+        if (filterBar) filterBar.innerHTML = "";
+        return;
+    }
+
+    // 1. Detect attempted languages
+    const attemptedLangs = [];
+    _cachedPersonalScores.forEach(r => {
+        const q = (r.quiz || '').toLowerCase();
+        let langName = 'Other';
+        if (q.includes('java')) langName = 'Java';
+        else if (q.includes('python')) langName = 'Python';
+        else if (q.includes('sql')) langName = 'SQL';
+
+        if (!attemptedLangs.includes(langName)) {
+            attemptedLangs.push(langName);
+        }
+    });
+
+    // Default active filter to user's first attempted language if set to All initially
+    if (_activeQuizLangFilter === 'All' && attemptedLangs.length > 0) {
+        _activeQuizLangFilter = attemptedLangs[0];
+    }
+
+    const allFilterOptions = ['All', ...attemptedLangs.filter(l => l !== 'All')];
+
+    // Render Filter Pills
+    if (filterBar) {
+        filterBar.innerHTML = allFilterOptions.map(l => {
+            const isActive = l === _activeQuizLangFilter;
+            const icon = l === 'Java' ? '☕' : (l === 'Python' ? '🐍' : (l === 'SQL' ? '🛢️' : (l === 'All' ? '📊' : '💻')));
+            const qCount = l === 'Java' ? ' (20 Qs)' : (l === 'Python' ? ' (10 Qs)' : (l === 'SQL' ? ' (10 Qs)' : ''));
+            return `
+                <button type="button" 
+                        class="lang-filter-pill ${isActive ? 'active' : ''}" 
+                        style="padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid ${isActive ? 'var(--jade)' : 'rgba(255,255,255,0.15)'}; background: ${isActive ? 'rgba(0,208,132,0.2)' : 'rgba(255,255,255,0.05)'}; color: ${isActive ? 'var(--jade)' : '#94a3b8'}; transition: all 0.2s ease;"
+                        onclick="setQuizLangFilter('${l}')">
+                    ${icon} ${l}${qCount}
+                </button>
+            `;
+        }).join("");
+    }
+
+    // Filter scores
+    const filtered = _cachedPersonalScores.filter(r => {
+        if (_activeQuizLangFilter === 'All') return true;
+        const q = (r.quiz || '').toLowerCase();
+        if (_activeQuizLangFilter === 'Java') return q.includes('java');
+        if (_activeQuizLangFilter === 'Python') return q.includes('python');
+        if (_activeQuizLangFilter === 'SQL') return q.includes('sql');
+        if (_activeQuizLangFilter === 'Other') return !q.includes('java') && !q.includes('python') && !q.includes('sql');
+        return true;
+    });
+
+    if (!filtered.length) {
+        topUsersContainer.innerHTML = `<div class="dash-empty-state">No ${_activeQuizLangFilter} quiz scores recorded yet.</div>`;
+        return;
+    }
+
+    let html = `<table class="dash-table"><thead><tr><th>Course</th><th>Score</th><th>Accuracy</th></tr></thead><tbody>`;
+    filtered.forEach(r => {
+        const qLower = (r.quiz || '').toLowerCase();
+        const total = r.total || (qLower.includes('java') ? 20 : 10);
+        const score = r.score != null ? r.score : 0;
+        const pct = Math.round((score / total) * 100);
+        html += `
+            <tr>
+                <td><span class="course-pill">${escapeHtml(r.quiz || 'Quiz')}</span></td>
+                <td><strong>${score} / ${total}</strong></td>
+                <td>
+                    <div class="score-progress-bar">
+                        <div class="progress-fill" style="width: ${pct}%;"></div>
+                        <span>${pct}%</span>
+                    </div>
+                </td>
+            </tr>`;
+    });
+    html += `</tbody></table>`;
+    topUsersContainer.innerHTML = html;
+}
+
+function openPrivateChatWith(targetUserName) {
+    if (!targetUserName) return;
+    if (typeof openProtectedSection === 'function') {
+        openProtectedSection('user-communication');
+    } else if (typeof showSection === 'function') {
+        showSection('user-communication');
+    }
+    if (typeof showChat === 'function') {
+        showChat('private');
+    }
+    if (typeof selectUser === 'function') {
+        selectUser(targetUserName);
+    }
+}
+
+function setLeaderboardLangFilter(lang) {
+    _activeLeaderboardLangFilter = lang;
+    renderFilteredLeaderboard();
+}
+
+function renderFilteredLeaderboard() {
+    const scoreContainer = document.getElementById("scoreDashboardContent");
+    const filterBar = document.getElementById("leaderboard-lang-filter-bar");
+    const kpiRank = document.getElementById("kpi-campus-rank");
+    const kpiSub = document.getElementById("kpi-campus-sub");
+    if (!scoreContainer) return;
+
+    if (!_cachedLeaderboardScores || !_cachedLeaderboardScores.length) {
+        scoreContainer.innerHTML = `<div class="dash-empty-state">No campus leaderboard scores available yet.</div>`;
+        if (filterBar) filterBar.innerHTML = "";
+        if (kpiRank) kpiRank.innerHTML = `N/A <span class="stat-unit">Rank</span>`;
+        return;
+    }
+
+    // Filter bar options: Only Java, Python, SQL
+    const filterOptions = ['Java', 'Python', 'SQL'];
+    if (filterBar) {
+        filterBar.innerHTML = filterOptions.map(l => {
+            const isActive = l === _activeLeaderboardLangFilter;
+            const icon = l === 'Java' ? '☕' : (l === 'Python' ? '🐍' : '🛢️');
+            const qCount = l === 'Java' ? ' (20 Qs)' : (l === 'Python' ? ' (10 Qs)' : ' (10 Qs)');
+            return `
+                <button type="button" 
+                        class="lang-filter-pill ${isActive ? 'active' : ''}" 
+                        style="padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid ${isActive ? 'var(--jade)' : 'rgba(255,255,255,0.15)'}; background: ${isActive ? 'rgba(0,208,132,0.2)' : 'rgba(255,255,255,0.05)'}; color: ${isActive ? 'var(--jade)' : '#94a3b8'}; transition: all 0.2s ease;"
+                        onclick="setLeaderboardLangFilter('${l}')">
+                    ${icon} ${l}${qCount}
+                </button>
+            `;
+        }).join("");
+    }
+
+    // Filter raw scores by selected language
+    const rawFiltered = _cachedLeaderboardScores.filter(r => {
+        const q = (r.quiz || '').toLowerCase();
+        if (_activeLeaderboardLangFilter === 'Java') return q.includes('java');
+        if (_activeLeaderboardLangFilter === 'Python') return q.includes('python');
+        if (_activeLeaderboardLangFilter === 'SQL') return q.includes('sql');
+        return true;
+    });
+
+    // Group by user email / name to compute top score per developer
+    const userMap = new Map();
+    rawFiltered.forEach(r => {
+        const key = (r.email || r.name || 'developer').toLowerCase();
+        const score = r.score != null ? r.score : 0;
+        const name = (r.name && r.name.trim() !== '') ? r.name.trim() : (r.username ? r.username : (r.email ? r.email.split('@')[0] : 'Developer'));
+        const username = r.username || '';
+
+        if (!userMap.has(key)) {
+            userMap.set(key, { key, name, username, email: r.email, topScore: score });
+        } else {
+            const existing = userMap.get(key);
+            if (score > existing.topScore) {
+                existing.topScore = score;
+            }
+        }
+    });
+
+    // Sort full ranked list of all users descending by topScore
+    const fullLeaderboard = Array.from(userMap.values()).sort((a, b) => b.topScore - a.topScore);
+    const top10 = fullLeaderboard.slice(0, 10);
+
+    // Identify current user's email / name
+    const currentUserEmail = (state.email || localStorage.getItem("loggedInEmail") || "").toLowerCase();
+    const currentUserName = (localStorage.getItem("loggedInUserName") || state.username || "").toLowerCase();
+
+    // Find current user's index in full Leaderboard
+    let myRankIndex = fullLeaderboard.findIndex(r => {
+        if (currentUserEmail && r.email && r.email.toLowerCase() === currentUserEmail) return true;
+        if (currentUserName && r.name && r.name.toLowerCase() === currentUserName) return true;
+        if (currentUserName && r.username && r.username.toLowerCase() === currentUserName) return true;
+        return false;
+    });
+
+    // Update KPI Card
+    if (kpiRank) {
+        if (myRankIndex !== -1) {
+            kpiRank.innerHTML = `Rank #${myRankIndex + 1} <span class="stat-unit">Position</span>`;
+            if (kpiSub) kpiSub.textContent = `${_activeLeaderboardLangFilter} Leaderboard (${fullLeaderboard.length} Developers)`;
+        } else {
+            kpiRank.innerHTML = `Top 5% <span class="stat-unit">Rank</span>`;
+            if (kpiSub) kpiSub.textContent = `${_activeLeaderboardLangFilter} Global Position`;
+        }
+    }
+
+    if (!top10.length) {
+        scoreContainer.innerHTML = `<div class="dash-empty-state">No ${_activeLeaderboardLangFilter} leaderboard scores recorded yet.</div>`;
+        return;
+    }
+
+    let dashHtml = `<table class="dash-table leaderboard-table"><thead><tr><th>Rank</th><th>Developer</th><th>Top Score</th></tr></thead><tbody>`;
+    top10.forEach((r, index) => {
+        const displayName = r.name;
+        const handle = r.username ? `@${r.username}` : '';
+        const topScore = r.topScore != null ? r.topScore : 0;
+        const rankBadge = index === 0 ? '🥇 1st' : (index === 1 ? '🥈 2nd' : (index === 2 ? '🥉 3rd' : `#${index + 1}`));
+        const rankClass = index === 0 ? 'gold' : (index === 1 ? 'silver' : (index === 2 ? 'bronze' : 'normal'));
+
+        const isSelf = (currentUserEmail && r.email && r.email.toLowerCase() === currentUserEmail) ||
+                       (currentUserName && (r.name.toLowerCase() === currentUserName || r.username.toLowerCase() === currentUserName));
+
+        const clickHandler = isSelf 
+            ? `alert('🎉 That\\'s you! You are currently Rank #${index + 1} in ${_activeLeaderboardLangFilter}!')`
+            : `openPrivateChatWith('${escapeHtml(displayName)}')`;
+
+        dashHtml += `
+            <tr class="rank-row ${rankClass} ${isSelf ? 'self-row' : ''}" style="cursor:pointer; ${isSelf ? 'background:rgba(0,208,132,0.12);' : ''}" onclick="${clickHandler}" title="${isSelf ? 'That is you!' : 'Click to message ' + escapeHtml(displayName)}">
+                <td><span class="rank-tag ${rankClass}">${rankBadge}</span></td>
+                <td>
+                    <div class="rank-user" style="display:flex; align-items:center; gap:10px;">
+                        <div class="user-avatar-small">${displayName.substring(0,2).toUpperCase()}</div>
+                        <div style="display:flex; flex-direction:column; gap:2px;">
+                            <span class="user-name" style="font-weight:700; font-size:0.9rem; color:var(--text-primary, #ffffff);">${escapeHtml(displayName)}</span>
+                            ${handle ? `<span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} ${isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700; margin-left:4px;">(You)</span>` : ''}</span>` : (isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">(You)</span>` : '')}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="score-badge">${topScore} pts</span>
+                        ${!isSelf ? `<button type="button" class="dm-action-pill" style="border:none; background:rgba(0,208,132,0.15); color:var(--jade); padding:3px 8px; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="event.stopPropagation(); openPrivateChatWith('${escapeHtml(displayName)}');">💬 Chat</button>` : `<span style="font-size:0.75rem; color:var(--jade); font-weight:700;">⭐ You</span>`}
+                    </div>
+                </td>
+            </tr>`;
+    });
+
+    // If current user is outside Top 10, append sticky row at the bottom!
+    if (myRankIndex >= 10) {
+        const myRecord = fullLeaderboard[myRankIndex];
+        const displayName = myRecord.name;
+        const handle = myRecord.username ? `@${myRecord.username}` : '';
+        const topScore = myRecord.topScore != null ? myRecord.topScore : 0;
+        const myRankNum = myRankIndex + 1;
+
+        dashHtml += `
+            <tr class="rank-row self-row-sticky" style="cursor:pointer; background:rgba(0,208,132,0.18); border-top:2px dashed rgba(0,208,132,0.5);" onclick="alert('🎉 That\\'s you! You are currently Rank #${myRankNum} in ${_activeLeaderboardLangFilter}!')" title="That is you!">
+                <td><span class="rank-tag normal" style="background:var(--jade); color:#021a0d; font-weight:800;">#${myRankNum}</span></td>
+                <td>
+                    <div class="rank-user" style="display:flex; align-items:center; gap:10px;">
+                        <div class="user-avatar-small" style="background:var(--jade); color:#021a0d;">${displayName.substring(0,2).toUpperCase()}</div>
+                        <div style="display:flex; flex-direction:column; gap:2px;">
+                            <span class="user-name" style="font-weight:700; font-size:0.9rem; color:var(--text-primary, #ffffff);">${escapeHtml(displayName)}</span>
+                            <span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} <span style="background:rgba(0,208,132,0.3); color:#ffffff; padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">(You)</span></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="score-badge" style="background:rgba(0,208,132,0.25); color:var(--jade); font-weight:800;">${topScore} pts</span>
+                        <span style="font-size:0.75rem; color:var(--jade); font-weight:700;">⭐ Your Spot</span>
+                    </div>
+                </td>
+            </tr>`;
+    }
+
+    dashHtml += `</tbody></table>`;
+    scoreContainer.innerHTML = dashHtml;
+}
 
 async function populateDashboard(force = false) {
     updateCodingStreak();
@@ -1174,53 +1470,14 @@ async function populateDashboard(force = false) {
     try {
         const res = await fetch("/api/leaderboard");
         if (!res.ok) throw new Error(`Server responded ${res.status}`);
-        const leaderboard = await res.json();
+        const rawScores = await res.json();
 
         // Check if leaderboard data has changed before mutating DOM
-        const newLeaderboardHash = JSON.stringify(leaderboard);
+        const newLeaderboardHash = JSON.stringify(rawScores);
         if (force || newLeaderboardHash !== _lastLeaderboardHash) {
             _lastLeaderboardHash = newLeaderboardHash;
-
-            function formatDisplayNameRow(r) {
-                let name = '';
-                if (r.username && typeof r.username === 'string' && !r.username.includes('@')) {
-                    name = r.username;
-                }
-                if (!name || name === '') {
-                    if (r.email && typeof r.email === 'string' && r.email.includes('@')) {
-                        name = r.email.split('@')[0];
-                    }
-                }
-                if (!name || name === '') name = 'Developer';
-                return name.charAt(0).toUpperCase() + name.slice(1);
-            }
-
-            let dashHtml = "";
-            if (leaderboard.length) {
-                dashHtml += `<table class="dash-table leaderboard-table"><thead><tr><th>Rank</th><th>Developer</th><th>Top Score</th></tr></thead><tbody>`;
-                leaderboard.forEach((r, index) => {
-                    const displayName = formatDisplayNameRow(r);
-                    const topScore = r.topScore != null ? r.topScore : '0';
-                    const rankBadge = index === 0 ? '🥇 1st' : (index === 1 ? '🥈 2nd' : (index === 2 ? '🥉 3rd' : `#${index + 1}`));
-                    const rankClass = index === 0 ? 'gold' : (index === 1 ? 'silver' : (index === 2 ? 'bronze' : 'normal'));
-
-                    dashHtml += `
-                        <tr class="rank-row ${rankClass}">
-                            <td><span class="rank-tag ${rankClass}">${rankBadge}</span></td>
-                            <td>
-                                <div class="rank-user">
-                                    <div class="user-avatar-small">${displayName.substring(0,2).toUpperCase()}</div>
-                                    <span class="user-name">${escapeHtml(displayName)}</span>
-                                </div>
-                            </td>
-                            <td><span class="score-badge">${topScore} pts</span></td>
-                        </tr>`;
-                });
-                dashHtml += `</tbody></table>`;
-            }
-
-            if (!dashHtml) dashHtml = `<div class="dash-empty-state">No campus leaderboard scores available yet.</div>`;
-            scoreContainer.innerHTML = dashHtml;
+            _cachedLeaderboardScores = rawScores;
+            renderFilteredLeaderboard();
         }
 
         // Show personal scores if logged in
@@ -1237,29 +1494,8 @@ async function populateDashboard(force = false) {
                     const kpiCount = document.getElementById("kpi-quizzes-count");
                     if (kpiCount) kpiCount.innerHTML = `${personal.length || 0} <span class="stat-unit">Levels</span>`;
 
-                    if (personal.length) {
-                        let html = `<table class="dash-table"><thead><tr><th>Course</th><th>Score</th><th>Accuracy</th></tr></thead><tbody>`;
-                        personal.forEach(r => {
-                            const total = r.total || 5;
-                            const score = r.score != null ? r.score : 0;
-                            const pct = Math.round((score / total) * 100);
-                            html += `
-                                <tr>
-                                    <td><span class="course-pill">${r.quiz || 'Quiz'}</span></td>
-                                    <td><strong>${score} / ${total}</strong></td>
-                                    <td>
-                                        <div class="score-progress-bar">
-                                            <div class="progress-fill" style="width: ${pct}%;"></div>
-                                            <span>${pct}%</span>
-                                        </div>
-                                    </td>
-                                </tr>`;
-                        });
-                        html += `</tbody></table>`;
-                        topUsersContainer.innerHTML = html;
-                    } else {
-                        topUsersContainer.innerHTML = `<div class="dash-empty-state">No quiz scores recorded yet. Take a quiz to see your history!</div>`;
-                    }
+                    _cachedPersonalScores = personal;
+                    renderFilteredQuizScores();
                 }
             } catch (err) {
                 console.error('Error loading personal scores', err);
@@ -1527,33 +1763,11 @@ document.addEventListener("DOMContentLoaded", () => {
 let _lastAdminHash = null;
 
 async function loadAdminMessages(force = false) {
-    const username = localStorage.getItem("loggedInUserName");
-    if (!username) return;
-
-    const res = await fetch(`/api/get-admin-messages/${username}`);
-    const messages = await res.json();
     const container = document.getElementById("admin-messages");
-
-    if (!container) return;
-
-    const newHash = JSON.stringify(messages);
-    if (!force && newHash === _lastAdminHash) return;
-    _lastAdminHash = newHash;
-
-    if (!messages || messages.length === 0) {
+    if (container) {
         container.innerHTML = "";
         container.style.display = "none";
-        return;
     }
-
-    container.style.display = "block";
-    container.innerHTML = messages.map(m => `
-        <div class="notification-card">
-            <b>Admin:</b> ${escapeHtml(m.message || "No message")}
-            <br>
-            <small>${new Date(m.createdAt).toLocaleString()}</small>
-        </div>
-    `).join("");
 }
 
 function setChatStatus(text) {
@@ -1759,6 +1973,69 @@ function getInitials(name) {
     return name.substring(0, 2).toUpperCase();
 }
 
+const _EMOJI_LIST = [
+    '😊', '😂', '😍', '😎', '🥳', '🤔',
+    '🙌', '👍', '👎', '❤️', '🔥', '🎉',
+    '💯', '🚀', '💻', '☕', '🐍', '🛢️',
+    '⚡', '🧠', '🐞', '🤖', '🔒', '⚙️',
+    '🌐', '📦', '📄', '🏆', '🥇', '✨',
+    '🎯', '💬', '🤝', '✌️', '👊', '👌'
+];
+
+function toggleEmojiPicker(inputId, btnElement) {
+    const parentBar = btnElement.closest('.messenger-input-bar');
+    if (!parentBar) return;
+
+    parentBar.style.position = 'relative';
+
+    let picker = parentBar.querySelector('.emoji-picker-popup');
+    if (picker) {
+        picker.style.display = picker.style.display === 'none' ? 'grid' : 'none';
+        return;
+    }
+
+    document.querySelectorAll('.emoji-picker-popup').forEach(p => p.style.display = 'none');
+
+    picker = document.createElement('div');
+    picker.className = 'emoji-picker-popup';
+    picker.style.cssText = `
+        position: absolute;
+        bottom: 64px;
+        left: 16px;
+        z-index: 9999;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(0, 208, 132, 0.4);
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
+        width: 285px;
+        box-sizing: border-box;
+        overflow: hidden;
+    `;
+
+    picker.innerHTML = _EMOJI_LIST.map(e => `
+        <button type="button" 
+                style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; font-size:1.15rem; height:34px; width:100%; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-sizing:border-box; transition:all 0.15s ease;"
+                onmouseover="this.style.background='rgba(0,208,132,0.25)'; this.style.transform='scale(1.15)';"
+                onmouseout="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='scale(1)';"
+                onclick="insertEmoji('${inputId}', '${e}'); this.closest('.emoji-picker-popup').style.display='none';">
+            ${e}
+        </button>
+    `).join("");
+
+    parentBar.appendChild(picker);
+
+    document.addEventListener('click', (e) => {
+        if (!picker.contains(e.target) && e.target !== btnElement) {
+            picker.style.display = 'none';
+        }
+    });
+}
+
 function insertEmoji(inputId, emoji) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -1870,7 +2147,22 @@ async function loadUsers(force = false) {
 
     if (!list) return;
 
-    const visibleUsers = users.filter(u => u !== currentUser);
+    const visibleUsers = users.filter(u => {
+        const name = typeof u === 'object' ? u.name : u;
+        const handle = (typeof u === 'object' && u.username) ? u.username.toLowerCase() : '';
+        const email = (typeof u === 'object' && u.email) ? u.email.toLowerCase() : '';
+        const nLower = (name || '').toLowerCase();
+
+        // Hide current logged in user
+        if (name === currentUser) return false;
+
+        // Hide all admin accounts & handles from contact list
+        if (handle === 'admin' || handle === 'system_admin' || handle === 'support' || handle === 'letscodetogether') return false;
+        if (email === 'letscodetogetheredu@gmail.com' || email === 'deepakgowrishankar7@gmail.com') return false;
+        if (nLower.includes('admin') || nLower.includes('system admin') || nLower.includes('lets code together')) return false;
+
+        return true;
+    });
 
     const newHash = JSON.stringify({ selectedUser, visibleUsers, _userStatuses });
     if (!force && newHash === _lastUsersHash) return;
@@ -1882,17 +2174,19 @@ async function loadUsers(force = false) {
     }
 
     list.innerHTML = visibleUsers.map(u => {
-        const isActive = u === selectedUser;
-        const initials = getInitials(u);
-        const status = _userStatuses[u] || 'offline';
+        const name = typeof u === 'object' ? u.name : u;
+        const handle = (typeof u === 'object' && u.username) ? `@${u.username}` : '';
+        const isActive = name === selectedUser;
+        const initials = getInitials(name);
+        const status = _userStatuses[name] || 'offline';
         const statusLabel = status === 'online' ? '🟢 Online' : (status === 'away' ? '🟡 Away' : '⚪ Offline');
         const dotClass = status === 'online' ? 'online' : (status === 'away' ? 'away' : 'offline');
 
         return `
-            <div class="user-item ${isActive ? 'active' : ''}" data-username="${u}" onclick="selectUser('${u}')">
+            <div class="user-item ${isActive ? 'active' : ''}" data-username="${name}" onclick="selectUser('${name}')">
                 <div class="user-item-avatar">${initials}</div>
                 <div class="user-item-info">
-                    <div class="user-item-name">${u}</div>
+                    <div class="user-item-name">${name} ${handle ? `<span style="font-size:0.75rem; color:var(--jade); font-weight:600; margin-left:4px;">${handle}</span>` : ''}</div>
                     <div class="user-item-sub">${statusLabel}</div>
                 </div>
                 <span class="online-dot ${dotClass}" title="${statusLabel}"></span>
@@ -1941,7 +2235,7 @@ function updateSelectedUserInfo() {
     }
 
     const status = _userStatuses[selectedUser] || 'offline';
-    const statusLabel = status === 'online' ? '🟢 Active now · Direct Messages' : (status === 'away' ? '🟡 Away · Direct Messages' : '⚪ Offline · Direct Messages');
+    const statusLabel = status === 'online' ? '🟢 Active now · Private Messages' : (status === 'away' ? '🟡 Away · Private Messages' : '⚪ Offline · Private Messages');
     info.textContent = statusLabel;
 }
 

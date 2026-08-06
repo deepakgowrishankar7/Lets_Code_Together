@@ -118,19 +118,24 @@
         .form-container {
             display: none;
             position: absolute;
-            top: 20%;
-            right: 10%;
-            width: 300px;
-            height: 400px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s ease, opacity 0.5s ease;
+            top: 12%;
+            right: 8%;
+            width: 350px;
+            max-width: 90vw;
+            height: auto;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 24px 26px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
             transform: translateX(100%);
             opacity: 0;
-            z-index: 2000; /* ensure above other overlays */
+            z-index: 2000;
         }
         .form-container.show {
             display: block;
@@ -139,56 +144,123 @@
         }
         .form-container h2 {
             margin-top: 0;
-            font-size: 1.5em;
+            margin-bottom: 14px;
+            font-size: 1.4em;
+            font-weight: 800;
             color: #fff;
             text-align: center;
         }
         .form-container .input-group {
             position: relative;
-            margin: 20px 0;
+            margin: 14px 0;
         }
         .form-container input {
             width: 100%;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            font-size: 0.9em;
             outline: none;
             box-sizing: border-box;
-            background-color: black;
+            background-color: rgba(0, 0, 0, 0.35);
             color: white;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-container input:focus {
+            border-color: #00d084;
+            box-shadow: 0 0 10px rgba(0, 208, 132, 0.25);
         }
         .form-container label {
             position: absolute;
             top: 50%;
-            left: 15px;
+            left: 12px;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0 5px;
-            color: #aaa;
-            transition: 0.3s;
+            background: transparent;
+            padding: 0 4px;
+            color: #94a3b8;
+            font-size: 0.85em;
+            transition: 0.2s ease;
             pointer-events: none;
         }
         .form-container input:focus + label,
         .form-container input:not(:placeholder-shown) + label {
             top: 0;
-            left: 15px;
-            font-size: 0.8em;
-            color: #007BFF;
-        }
-        .form-container button {
-            padding: 15px;
-            background-color: #007BFF;
-            border: none;
+            left: 10px;
+            font-size: 0.7em;
+            font-weight: 700;
+            color: #00d084;
+            background: #0f172a;
             border-radius: 4px;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
+            padding: 0 4px;
         }
-        .form-container button:hover {
-            background-color: #0056b3;
+        .name-row-group {
+            display: flex;
+            gap: 10px;
+        }
+        .name-row-group .input-group {
+            flex: 1;
+            margin: 10px 0 !important;
+        }
+        .handle-at-symbol {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 800;
+            color: #00d084;
+            font-size: 0.9em;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .email-otp-input-group {
+            position: relative;
+        }
+        .form-container .otp-send-badge-btn {
+            position: absolute !important;
+            right: 6px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            width: auto !important;
+            padding: 5px 12px !important;
+            margin-top: 0 !important;
+            background: linear-gradient(135deg, #00d084, #00b894) !important;
+            color: #041a12 !important;
+            font-size: 0.72rem !important;
+            font-weight: 800 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 2px 6px rgba(0, 208, 132, 0.4) !important;
+            display: inline-block !important;
+            cursor: pointer !important;
+            z-index: 20 !important;
+            white-space: nowrap !important;
+        }
+        .form-container .otp-send-badge-btn:hover {
+            transform: translateY(-50%) scale(1.04) !important;
+            box-shadow: 0 4px 10px rgba(0, 208, 132, 0.6) !important;
+        }
+        .form-container .otp-send-badge-btn:disabled {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #94a3b8 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+        .form-container button[type="submit"] {
+            padding: 12px;
+            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            border: none;
+            border-radius: 8px;
+            color: #041a12;
+            font-size: 1.05em;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 14px;
+            width: 100%;
+            box-shadow: 0 4px 14px rgba(0, 208, 132, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-container button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 208, 132, 0.5);
         }
         .form-container button.admin-btn {
             background-color: #28a745;
@@ -364,10 +436,10 @@
     <div class="navbar">
         <img src="image/logo.jpg" id="logo" alt="Logo" draggable="false" ondragstart="return false" oncontextmenu="return false" style="pointer-events:none;">
         <div>
-            <a href="#" onclick="toggleLoginForm()">Login</a>
-            <a href="#" onclick="toggleRegisterForm()">Register</a>
-            <a href="#" onclick="goToAdminLogin()">Admin Login</a>
-            <a href="#" onclick="toggleModal()">Privacy Policy</a>
+            <a href="#" onclick="toggleLoginForm(); return false;">Login</a>
+            <a href="#" onclick="toggleRegisterForm(); return false;">Register</a>
+            <a href="#" onclick="toggleAdminLoginForm(); return false;">Admin Login</a>
+            <a href="#" onclick="toggleModal(); return false;">Privacy Policy</a>
             <a href="about.html">About</a>
             <a href="help.html">Help</a>
         </div>
@@ -396,33 +468,67 @@
             <button type="submit">Login</button>
             <div id="loginErrorMessage" class="error-message"></div>
             <a href="#" class="forgot-password" onclick="toggleForgotPasswordForm(); return false;">Forgot password?</a>
+            <div style="margin-top: 12px; font-size: 0.78rem; color: #94a3b8; text-align: center;">
+                Need Help? Contact Support: <a href="mailto:letscodetogethersupport@gmail.com" style="color: #00d084; text-decoration: underline; font-weight: 600;">letscodetogethersupport@gmail.com</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container" id="adminLoginForm">
+        <h2>Admin Login</h2>
+        <form id="admin-login-form" onsubmit="loginAdminUser(event)">
+            <div class="input-group">
+                <input type="email" name="email" id="admin-email" placeholder=" " autocomplete="username" required>
+                <label for="admin-email">Admin Email</label>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" id="admin-password" placeholder=" " autocomplete="current-password" required>
+                <label for="admin-password">Admin Password</label>
+            </div>
+            <button type="submit" class="admin-btn">Admin Login</button>
+            <div id="adminErrorMessage" class="error-message"></div>
         </form>
     </div>
   <div class="form-container" id="registerForm">
-    <h2>Register</h2>
+    <h2>Create Account</h2>
     <form id="registerFormElement">
-        <div class="input-group">
-            <input type="text" name="username" id="reg-username" placeholder=" " autocomplete="username" required>
-            <label for="reg-username">Username</label>
+        <div class="name-row-group">
+            <div class="input-group">
+                <input type="text" id="reg-firstname" placeholder=" " required>
+                <label for="reg-firstname">First Name</label>
+            </div>
+            <div class="input-group">
+                <input type="text" id="reg-lastname" placeholder=" " required>
+                <label for="reg-lastname">Surname (Last Name)</label>
+            </div>
         </div>
-        <div class="input-group" style="position: relative;">
+
+        <div class="input-group handle-input-group">
+            <span class="handle-at-symbol">@</span>
+            <input type="text" name="username" id="reg-username" placeholder=" " autocomplete="username" style="padding-left: 28px !important;" required>
+            <label for="reg-username" style="left: 28px;">Unique Handle (e.g. rahul_s)</label>
+        </div>
+
+        <div class="input-group email-otp-input-group">
             <input type="email" name="email" id="reg-email" placeholder=" " required>
-            <label for="reg-email">Email</label>
-            <a href="#" onclick="sendOTP()" style="position: absolute; right: 0; bottom: -25px; font-size: 1em; color: #007BFF; text-decoration: none; cursor: pointer;">Send OTP</a>
+            <label for="reg-email">Email Address</label>
+            <button type="button" class="otp-send-badge-btn" onclick="sendOTP(event)" id="sendOtpBtn">Send OTP</button>
         </div>
-        <div class="input-group" style="margin-top: 25px;">
+
+        <div class="input-group">
             <input type="text" name="otp" id="reg-otp" placeholder=" " required>
-            <label for="reg-otp">Enter OTP</label>
+            <label for="reg-otp">Enter 6-Digit OTP</label>
         </div>
+
         <div class="input-group">
             <input type="password" name="password" id="reg-password" placeholder=" " autocomplete="new-password" required>
             <label for="reg-password">Password</label>
         </div>
-        <button type="submit">Register</button>
+
+        <button type="submit" class="register-submit-btn">Register</button>
         <div id="registerErrorMessage" class="error-message"></div>
     </form>
 </div>
-
 
     <div class="form-container" id="forgotPasswordForm">
         <h2>Forgot Password</h2>
@@ -443,11 +549,20 @@
         </div>
     </div>
     <script>
-        async function sendOTP() {
+        async function sendOTP(event) {
+            if (event) event.preventDefault();
             const email = document.getElementById('reg-email').value.trim();
+            const btn = document.getElementById('sendOtpBtn');
+
             if (!email) {
-                alert("Please enter email before requesting OTP");
+                alert("Please enter your email address first.");
+                document.getElementById('reg-email').focus();
                 return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = "Sending...";
             }
 
             try {
@@ -459,17 +574,39 @@
 
                 const data = await response.json();
                 if (response.ok) {
-                    alert(data.message || "OTP sent successfully.");
+                    alert(data.message || "OTP sent to your email!");
+                    let countdown = 30;
+                    const timer = setInterval(() => {
+                        if (countdown <= 0) {
+                            clearInterval(timer);
+                            if (btn) {
+                                btn.disabled = false;
+                                btn.textContent = "Resend OTP";
+                            }
+                        } else {
+                            if (btn) btn.textContent = `Sent (${countdown}s)`;
+                            countdown--;
+                        }
+                    }, 1000);
                 } else {
                     alert("Failed to send OTP: " + (data.message || "Unknown error"));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.textContent = "Send OTP";
+                    }
                 }
             } catch (error) {
-                alert("Error sending OTP.");
+                alert("Error sending OTP. Please try again.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = "Send OTP";
+                }
             }
         }
         function toggleLoginForm() {
             var loginForm = document.getElementById('loginForm');
             var registerForm = document.getElementById('registerForm');
+            var adminLoginForm = document.getElementById('adminLoginForm');
             var forgotPasswordForm = document.getElementById('forgotPasswordForm');
             var content = document.getElementById('content');
             if (loginForm.classList.contains('show')) {
@@ -477,8 +614,9 @@
                 content.classList.remove('move-left');
             } else {
                 loginForm.classList.add('show');
-                registerForm.classList.remove('show');
-                forgotPasswordForm.classList.remove('show');
+                if (registerForm) registerForm.classList.remove('show');
+                if (adminLoginForm) adminLoginForm.classList.remove('show');
+                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
                 content.classList.add('move-left');
             }
         }
@@ -486,6 +624,7 @@
         function toggleRegisterForm() {
             var registerForm = document.getElementById('registerForm');
             var loginForm = document.getElementById('loginForm');
+            var adminLoginForm = document.getElementById('adminLoginForm');
             var forgotPasswordForm = document.getElementById('forgotPasswordForm');
             var content = document.getElementById('content');
             if (registerForm.classList.contains('show')) {
@@ -493,9 +632,68 @@
                 content.classList.remove('move-left');
             } else {
                 registerForm.classList.add('show');
-                loginForm.classList.remove('show');
-                forgotPasswordForm.classList.remove('show');
+                if (loginForm) loginForm.classList.remove('show');
+                if (adminLoginForm) adminLoginForm.classList.remove('show');
+                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
                 content.classList.add('move-left');
+            }
+        }
+
+        function toggleAdminLoginForm() {
+            var adminLoginForm = document.getElementById('adminLoginForm');
+            var loginForm = document.getElementById('loginForm');
+            var registerForm = document.getElementById('registerForm');
+            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            var content = document.getElementById('content');
+            if (!adminLoginForm) return;
+
+            if (adminLoginForm.classList.contains('show')) {
+                adminLoginForm.classList.remove('show');
+                content.classList.remove('move-left');
+            } else {
+                adminLoginForm.classList.add('show');
+                if (loginForm) loginForm.classList.remove('show');
+                if (registerForm) registerForm.classList.remove('show');
+                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
+                content.classList.add('move-left');
+            }
+        }
+
+        async function loginAdminUser(event) {
+            event.preventDefault();
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value.trim();
+            const errorDiv = document.getElementById('adminErrorMessage');
+
+            if (errorDiv) {
+                errorDiv.textContent = "";
+                errorDiv.classList.remove('show');
+            }
+
+            try {
+                const response = await fetch('/api/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('adminSession', 'true');
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('loggedInEmail', email);
+                    window.location.href = 'admin-notifications.html';
+                } else {
+                    if (errorDiv) {
+                        errorDiv.textContent = data.message || "Invalid Admin Credentials";
+                        errorDiv.classList.add('show');
+                    }
+                }
+            } catch (error) {
+                if (errorDiv) {
+                    errorDiv.textContent = "Error connecting to server.";
+                    errorDiv.classList.add('show');
+                }
             }
         }
 
@@ -575,7 +773,10 @@
 
             document.getElementById('registerFormElement').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const name = document.getElementById('reg-username').value.trim();
+            const firstName = document.getElementById('reg-firstname').value.trim();
+            const lastName = document.getElementById('reg-lastname').value.trim();
+            const name = (firstName + ' ' + lastName).trim();
+            const username = document.getElementById('reg-username').value.trim().replace(/^@+/g, '');
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const otp = document.getElementById('reg-otp').value.trim();
@@ -584,7 +785,7 @@
                 const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, otp })
+                    body: JSON.stringify({ name, username, email, password, otp })
                 });
 
                 const data = await response.json();
@@ -612,7 +813,7 @@
         }
 
         function goToAdminLogin() {
-            window.location.href = 'admin.html';
+            toggleAdminLoginForm();
         }
 
         const loggedInEmail = localStorage.getItem('loggedInEmail');

@@ -59,20 +59,30 @@ public class QuizController {
 
     @GetMapping("/leaderboard")
     public List<Map<String, Object>> leaderboard() {
-        Map<String, Integer> topScoresByEmail = quizScoreRepository.findAll().stream()
-                .filter(score -> score != null && score.getEmail() != null && score.getScore() != null)
-                .collect(Collectors.toMap(
-                        score -> score.getEmail().toLowerCase(),
-                        score -> score.getScore(),
-                        (existing, replacement) -> existing > replacement ? existing : replacement));
+        List<QuizScore> allScores = quizScoreRepository.findAll();
 
-        return topScoresByEmail.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder()))
-                .limit(10)
-                .map(entry -> {
+        Map<String, User> userCache = userRepository.findAll().stream()
+                .filter(u -> u.getEmail() != null)
+                .collect(Collectors.toMap(u -> u.getEmail().toLowerCase(), u -> u, (a, b) -> a));
+
+        return allScores.stream()
+                .filter(score -> score != null && score.getEmail() != null && score.getScore() != null)
+                .map(score -> {
                     Map<String, Object> item = new java.util.HashMap<>();
-                    item.put("email", entry.getKey());
-                    item.put("topScore", entry.getValue());
+                    String email = score.getEmail().toLowerCase();
+                    item.put("email", email);
+                    item.put("quiz", score.getQuiz() != null ? score.getQuiz() : "Quiz");
+                    item.put("score", score.getScore());
+                    item.put("total", score.getTotal() != null ? score.getTotal() : 10);
+
+                    User u = userCache.get(email);
+                    if (u != null) {
+                        item.put("name", u.getName() != null && !u.getName().isBlank() ? u.getName() : (u.getUsername() != null ? u.getUsername() : email));
+                        item.put("username", u.getUsername() != null ? u.getUsername() : "");
+                    } else {
+                        item.put("name", email.contains("@") ? email.split("@")[0] : email);
+                        item.put("username", "");
+                    }
                     return item;
                 })
                 .collect(Collectors.toList());

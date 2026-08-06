@@ -27,6 +27,20 @@ public class AuthService {
     private JwtService jwtService;
 
     public User register(User user) {
+        if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
+            String handle = user.getUsername().trim().toLowerCase().replaceAll("^@+", "");
+            
+            // Block reserved handles
+            if (handle.equals("admin") || handle.equals("system_admin") || handle.equals("support") || handle.equals("letscodetogether")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username handle is reserved by the system.");
+            }
+            
+            if (userRepository.existsByUsername(handle)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username handle @" + handle + " is already taken.");
+            }
+            user.setUsername(handle);
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

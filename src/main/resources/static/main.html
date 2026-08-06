@@ -55,6 +55,10 @@
             </h2>
           <nav>
   <a href="javascript:void(0)" class="nav-link active"
+     data-section="dashboard"
+     onclick="openProtectedSection('dashboard')">Dashboard</a>
+
+  <a href="javascript:void(0)" class="nav-link"
      data-section="home"
      onclick="showSection('home')">Home</a>
 
@@ -63,12 +67,8 @@
      onclick="showSection('courses')">Courses</a>
 
   <a href="javascript:void(0)" class="nav-link"
-     data-section="notifications"
-     onclick="openProtectedSection('notifications')">Notifications</a>
-
-  <a href="javascript:void(0)" class="nav-link"
-     data-section="animated-videos"
-     onclick="showSection('animated-videos')">Animated Videos</a>
+     data-section="user-communication"
+     onclick="openProtectedSection('user-communication')">User Communication</a>
 
   <a href="javascript:void(0)" class="nav-link"
      data-section="compiler"
@@ -79,12 +79,12 @@
      onclick="openProtectedSection('visualizer')">Visualizer</a>
 
   <a href="javascript:void(0)" class="nav-link"
-     data-section="user-communication"
-     onclick="openProtectedSection('user-communication')">User Communication</a>
+     data-section="animated-videos"
+     onclick="showSection('animated-videos')">Animated Videos</a>
 
   <a href="javascript:void(0)" class="nav-link"
-     data-section="dashboard"
-     onclick="openProtectedSection('dashboard')">Dashboard</a>
+     data-section="notifications"
+     onclick="openProtectedSection('notifications')">Notifications</a>
 
   <a href="javascript:void(0)" class="nav-link"
      data-section="settings"
@@ -389,8 +389,8 @@ New Message
                         <div class="stat-icon-wrapper gold">🥇</div>
                         <div class="stat-info">
                             <div class="stat-label">Campus Standing</div>
-                            <div class="stat-number">Top 5% <span class="stat-unit">Rank</span></div>
-                            <div class="stat-sub">Global Leaderboard Position</div>
+                            <div id="kpi-campus-rank" class="stat-number">Rank #1 <span class="stat-unit">Position</span></div>
+                            <div id="kpi-campus-sub" class="stat-sub">Global Leaderboard Position</div>
                         </div>
                     </div>
                 </div>
@@ -405,6 +405,7 @@ New Message
                             </div>
                             <span class="panel-badge">Personal Summary</span>
                         </div>
+                        <div id="quiz-lang-filter-bar" class="quiz-lang-filter-bar" style="margin: 10px 0 14px 0; display: flex; gap: 8px; flex-wrap: wrap;"></div>
                         <div id="topUsersTable" class="score-dashboard-container">
                             <!-- Dynamic personal scores injected here -->
                         </div>
@@ -418,6 +419,7 @@ New Message
                             </div>
                             <span class="panel-badge highlight">Top Performers</span>
                         </div>
+                        <div id="leaderboard-lang-filter-bar" class="quiz-lang-filter-bar" style="margin: 10px 0 14px 0; display: flex; gap: 8px; flex-wrap: wrap;"></div>
                         <div id="scoreDashboardContent" class="score-dashboard-container">
                             <!-- Dynamic global leaderboard injected here -->
                         </div>
@@ -686,7 +688,7 @@ New Message
                     <nav class="course-sidebar">
                         <h3>Java Tutorial</h3>
                         <ul>
-                            <li class="course-topic" onclick="showJavaContent('intro')">Introduction</li>
+                            <li class="course-topic active" onclick="showJavaContent('intro')">Introduction</li>
                             <li class="course-topic" onclick="showJavaContent('videos')">Videos</li>
                             <li class="course-topic" onclick="showJavaContent('pdfs')">PDF Notes</li>
                             <li class="course-topic" onclick="showJavaContent('concepts')">Concepts</li>
@@ -1606,7 +1608,7 @@ ORDER BY avg_sal DESC;</code></pre>
                     </div>
                     <div class="chat-toggle-buttons">
                         <button class="toggle-btn active" onclick="showChat('public')">🌐 Public Lounge</button>
-                        <button class="toggle-btn" onclick="showChat('private')">🔒 Direct Messages</button>
+                        <button class="toggle-btn" onclick="showChat('private')">🔒 Private Messages</button>
                     </div>
                 </div>
 
@@ -1631,7 +1633,7 @@ ORDER BY avg_sal DESC;</code></pre>
                     </div>
 
                     <div class="messenger-input-bar">
-                        <button class="chat-action-btn" title="Add Emoji" onclick="insertEmoji('public-chat-input', '👋')">😊</button>
+                        <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('public-chat-input', this)">😊</button>
                         <textarea id="public-chat-input" placeholder="Type a message to the community... (Press Enter to send)" rows="1"></textarea>
                         <button class="chat-send-btn" onclick="sendPublicMessage()">
                             <span>Send</span>
@@ -1662,12 +1664,12 @@ ORDER BY avg_sal DESC;</code></pre>
                                 <div class="channel-info">
                                     <div id="private-target-avatar" class="channel-avatar user-avatar-bubble">💬</div>
                                     <div>
-                                        <h3 id="private-target-name">Direct Messages</h3>
+                                        <h3 id="private-target-name">Private Messages</h3>
                                         <div id="selected-user-info" class="channel-status">Select a contact to begin messaging</div>
                                     </div>
                                 </div>
                                 <div class="channel-actions">
-                                    <button class="clear-chat-btn" onclick="clearCurrentChat('private')" title="Clear Direct Conversation">🗑️ Clear Chat</button>
+                                    <button class="clear-chat-btn" onclick="clearCurrentChat('private')" title="Clear Private Conversation">🗑️ Clear Chat</button>
                                 </div>
                             </div>
 
@@ -1675,7 +1677,7 @@ ORDER BY avg_sal DESC;</code></pre>
                             <div id="private-chat-messages" class="messenger-messages-box private-messages"></div>
 
                             <div class="messenger-input-bar">
-                                <button class="chat-action-btn" title="Add Emoji" onclick="insertEmoji('private-chat-input', '👍')">😊</button>
+                                <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('private-chat-input', this)">😊</button>
                                 <textarea id="private-chat-input" placeholder="Message selected user... (Press Enter to send)" rows="1"></textarea>
                                 <button class="chat-send-btn" onclick="sendPrivateMessage()">
                                     <span>Send</span>

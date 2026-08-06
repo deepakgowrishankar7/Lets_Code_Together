@@ -798,7 +798,7 @@ function initQuizAntiCheating() {
             const sel = window.getSelection();
             if (sel.anchorNode) {
                 const node = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode;
-                if (node.closest(quizSelector)) {
+                if (node && typeof node.closest === 'function' && node.closest(quizSelector)) {
                     sel.removeAllRanges();
                 }
             }
@@ -807,7 +807,7 @@ function initQuizAntiCheating() {
 
     // Block selectstart
     window.addEventListener("selectstart", (e) => {
-        if (e.target.closest(quizSelector)) {
+        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             return false;
         }
@@ -815,7 +815,7 @@ function initQuizAntiCheating() {
 
     // Block Right Click (Context Menu)
     window.addEventListener("contextmenu", (e) => {
-        if (e.target.closest(quizSelector)) {
+        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             if (window.getSelection) window.getSelection().removeAllRanges();
             return false;
@@ -824,7 +824,7 @@ function initQuizAntiCheating() {
 
     // Block Copy and Cut operations
     window.addEventListener("copy", (e) => {
-        if (e.target.closest(quizSelector) || document.querySelector(".quiz-question")) {
+        if (e.target && typeof e.target.closest === 'function' && (e.target.closest(quizSelector) || document.querySelector(".quiz-question"))) {
             e.preventDefault();
             if (e.clipboardData) e.clipboardData.setData("text/plain", "");
             if (window.getSelection) window.getSelection().removeAllRanges();
@@ -834,7 +834,7 @@ function initQuizAntiCheating() {
     }, true);
 
     window.addEventListener("cut", (e) => {
-        if (e.target.closest(quizSelector)) {
+        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             return false;
         }
