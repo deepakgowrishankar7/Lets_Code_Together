@@ -4,10 +4,14 @@
 @media (max-width: 600px) {
     body {
         padding: 6px !important;
+        overflow-y: auto !important;
+        height: auto !important;
     }
     .container {
         border-radius: 8px !important;
         border: none !important;
+        height: auto !important;
+        overflow: visible !important;
     }
     .top {
         flex-direction: column !important;
