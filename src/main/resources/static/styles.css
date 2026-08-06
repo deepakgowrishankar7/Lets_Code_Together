@@ -5836,4 +5836,145 @@ body.light-mode .compiler-output {
     background: rgba(0, 208, 132, 0.08) !important;
     border-left-color: var(--jade) !important;
   }
+
+  /* ==========================================
+     MOBILE-ONLY PROFESSIONAL SPACING OVERRIDES
+     ========================================== */
+  @media (max-width: 600px) {
+    /* 1. Stretch page content container to the physical edges */
+    .main-content {
+      padding-top: 76px !important; /* Fixed sticky header margin */
+      padding-left: 6px !important;
+      padding-right: 6px !important;
+    }
+
+    /* 2. Flatten course card layout boundaries */
+    .course-layout {
+      border-radius: 8px !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .course-main-content {
+      padding: 16px 8px !important; /* Re-gain huge reading canvas width */
+    }
+
+    /* 3. Reformat course tables into premium data definition cards */
+    .course-main-content table tr:has(th),
+    .course-main-content table tr:has(td > th) {
+      display: none !important; /* Hide squeezed raw table headers */
+    }
+    
+    .course-main-content table, 
+    .course-main-content table tbody, 
+    .course-main-content table tr, 
+    .course-main-content table td {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .course-main-content table tr {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 1px solid var(--border-soft) !important;
+      border-radius: 12px !important;
+      padding: 12px 14px !important;
+      margin-bottom: 12px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    body.light-mode .course-main-content table tr {
+      background: #ffffff !important;
+      border-color: rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .course-main-content table tr td {
+      padding: 6px 0 !important;
+      border: none !important;
+      font-size: 0.95rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+
+    .course-main-content table tr td:first-child {
+      font-size: 1.15rem !important;
+      font-weight: 800 !important;
+      color: var(--jade) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      padding-bottom: 8px !important;
+      margin-bottom: 8px !important;
+      width: 100% !important;
+    }
+
+    body.light-mode .course-main-content table tr td:first-child {
+      border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+    }
+
+    /* Prefix card values with bold semantic metadata */
+    .course-main-content table tr td:nth-child(2)::before {
+      content: "Size" !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: var(--text-tertiary) !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      margin-bottom: 2px !important;
+    }
+
+    .course-main-content table tr td:nth-child(3)::before {
+      content: "Default Value" !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: var(--text-tertiary) !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      margin-bottom: 2px !important;
+    }
+
+    .course-main-content table tr td:nth-child(4)::before {
+      content: "Description" !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: var(--text-tertiary) !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      margin-bottom: 2px !important;
+    }
+
+    /* 4. Flatten Visualizer & Compiler sections to the margins */
+    .compiler-section, 
+    .animated-videos-section {
+      padding: 12px 8px !important;
+      border-radius: 8px !important;
+      border: none !important;
+      box-shadow: none !important;
+      margin-bottom: var(--s4) !important;
+    }
+
+    .ide-workbench {
+      border-radius: 8px !important;
+      border: none !important;
+    }
+
+    /* 5. Make Quiz Cards and Options look clean and spacious */
+    .quiz-question {
+      padding: 16px 12px !important;
+      border-radius: 12px !important;
+    }
+
+    .quiz-question label {
+      padding: 12px 14px !important;
+      border-radius: 10px !important;
+      font-size: 0.95rem !important;
+    }
+
+    .quiz-level-buttons button {
+      flex: 1 1 calc(50% - 8px) !important; /* Stack level buttons in 2 columns */
+      text-align: center !important;
+      padding: 10px 8px !important;
+      font-size: 0.88rem !important;
+    }
+  }
 }
