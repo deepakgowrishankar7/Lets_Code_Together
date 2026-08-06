@@ -4,7 +4,7 @@
   "description": "Interactive Coding, Learning, Visualizer & Community Hub",
   "start_url": "/main.html",
   "display": "standalone",
-  "background_color": "#090d16",
+  "background_color": "#000000",
   "theme_color": "#0b1020",
   "icons": [
     {
