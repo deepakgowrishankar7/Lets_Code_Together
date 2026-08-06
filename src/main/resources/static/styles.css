@@ -5976,5 +5976,31 @@ body.light-mode .compiler-output {
       padding: 10px 8px !important;
       font-size: 0.88rem !important;
     }
+
+    /* 6. Chat messenger overrides to prevent header overflow */
+    .channel-header-bar {
+      padding: 10px 12px !important;
+      gap: 12px !important;
+    }
+    .channel-avatar {
+      width: 32px !important;
+      height: 32px !important;
+      font-size: 0.95rem !important;
+    }
+    .clear-chat-btn {
+      font-size: 0 !important; /* Hide text "Clear Chat" */
+      padding: 0 !important;
+      width: 32px !important;
+      height: 32px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 50% !important;
+      flex-shrink: 0 !important;
+    }
+    .clear-chat-btn::before {
+      content: "🗑️" !important;
+      font-size: 0.95rem !important;
+    }
   }
 }
