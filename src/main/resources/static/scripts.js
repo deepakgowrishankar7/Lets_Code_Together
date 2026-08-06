@@ -2892,4 +2892,33 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         window.addEventListener("load", hidePreloader);
     }
-})();
+})();
+
+// PWA Custom Installation Logic
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
+    if (sidebarInstallBtn) {
+        sidebarInstallBtn.style.display = "inline-flex";
+    }
+});
+
+function triggerPwaInstall() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        }
+        deferredPrompt = null;
+        const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
+        if (sidebarInstallBtn) sidebarInstallBtn.style.display = "none";
+    });
+}
+
+window.addEventListener('appinstalled', (evt) => {
+    const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
+    if (sidebarInstallBtn) sidebarInstallBtn.style.display = "none";
+});

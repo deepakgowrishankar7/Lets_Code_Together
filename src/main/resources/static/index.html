@@ -475,6 +475,9 @@
         <button class="guest-btn" onclick="goWithoutLogin()">
     Let’s Go
 </button>
+        <button id="pwa-install-welcome" class="guest-btn" style="display: none; background: linear-gradient(135deg, #00f5a0, #00d9f5); color: #000; margin-top: 15px; box-shadow: 0 4px 16px rgba(0, 245, 160, 0.4); border: none;" onclick="triggerPwaInstall()">
+            📲 Install Mobile App
+        </button>
 
         <div id="successMessage" class="success-message">Registered successfully!</div>
         <div id="forgotPasswordSuccessMessage" class="success-message">Link sent successfully!</div>
@@ -909,6 +912,34 @@
     window.location.href = "main.html";
   }
 }
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
+  if (welcomeInstallBtn) {
+    welcomeInstallBtn.style.display = "inline-block";
+  }
+});
+
+function triggerPwaInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    deferredPrompt = null;
+    const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
+    if (welcomeInstallBtn) welcomeInstallBtn.style.display = "none";
+  });
+}
+
+window.addEventListener('appinstalled', (evt) => {
+  const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
+  if (welcomeInstallBtn) welcomeInstallBtn.style.display = "none";
+});
 
 </script>
     
