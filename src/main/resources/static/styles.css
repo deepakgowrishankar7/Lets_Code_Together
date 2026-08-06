@@ -5704,4 +5704,136 @@ body.light-mode .compiler-output {
     width: 100% !important;
     text-align: center !important;
   }
+
+  /* Professional Sticky Header overrides for Mobile */
+  header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 60px !important;
+    background: rgba(11, 16, 32, 0.82) !important; /* Glassmorphism Abyss */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--border-soft) !important;
+    z-index: 1000 !important;
+    padding: 0 16px !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
+  body.light-mode header {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Center the Brand Logo on Mobile Header */
+  header::after {
+    content: "Let's Code Together" !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.92rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    color: var(--jade) !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+  }
+  
+  body.light-mode header::after {
+    color: #0f172a !important;
+  }
+
+  header input {
+    display: none !important; /* Hide courses search bar on mobile header */
+  }
+
+  .main-content {
+    padding-top: 80px !important; /* Spacing for the sticky header */
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Circular Clean Toggles in Header */
+  .hamburger-btn {
+    width: 38px !important;
+    height: 38px !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border-soft) !important;
+    border-radius: 50% !important;
+    color: var(--text-primary) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.15rem !important;
+    cursor: pointer !important;
+    margin-right: 0 !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  body.light-mode .hamburger-btn {
+    background: #f8fafc !important;
+    border-color: rgba(0,0,0,0.06) !important;
+    color: #334155 !important;
+  }
+
+  .theme-toggle-btn {
+    font-size: 0 !important; /* Hide text content */
+    width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border-soft) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  body.light-mode .theme-toggle-btn {
+    background: #f8fafc !important;
+    border-color: rgba(0,0,0,0.06) !important;
+  }
+
+  body.light-mode .theme-toggle-btn::before {
+    content: "🌙" !important;
+    font-size: 1.1rem !important;
+  }
+
+  body:not(.light-mode) .theme-toggle-btn::before {
+    content: "☀️" !important;
+    font-size: 1.1rem !important;
+  }
+
+  /* Mobile Drawer Links Active Highlight Formatting */
+  .sidebar nav .nav-link,
+  .sidebar .nav-link,
+  .nav-link {
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .sidebar nav .nav-link.active,
+  .sidebar .nav-link.active,
+  .nav-link.active {
+    background: rgba(0, 245, 160, 0.08) !important;
+    border-left: 3px solid var(--jade) !important;
+    padding-left: calc(var(--s3) - 3px) !important;
+  }
+  
+  body.light-mode .sidebar nav .nav-link.active,
+  body.light-mode .sidebar .nav-link.active,
+  body.light-mode .nav-link.active {
+    background: rgba(0, 208, 132, 0.08) !important;
+    border-left-color: var(--jade) !important;
+  }
 }

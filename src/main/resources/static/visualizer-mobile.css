@@ -56,3 +56,80 @@
         margin-top: 4px !important;
     }
 }
+
+/* Landscape or short viewport overrides to keep panels side-by-side (Professional Look) */
+@media (max-height: 520px) {
+    body {
+        padding: 4px !important;
+    }
+    .container {
+        border-radius: 0 !important;
+        border: none !important;
+        height: calc(100vh - 8px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .top {
+        flex-direction: row !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+    .code-panel {
+        flex: 1.2 !important;
+        border-right: 1px solid rgba(255,255,255,.08) !important;
+        border-bottom: none !important;
+        height: 100% !important;
+        max-height: none !important;
+        padding: 10px !important;
+    }
+    .debug-panel {
+        flex: 1 !important;
+        width: auto !important;
+        border-left: 1px solid rgba(255,255,255,.08) !important;
+        border-top: none !important;
+        height: 100% !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        overflow-y: auto !important;
+    }
+    .summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)) !important;
+        gap: 6px !important;
+    }
+    .summary-box {
+        padding: 4px 6px !important;
+    }
+    .summary-label {
+        font-size: 9px !important;
+    }
+    .summary-value {
+        font-size: 12px !important;
+    }
+    .explain-item {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+        margin-top: 6px !important;
+    }
+    .output-panel {
+        padding: 6px 12px !important;
+        min-height: auto !important;
+        height: 48px !important;
+        overflow: auto !important;
+    }
+    .controls {
+        padding: 6px 12px !important;
+        gap: 8px !important;
+    }
+    .btn, select {
+        font-size: 11px !important;
+        padding: 5px 8px !important;
+    }
+    .speed-label, .topic-label, .step-info {
+        font-size: 11px !important;
+    }
+    .project-badge {
+        display: none !important; /* Hide badge to save space */
+    }
+}
+
