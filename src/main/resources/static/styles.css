@@ -5660,4 +5660,48 @@ body.light-mode .compiler-output {
       transform-origin: center center !important;
     }
   }
+
+  /* Mobile Settings Panel Overrides to prevent Email Overflow */
+  .settings-header-banner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+    gap: 16px !important;
+  }
+  .settings-profile-info {
+    align-items: center !important;
+    width: 100% !important;
+  }
+  .settings-profile-email {
+    word-break: break-all !important;
+    text-align: center !important;
+  }
+  .settings-profile-status {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .setting-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .setting-value-pill {
+    word-break: break-all !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  /* Mobile Notification hero card Overrides */
+  .notif-hero-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 20px 16px !important;
+    gap: 16px !important;
+  }
+  .notif-dismiss-all-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
 }
