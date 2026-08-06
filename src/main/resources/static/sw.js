@@ -1,9 +1,10 @@
-const CACHE_NAME = 'codetogether-v1';
+const CACHE_NAME = 'codetogether-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/main.html',
   '/styles.css',
+  '/mobile_fixes.css',
   '/scripts.js',
   '/quizzes.js',
   '/logo.jpg',
