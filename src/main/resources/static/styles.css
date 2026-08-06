@@ -5981,11 +5981,43 @@ body.light-mode .compiler-output {
     .channel-header-bar {
       padding: 10px 12px !important;
       gap: 12px !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .channel-info {
+      min-width: 0 !important;
+      flex: 1 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+    .channel-info > div:last-child {
+      min-width: 0 !important;
+      flex: 1 !important;
+      overflow: hidden !important;
+    }
+    .channel-info h3, 
+    .channel-status {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
     }
     .channel-avatar {
       width: 32px !important;
       height: 32px !important;
       font-size: 0.95rem !important;
+      flex-shrink: 0 !important;
+    }
+    .channel-actions {
+      flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
     .clear-chat-btn {
       font-size: 0 !important; /* Hide text "Clear Chat" */
