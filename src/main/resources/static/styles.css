@@ -6049,4 +6049,101 @@ body.light-mode .compiler-output {
       display: inline-block !important;
     }
   }
+}
+
+/* =====================================================
+   PRELOADER SPLASH SCREEN (Zero impact on desktop layout)
+   ===================================================== */
+#app-preloader {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #0b1020 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s !important;
+}
+
+.preloader-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  max-width: 290px !important;
+  width: 100% !important;
+}
+
+.preloader-logo {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 24px !important;
+  box-shadow: 0 0 35px rgba(0, 245, 160, 0.25) !important;
+  margin-bottom: 26px !important;
+  animation: logo-pulse 2s infinite ease-in-out !important;
+}
+
+.preloader-title {
+  font-family: var(--font-display, 'Outfit', sans-serif) !important;
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  color: var(--jade, #00f5a0) !important;
+  letter-spacing: 0.12em !important;
+  margin-bottom: 22px !important;
+  text-shadow: 0 0 10px rgba(0, 245, 160, 0.3) !important;
+}
+
+.preloader-spinner-bar {
+  width: 150px !important;
+  height: 3px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+  margin-bottom: 18px !important;
+}
+
+.preloader-progress {
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, var(--jade, #00f5a0), transparent) !important;
+  animation: preloader-loading 1.6s infinite linear !important;
+}
+
+.preloader-status {
+  font-family: var(--font-body, sans-serif) !important;
+  font-size: 0.82rem !important;
+  color: var(--text-tertiary, #94a3b8) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  animation: text-pulse 1.6s infinite ease-in-out !important;
+}
+
+#app-preloader.fade-out {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Preloader Animations */
+@keyframes logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(0, 245, 160, 0.15);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 35px rgba(0, 245, 160, 0.35);
+  }
+}
+
+@keyframes preloader-loading {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes text-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }

@@ -5,32 +5,11 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
 /* =====================================================
-   PREVENT BACK NAVIGATION (LOGIN SAFE)
+   APP SECTION HISTORY & NAVIGATION (System Gesture compatible)
 ===================================================== */
-history.pushState(null, null, location.href);
-window.onpopstate = () => history.pushState(null, null, location.href);
+const sectionHistory = ["dashboard"];
 
-/* =====================================================
-   GLOBAL STATE
-===================================================== */
-const state = {
-    email: localStorage.getItem("loggedInEmail"),
-    username: localStorage.getItem("loggedInUserName"),
-    isGuest: !localStorage.getItem("loggedInEmail")
-};
-
-// Notification polling handle (poll only while notifications section is open)
-let _notificationPollId = null;
-// Global notification poll (for logged-in users to receive new notifications without reload)
-let _globalNotificationPollId = null;
-// Server-Sent Events source
-let _sseSource = null;
-
-
-/* =====================================================
-   SECTION NAVIGATION
-===================================================== */
-function showSection(sectionId) {
+function showSectionDirect(sectionId) {
     $$("main > section").forEach(sec => {
         sec.style.display = "none";
         sec.classList.remove("active-section");
@@ -69,6 +48,87 @@ function showSection(sectionId) {
         showSqlContent('intro');
     }
 }
+
+function showSection(sectionId) {
+    showSectionDirect(sectionId);
+
+    const lastSection = sectionHistory[sectionHistory.length - 1];
+    if (lastSection !== sectionId) {
+        sectionHistory.push(sectionId);
+        history.pushState({ section: sectionId }, "", "");
+    }
+}
+
+function goBackSection() {
+    if (sectionHistory.length <= 1) return;
+    sectionHistory.pop(); // Pop current section
+    const prevSection = sectionHistory[sectionHistory.length - 1];
+    if (prevSection) {
+        openProtectedSectionDirect(prevSection);
+    }
+}
+
+function openProtectedSectionDirect(sectionId) {
+    const protectedSections = [
+        "compiler",
+        "visualizer",
+        "notifications",
+        "user-communication",
+        "dashboard"
+    ];
+
+    if (state.isGuest && protectedSections.includes(sectionId)) {
+        showGuestMessage();
+        return;
+    }
+    showSectionDirect(sectionId);
+
+    if (sectionId === 'user-communication') {
+        showChat('public');
+    }
+    if (sectionId === 'dashboard') {
+        populateDashboard();
+    }
+    if (sectionId === 'settings') {
+        populateSettings();
+    }
+}
+
+// Browser back button / swipe back gesture interception
+history.pushState({ section: "dashboard" }, "", "");
+window.onpopstate = (event) => {
+    if (sectionHistory.length > 1) {
+        sectionHistory.pop(); // Pop current section
+        const prevSection = sectionHistory[sectionHistory.length - 1];
+        if (prevSection) {
+            openProtectedSectionDirect(prevSection);
+        }
+    } else {
+        // Prevent leaving main app / dashboard
+        history.pushState({ section: "dashboard" }, "", "");
+    }
+};
+
+/* =====================================================
+   GLOBAL STATE
+===================================================== */
+const state = {
+    email: localStorage.getItem("loggedInEmail"),
+    username: localStorage.getItem("loggedInUserName"),
+    isGuest: !localStorage.getItem("loggedInEmail")
+};
+
+// Notification polling handle (poll only while notifications section is open)
+let _notificationPollId = null;
+// Global notification poll (for logged-in users to receive new notifications without reload)
+let _globalNotificationPollId = null;
+// Server-Sent Events source
+let _sseSource = null;
+
+
+/* =====================================================
+   SECTION NAVIGATION
+===================================================== */
 
 function setActiveSidebar(sectionId) {
     $$(".sidebar .nav-link").forEach(link => link.classList.remove("active"));
@@ -2761,7 +2821,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Swipe gestures to open/close mobile sidebar drawer (Udemy Native App style)
+    // Swipe gestures to open/close mobile sidebar drawer & navigate back (Udemy & Android Native style)
     let touchStartX = 0;
     let touchStartY = 0;
     
@@ -2783,14 +2843,30 @@ document.addEventListener("DOMContentLoaded", () => {
         // Swipe distance threshold of 50px
         if (Math.abs(deltaX) < 50) return;
         
+        const screenWidth = window.innerWidth;
         const isOpen = sidebar && sidebar.classList.contains('open');
         
-        if (deltaX < 0 && isOpen) {
-            // Swipe right-to-left: Close sidebar drawer
-            closeMobileSidebar();
-        } else if (deltaX > 0 && !isOpen && touchStartX < 40) {
-            // Swipe left-to-right near left edge: Open sidebar drawer
-            openMobileSidebar();
+        if (window.innerWidth <= 900) {
+            if (deltaX < 0) {
+                // Swipe right-to-left (⬅)
+                if (isOpen) {
+                    closeMobileSidebar();
+                } else if (touchStartX > screenWidth - 60) {
+                    // Right edge inward swipe: Go back
+                    goBackSection();
+                }
+            } else if (deltaX > 0) {
+                // Swipe left-to-right (➔)
+                if (!isOpen) {
+                    if (touchStartX < 45) {
+                        // Left edge swipe: Open menu drawer
+                        openMobileSidebar();
+                    } else if (touchStartX >= 45 && touchStartX < 90) {
+                        // Inward left edge swipe: Go back
+                        goBackSection();
+                    }
+                }
+            }
         }
     }, { passive: true });
 
@@ -2800,4 +2876,20 @@ document.addEventListener("DOMContentLoaded", () => {
             populateSettings();
         } catch(e) {}
     }, 200);
-});
+});
+
+// Hide App Preloader once everything is completely loaded
+(() => {
+    const hidePreloader = () => {
+        const preloader = document.getElementById("app-preloader");
+        if (preloader && !preloader.classList.contains("fade-out")) {
+            preloader.classList.add("fade-out");
+            setTimeout(() => preloader.remove(), 600);
+        }
+    };
+    if (document.readyState === "complete") {
+        hidePreloader();
+    } else {
+        window.addEventListener("load", hidePreloader);
+    }
+})();
