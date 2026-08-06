@@ -301,7 +301,7 @@ li     { margin-bottom: var(--s1); }
 
 .sidebar h2 img {
   width: 34px; height: 34px;
-  border-radius: 50%;
+  border-radius: 8px;
   border: 1.5px solid var(--border-medium);
   object-fit: cover;
 }
@@ -6112,7 +6112,7 @@ body.light-mode .compiler-output {
 .preloader-logo {
   width: 96px !important;
   height: 96px !important;
-  border-radius: 50% !important;
+  border-radius: 24px !important;
   object-fit: cover !important;
   box-shadow: 0 0 35px rgba(0, 245, 160, 0.25) !important;
   margin-bottom: 26px !important;

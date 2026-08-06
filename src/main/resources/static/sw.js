@@ -1,4 +1,4 @@
-const CACHE_NAME = 'codetogether-v4';
+const CACHE_NAME = 'codetogether-v5';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
