@@ -158,12 +158,18 @@ function populateSettings() {
     const avatarEl = document.getElementById("settings-avatar-bubble");
     const nameVal = document.getElementById("settings-username-val");
     const emailVal = document.getElementById("settings-email-val");
+    
+    const mobileAvatar = document.getElementById("sidebar-avatar-mobile");
+    const mobileUsername = document.getElementById("sidebar-username-mobile");
 
     if (nameEl) nameEl.textContent = username;
     if (emailEl) emailEl.textContent = email;
     if (avatarEl) avatarEl.textContent = initials;
     if (nameVal) nameVal.textContent = username;
     if (emailVal) emailVal.textContent = email;
+    
+    if (mobileAvatar) mobileAvatar.textContent = initials;
+    if (mobileUsername) mobileUsername.textContent = "Hi, " + username;
 }
 
 function showProLearnerInfo() {
@@ -1019,12 +1025,34 @@ function initAnimatedVideos() {
 
     let activeLanguage = 'java';
 
+    function injectIframeMobileStyles(iframeElement) {
+        if (!iframeElement) return;
+        try {
+            const doc = iframeElement.contentDocument || iframeElement.contentWindow.document;
+            if (!doc) return;
+            if (doc.getElementById('mobile-injected-styles')) return;
+
+            const link = doc.createElement('link');
+            link.id = 'mobile-injected-styles';
+            link.rel = 'stylesheet';
+            link.href = window.location.origin + '/visualizer-mobile.css';
+            doc.head.appendChild(link);
+        } catch (e) {
+            console.warn("[IFRAME STYLE] Could not inject mobile styles: ", e);
+        }
+    }
+
     function openModal(video) {
         if (!modal || !modalIframe) return;
         const videoSrc = `${window.location.origin}/${video.src.split('/').map(encodeURIComponent).join('/')}`;
         modalTitle.textContent = video.title;
         modalBadge.textContent = video.language.toUpperCase();
         modalIframe.src = videoSrc;
+        
+        modalIframe.onload = () => {
+            injectIframeMobileStyles(modalIframe);
+        };
+        
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
@@ -1051,13 +1079,40 @@ function initAnimatedVideos() {
 
     if (modalFsBtn) {
         modalFsBtn.onclick = () => {
-            if (modalIframe.requestFullscreen) {
-                modalIframe.requestFullscreen();
-            } else if (modalIframe.webkitRequestFullscreen) {
-                modalIframe.webkitRequestFullscreen();
+            const container = document.querySelector('.animation-modal-container');
+            if (!container) return;
+
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            }
+
+            // Lock screen orientation to landscape if API is supported
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock("landscape").catch(err => {
+                        console.log("Screen orientation lock failed: ", err);
+                    });
+                }
+            } catch (e) {
+                console.warn("Screen orientation not supported: ", e);
             }
         };
     }
+
+    // Automatically unlock screen orientation when exiting fullscreen
+    const resetOrientation = () => {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            try {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            } catch(e) {}
+        }
+    };
+    document.addEventListener('fullscreenchange', resetOrientation);
+    document.addEventListener('webkitfullscreenchange', resetOrientation);
 
     function renderVideoCards(filteredVideos) {
         grid.innerHTML = '';
@@ -1302,30 +1357,42 @@ function renderFilteredLeaderboard() {
         return;
     }
 
-    // Filter bar options: Only Java, Python, SQL
-    const filterOptions = ['Java', 'Python', 'SQL'];
+    // Filter bar options: Java Beginner, Java Intermediate, Java Advanced, Python, SQL
+    const filterOptions = [
+        { label: 'Java Beginner', icon: '☕', count: '(20 Qs)', key: 'java beginner' },
+        { label: 'Java Intermediate', icon: '☕', count: '(20 Qs)', key: 'java intermediate' },
+        { label: 'Java Advanced', icon: '☕', count: '(20 Qs)', key: 'java advanced' },
+        { label: 'Python', icon: '🐍', count: '(10 Qs)', key: 'python' },
+        { label: 'SQL', icon: '🛢️', count: '(10 Qs)', key: 'sql' }
+    ];
+
+    if (!_activeLeaderboardLangFilter || !_activeLeaderboardLangFilter.includes('Java') && !_activeLeaderboardLangFilter.includes('Python') && !_activeLeaderboardLangFilter.includes('SQL')) {
+        _activeLeaderboardLangFilter = 'Java Beginner';
+    }
+
     if (filterBar) {
-        filterBar.innerHTML = filterOptions.map(l => {
-            const isActive = l === _activeLeaderboardLangFilter;
-            const icon = l === 'Java' ? '☕' : (l === 'Python' ? '🐍' : '🛢️');
-            const qCount = l === 'Java' ? ' (20 Qs)' : (l === 'Python' ? ' (10 Qs)' : ' (10 Qs)');
+        filterBar.innerHTML = filterOptions.map(opt => {
+            const isActive = opt.label === _activeLeaderboardLangFilter;
             return `
                 <button type="button" 
                         class="lang-filter-pill ${isActive ? 'active' : ''}" 
                         style="padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid ${isActive ? 'var(--jade)' : 'rgba(255,255,255,0.15)'}; background: ${isActive ? 'rgba(0,208,132,0.2)' : 'rgba(255,255,255,0.05)'}; color: ${isActive ? 'var(--jade)' : '#94a3b8'}; transition: all 0.2s ease;"
-                        onclick="setLeaderboardLangFilter('${l}')">
-                    ${icon} ${l}${qCount}
+                        onclick="setLeaderboardLangFilter('${opt.label}')">
+                    ${opt.icon} ${opt.label} ${opt.count}
                 </button>
             `;
         }).join("");
     }
 
-    // Filter raw scores by selected language
+    // Filter raw scores by selected level
+    const targetOpt = filterOptions.find(o => o.label === _activeLeaderboardLangFilter) || filterOptions[0];
     const rawFiltered = _cachedLeaderboardScores.filter(r => {
         const q = (r.quiz || '').toLowerCase();
-        if (_activeLeaderboardLangFilter === 'Java') return q.includes('java');
-        if (_activeLeaderboardLangFilter === 'Python') return q.includes('python');
-        if (_activeLeaderboardLangFilter === 'SQL') return q.includes('sql');
+        if (targetOpt.key === 'java beginner') return q.includes('java') && (q.includes('beginner') || !q.includes('intermediate') && !q.includes('advanced'));
+        if (targetOpt.key === 'java intermediate') return q.includes('java') && q.includes('intermediate');
+        if (targetOpt.key === 'java advanced') return q.includes('java') && q.includes('advanced');
+        if (targetOpt.key === 'python') return q.includes('python');
+        if (targetOpt.key === 'sql') return q.includes('sql');
         return true;
     });
 
@@ -1335,7 +1402,7 @@ function renderFilteredLeaderboard() {
         const key = (r.email || r.name || 'developer').toLowerCase();
         const score = r.score != null ? r.score : 0;
         const name = (r.name && r.name.trim() !== '') ? r.name.trim() : (r.username ? r.username : (r.email ? r.email.split('@')[0] : 'Developer'));
-        const username = r.username || '';
+        const username = r.username || name.toLowerCase().replace(/\s+/g, '');
 
         if (!userMap.has(key)) {
             userMap.set(key, { key, name, username, email: r.email, topScore: score });
@@ -1382,7 +1449,7 @@ function renderFilteredLeaderboard() {
     let dashHtml = `<table class="dash-table leaderboard-table"><thead><tr><th>Rank</th><th>Developer</th><th>Top Score</th></tr></thead><tbody>`;
     top10.forEach((r, index) => {
         const displayName = r.name;
-        const handle = r.username ? `@${r.username}` : '';
+        const handle = `@${r.username}`;
         const topScore = r.topScore != null ? r.topScore : 0;
         const rankBadge = index === 0 ? '🥇 1st' : (index === 1 ? '🥈 2nd' : (index === 2 ? '🥉 3rd' : `#${index + 1}`));
         const rankClass = index === 0 ? 'gold' : (index === 1 ? 'silver' : (index === 2 ? 'bronze' : 'normal'));
@@ -1402,7 +1469,7 @@ function renderFilteredLeaderboard() {
                         <div class="user-avatar-small">${displayName.substring(0,2).toUpperCase()}</div>
                         <div style="display:flex; flex-direction:column; gap:2px;">
                             <span class="user-name" style="font-weight:700; font-size:0.9rem; color:var(--text-primary, #ffffff);">${escapeHtml(displayName)}</span>
-                            ${handle ? `<span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} ${isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700; margin-left:4px;">(You)</span>` : ''}</span>` : (isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">(You)</span>` : '')}
+                            <span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} ${isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700; margin-left:4px;">(You)</span>` : ''}</span>
                         </div>
                     </div>
                 </td>
@@ -2652,4 +2719,52 @@ function createVideoLabModal() {
     `;
     document.body.appendChild(div);
     return div;
-}
+}
+
+// =====================================================
+// MOBILE HAMBURGER SIDEBAR LOGIC (Zero impact on desktop)
+// =====================================================
+document.addEventListener("DOMContentLoaded", () => {
+    const hamburgerBtn = document.getElementById("hamburger-menu-btn");
+    const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+    const sidebar = document.querySelector(".sidebar");
+
+    function openMobileSidebar() {
+        if (sidebar) sidebar.classList.add("open");
+        if (sidebarOverlay) sidebarOverlay.classList.add("show");
+    }
+
+    function closeMobileSidebar() {
+        if (sidebar) sidebar.classList.remove("open");
+        if (sidebarOverlay) sidebarOverlay.classList.remove("show");
+    }
+
+    if (hamburgerBtn) hamburgerBtn.addEventListener("click", openMobileSidebar);
+    if (sidebarCloseBtn) sidebarCloseBtn.addEventListener("click", closeMobileSidebar);
+    if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeMobileSidebar);
+
+    // Close sidebar when any nav-link is clicked on mobile screen sizes
+    const navLinks = document.querySelectorAll(".nav-link");
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth <= 900) {
+                closeMobileSidebar();
+            }
+        });
+    });
+
+    // Close sidebar if screen is resized back to desktop layout
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+            closeMobileSidebar();
+        }
+    });
+
+    // Run dynamic populate on load to update mobile drawer user profile details
+    setTimeout(() => {
+        try {
+            populateSettings();
+        } catch(e) {}
+    }, 200);
+});

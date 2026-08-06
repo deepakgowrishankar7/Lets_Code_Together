@@ -337,11 +337,30 @@
             .navbar {
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
-                padding: 8px;
+                gap: 6px;
+                padding: 6px 12px;
+            }
+            .navbar img {
+                height: 30px !important;
+            }
+            .navbar div {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                width: 100%;
+                justify-content: flex-start;
+                gap: 6px;
+                padding: 4px 0;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .navbar div::-webkit-scrollbar {
+                display: none;
             }
             .navbar a {
-                padding: 8px 12px;
+                flex-shrink: 0;
+                padding: 6px 12px;
+                font-size: 0.85rem;
                 width: auto;
                 text-align: center;
                 display: inline-block;
@@ -373,6 +392,12 @@
                 width: 90%;
                 padding: 12px 20px;
                 font-size: 1rem;
+            }
+            .form-container.show {
+                transform: translate(-50%, -50%) !important;
+            }
+            .content.move-left {
+                transform: none !important;
             }
         }
         .success-message {

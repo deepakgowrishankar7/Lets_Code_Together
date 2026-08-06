@@ -27,7 +27,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#22c55e">
     <!-- Link external CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <script>
         // Redirect to login page if user is NOT logged in AND NOT in guest mode
         const isGuest = localStorage.getItem("isGuest") === "true";
@@ -47,8 +47,18 @@
 
 <body>
     <div class="dashboard">
+        <!-- Sidebar Mobile Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
         <!-- Sidebar -->
         <aside class="sidebar">
+            <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close Menu">&times;</button>
+            <div class="sidebar-profile-mobile">
+                <div class="user-avatar-mobile" id="sidebar-avatar-mobile">DE</div>
+                <div class="user-info-mobile">
+                    <div class="user-name-mobile" id="sidebar-username-mobile">Hi, Developer</div>
+                    <div class="user-welcome-mobile">Welcome back</div>
+                </div>
+            </div>
             <h2>
                 <img src="image/logo.jpg" alt="Logo">
                 Let's Code Together
@@ -95,6 +105,7 @@
         </aside>
         <main class="main-content">
             <header>
+                <button id="hamburger-menu-btn" class="hamburger-btn" aria-label="Open Menu">☰</button>
                 <input type="search" id="header-search-courses" name="headerSearchCourses" placeholder="Search courses..." aria-label="Search courses">
 
 <!-- ALERTS -->
@@ -1724,6 +1735,8 @@ ORDER BY avg_sal DESC;</code></pre>
         </div>
     </div>
 </div>
+
+
 
     <!-- Link external JavaScript -->
       <script src="quizzes.js"></script>

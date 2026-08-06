@@ -5279,3 +5279,385 @@ body.light-mode .compiler-output {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* Mobile hamburger navigation elements (desktop default: hidden) */
+.hamburger-btn, 
+.sidebar-close-btn, 
+.sidebar-overlay, 
+.sidebar-profile-mobile {
+  display: none !important;
+}
+
+/* ================================================================
+   MOBILE-ONLY RESPONSIVE OVERRIDES (Zero impact on laptop views)
+   ================================================================ */
+@media (max-width: 900px) {
+  /* Hamburger button (hidden on desktop, shown on mobile) */
+  .hamburger-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 12px;
+  }
+
+  /* Overlay background for sidebar drawer */
+  .sidebar-overlay {
+    display: block !important;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .sidebar-overlay.show {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Slide-out Sidebar layout */
+  .sidebar {
+    position: fixed !important;
+    top: 0; left: 0;
+    height: 100vh !important;
+    width: 290px !important;
+    background: var(--abyss) !important;
+    z-index: 9999 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--s4) !important;
+    padding: var(--s4) !important;
+    box-shadow: 8px 0 25px rgba(0, 0, 0, 0.5) !important;
+    border-right: 1px solid var(--border-soft) !important;
+  }
+  .sidebar.open {
+    transform: translateX(0) !important;
+  }
+
+  /* Theme adaptations for mobile sidebar */
+  body.light-mode .sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+  body.light-mode .sidebar-profile-mobile {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+  body.light-mode .user-name-mobile {
+    color: #0f172a !important;
+  }
+  body.light-mode .user-avatar-mobile {
+    background: rgba(0, 208, 132, 0.1) !important;
+    color: var(--jade) !important;
+    border-color: var(--jade) !important;
+  }
+  body.light-mode .sidebar-close-btn {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    color: #475569 !important;
+  }
+  body.light-mode .sidebar h2 {
+    color: #0f172a !important;
+  }
+  body.light-mode .sidebar nav .nav-link,
+  body.light-mode .sidebar .nav-link,
+  body.light-mode .nav-link {
+    color: #334155 !important;
+  }
+  body.light-mode .sidebar nav .nav-link.active,
+  body.light-mode .sidebar .nav-link.active,
+  body.light-mode .nav-link.active {
+    color: var(--jade) !important;
+  }
+  body.light-mode .sidebar nav .nav-link::after,
+  body.light-mode .sidebar .nav-link::after,
+  body.light-mode .nav-link::after {
+    color: #94a3b8 !important;
+  }
+
+  /* Sidebar header & branding inside mobile drawer */
+  .sidebar h2 {
+    display: flex !important;
+    font-size: 1.15rem !important;
+    padding: 0 var(--s2) !important;
+    margin-top: 10px !important;
+    color: #ffffff !important;
+  }
+  .sidebar::before {
+    display: none !important;
+  }
+
+  /* Sidebar Close Button */
+  .sidebar-close-btn {
+    display: block !important;
+    position: absolute;
+    top: 14px; right: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .sidebar-close-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Profile card layout inside sidebar (matching Udemy mockup) */
+  .sidebar-profile-mobile {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    padding: var(--s3) var(--s2);
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 4px;
+  }
+  .user-avatar-mobile {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--jade-pulse);
+    border: 2px solid var(--jade);
+    color: var(--jade);
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .user-info-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .user-name-mobile {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff !important;
+  }
+  .user-welcome-mobile {
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  /* Sidebar Links List formatting with right chevrons */
+  .sidebar nav {
+    flex-direction: column !important;
+    overflow-x: visible !important;
+    gap: 4px !important;
+  }
+  
+  .sidebar nav .nav-link, 
+  .sidebar .nav-link,
+  .nav-link {
+    font-size: 0.92rem !important;
+    padding: 10px var(--s3) !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0 !important;
+    color: #f8fafc !important; /* Explicit bright white text in dark mode */
+  }
+  .sidebar nav .nav-link.active,
+  .sidebar .nav-link.active,
+  .nav-link.active {
+    color: #00d084 !important; /* Explicit bright green color in dark mode */
+  }
+  
+  /* Add right arrow icon to menu links like Udemy style */
+  .nav-link::after {
+    display: block !important;
+    content: "❯" !important;
+    position: static !important;
+    transform: none !important;
+    font-size: 0.72rem !important;
+    color: rgba(255, 255, 255, 0.4) !important; /* Explicit grey arrow in dark mode */
+    font-weight: 700 !important;
+    background: none !important;
+    width: auto !important; height: auto !important;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover::after, .nav-link.active::after {
+    color: var(--jade) !important;
+  }
+
+  /* Center welcome banner content and stack illustration below it on mobile */
+  .dash-hero-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+    padding: 20px !important;
+  }
+  .dash-hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .dash-hero-subtitle {
+    text-align: center;
+  }
+  .dash-quick-actions {
+    justify-content: center;
+  }
+  .dash-hero-illustration {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Make sure the scrollable table containers are styled correctly and don't squeeze columns */
+  .score-dashboard-container {
+    overflow-x: auto !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  .dash-table, table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 480px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  @media (max-width: 600px) {
+    /* Turn tables into modern visual cards for small screens */
+    .dash-table thead, table thead {
+      display: none !important;
+    }
+    
+    .dash-table, 
+    .dash-table tbody, 
+    .dash-table tr, 
+    .dash-table td,
+    table,
+    table tbody,
+    table tr,
+    table td {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .dash-table tr, table tr {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 1px solid var(--border-soft) !important;
+      border-radius: 12px !important;
+      padding: 12px 14px !important;
+      margin-bottom: 12px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Leaderboard table row formatting */
+    .leaderboard-table tr {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+
+    .leaderboard-table tr td:first-child {
+      width: auto !important;
+      padding: 0 !important;
+    }
+    
+    .leaderboard-table tr td:nth-child(2) {
+      flex: 1 !important;
+      width: auto !important;
+      padding: 0 !important;
+      margin-left: 10px !important;
+    }
+    
+    .leaderboard-table tr td:nth-child(3) {
+      width: 100% !important;
+      padding: 8px 0 0 0 !important;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1) !important;
+      margin-top: 4px !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+
+    /* Personal quiz history tables formatting */
+    .dash-table:not(.leaderboard-table) tr {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
+    .dash-table:not(.leaderboard-table) tr td:first-child {
+      padding: 0 !important;
+    }
+
+    .dash-table:not(.leaderboard-table) tr td:nth-child(2) {
+      padding: 4px 0 !important;
+      font-size: 0.88rem !important;
+      color: var(--text-secondary) !important;
+    }
+
+    .dash-table:not(.leaderboard-table) tr td:nth-child(2)::before {
+      content: "Score: " !important;
+      font-weight: 700 !important;
+      color: var(--jade) !important;
+      margin-right: 4px;
+    }
+
+    .dash-table:not(.leaderboard-table) tr td:nth-child(3) {
+      padding: 4px 0 0 0 !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+      margin-top: 4px !important;
+    }
+    
+    .score-progress-bar {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  /* Fullscreen Video Rotation for Mobile Landscape feel in Portrait mode */
+  .animation-modal-container:fullscreen,
+  .animation-modal-container:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #020617 !important;
+  }
+  
+  @media (orientation: portrait) {
+    .animation-modal-container:fullscreen,
+    .animation-modal-container:-webkit-full-screen {
+      width: 100vh !important;
+      height: 100vw !important;
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform-origin: center center !important;
+    }
+  }
+}

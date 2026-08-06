@@ -1,0 +1,58 @@
+/* ================================================================
+   MOBILE-ONLY OVERRIDES FOR CODE TOGETHER VISUALIZERS
+   ================================================================ */
+@media (max-width: 600px) {
+    body {
+        padding: 6px !important;
+    }
+    .container {
+        border-radius: 8px !important;
+        border: none !important;
+    }
+    .top {
+        flex-direction: column !important;
+        min-height: auto !important;
+    }
+    .code-panel {
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,.08) !important;
+        max-height: 280px !important;
+        overflow: auto !important;
+    }
+    .debug-panel {
+        width: 100% !important;
+        border-left: none !important;
+        padding: 12px !important;
+        gap: 10px !important;
+    }
+    .summary-grid {
+        grid-template-columns: 1fr !important; /* Stack debug cards vertically */
+    }
+    .summary-box {
+        padding: 8px 10px !important;
+    }
+    .summary-value {
+        font-size: 15px !important;
+        word-break: break-all !important;
+    }
+    .explain-item {
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+    }
+    .controls {
+        padding: 8px 10px !important;
+        gap: 6px !important;
+    }
+    .btn, select {
+        font-size: 11px !important;
+        padding: 6px 10px !important;
+        border-radius: 8px !important;
+    }
+    .speed-label, .topic-label, .step-info {
+        font-size: 11px !important;
+    }
+    .topic-label {
+        width: 100% !important;
+        margin-top: 4px !important;
+    }
+}
