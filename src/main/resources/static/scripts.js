@@ -2761,6 +2761,39 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Swipe gestures to open/close mobile sidebar drawer (Udemy Native App style)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    
+    document.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // Ignore vertical scrolling swipes
+        if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+        
+        // Swipe distance threshold of 50px
+        if (Math.abs(deltaX) < 50) return;
+        
+        const isOpen = sidebar && sidebar.classList.contains('open');
+        
+        if (deltaX < 0 && isOpen) {
+            // Swipe right-to-left: Close sidebar drawer
+            closeMobileSidebar();
+        } else if (deltaX > 0 && !isOpen && touchStartX < 40) {
+            // Swipe left-to-right near left edge: Open sidebar drawer
+            openMobileSidebar();
+        }
+    }, { passive: true });
+
     // Run dynamic populate on load to update mobile drawer user profile details
     setTimeout(() => {
         try {
