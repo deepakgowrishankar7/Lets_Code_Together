@@ -1,4 +1,4 @@
-const CACHE_NAME = 'codetogether-v5';
+const CACHE_NAME = 'codetogether-v6';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -7,7 +7,7 @@ const ASSETS_TO_CACHE = [
   '/mobile_fixes.css',
   '/scripts.js',
   '/quizzes.js',
-  '/logo.jpg',
+  '/logo.png',
   '/manifest.json'
 ];
 
