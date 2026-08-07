@@ -1,125 +1,92 @@
-<h2>Modern Java (Java 8 to Java 21+)</h2>
+<h1>Modern Java: Lambdas & Streams</h1>
 
-<p>
-  Java has evolved rapidly since Java 8. Modern Java emphasizes functional programming techniques, immutability, concise syntax, high performance, and pattern matching.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty intermediate">Intermediate</span>
+    <span class="badge-time">Read Time: 12 mins</span>
+</div>
 
-<hr>
+<div class="section">
+    <h2>1. The Real-World Analogy: Water Filtration Pipeline</h2>
+    <p>Imagine a raw water processing plant. Water flows through a pipe (Stream):</p>
+    <ol>
+        <li>First, it passes through a mesh grid to filter out leaves (Intermediate: <code>filter</code>).</li>
+        <li>Next, it flows through a dispenser that adds mineral vitamins, transforming it into drinking water (Intermediate: <code>map</code>).</li>
+        <li>Finally, the processed water is collected into storage bottles ready for distribution (Terminal: <code>collect</code>).</li>
+    </ol>
+    <p>In Modern Java, the <strong>Stream API</strong> works exactly like this pipe. It lets you process collections of data declaratively through a pipeline of operations without using messy loops.</p>
+</div>
 
-<h3>1. Lambda Expressions & Functional Interfaces</h3>
-<p>
-  A lambda expression is an anonymous function that can be passed around like a value. A <strong>Functional Interface</strong> contains exactly one abstract method.
-</p>
+<div class="section">
+    <h2>2. Functional Programming & Lambda Expressions</h2>
+    <p>Introduced in Java 8, <strong>Lambda Expressions</strong> provide a clear, concise inline syntax to represent anonymous functional interfaces (interfaces containing exactly one abstract method). They allow you to treat code as arguments.</p>
+    <pre><code class="language-java">// Traditional anonymous class
+Runnable r1 = new Runnable() {
+    public void run() { System.out.println("Hello"); }
+};
 
-<pre><code>import java.util.function.*;
+// Modern Lambda expression shorthand
+Runnable r2 = () -> System.out.println("Hello");</code></pre>
+</div>
 
-public class LambdaExample {
+<div class="warning-callout">
+    <h3>⚠️ Warning: Streams Can Only Be Consumed Once!</h3>
+    <p>A Java Stream is like a physical conveyor belt: once items pass through and are collected, the conveyor is empty. If you try to call multiple terminal operations on the same Stream variable (e.g. counting and then collecting), Java throws an <code>IllegalStateException</code>.</p>
+</div>
+
+<div class="section">
+    <h2>3. Stream Operations: Intermediate vs. Terminal</h2>
+    <p>A Stream pipeline consists of a data source (like a List), followed by zero or more intermediate operations, and exactly one terminal operation:</p>
+    <ul>
+        <li><strong>Intermediate Operations (Lazy):</strong> Transform the stream into another stream (e.g., <code>filter(Predicate)</code>, <code>map(Function)</code>, <code>sorted()</code>). They do not execute until a terminal operation is invoked.</li>
+        <li><strong>Terminal Operations (Eager):</strong> Execute the pipeline and return a non-stream result (e.g., <code>collect()</code>, <code>forEach()</code>, <code>reduce()</code>, <code>count()</code>). Once called, the Stream is closed.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>💻 Example Code: Stream Processing</h2>
+    <pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class StreamDemo {
     public static void main(String[] args) {
-        // Predicate: takes an input and returns boolean
-        Predicate<Integer> isEven = n -> n % 2 == 0;
-        
-        // Function: transforms T into R
-        Function<String, Integer> stringLength = str -> str.length();
+        List&lt;String&gt; names = Arrays.asList("Alex", "Bob", "Alice", "David");
 
-        // Consumer: takes input and returns nothing
-        Consumer<String> printer = msg -> System.out.println("LOG: " + msg);
+        // Filter names starting with 'A', convert to uppercase, and collect
+        List&lt;String&gt; result = names.stream()
+            .filter(name -> name.startsWith("A")) // Intermediate (Lazy)
+            .map(String::toUpperCase)              // Intermediate (Lazy)
+            .collect(Collectors.toList());        // Terminal (Eager)
 
-        System.out.println("Is 4 even? " + isEven.test(4));
-        System.out.println("Length of 'Java': " + stringLength.apply("Java"));
-        printer.accept("Lambda Functional Demo");
+        System.out.println(result); // Outputs: [ALEX, ALICE]
     }
 }</code></pre>
 
-<hr>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>names.stream()</code>: Opens a pipeline wrapper over the standard collection list.</li>
+        <li><code>filter(name -&gt; ...)</code>: Discards strings that do not start with 'A'. The argument is a lambda expression representing a <code>Predicate</code>.</li>
+        <li><code>map(String::toUpperCase)</code>: Transforms each string using a **Method Reference** (shorthand for <code>s -&gt; s.toUpperCase()</code>).</li>
+        <li><code>collect(Collectors.toList())</code>: Closes the stream and saves the resulting items into a new list.</li>
+    </ul>
+</div>
 
-<h3>2. Java Stream API</h3>
-<p>
-  The Stream API is used to process sequences of elements imperatively and declaratively. It supports filtering, mapping, sorting, and reduction.
-</p>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge microsoft">Microsoft</span>
+            <span class="company-badge netflix">Netflix</span>
+        </div>
+        <h4>Q1: Explain intermediate vs. terminal stream operations and why streams are lazy.</h4>
+        <p><strong>A:</strong> Intermediate operations return a new Stream and are lazy because they do not execute immediately; they only register the filter/map callback actions. Terminal operations are eager; they trigger the actual traversal and processing of data, executing intermediate filters in a single efficient pass.</p>
+    </div>
 
-<pre><code>import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class StreamExample {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David", "Amanda");
-
-        // Filter names starting with 'A', uppercase them, and collect into a list
-        List<String> result = names.stream()
-                .filter(name -> name.startsWith("A"))
-                .map(String::toUpperCase)
-                .sorted()
-                .collect(Collectors.toList());
-
-        System.out.println(result); // [ALICE, AMANDA]
-    }
-}</code></pre>
-
-<hr>
-
-<h3>3. `Optional<T>` to Avoid `NullPointerException`</h3>
-<p>
-  <code>Optional</code> is a container object used to contain non-null values and explicitly handle the absence of a value.
-</p>
-
-<pre><code>import java.util.Optional;
-
-public class OptionalExample {
-    public static void main(String[] args) {
-        Optional<String> name = Optional.ofNullable(getName());
-
-        String defaultName = name.orElse("Guest User");
-        System.out.println("Hello, " + defaultName);
-    }
-
-    static String getName() {
-        return null; // Could return null
-    }
-}</code></pre>
-
-<hr>
-
-<h3>4. Java 14+ Records (Immutable Data Carriers)</h3>
-<p>
-  Records provide a compact syntax to declare classes that are transparent holders for immutable data, eliminating boilerplate getters, `equals()`, `hashCode()`, and `toString()`.
-</p>
-
-<pre><code>// Record declaration (1 line!)
-public record Student(int id, String name, double gpa) {}
-
-public class RecordDemo {
-    public static void main(String[] args) {
-        Student student = new Student(101, "Alex", 3.9);
-
-        System.out.println(student.name()); // Accessor method name()
-        System.out.println(student);        // Student[id=101, name=Alex, gpa=3.9]
-    }
-}</code></pre>
-
-<hr>
-
-<h3>5. Pattern Matching & Switch Expressions (Java 17+)</h3>
-<p>
-  Pattern matching reduces boilerplate when checking types and casting objects. Switch expressions return values and reduce fallthrough bugs.
-</p>
-
-<pre><code>public class PatternMatchingDemo {
-    public static void main(String[] args) {
-        Object obj = "Hello Java 21";
-
-        // Pattern matching for instanceof
-        if (obj instanceof String s) {
-            System.out.println("String length: " + s.length());
-        }
-
-        // Switch expression
-        String day = "MONDAY";
-        int type = switch (day) {
-            case "MONDAY", "FRIDAY" -> 1;
-            case "TUESDAY" -> 2;
-            default -> 0;
-        };
-        System.out.println("Day code: " + type);
-    }
-}</code></pre>
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge amazon">Amazon</span>
+        </div>
+        <h4>Q2: What are Functional Interfaces in Java? Give examples.</h4>
+        <p><strong>A:</strong> A functional interface is an interface containing exactly one abstract method (marked optionally with <code>@FunctionalInterface</code>). Standard examples in <code>java.util.function</code> include: <code>Predicate&lt;T&gt;</code> (returns boolean), <code>Function&lt;T, R&gt;</code> (maps inputs), <code>Consumer&lt;T&gt;</code> (consumes inputs, returns void), and <code>Supplier&lt;T&gt;</code> (returns values).</p>
+    </div>
+</div>

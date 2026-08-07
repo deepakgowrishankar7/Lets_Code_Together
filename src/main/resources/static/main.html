@@ -114,9 +114,18 @@
      onclick="openProtectedSection('settings')">Settings</a>
 </nav>
 
-            <div class="sidebar-pwa-install-container" style="padding: 10px 14px; margin-top: auto; border-top: 1px solid var(--border-soft);">
-                <button id="pwa-install-sidebar" class="chat-send-btn" style="display: none; width: 100%; justify-content: center; background: linear-gradient(135deg, var(--jade), #00d9f5); color: #000; box-shadow: 0 4px 16px rgba(0, 245, 160, 0.35); font-weight: 800; font-size: 0.9rem;" onclick="triggerPwaInstall()">
-                    📲 Install App
+            <div class="sidebar-pwa-install-container">
+                <button id="pwa-install-sidebar" class="pwa-install-btn" style="display:none;" onclick="triggerPwaInstall()">
+                    <span class="pwa-btn-glow"></span>
+                    <span class="pwa-btn-shimmer"></span>
+                    <span class="pwa-btn-content">
+                        <span class="pwa-btn-icon">⬇️</span>
+                        <span class="pwa-btn-text">
+                            <span class="pwa-btn-label">Install App</span>
+                            <span class="pwa-btn-sub">Get the full experience</span>
+                        </span>
+                    </span>
+                    <span class="pwa-pulse-ring"></span>
                 </button>
             </div>
         </aside>
@@ -261,80 +270,217 @@ New Message
                 <div class="course-category available-courses">
                     <h4>Available Courses</h4>
                     <div class="courses">
-                        <div class="course-card" onclick="showSection('java-course')">
-                            <img src="image/cources2.jpeg" alt="Java Programming">
-                            <div>Java Programming</div>
+
+                        <!-- Java -->
+                        <div class="course-card java-card" onclick="showSection('java-course')">
+                            <div class="card-cover">
+                                <img src="image/cources2.jpeg" alt="Java Programming">
+                                <div class="card-cover-overlay"></div>
+                                <span class="card-badge">Available</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-header-row">
+                                    <span class="card-icon">☕</span>
+                                    <span class="card-lang-tag">Java</span>
+                                </div>
+                                <h3 class="card-title">Java Programming</h3>
+                                <p class="card-desc">Master OOP, Collections, Multithreading & modern Java 17+ features from scratch.</p>
+                                <div class="card-footer-row">
+                                    <span class="difficulty-badge">⭐ Beginner → Expert</span>
+                                    <span class="card-start-prompt">Start →</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="course-card" onclick="showSection('python-course')">
-                            <img src="image/cources.jpeg" alt="Python for Beginners">
-                            <div>Python for Beginners</div>
+
+                        <!-- Python -->
+                        <div class="course-card python-card" onclick="showSection('python-course')">
+                            <div class="card-cover">
+                                <img src="image/cources.jpeg" alt="Python for Beginners">
+                                <div class="card-cover-overlay"></div>
+                                <span class="card-badge">Available</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-header-row">
+                                    <span class="card-icon">🐍</span>
+                                    <span class="card-lang-tag">Python</span>
+                                </div>
+                                <h3 class="card-title">Python for Beginners</h3>
+                                <p class="card-desc">Learn Python from basics to data science, automation, and web development.</p>
+                                <div class="card-footer-row">
+                                    <span class="difficulty-badge">⭐ Beginner</span>
+                                    <span class="card-start-prompt">Start →</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="course-card" onclick="showSection('sql-course')">
-                            <img src="image/SQL.jpg" alt="SQL for Beginners">
-                            <div>SQL for Beginners</div>
+
+                        <!-- SQL -->
+                        <div class="course-card sql-card" onclick="showSection('sql-course')">
+                            <div class="card-cover">
+                                <img src="image/SQL.jpg" alt="SQL for Beginners">
+                                <div class="card-cover-overlay"></div>
+                                <span class="card-badge">Available</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-header-row">
+                                    <span class="card-icon">🗄️</span>
+                                    <span class="card-lang-tag">SQL</span>
+                                </div>
+                                <h3 class="card-title">SQL for Beginners</h3>
+                                <p class="card-desc">Query, manage and master relational databases with real-world exercises.</p>
+                                <div class="card-footer-row">
+                                    <span class="difficulty-badge">⭐ Beginner</span>
+                                    <span class="card-start-prompt">Start →</span>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
                 <div class="course-category upcoming-courses">
                     <h4>Upcoming Courses</h4>
                     <div class="courses">
-                        <div class="course-card upcoming">
-                            <img src="image/c++.jpg" alt="C++ Basics">
-                            <div>C++ Basics</div>
+
+                        <div class="course-card upcoming cpp-card">
+                            <div class="card-cover"><img src="image/c++.jpg" alt="C++ Basics"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">⚡</span><span class="card-lang-tag">C++</span></div>
+                                <h3 class="card-title">C++ Basics</h3>
+                                <p class="card-desc">Systems programming, STL, memory management & performance.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/cprograming.jpg" alt="C Programming">
-                            <div>C Programming</div>
+
+                        <div class="course-card upcoming c-card">
+                            <div class="card-cover"><img src="image/cprograming.jpg" alt="C Programming"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🔧</span><span class="card-lang-tag">C</span></div>
+                                <h3 class="card-title">C Programming</h3>
+                                <p class="card-desc">Pointers, memory, file I/O — the language behind all systems.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/html.webp" alt="HTML Basics">
-                            <div>HTML Basics</div>
+
+                        <div class="course-card upcoming html-card">
+                            <div class="card-cover"><img src="image/html.webp" alt="HTML Basics"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🌐</span><span class="card-lang-tag">HTML</span></div>
+                                <h3 class="card-title">HTML Basics</h3>
+                                <p class="card-desc">Structure the web with semantic HTML5 and accessibility best practices.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐ Beginner</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/category1.jpeg" alt="Web Development">
-                            <div>Web Development</div>
+
+                        <div class="course-card upcoming web-card">
+                            <div class="card-cover"><img src="image/category1.jpeg" alt="Web Development"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">💻</span><span class="card-lang-tag">Web</span></div>
+                                <h3 class="card-title">Web Development</h3>
+                                <p class="card-desc">Full-stack web development with HTML, CSS, JS and frameworks.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/reactjs.jpg" alt="React.js">
-                            <div>React.js</div>
+
+                        <div class="course-card upcoming react-card">
+                            <div class="card-cover"><img src="image/reactjs.jpg" alt="React.js"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">⚛️</span><span class="card-lang-tag">React</span></div>
+                                <h3 class="card-title">React.js</h3>
+                                <p class="card-desc">Build modern UIs with hooks, state management, and component patterns.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/AWS.jpeg" alt="AWS Cloud Essentials">
-                            <div>AWS Cloud Essentials</div>
+
+                        <div class="course-card upcoming aws-card">
+                            <div class="card-cover"><img src="image/AWS.jpeg" alt="AWS Cloud Essentials"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">☁️</span><span class="card-lang-tag">AWS</span></div>
+                                <h3 class="card-title">AWS Cloud Essentials</h3>
+                                <p class="card-desc">S3, EC2, Lambda, RDS — cloud architecture for real-world apps.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐⭐ Advanced</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/dbms.png" alt="DBMS">
-                            <div>DBMS</div>
+
+                        <div class="course-card upcoming dbms-card">
+                            <div class="card-cover"><img src="image/dbms.png" alt="DBMS"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🗃️</span><span class="card-lang-tag">DBMS</span></div>
+                                <h3 class="card-title">DBMS</h3>
+                                <p class="card-desc">Normalization, indexing, transactions, and database design theory.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/Data_Structures.jpg" alt="Data Structures">
-                            <div>Data Structures</div>
+
+                        <div class="course-card upcoming ds-card">
+                            <div class="card-cover"><img src="image/Data_Structures.jpg" alt="Data Structures"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🧩</span><span class="card-lang-tag">DSA</span></div>
+                                <h3 class="card-title">Data Structures</h3>
+                                <p class="card-desc">Arrays, trees, graphs, heaps and dynamic programming for interviews.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐⭐ Advanced</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/Data_Analysis.jpg" alt="Data Analysis">
-                            <div>Data Analysis</div>
+
+                        <div class="course-card upcoming da-card">
+                            <div class="card-cover"><img src="image/Data_Analysis.jpg" alt="Data Analysis"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">📊</span><span class="card-lang-tag">Data</span></div>
+                                <h3 class="card-title">Data Analysis</h3>
+                                <p class="card-desc">Pandas, NumPy, data visualization with Matplotlib and Seaborn.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/nodejs.jpeg" alt="Node.js">
-                            <div>Node.js</div>
+
+                        <div class="course-card upcoming node-card">
+                            <div class="card-cover"><img src="image/nodejs.jpeg" alt="Node.js"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🟢</span><span class="card-lang-tag">Node</span></div>
+                                <h3 class="card-title">Node.js</h3>
+                                <p class="card-desc">Build fast backends, REST APIs and real-time apps with Node & Express.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐ Intermediate</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/Figma.webp" alt="Figma">
-                            <div>Figma</div>
+
+                        <div class="course-card upcoming figma-card">
+                            <div class="card-cover"><img src="image/Figma.webp" alt="Figma"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🎨</span><span class="card-lang-tag">Design</span></div>
+                                <h3 class="card-title">Figma</h3>
+                                <p class="card-desc">UI/UX design, prototyping and collaboration with Figma for product teams.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐ Beginner</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/Ethical_Hacking.jpg" alt="Ethical Hacking">
-                            <div>Ethical Hacking</div>
+
+                        <div class="course-card upcoming hack-card">
+                            <div class="card-cover"><img src="image/Ethical_Hacking.jpg" alt="Ethical Hacking"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🛡️</span><span class="card-lang-tag">Security</span></div>
+                                <h3 class="card-title">Ethical Hacking</h3>
+                                <p class="card-desc">Penetration testing, network security, and cybersecurity fundamentals.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐⭐ Advanced</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/photoshop.jpg" alt="Photoshop">
-                            <div>Photoshop</div>
+
+                        <div class="course-card upcoming ps-card">
+                            <div class="card-cover"><img src="image/photoshop.jpg" alt="Photoshop"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">🖼️</span><span class="card-lang-tag">Design</span></div>
+                                <h3 class="card-title">Photoshop</h3>
+                                <p class="card-desc">Photo editing, digital art, and creative design for professionals.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐ Beginner</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
-                        <div class="course-card upcoming">
-                            <img src="image/designthinkin.jpeg" alt="Design Thinking">
-                            <div>Design Thinking</div>
+
+                        <div class="course-card upcoming dt-card">
+                            <div class="card-cover"><img src="image/designthinkin.jpeg" alt="Design Thinking"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
+                            <div class="card-body">
+                                <div class="card-header-row"><span class="card-icon">💡</span><span class="card-lang-tag">Thinking</span></div>
+                                <h3 class="card-title">Design Thinking</h3>
+                                <p class="card-desc">Human-centered problem solving: empathize, define, ideate, prototype, test.</p>
+                                <div class="card-footer-row"><span class="difficulty-badge">⭐ Beginner</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div id="no-course-message" style="display:none; color:var(--text-main); margin-top:20px; font-size:1.1em;">
@@ -721,6 +867,7 @@ New Message
                             <li class="course-topic" onclick="showJavaContent('pdfs')">PDF Notes</li>
                             <li class="course-topic" onclick="showJavaContent('concepts')">Concepts</li>
                             <li class="course-topic" onclick="showJavaContent('quiz')">Quiz</li>
+                            <li class="course-topic" onclick="showJavaContent('interview')">Interview Prep</li>
                         </ul>
                     </nav>
                     <div class="course-main-content">
@@ -827,6 +974,12 @@ New Message
                                 <button onclick="loadJavaConcept('java-problems')">Java Problems</button>
                             </nav>
 
+                            <!-- Floating scroll controls -->
+                            <div class="floating-scroll-controls">
+                                <button class="scroll-btn scroll-up" onclick="scrollToTopConcepts('java-content-concepts')" title="Scroll to Top">▲</button>
+                                <button class="scroll-btn scroll-down" onclick="scrollToBottomConcepts('java-content-concepts')" title="Scroll to Bottom">▼</button>
+                            </div>
+
                             <!-- Content area -->
                             <div id="java-concept-content">
                                 <p>Select a concept to view details.</p>
@@ -841,8 +994,13 @@ New Message
         <button id="quiz4Btn">Quiz 4 (Advanced)</button>
         <button id="quiz5Btn">Quiz 5 (Expert)</button>
     </div>
-    <div id="quizContainer"></div>
-</div>
+     <div id="quizContainer"></div>
+                        </div>
+                        <div id="java-content-interview" class="java-content-block" style="display:none;">
+                            <div id="java-interview-hub-content">
+                                <p>Loading Interview Preparation Hub...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

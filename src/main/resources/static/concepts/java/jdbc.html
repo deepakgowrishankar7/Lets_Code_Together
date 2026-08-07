@@ -1,105 +1,88 @@
-<h2>Java Database Connectivity (JDBC)</h2>
+<h1>JDBC & Database Connectivity</h1>
 
-<p>
-  <strong>JDBC</strong> is a Java API that defines how a client application may access a relational database. It provides methods to query and update data in a database using SQL statements.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty intermediate">Intermediate</span>
+    <span class="badge-time">Read Time: 10 mins</span>
+</div>
 
-<hr>
+<div class="section">
+    <h2>1. The Real-World Analogy: Language Translators</h2>
+    <p>Imagine you have a French businessman (Java Application) who needs to negotiate a contract with a Japanese merchant (SQL Database). Neither speaks the other's language. To collaborate, they hire an expert **Interpreter** who translates French to Japanese and vice versa.</p>
+    <p>In Java, <strong>JDBC (Java Database Connectivity)</strong> is that translator, providing a standard API layer that translates Java object commands into raw SQL queries that databases (like MySQL, PostgreSQL, Oracle) understand.</p>
+</div>
 
-<h3>1. Architecture & Steps to Connect JDBC</h3>
-<p>Connecting Java to a database involves 5 standard steps:</p>
-<ol>
-  <li><strong>Register Driver:</strong> Load the database driver (`Class.forName("org.h2.Driver")` or automatic loading).</li>
-  <li><strong>Create Connection:</strong> `DriverManager.getConnection(url, username, password)`</li>
-  <li><strong>Create Statement:</strong> Create `Statement` or `PreparedStatement`.</li>
-  <li><strong>Execute Query/Update:</strong> Execute SQL (`executeQuery` or `executeUpdate`).</li>
-  <li><strong>Close Connection:</strong> Close resources using try-with-resources.</li>
-</ol>
+<div class="section">
+    <h2>2. Core JDBC Components</h2>
+    <p>The JDBC API resides inside the <code>java.sql</code> package. It relies on four main interfaces:</p>
+    <ul>
+        <li><strong>DriverManager:</strong> Manages database drivers, establishing a connection via a JDBC URL (e.g. <code>jdbc:mysql://localhost:3306/mydb</code>).</li>
+        <li><strong>Connection:</strong> Represents the active session socket with the database.</li>
+        <li><strong>Statement / PreparedStatement:</strong> Used to compile and execute SQL queries.</li>
+        <li><strong>ResultSet:</strong> A cursor representing the row-by-row data results returned by the database.</li>
+    </ul>
+</div>
 
-<hr>
+<div class="warning-callout">
+    <h3>⚠️ Warning: The SQL Injection Vulnerability!</h3>
+    <p>Never concatenate user inputs directly into raw SQL strings (e.g. <code>"SELECT * FROM users WHERE pass = " + input</code>). Hackers can enter statements like <code>1 OR 1=1</code> to bypass password logic. Always use **PreparedStatement** placeholders (<code>?</code>) instead.</p>
+</div>
 
-<h3>2. `PreparedStatement` vs `Statement`</h3>
-<p>
-  Always prefer <code>PreparedStatement</code> over <code>Statement</code>. PreparedStatement pre-compiles SQL queries, boosts execution speed for repeated queries, and <strong>prevents SQL Injection attacks</strong>.
-</p>
+<div class="section">
+    <h2>3. PreparedStatement vs. Statement</h2>
+    <p>A basic <code>Statement</code> compiles the query string on the database every single time you execute it. A <code>PreparedStatement</code> compiles the SQL query once and stores it, letting you safely insert dynamic parameters via question mark placeholders (<code>?</code>). This is faster and completely secure.</p>
+</div>
 
-<pre><code>import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+<div class="section">
+    <h2>💻 Example Code: Safe Database Query</h2>
+    <pre><code class="language-java">import java.sql.*;
 
-public class JdbcExample {
-    private static final String URL = "jdbc:h2:mem:testdb";
-    private static final String USER = "sa";
-    private static final String PASS = "";
-
-    public static void main(String[] args) {
-        String sql = "SELECT id, username, email FROM users WHERE role = ?";
-
-        // Use try-with-resources for automatic closing of Connection, Statement, and ResultSet
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            // Bind parameter
-            stmt.setString(1, "ADMIN");
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String username = rs.getString("username");
-                    String email = rs.getString("email");
-
-                    System.out.println("User [" + id + "]: " + username + " (" + email + ")");
+public class JdbcDemo {
+    public static void queryUser(int userId) {
+        String query = "SELECT username, email FROM users WHERE id = ?";
+        
+        // Try-with-resources closes database connections automatically
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "user", "pass");
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, userId); // Binds index 1 placeholder to userId
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("username");
+                    System.out.println("User is: " + name);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }</code></pre>
 
-<hr>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>DriverManager.getConnection()</code>: Contacts the MySQL driver to open a network socket connection.</li>
+        <li><code>conn.prepareStatement(query)</code>: Compiles the SQL structure inside the database engine.</li>
+        <li><code>pstmt.setInt(1, userId)</code>: Safely binds parameters, escaping characters to block SQL injection.</li>
+        <li><code>rs.next()</code>: Moves the cursor to the first row of data. Returns <code>false</code> if no matching rows exist.</li>
+    </ul>
+</div>
 
-<h3>3. Transaction Management (`commit`, `rollback`)</h3>
-<p>
-  By default, JDBC connections operate in <strong>auto-commit mode</strong> (every individual SQL statement is treated as a transaction). For atomic multi-step operations (e.g. money transfers), disable auto-commit.
-</p>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge oracle">Oracle</span>
+        </div>
+        <h4>Q1: Why should you prefer PreparedStatement over Statement?</h4>
+        <p><strong>A:</strong> 1. **Security:** PreparedStatement blocks SQL injection by parameterizing arguments. 2. **Performance:** It pre-compiles the query on the database, allowing faster execution during repeated query calls.</p>
+    </div>
 
-<pre><code>public void transferMoney(Connection conn, int fromAcc, int toAcc, double amount) throws SQLException {
-    try {
-        // Step 1: Disable Auto-Commit
-        conn.setAutoCommit(false);
-
-        // Step 2: Deduct money from account A
-        PreparedStatement deduct = conn.prepareStatement("UPDATE accounts SET balance = balance - ? WHERE id = ?");
-        deduct.setDouble(1, amount);
-        deduct.setInt(2, fromAcc);
-        deduct.executeUpdate();
-
-        // Step 3: Add money to account B
-        PreparedStatement add = conn.prepareStatement("UPDATE accounts SET balance = balance + ? WHERE id = ?");
-        add.setDouble(1, amount);
-        add.setInt(2, toAcc);
-        add.executeUpdate();
-
-        // Step 4: Commit Transaction if everything succeeded
-        conn.commit();
-        System.out.println("Transaction committed successfully!");
-
-    } catch (Exception e) {
-        // Step 5: Rollback Transaction on error
-        conn.rollback();
-        System.err.println("Transaction failed! Changes rolled back.");
-    } finally {
-        conn.setAutoCommit(true);
-    }
-}</code></pre>
-
-<hr>
-
-<h3>4. Connection Pooling (HikariCP Overview)</h3>
-<p>
-  Opening and closing physical database connections is expensive. In production systems, <strong>Connection Pools</strong> (such as HikariCP or Apache DBCP) maintain a pool of reusable connections, eliminating connection latency.
-</p>
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge walmart">Walmart</span>
+        </div>
+        <h4>Q2: What is transaction commit vs. rollback?</h4>
+        <p><strong>A:</strong> A transaction is a group of database actions that execute as a single unit (ACID). Calling <code>commit()</code> saves all changes permanently to the database. Calling <code>rollback()</code> undoes all actions in that block if any step fails, maintaining database consistency.</p>
+    </div>
+</div>

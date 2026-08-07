@@ -1,180 +1,113 @@
-<h2>Java Strings</h2>
+<h1>Java Strings</h1>
 
-<p>In Java, <strong>String</strong> is a class that represents a sequence of characters. Strings are immutable, meaning once created, their values cannot be changed.</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty beginner">Beginner</span>
+    <span class="badge-time">Read Time: 12 mins</span>
+</div>
 
-<h3>1. Creating Strings</h3>
-<ul>
-  <li><strong>Using String Literal:</strong> <code>String s = "Hello";</code></li>
-  <li><strong>Using new Keyword:</strong> <code>String s = new String("Hello");</code></li>
-</ul>
+<div class="section">
+    <h2>1. The Real-World Analogy: Library Book Sharing</h2>
+    <p>Imagine a school library that has only one copy of <i>"The Hobbit"</i>. Three students want to read it. Instead of buying three separate books, the library registers all three students to share that single physical copy.</p>
+    <p>In Java, <strong>String literals</strong> work the same way. Since strings are immutable (cannot change), the JVM shares a single copy of a string literal among multiple variables inside the <strong>String Constant Pool</strong> to save memory.</p>
+</div>
 
-<pre>
-public class StringCreate {
+<div class="section">
+    <h2>2. The String Constant Pool & Immutability</h2>
+    <p>Java Strings are **immutable**, meaning their value cannot be modified once created in the Heap. When you do:
+        <code>String s = "Hello"; s = s + " World";</code>, the original `"Hello"` string is NOT changed. 
+        Instead, a brand new string `"Hello World"` is created in the Heap, and the reference variable <code>s</code> is updated to point to it.
+    </p>
+    <p>The <strong>String Constant Pool (SCP)</strong> is a special memory area inside the Heap. Liters are cached here. If you create a string that already exists in the pool, Java simply redirects your variable to point to the existing instance instead of creating a new object.</p>
+</div>
+
+<div class="warning-callout">
+    <h3>⚠️ Warning: The == vs .equals() Trap!</h3>
+    <p>Never use <code>==</code> to compare strings. The <code>==</code> operator compares **memory reference addresses** (whether they point to the exact same memory location). To compare the **actual characters/content** of strings, you must always use <code>.equals()</code>.</p>
+</div>
+
+<div class="section">
+    <h2>3. String vs. StringBuilder vs. StringBuffer</h2>
+    <p>When modifying text frequently (like in loops), using <code>String</code> is slow because it creates a new object on every edit. We use mutable classes instead:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>String</th>
+                <th>StringBuilder</th>
+                <th>StringBuffer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Mutability</strong></td>
+                <td>Immutable (Cannot change)</td>
+                <td>Mutable (Can modify)</td>
+                <td>Mutable (Can modify)</td>
+            </tr>
+            <tr>
+                <td><strong>Thread Safety</strong></td>
+                <td>Safe (Read-only)</td>
+                <td>Not Thread-Safe (Fastest)</td>
+                <td>Thread-Safe (Synchronized, slower)</td>
+            </tr>
+            <tr>
+                <td><strong>Memory Area</strong></td>
+                <td>Heap & String Pool</td>
+                <td>Heap only</td>
+                <td>Heap only</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>💻 Example Code & Line-by-Line Breakdown</h2>
+    <pre><code class="language-java">public class StringDemo {
     public static void main(String[] args) {
-        String s1 = "Hello";
-        String s2 = new String("World");
-        System.out.println(s1);
-        System.out.println(s2);
-    }
-}
-</pre>
+        String s1 = "Java"; // Inside String Pool
+        String s2 = new String("Java"); // Forced new object on Heap
 
-<strong>Output:</strong>
-<pre>
-Hello
-World
-</pre>
-
-<h3>2. Common String Methods</h3>
-<ul>
-  <li><strong>length()</strong> – Returns the number of characters.</li>
-  <li><strong>charAt(index)</strong> – Returns character at given index.</li>
-  <li><strong>toUpperCase()</strong> / <strong>toLowerCase()</strong> – Changes case.</li>
-  <li><strong>equals()</strong> / <strong>equalsIgnoreCase()</strong> – Compares two strings.</li>
-  <li><strong>contains()</strong> – Checks if a string contains a sequence.</li>
-  <li><strong>replace()</strong> – Replaces characters or text.</li>
-  <li><strong>substring()</strong> – Extracts a portion.</li>
-  <li><strong>trim()</strong> – Removes leading/trailing spaces.</li>
-  <li><strong>split()</strong> – Splits the string into array.</li>
-  <li><strong>concat()</strong> – Appends another string.</li>
-</ul>
-
-<pre>
-public class StringMethods {
-    public static void main(String[] args) {
-        String str = "  Java Programming ";
-
-        System.out.println("Length: " + str.length());
-        System.out.println("Char at index 5: " + str.charAt(5));
-        System.out.println("Uppercase: " + str.toUpperCase());
-        System.out.println("Lowercase: " + str.toLowerCase());
-        System.out.println("Trimmed: " + str.trim());
-        System.out.println("Contains 'Pro': " + str.contains("Pro"));
-        System.out.println("Replaced: " + str.replace("Java", "Python"));
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Length: 19
-Char at index 5: P
-Uppercase:   JAVA PROGRAMMING 
-Lowercase:   java programming 
-Trimmed: Java Programming
-Contains 'Pro': true
-Replaced:   Python Programming 
-</pre>
-
-<h3>3. Comparing Strings</h3>
-<pre>
-public class CompareStrings {
-    public static void main(String[] args) {
-        String a = "hello";
-        String b = "HELLO";
-
-        System.out.println(a.equals(b));
-        System.out.println(a.equalsIgnoreCase(b));
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-false
-true
-</pre>
-
-<h3>4. String Concatenation</h3>
-<pre>
-public class ConcatExample {
-    public static void main(String[] args) {
-        String first = "Java";
-        String second = "Language";
-
-        System.out.println(first + " " + second);
-        System.out.println(first.concat(" " + second));
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Java Language
-Java Language
-</pre>
-
-<h3>5. Splitting Strings</h3>
-<pre>
-public class SplitExample {
-    public static void main(String[] args) {
-        String sentence = "Java is simple";
-        String[] words = sentence.split(" ");
-
-        for (String word : words) {
-            System.out.println(word);
-        }
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Java
-is
-simple
-</pre>
-
-<h3>6. Using substring()</h3>
-<pre>
-public class SubstringExample {
-    public static void main(String[] args) {
-        String s = "Programming";
-        System.out.println(s.substring(0, 4)); // from 0 to 3
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Prog
-</pre>
-
-<h3>7. StringBuilder and StringBuffer</h3>
-<ul>
-  <li><strong>StringBuilder:</strong> Mutable, faster, not thread-safe</li>
-  <li><strong>StringBuffer:</strong> Mutable, slower, but thread-safe</li>
-</ul>
-
-<h4>Example (StringBuilder):</h4>
-<pre>
-public class BuilderExample {
-    public static void main(String[] args) {
+        System.out.println(s1 == s2);      // false (different memory locations)
+        System.out.println(s1.equals(s2)); // true (same character content)
+        
+        // Efficient text builder
         StringBuilder sb = new StringBuilder("Hello");
         sb.append(" World");
-        System.out.println(sb.toString());
+        System.out.println(sb.toString()); // "Hello World"
     }
-}
-</pre>
+}</code></pre>
 
-<strong>Output:</strong>
-<pre>
-Hello World
-</pre>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>String s1 = "Java";</code>: Places `"Java"` in the String Pool and references it.</li>
+        <li><code>String s2 = new String("Java");</code>: Forces the JVM to bypass the pool and create a new String object directly on the general Heap.</li>
+        <li><code>s1 == s2</code>: Evaluates to <code>false</code> because <code>s1</code> references the Pool, while <code>s2</code> references a different address on the general Heap.</li>
+        <li><code>sb.append(" World");</code>: Modifies the original internal character array of `sb` directly without creating any intermediate string objects.</li>
+    </ul>
+</div>
 
-<h4>Example (StringBuffer):</h4>
-<pre>
-public class BufferExample {
-    public static void main(String[] args) {
-        StringBuffer sb = new StringBuffer("Java");
-        sb.append(" Strings");
-        System.out.println(sb);
-    }
-}
-</pre>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge google">Google</span>
+            <span class="company-badge meta">Meta</span>
+        </div>
+        <h4>Q1: Why are Strings immutable in Java?</h4>
+        <p><strong>A:</strong> Immutability guarantees:
+            1. **Memory efficiency:** The String Pool can share literals.
+            2. **Security:** Strings are widely used for databases, file paths, and network credentials; immutability prevents malicious changes.
+            3. **Thread Safety:** Multiple threads can read a string simultaneously without synchronization issues.
+        </p>
+    </div>
 
-<strong>Output:</strong>
-<pre>
-Java Strings
-<p><strong>Conclusion:</strong> Strings are essential in Java programming. Understanding string manipulation helps in handling user input, file processing, and building applications that interact with text data.</p>
-
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge microsoft">Microsoft</span>
+        </div>
+        <h4>Q2: What is the difference between String s = "abc" and String s = new String("abc")?</h4>
+        <p><strong>A:</strong> The first creates a string in the String Pool. If `"abc"` already exists, it reuses the pool reference. The second syntax always allocates a new String object on the main Heap, plus creates the literal in the Pool if it's not already present, resulting in duplicate memory allocation.</p>
+    </div>
+</div>

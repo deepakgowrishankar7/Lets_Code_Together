@@ -1,201 +1,125 @@
-<h2>Java Collections Framework</h2>
+<h1>Java Collections Framework</h1>
 
-<p>
-The <strong>Java Collections Framework</strong> is a set of classes and interfaces that implement commonly reusable data structures like List, Set, Map, and Queue. It provides a way to store, access, and manipulate groups of objects efficiently.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty intermediate">Intermediate</span>
+    <span class="badge-time">Read Time: 12 mins</span>
+</div>
 
-<h3>Main Interfaces in Collections:</h3>
-<ul>
-  <li><strong>List</strong> – Ordered, allows duplicates (e.g., ArrayList, LinkedList)</li>
-  <li><strong>Set</strong> – Unordered, no duplicates (e.g., HashSet, TreeSet)</li>
-  <li><strong>Map</strong> – Key-value pairs (e.g., HashMap, TreeMap)</li>
-  <li><strong>Queue</strong> – FIFO order (e.g., LinkedList, PriorityQueue)</li>
-</ul>
+<div class="section">
+    <h2>1. The Real-World Analogy: Container Organizers</h2>
+    <p>Imagine organizing different objects in your room. Depending on what you are organizing, you choose different tools:</p>
+    <ul>
+        <li><strong>A Notebook (List):</strong> Stores items sequentially. You can write the same word multiple times, and the order matters.</li>
+        <li><strong>A Jar of Marbles (Set):</strong> Holds unique items. If you drop two blue marbles inside, they just mix together; order doesn't matter, and duplicates are impossible.</li>
+        <li><strong>A Rolodex Contacts Book (Map):</strong> Associates a unique key (Name) with a value (Phone number). You look up the phone number by indexing the name.</li>
+    </ul>
+</div>
 
-<hr>
+<div class="section">
+    <h2>2. Key Collections Hierarchy</h2>
+    <p>The collections framework resides in <code>java.util</code>. Primitives cannot go directly into collections; you must use wrapper classes (like <code>Integer</code>).</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Interface</th>
+                <th>Common Class</th>
+                <th>Order Preserved?</th>
+                <th>Allows Duplicates?</th>
+                <th>Internal Data Structure</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2"><strong>List</strong></td>
+                <td><code>ArrayList</code></td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>Dynamic resizeable Array</td>
+            </tr>
+            <tr>
+                <td><code>LinkedList</code></td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>Doubly Linked List nodes</td>
+            </tr>
+            <tr>
+                <td rowspan="2"><strong>Set</strong></td>
+                <td><code>HashSet</code></td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+                <td>HashMap (using key indices)</td>
+            </tr>
+            <tr>
+                <td><code>TreeSet</code></td>
+                <td>✅ Yes (Sorted)</td>
+                <td>❌ No</td>
+                <td>Self-balancing Red-Black Tree</td>
+            </tr>
+            <tr>
+                <td rowspan="2"><strong>Map</strong></td>
+                <td><code>HashMap</code></td>
+                <td>❌ No</td>
+                <td>Key: ❌ No, Value: ✅ Yes</td>
+                <td>Hash buckets array + Node lists</td>
+            </tr>
+            <tr>
+                <td><code>TreeMap</code></td>
+                <td>✅ Yes (Sorted)</td>
+                <td>Key: ❌ No, Value: ✅ Yes</td>
+                <td>Self-balancing Red-Black Tree</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-<h3>1. List Example (ArrayList)</h3>
-<p><strong>List</strong> stores elements in the order they were added and allows duplicates.</p>
-<pre>
-import java.util.ArrayList;
+<div class="warning-callout">
+    <h3>⚠️ Warning: ConcurrentModificationException!</h3>
+    <p>If you try to modify a collection (like adding or removing items) directly inside a standard <code>for-each</code> loop, Java's iterator will detect a structural modification mismatch and throw a <strong>ConcurrentModificationException</strong>. To edit safe, use an explicit <code>Iterator</code> or <code>removeIf()</code>.</p>
+</div>
 
-public class ListExample {
+<div class="section">
+    <h2>💻 Example Code: HashMap Internal Access</h2>
+    <pre><code class="language-java">import java.util.*;
+
+public class MapDemo {
     public static void main(String[] args) {
-        ArrayList<String> fruits = new ArrayList<>();
-        fruits.add("Apple");
-        fruits.add("Banana");
-        fruits.add("Mango");
-
-        System.out.println(fruits);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-[Apple, Banana, Mango]
-</pre>
-
-<hr>
-
-<h3>2. Set Example (HashSet)</h3>
-<p><strong>Set</strong> does not allow duplicate values and does not maintain insertion order.</p>
-<pre>
-import java.util.HashSet;
-
-public class SetExample {
-    public static void main(String[] args) {
-        HashSet<String> colors = new HashSet<>();
-        colors.add("Red");
-        colors.add("Green");
-        colors.add("Red"); // duplicate
-
-        System.out.println(colors);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-[Red, Green]
-</pre>
-
-<hr>
-
-<h3>3. Map Example (HashMap)</h3>
-<p><strong>Map</strong> stores key-value pairs. Keys are unique.</p>
-<pre>
-import java.util.HashMap;
-
-public class MapExample {
-    public static void main(String[] args) {
-        HashMap<Integer, String> map = new HashMap<>();
-        map.put(1, "A");
-        map.put(2, "B");
-        map.put(3, "C");
-
-        System.out.println(map);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-{1=A, 2=B, 3=C}
-</pre>
-
-<hr>
-
-<h3>4. Queue Example (LinkedList)</h3>
-<p><strong>Queue</strong> follows FIFO (First In First Out).</p>
-<pre>
-import java.util.LinkedList;
-import java.util.Queue;
-
-public class QueueExample {
-    public static void main(String[] args) {
-        Queue<String> tasks = new LinkedList<>();
-        tasks.add("Task1");
-        tasks.add("Task2");
-
-        System.out.println("Next: " + tasks.peek());
-        tasks.remove();
-        System.out.println("After removing: " + tasks);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Next: Task1
-After removing: [Task2]
-</pre>
-
-<hr>
-
-<h3>5. Iterating Collections (For-each loop)</h3>
-<pre>
-import java.util.ArrayList;
-
-public class LoopExample {
-    public static void main(String[] args) {
-        ArrayList<Integer> nums = new ArrayList<>();
-        nums.add(10);
-        nums.add(20);
-        nums.add(30);
-
-        for (int n : nums) {
-            System.out.println(n);
+        Map&lt;String, Integer&gt; inventory = new HashMap&lt;&gt;();
+        inventory.put("Apples", 50);
+        inventory.put("Bananas", 20);
+        inventory.put("Apples", 75); // Overwrites key "Apples" with new value
+        
+        for (Map.Entry&lt;String, Integer&gt; entry : inventory.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
     }
-}
-</pre>
+}</code></pre>
 
-<strong>Output:</strong>
-<pre>
-10
-20
-30
-</pre>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>Map&lt;String, Integer&gt;</code>: Declares key datatype as <code>String</code> and value datatype as wrapper <code>Integer</code>.</li>
+        <li><code>inventory.put("Apples", 75);</code>: Since keys must be unique, Java hashes `"Apples"`, resolves the bucket index, checks for equality, and updates the value from 50 to 75.</li>
+        <li><code>inventory.entrySet()</code>: Returns a set representation of key-value mapping nodes to allow clean loop iteration.</li>
+    </ul>
+</div>
 
-<hr>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge google">Google</span>
+            <span class="company-badge meta">Meta</span>
+        </div>
+        <h4>Q1: How does HashMap handle key hashing and collisions?</h4>
+        <p><strong>A:</strong> HashMap uses the key's <code>hashCode()</code> to locate the bucket array index. If multiple keys hash to the same bucket (collision), they are chained in a LinkedList. If bucket size exceeds 8, the chain converts to a Balanced Tree (Red-Black Tree) to keep retrieval speed at <code>O(log n)</code> instead of <code>O(n)</code>.</p>
+    </div>
 
-<h3>6. Useful Methods in Collection Classes</h3>
-<ul>
-  <li><code>add()</code> – Add an element</li>
-  <li><code>remove()</code> – Remove an element</li>
-  <li><code>contains()</code> – Check if element exists</li>
-  <li><code>size()</code> – Get size of collection</li>
-  <li><code>clear()</code> – Remove all elements</li>
-  <li><code>isEmpty()</code> – Check if collection is empty</li>
-</ul>
-
-<hr>
-
-<h3>7. Sorting Collections</h3>
-<pre>
-import java.util.ArrayList;
-import java.util.Collections;
-
-public class SortExample {
-    public static void main(String[] args) {
-        ArrayList<String> names = new ArrayList<>();
-        names.add("Zara");
-        names.add("Anil");
-        names.add("John");
-
-        Collections.sort(names);
-        System.out.println(names);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-[Anil, John, Zara]
-</pre>
-
-<hr>
-
-<h3>8. Convert Array to List</h3>
-<pre>
-import java.util.Arrays;
-import java.util.List;
-
-public class ConvertArrayToList {
-    public static void main(String[] args) {
-        String[] animals = {"Dog", "Cat", "Horse"};
-        List<String> list = Arrays.asList(animals);
-
-        System.out.println(list);
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-[Dog, Cat, Horse]
-</pre>
-
-<p><strong>Conclusion:</strong> The Java Collections Framework simplifies working with data groups. Choosing the right collection depends on your needs (ordering, uniqueness, key-value storage, etc.).</p>
-
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge microsoft">Microsoft</span>
+        </div>
+        <h4>Q2: What is the equals() and hashCode() contract?</h4>
+        <p><strong>A:</strong> If two objects are equal (determined by <code>equals()</code>), they MUST return the exact same integer value for <code>hashCode()</code>. If you override one, you must override both, otherwise custom objects will fail to locate keys correctly inside HashMaps and HashSets.</p>
+    </div>
+</div>

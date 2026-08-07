@@ -1,168 +1,84 @@
-<h2>Java Exception Handling</h2>
+<h1>Exception Handling</h1>
 
-<p>
-In Java, an <strong>exception</strong> is an event that disrupts the normal flow of the program. It is an object that describes an error condition. Java provides a robust mechanism to handle runtime errors, known as <strong>Exception Handling</strong>.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty intermediate">Intermediate</span>
+    <span class="badge-time">Read Time: 10 mins</span>
+</div>
 
-<h3>Why Use Exception Handling?</h3>
-<ul>
-  <li>To prevent program crashes</li>
-  <li>To handle errors gracefully</li>
-  <li>To separate error handling logic from normal logic</li>
-</ul>
+<div class="section">
+    <h2>1. The Real-World Analogy: Car Airbags</h2>
+    <p>Imagine driving a car down the road. If a tire blows out or another vehicle crashes into you, the car's <strong>airbags</strong> automatically inflate. The crash is an unexpected interruption, but the airbags deploy to mitigate damage and prevent a fatal accident.</p>
+    <p>In Java, an <strong>Exception</strong> is that unexpected crash (e.g. division by zero, database disconnected). <strong>Exception Handling</strong> is the airbag system, catching the error and allowing your program to recovery gracefully instead of abruptly crashing.</p>
+</div>
 
-<hr>
+<div class="section">
+    <h2>2. Exception Hierarchy: Checked vs. Unchecked</h2>
+    <p>All exception classes inherit from <code>java.lang.Throwable</code>. Throwable splits into two main branches:</p>
+    <ul>
+        <li><strong>Checked Exceptions:</strong> Checked at compile-time. The compiler forces you to handle them (e.g., <code>IOException</code>, <code>SQLException</code>) using try-catch blocks or declaring them in method signatures using <code>throws</code>.</li>
+        <li><strong>Unchecked Exceptions (Runtime Exceptions):</strong> Not checked at compile-time. Usually caused by programming logic errors (e.g., <code>NullPointerException</code>, <code>ArrayIndexOutOfBoundsException</code>).</li>
+        <li><strong>Errors:</strong> Severe conditions outside the program's control (e.g., <code>OutOfMemoryError</code>, <code>StackOverflowError</code>). Programs should not try to catch Errors.</li>
+    </ul>
+</div>
 
-<h3>1. Types of Exceptions</h3>
-<ul>
-  <li><strong>Checked Exceptions</strong> – Caught during compile time (e.g., IOException, SQLException)</li>
-  <li><strong>Unchecked Exceptions</strong> – Caught at runtime (e.g., ArithmeticException, NullPointerException)</li>
-  <li><strong>Error</strong> – Serious issues like OutOfMemoryError (not usually handled)</li>
-</ul>
+<div class="warning-callout">
+    <h3>⚠️ Warning: Generic Exception Catching!</h3>
+    <p>Avoid catching the top-level <code>Exception</code> class (e.g. <code>catch (Exception e)</code>) blindly. This hides unexpected bugs and makes debugging extremely difficult. Always catch the most specific exception first.</p>
+</div>
 
-<hr>
+<div class="section">
+    <h2>3. The Try-Catch-Finally Mechanism</h2>
+    <p>Errors are captured and resolved inside try-catch wrappers:</p>
+    <ul>
+        <li><strong>try:</strong> Surrounds the code that might throw an exception.</li>
+        <li><strong>catch:</strong> Executes if an exception is thrown inside the try block, handling the error.</li>
+        <li><strong>finally:</strong> A block that **always executes**, regardless of whether an exception was thrown or caught (essential for closing files, network connections, or database sockets).</li>
+    </ul>
+</div>
 
-<h3>2. Basic try-catch Example</h3>
-<pre>
-public class TryCatchExample {
-    public static void main(String[] args) {
+<div class="section">
+    <h2>💻 Example Code & Line-by-Line Breakdown</h2>
+    <pre><code class="language-java">import java.io.*;
+
+public class ExceptionDemo {
+    public static void readFile(String path) throws IOException {
+        FileReader file = new FileReader(path); // Might throw FileNotFoundException
+        BufferedReader fileInput = new BufferedReader(file);
+        
         try {
-            int a = 10 / 0; // will throw ArithmeticException
-        } catch (ArithmeticException e) {
-            System.out.println("Cannot divide by zero!");
-        }
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Cannot divide by zero!
-</pre>
-
-<hr>
-
-<h3>3. Multiple catch Blocks</h3>
-<pre>
-public class MultiCatch {
-    public static void main(String[] args) {
-        try {
-            String s = null;
-            System.out.println(s.length());
-        } catch (NullPointerException e) {
-            System.out.println("Null pointer error!");
-        } catch (Exception e) {
-            System.out.println("General error occurred.");
-        }
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Null pointer error!
-</pre>
-
-<hr>
-
-<h3>4. finally Block</h3>
-<p>The <code>finally</code> block always runs, whether or not an exception is caught.</p>
-<pre>
-public class FinallyExample {
-    public static void main(String[] args) {
-        try {
-            int[] arr = new int[3];
-            System.out.println(arr[5]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Index error!");
+            System.out.println(fileInput.readLine());
         } finally {
-            System.out.println("This block always runs.");
+            // Always close resources to prevent memory leaks
+            System.out.println("Closing resources...");
+            fileInput.close();
         }
     }
-}
-</pre>
+}</code></pre>
 
-<strong>Output:</strong>
-<pre>
-Index error!
-This block always runs.
-</pre>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>throws IOException</code>: Declares that this method does not handle IO exceptions internally. Instead, it delegates responsibility to whatever method calls <code>readFile()</code>.</li>
+        <li><code>try { ... } finally { fileInput.close(); }</code>: Ensures that the file reader is closed safely even if reading the line fails midway.</li>
+    </ul>
+</div>
 
-<hr>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge amazon">Amazon</span>
+            <span class="company-badge uber">Uber</span>
+        </div>
+        <h4>Q1: What happens if you return a value from a try block? Does the finally block still run?</h4>
+        <p><strong>A:</strong> Yes. The <code>finally</code> block always executes. If there is a return statement inside the <code>try</code> block, the JVM saves the return value, executes the <code>finally</code> block first, and then returns the saved value. If the <code>finally</code> block also contains a return statement, it will override the value returned in the <code>try</code> block.</p>
+    </div>
 
-<h3>5. throw Keyword</h3>
-<p><code>throw</code> is used to explicitly throw an exception.</p>
-<pre>
-public class ThrowExample {
-    public static void main(String[] args) {
-        int age = 15;
-        if (age < 18) {
-            throw new ArithmeticException("Not eligible to vote");
-        }
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Exception in thread "main" java.lang.ArithmeticException: Not eligible to vote
-</pre>
-
-<hr>
-
-<h3>6. throws Keyword</h3>
-<p><code>throws</code> is used in method declaration to indicate that method might throw an exception.</p>
-<pre>
-import java.io.*;
-
-public class ThrowsExample {
-    public static void main(String[] args) throws IOException {
-        throw new IOException("IO Error");
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Exception in thread "main" java.io.IOException: IO Error
-</pre>
-
-<hr>
-
-<h3>7. Custom Exception (User-defined)</h3>
-<pre>
-class MyException extends Exception {
-    public MyException(String message) {
-        super(message);
-    }
-}
-
-public class CustomExample {
-    public static void main(String[] args) {
-        try {
-            throw new MyException("This is a custom exception");
-        } catch (MyException e) {
-            System.out.println("Caught: " + e.getMessage());
-        }
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Caught: This is a custom exception
-</pre>
-
-<hr>
-
-<h3>8. Common Exceptions in Java</h3>
-<ul>
-  <li><strong>ArithmeticException</strong> – Divide by zero</li>
-  <li><strong>NullPointerException</strong> – Accessing object that is null</li>
-  <li><strong>ArrayIndexOutOfBoundsException</strong> – Invalid array index</li>
-  <li><strong>NumberFormatException</strong> – Invalid number conversion</li>
-  <li><strong>IOException</strong> – Error during input/output</li>
-</ul>
-
-<p><strong>Conclusion:</strong> Exception handling is an essential feature in Java that ensures graceful handling of runtime errors, keeping programs safe and user-friendly.</p>
-
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge microsoft">Microsoft</span>
+        </div>
+        <h4>Q2: What is the difference between throw and throws?</h4>
+        <p><strong>A:</strong> <code>throw</code> is a keyword used inside methods to explicitly instantiate and throw a specific exception (e.g. <code>throw new IllegalArgumentException();</code>). <code>throws</code> is a keyword in the method header used to declare that this method might throw specific checked exceptions, warning callers to handle them.</p>
+    </div>
+</div>

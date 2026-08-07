@@ -1,270 +1,129 @@
-<h2>Java OOPs Concepts</h2>
+<h1>Object-Oriented Programming (OOP) Pillars</h1>
 
-<p>Java is an Object-Oriented Programming (OOP) language. OOP helps in writing modular, reusable, and scalable code. It organizes the program using <strong>objects</strong> and <strong>classes</strong>.</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty intermediate">Intermediate</span>
+    <span class="badge-time">Read Time: 15 mins</span>
+</div>
 
-<h3>Main Concepts of OOP in Java:</h3>
-<ul>
-  <li><strong>1. Class and Object</strong></li>
-  <li><strong>2. Inheritance</strong></li>
-  <li><strong>3. Encapsulation</strong></li>
-  <li><strong>4. Polymorphism</strong></li>
-  <li><strong>5. Abstraction</strong></li>
-</ul>
+<div class="section">
+    <h2>1. The Four Pillars of OOP</h2>
+    <p>Object-Oriented Programming is a paradigm that models software around real-world objects. In Java, this structure rests on **Four Pillars**:</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0;">
+        <div style="padding:16px; background:rgba(0,245,160,0.04); border:1px solid rgba(0,245,160,0.15); border-radius:12px;">
+            <h4 style="color:var(--jade); margin-top:0;">🛡️ 1. Encapsulation</h4>
+            <p style="font-size:0.88em; margin:0;">Hiding data by declaring fields <code>private</code> and exposing them only through <code>public</code> getters/setters. (Analogy: Medicine capsule protecting its ingredients).</p>
+        </div>
+        <div style="padding:16px; background:rgba(0,245,160,0.04); border:1px solid rgba(0,245,160,0.15); border-radius:12px;">
+            <h4 style="color:var(--jade); margin-top:0;">🌳 2. Inheritance</h4>
+            <p style="font-size:0.88em; margin:0;">Reusing code by letting child classes inherit attributes and methods from parent classes using <code>extends</code>. (Analogy: Child inheriting family traits).</p>
+        </div>
+        <div style="padding:16px; background:rgba(0,245,160,0.04); border:1px solid rgba(0,245,160,0.15); border-radius:12px;">
+            <h4 style="color:var(--jade); margin-top:0;">🎭 3. Polymorphism</h4>
+            <p style="font-size:0.88em; margin:0;">Allowing objects to take multiple forms (overriding parent methods). (Analogy: A person acting differently at work vs. at home).</p>
+        </div>
+        <div style="padding:16px; background:rgba(0,245,160,0.04); border:1px solid rgba(0,245,160,0.15); border-radius:12px;">
+            <h4 style="color:var(--jade); margin-top:0;">🔌 4. Abstraction</h4>
+            <p style="font-size:0.88em; margin:0;">Hiding background complexity and showing only relevant interaction signatures. (Analogy: Operating a TV remote without knowing the circuit design).</p>
+        </div>
+    </div>
+</div>
 
-<hr>
+<div class="warning-callout">
+    <h3>⚠️ Warning: Method Overloading vs. Overriding!</h3>
+    <ul>
+        <li><strong>Overloading</strong> (Compile-time): Same method name, different parameters inside the same class.</li>
+        <li><strong>Overriding</strong> (Runtime): Re-defining a parent method inside a subclass with the *exact same* signature. Add `@Override` to catch compilation mismatches.</li>
+    </ul>
+</div>
 
-<h3>1. Class and Object</h3>
-<p>A <strong>class</strong> is a blueprint or template from which objects are created. An <strong>object</strong> is an instance of a class.</p>
+<div class="section">
+    <h2>2. Deep Dive: Interfaces vs. Abstract Classes</h2>
+    <p>Both support Abstraction, but they differ in purpose and capability:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Abstract Class</th>
+                <th>Interface</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Inheritance model</strong></td>
+                <td>Single inheritance (Class can only extend one class).</td>
+                <td>Multiple inheritance (Class can implement many interfaces).</td>
+            </tr>
+            <tr>
+                <td><strong>Instance Variables</strong></td>
+                <td>Can have instance fields (state).</td>
+                <td>Variables are implicitly <code>public static final</code> (constants).</td>
+            </tr>
+            <tr>
+                <td><strong>Methods</strong></td>
+                <td>Can have both abstract and concrete methods.</td>
+                <td>Abstract methods (Java 8+ supports default & static methods).</td>
+            </tr>
+            <tr>
+                <td><strong>Constructor</strong></td>
+                <td>Can have constructors (for subclasses).</td>
+                <td>Cannot have constructors.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-<pre>
-class Car {
-    String brand = "Honda";
-    int speed = 120;
-
-    void display() {
-        System.out.println("Brand: " + brand);
-        System.out.println("Speed: " + speed + " km/h");
-    }
+<div class="section">
+    <h2>💻 Example Code & Line-by-Line Breakdown</h2>
+    <pre><code class="language-java">// 1. Abstraction: Contract definition
+interface Animal {
+    void makeSound(); // Implicitly public abstract
 }
 
-public class Main {
-    public static void main(String[] args) {
-        Car myCar = new Car();
-        myCar.display();
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Brand: Honda
-Speed: 120 km/h
-</pre>
-
-<hr>
-
-<h3>2. Inheritance</h3>
-<p>Inheritance allows one class (child) to inherit the properties and methods of another class (parent).</p>
-
-<pre>
-class Animal {
-    void sound() {
-        System.out.println("Animal makes sound");
-    }
-}
-
-class Dog extends Animal {
-    void bark() {
-        System.out.println("Dog barks");
-    }
-}
-
-public class Test {
-    public static void main(String[] args) {
-        Dog d = new Dog();
-        d.sound();  // inherited
-        d.bark();   // own
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Animal makes sound
-Dog barks
-</pre>
-
-<hr>
-
-<h3>3. Encapsulation</h3>
-<p>Encapsulation means binding data (variables) and code (methods) together and keeping them safe from outside access using <code>private</code> access modifier.</p>
-
-<pre>
-class Student {
+// 2. Inheritance: Dog extends generic class characteristics
+class Dog implements Animal {
+    // 3. Encapsulation: Private state hidden
     private String name;
 
-    public void setName(String n) {
-        name = n;
+    public Dog(String name) {
+        this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-}
+    public String getName() { return this.name; }
 
-public class EncapsulationExample {
-    public static void main(String[] args) {
-        Student s = new Student();
-        s.setName("Ravi");
-        System.out.println(s.getName());
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Ravi
-</pre>
-
-<hr>
-
-<h3>4. Polymorphism</h3>
-<p>Polymorphism means "many forms". Java supports two types:</p>
-<ul>
-  <li><strong>Compile-time (Method Overloading)</strong></li>
-  <li><strong>Run-time (Method Overriding)</strong></li>
-</ul>
-
-<h4>Method Overloading Example:</h4>
-<pre>
-class Calculator {
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    int add(int a, int b, int c) {
-        return a + b + c;
-    }
-}
-
-public class OverloadTest {
-    public static void main(String[] args) {
-        Calculator calc = new Calculator();
-        System.out.println(calc.add(2, 3));
-        System.out.println(calc.add(1, 2, 3));
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-5
-6
-</pre>
-
-<h4>Method Overriding Example:</h4>
-<pre>
-class Bank {
-    int getInterestRate() {
-        return 5;
-    }
-}
-
-class SBI extends Bank {
-    int getInterestRate() {
-        return 7;
-    }
-}
-
-public class OverrideTest {
-    public static void main(String[] args) {
-        SBI bank = new SBI();
-        System.out.println("Interest Rate: " + bank.getInterestRate() + "%");
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Interest Rate: 7%
-</pre>
-
-<hr>
-
-<h3>5. Abstraction</h3>
-<p>Abstraction is hiding the internal details and showing only functionality. It is achieved using <strong>abstract classes</strong> or <strong>interfaces</strong>.</p>
-
-<h4>Abstract Class Example:</h4>
-<pre>
-abstract class Shape {
-    abstract void draw();
-}
-
-class Circle extends Shape {
-    void draw() {
-        System.out.println("Drawing Circle");
-    }
-}
-
-public class AbstractTest {
-    public static void main(String[] args) {
-        Shape s = new Circle();
-        s.draw();
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Drawing Circle
-</pre>
-
-<h4>Interface Example:</h4>
-<pre>
-interface Animal {
-    void makeSound();
-}
-
-class Cat implements Animal {
+    // 4. Polymorphism: Override abstract contract method
+    @Override
     public void makeSound() {
-        System.out.println("Meow");
+        System.out.println(name + " says: Woof!");
     }
-}
+}</code></pre>
 
-public class InterfaceTest {
-    public static void main(String[] args) {
-        Animal a = new Cat();
-        a.makeSound();
-    }
-}
-</pre>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>interface Animal { void makeSound(); }</code>: Defines an abstract contract. Any class that implements <code>Animal</code> MUST implement <code>makeSound()</code>.</li>
+        <li><code>private String name;</code>: Encapsulates the variable so external classes cannot bypass setter validation or corrupt internal state.</li>
+        <li><code>@Override public void makeSound()</code>: Implements Polymorphism. When you call <code>makeSound()</code> on an <code>Animal</code> reference pointing to a <code>Dog</code> object, Java dynamically binds the execution to the Dog's version at runtime.</li>
+    </ul>
+</div>
 
-<strong>Output:</strong>
-<pre>
-Meow
-</pre>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge meta">Meta</span>
+            <span class="company-badge netflix">Netflix</span>
+        </div>
+        <h4>Q1: What is runtime polymorphism, and how does Java achieve it?</h4>
+        <p><strong>A:</strong> Runtime polymorphism (dynamic method dispatch) is when a call to an overridden method is resolved at runtime rather than compile-time. Java achieves this by referencing the actual object type in Heap memory using <strong>Virtual Method Tables (VTABLES)</strong> instead of relying on the reference variable type.</p>
+    </div>
 
-<hr>
-
-<h3>Real-World Example using all Concepts</h3>
-<pre>
-abstract class Vehicle {
-    String brand = "Generic";
-
-    abstract void drive();
-}
-
-class Bike extends Vehicle {
-    void drive() {
-        System.out.println(brand + " bike is driving");
-    }
-}
-
-class HeroBike extends Bike {
-    String model = "Splendor";
-
-    void showModel() {
-        System.out.println("Model: " + model);
-    }
-}
-
-public class OopsExample {
-    public static void main(String[] args) {
-        HeroBike hb = new HeroBike();
-        hb.brand = "Hero";
-        hb.drive();
-        hb.showModel();
-    }
-}
-</pre>
-
-<strong>Output:</strong>
-<pre>
-Hero bike is driving
-Model: Splendor
-</pre>
-
-<hr>
-
-<h3>Video Tutorial</h3>
-<p><strong>Conclusion:</strong> Mastering OOPs is crucial in Java. It helps to design clean, modular, and reusable code using objects and classes.</p>
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge google">Google</span>
+        </div>
+        <h4>Q2: Why doesn't Java support multiple inheritance of classes?</h4>
+        <p><strong>A:</strong> To prevent the <strong>Diamond Problem</strong>, which occurs when a subclass inherits conflicting implementations of a method from two different parent classes. Java bypasses this conflict by allowing multiple inheritance only through Interfaces (which do not hold instances or state).</p>
+    </div>
+</div>

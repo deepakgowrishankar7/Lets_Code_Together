@@ -657,6 +657,9 @@ function switchCourseTab(course, tab) {
 }
 function showJavaContent(tab) {
     switchCourseTab("java", tab);
+    if (tab === "interview") {
+        loadJavaInterviewHub();
+    }
 }
 
 function showCppContent(tab) {
@@ -1321,10 +1324,7 @@ function renderFilteredQuizScores() {
         }
     });
 
-    // Default active filter to user's first attempted language if set to All initially
-    if (_activeQuizLangFilter === 'All' && attemptedLangs.length > 0) {
-        _activeQuizLangFilter = attemptedLangs[0];
-    }
+
 
     const allFilterOptions = ['All', ...attemptedLangs.filter(l => l !== 'All')];
 
@@ -1333,19 +1333,14 @@ function renderFilteredQuizScores() {
         filterBar.innerHTML = allFilterOptions.map(l => {
             const isActive = l === _activeQuizLangFilter;
             const icon = l === 'Java' ? '☕' : (l === 'Python' ? '🐍' : (l === 'SQL' ? '🛢️' : (l === 'All' ? '📊' : '💻')));
-            const qCount = l === 'Java' ? ' (20 Qs)' : (l === 'Python' ? ' (10 Qs)' : (l === 'SQL' ? ' (10 Qs)' : ''));
             return `
-                <button type="button" 
-                        class="lang-filter-pill ${isActive ? 'active' : ''}" 
-                        style="padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid ${isActive ? 'var(--jade)' : 'rgba(255,255,255,0.15)'}; background: ${isActive ? 'rgba(0,208,132,0.2)' : 'rgba(255,255,255,0.05)'}; color: ${isActive ? 'var(--jade)' : '#94a3b8'}; transition: all 0.2s ease;"
-                        onclick="setQuizLangFilter('${l}')">
-                    ${icon} ${l}${qCount}
+                <button type="button" class="filter-pill ${isActive ? 'active' : ''}" onclick="setQuizLangFilter('${l}')">
+                    ${icon} ${l}
                 </button>
             `;
         }).join("");
     }
 
-    // Filter scores
     const filtered = _cachedPersonalScores.filter(r => {
         if (_activeQuizLangFilter === 'All') return true;
         const q = (r.quiz || '').toLowerCase();
@@ -1356,31 +1351,70 @@ function renderFilteredQuizScores() {
         return true;
     });
 
-    if (!filtered.length) {
-        topUsersContainer.innerHTML = `<div class="dash-empty-state">No ${_activeQuizLangFilter} quiz scores recorded yet.</div>`;
+    // Filter by search term
+    const searchVal = (document.getElementById("personal-quiz-search")?.value || "").toLowerCase().trim();
+    let displayList = filtered;
+    if (searchVal) {
+        displayList = filtered.filter(r => 
+            (r.quiz || "").toLowerCase().includes(searchVal)
+        );
+    }
+
+    if (!displayList.length) {
+        topUsersContainer.innerHTML = `<div class="dash-empty-state">No matching ${_activeQuizLangFilter} quiz scores found.</div>`;
         return;
     }
 
-    let html = `<table class="dash-table"><thead><tr><th>Course</th><th>Score</th><th>Accuracy</th></tr></thead><tbody>`;
-    filtered.forEach(r => {
-        const qLower = (r.quiz || '').toLowerCase();
-        const total = r.total || (qLower.includes('java') ? 20 : 10);
+    // Render personal history as a premium compact table
+    let listHtml = `<div class="leaderboard-table-container">
+        <table class="leaderboard-premium-table">
+            <thead>
+                <tr>
+                    <th>Track</th>
+                    <th>Quiz Title</th>
+                    <th>Score</th>
+                    <th>Accuracy</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+    displayList.forEach(r => {
+        const qLabel = (r.quiz || 'Quiz').trim();
+        const qLower = qLabel.toLowerCase();
+        const total = r.total || (qLower.includes('java') ? 20 : (qLower.includes('python') || qLower.includes('sql') ? 10 : 15));
         const score = r.score != null ? r.score : 0;
-        const pct = Math.round((score / total) * 100);
-        html += `
+        const pct = Math.min(100, Math.max(0, Math.round((score / total) * 100)));
+        const level = qLower.includes('beginner') ? 'Beginner' : (qLower.includes('intermediate') ? 'Intermediate' : (qLower.includes('advanced') ? 'Advanced' : 'Practice'));
+        const track = qLower.includes('java') ? 'Java' : (qLower.includes('python') ? 'Python' : (qLower.includes('sql') ? 'SQL' : 'Other'));
+        const accuracyColorClass = pct >= 90 ? 'accuracy-high' : (pct >= 60 ? 'accuracy-med' : 'accuracy-low');
+
+        listHtml += `
             <tr>
-                <td><span class="course-pill">${escapeHtml(r.quiz || 'Quiz')}</span></td>
-                <td><strong>${score} / ${total}</strong></td>
                 <td>
-                    <div class="score-progress-bar">
-                        <div class="progress-fill" style="width: ${pct}%;"></div>
-                        <span>${pct}%</span>
+                    <span class="track-tag-pill ${track.toLowerCase()}">${track}</span>
+                </td>
+                <td>
+                    <div class="user-cell-info">
+                        <div class="user-cell-name">${escapeHtml(qLabel)}</div>
+                        <div class="user-cell-handle">${escapeHtml(level)} Level</div>
+                    </div>
+                </td>
+                <td>
+                    <span class="table-score-badge">${score} / ${total}</span>
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="accuracy-percentage-label ${accuracyColorClass}">${pct}%</span>
+                        <div class="table-progress-bar-container">
+                            <div class="table-progress-bar-fill ${accuracyColorClass}" style="width: ${pct}%;"></div>
+                        </div>
                     </div>
                 </td>
             </tr>`;
     });
-    html += `</tbody></table>`;
-    topUsersContainer.innerHTML = html;
+
+    listHtml += `</tbody></table></div>`;
+    topUsersContainer.innerHTML = listHtml;
 }
 
 function openPrivateChatWith(targetUserName) {
@@ -1426,7 +1460,7 @@ function renderFilteredLeaderboard() {
         { label: 'SQL', icon: '🛢️', count: '(10 Qs)', key: 'sql' }
     ];
 
-    if (!_activeLeaderboardLangFilter || !_activeLeaderboardLangFilter.includes('Java') && !_activeLeaderboardLangFilter.includes('Python') && !_activeLeaderboardLangFilter.includes('SQL')) {
+    if (!_activeLeaderboardLangFilter || (!_activeLeaderboardLangFilter.includes('Java') && !_activeLeaderboardLangFilter.includes('Python') && !_activeLeaderboardLangFilter.includes('SQL'))) {
         _activeLeaderboardLangFilter = 'Java Beginner';
     }
 
@@ -1434,10 +1468,7 @@ function renderFilteredLeaderboard() {
         filterBar.innerHTML = filterOptions.map(opt => {
             const isActive = opt.label === _activeLeaderboardLangFilter;
             return `
-                <button type="button" 
-                        class="lang-filter-pill ${isActive ? 'active' : ''}" 
-                        style="padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1px solid ${isActive ? 'var(--jade)' : 'rgba(255,255,255,0.15)'}; background: ${isActive ? 'rgba(0,208,132,0.2)' : 'rgba(255,255,255,0.05)'}; color: ${isActive ? 'var(--jade)' : '#94a3b8'}; transition: all 0.2s ease;"
-                        onclick="setLeaderboardLangFilter('${opt.label}')">
+                <button type="button" class="filter-pill ${isActive ? 'active' : ''}" onclick="setLeaderboardLangFilter('${opt.label}')">
                     ${opt.icon} ${opt.label} ${opt.count}
                 </button>
             `;
@@ -1448,7 +1479,7 @@ function renderFilteredLeaderboard() {
     const targetOpt = filterOptions.find(o => o.label === _activeLeaderboardLangFilter) || filterOptions[0];
     const rawFiltered = _cachedLeaderboardScores.filter(r => {
         const q = (r.quiz || '').toLowerCase();
-        if (targetOpt.key === 'java beginner') return q.includes('java') && (q.includes('beginner') || !q.includes('intermediate') && !q.includes('advanced'));
+        if (targetOpt.key === 'java beginner') return q.includes('java') && (q.includes('beginner') || (!q.includes('intermediate') && !q.includes('advanced')));
         if (targetOpt.key === 'java intermediate') return q.includes('java') && q.includes('intermediate');
         if (targetOpt.key === 'java advanced') return q.includes('java') && q.includes('advanced');
         if (targetOpt.key === 'python') return q.includes('python');
@@ -1476,9 +1507,6 @@ function renderFilteredLeaderboard() {
 
     // Sort full ranked list of all users descending by topScore
     const fullLeaderboard = Array.from(userMap.values()).sort((a, b) => b.topScore - a.topScore);
-    const top10 = fullLeaderboard.slice(0, 10);
-
-    // Identify current user's email / name
     const currentUserEmail = (state.email || localStorage.getItem("loggedInEmail") || "").toLowerCase();
     const currentUserName = (localStorage.getItem("loggedInUserName") || state.username || "").toLowerCase();
 
@@ -1501,78 +1529,70 @@ function renderFilteredLeaderboard() {
         }
     }
 
-    if (!top10.length) {
-        scoreContainer.innerHTML = `<div class="dash-empty-state">No ${_activeLeaderboardLangFilter} leaderboard scores recorded yet.</div>`;
+    // Filter by search term
+    const searchVal = (document.getElementById("leaderboard-search")?.value || "").toLowerCase().trim();
+    let displayList = fullLeaderboard;
+    if (searchVal) {
+        displayList = fullLeaderboard.filter(r => 
+            (r.name || "").toLowerCase().includes(searchVal) || 
+            (r.username || "").toLowerCase().includes(searchVal) ||
+            (r.email || "").toLowerCase().includes(searchVal)
+        );
+    }
+
+    if (!displayList.length) {
+        scoreContainer.innerHTML = `<div class="dash-empty-state">No users match "${escapeHtml(searchVal)}" in ${_activeLeaderboardLangFilter}.</div>`;
         return;
     }
 
-    let dashHtml = `<table class="dash-table leaderboard-table"><thead><tr><th>Rank</th><th>Developer</th><th>Top Score</th></tr></thead><tbody>`;
-    top10.forEach((r, index) => {
+    // Render a high-performance scrollable list
+    let listHtml = `<div class="leaderboard-table-container">
+        <table class="leaderboard-premium-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Developer</th>
+                    <th>Score</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+    displayList.forEach((r, idx) => {
+        const originalIndex = fullLeaderboard.findIndex(u => u.key === r.key);
+        const rankNum = originalIndex !== -1 ? originalIndex + 1 : idx + 1;
         const displayName = r.name;
         const handle = `@${r.username}`;
         const topScore = r.topScore != null ? r.topScore : 0;
-        const rankBadge = index === 0 ? '🥇 1st' : (index === 1 ? '🥈 2nd' : (index === 2 ? '🥉 3rd' : `#${index + 1}`));
-        const rankClass = index === 0 ? 'gold' : (index === 1 ? 'silver' : (index === 2 ? 'bronze' : 'normal'));
-
+        
+        const rankBadge = rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : (rankNum === 3 ? '🥉' : `#${rankNum}`));
+        const rankClass = rankNum === 1 ? 'gold' : (rankNum === 2 ? 'silver' : (rankNum === 3 ? 'bronze' : 'normal'));
+        
         const isSelf = (currentUserEmail && r.email && r.email.toLowerCase() === currentUserEmail) ||
                        (currentUserName && (r.name.toLowerCase() === currentUserName || r.username.toLowerCase() === currentUserName));
 
-        const clickHandler = isSelf 
-            ? `alert('🎉 That\\'s you! You are currently Rank #${index + 1} in ${_activeLeaderboardLangFilter}!')`
-            : `openPrivateChatWith('${escapeHtml(displayName)}')`;
-
-        dashHtml += `
-            <tr class="rank-row ${rankClass} ${isSelf ? 'self-row' : ''}" style="cursor:pointer; ${isSelf ? 'background:rgba(0,208,132,0.12);' : ''}" onclick="${clickHandler}" title="${isSelf ? 'That is you!' : 'Click to message ' + escapeHtml(displayName)}">
-                <td><span class="rank-tag ${rankClass}">${rankBadge}</span></td>
+        listHtml += `
+            <tr class="${isSelf ? 'table-row-self' : ''}">
                 <td>
-                    <div class="rank-user" style="display:flex; align-items:center; gap:10px;">
-                        <div class="user-avatar-small">${displayName.substring(0,2).toUpperCase()}</div>
-                        <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span class="user-name" style="font-weight:700; font-size:0.9rem; color:var(--text-primary, #ffffff);">${escapeHtml(displayName)}</span>
-                            <span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} ${isSelf ? `<span style="background:rgba(0,208,132,0.25); color:var(--jade); padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700; margin-left:4px;">(You)</span>` : ''}</span>
-                        </div>
+                    <span class="rank-badge-cell ${rankClass}">${rankBadge}</span>
+                </td>
+                <td>
+                    <div class="user-cell-info">
+                        <div class="user-cell-name">${escapeHtml(displayName)} ${isSelf ? '<span class="you-pill">You</span>' : ''}</div>
+                        <div class="user-cell-handle">${escapeHtml(handle)}</div>
                     </div>
                 </td>
                 <td>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="score-badge">${topScore} pts</span>
-                        ${!isSelf ? `<button type="button" class="dm-action-pill" style="border:none; background:rgba(0,208,132,0.15); color:var(--jade); padding:3px 8px; border-radius:12px; font-size:0.72rem; font-weight:700; cursor:pointer;" onclick="event.stopPropagation(); openPrivateChatWith('${escapeHtml(displayName)}');">💬 Chat</button>` : `<span style="font-size:0.75rem; color:var(--jade); font-weight:700;">⭐ You</span>`}
-                    </div>
+                    <span class="table-score-badge">${topScore} pts</span>
+                </td>
+                <td style="text-align: right;">
+                    ${isSelf ? '<span class="self-tag-pill">Current Player</span>' : `<button type="button" class="table-action-chat-btn" onclick="openPrivateChatWith('${escapeHtml(displayName)}')">💬 Message</button>`}
                 </td>
             </tr>`;
     });
 
-    // If current user is outside Top 10, append sticky row at the bottom!
-    if (myRankIndex >= 10) {
-        const myRecord = fullLeaderboard[myRankIndex];
-        const displayName = myRecord.name;
-        const handle = myRecord.username ? `@${myRecord.username}` : '';
-        const topScore = myRecord.topScore != null ? myRecord.topScore : 0;
-        const myRankNum = myRankIndex + 1;
-
-        dashHtml += `
-            <tr class="rank-row self-row-sticky" style="cursor:pointer; background:rgba(0,208,132,0.18); border-top:2px dashed rgba(0,208,132,0.5);" onclick="alert('🎉 That\\'s you! You are currently Rank #${myRankNum} in ${_activeLeaderboardLangFilter}!')" title="That is you!">
-                <td><span class="rank-tag normal" style="background:var(--jade); color:#021a0d; font-weight:800;">#${myRankNum}</span></td>
-                <td>
-                    <div class="rank-user" style="display:flex; align-items:center; gap:10px;">
-                        <div class="user-avatar-small" style="background:var(--jade); color:#021a0d;">${displayName.substring(0,2).toUpperCase()}</div>
-                        <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span class="user-name" style="font-weight:700; font-size:0.9rem; color:var(--text-primary, #ffffff);">${escapeHtml(displayName)}</span>
-                            <span style="font-size:0.75rem; color:var(--jade); font-weight:600;">${escapeHtml(handle)} <span style="background:rgba(0,208,132,0.3); color:#ffffff; padding:1px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">(You)</span></span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="score-badge" style="background:rgba(0,208,132,0.25); color:var(--jade); font-weight:800;">${topScore} pts</span>
-                        <span style="font-size:0.75rem; color:var(--jade); font-weight:700;">⭐ Your Spot</span>
-                    </div>
-                </td>
-            </tr>`;
-    }
-
-    dashHtml += `</tbody></table>`;
-    scoreContainer.innerHTML = dashHtml;
+    listHtml += `</tbody></table></div>`;
+    scoreContainer.innerHTML = listHtml;
 }
 
 async function populateDashboard(force = false) {
@@ -1708,6 +1728,75 @@ function loadJavaConcept(concept) {
         `.concepts-submenu button[onclick="loadJavaConcept('${concept}')"]`
     );
     if (activeBtn) activeBtn.classList.add("active");
+}
+
+function loadJavaInterviewHub() {
+    const container = document.getElementById("java-interview-hub-content");
+    if (!container) return;
+
+    fetch("./concepts/java/interview.html")
+        .then(res => {
+            if (!res.ok) throw new Error("Interview file not found");
+            return res.text();
+        })
+        .then(html => {
+            container.innerHTML = html;
+            initInterviewSearchAndFilter();
+        })
+        .catch(err => {
+            console.error(err);
+            container.innerHTML = `
+                <div style="color:red; padding:18px; border-radius:12px; background:rgba(239,68,68,0.06); border:1.5px solid rgba(239,68,68,0.2);">
+                    ❌ Unable to load Interview Preparation Hub.<br>
+                    Please verify that static resource build outputs are synchronized.
+                </div>`;
+        });
+}
+
+function initInterviewSearchAndFilter() {
+    const searchInput   = document.getElementById("interview-search");
+    const companySelect = document.getElementById("company-filter");
+    const topicSelect   = document.getElementById("topic-filter");
+    const countDisplay  = document.getElementById("q-count-display");
+
+    function filterQuestions() {
+        const query           = searchInput   ? searchInput.value.trim().toLowerCase()   : "";
+        const selectedCompany = companySelect ? companySelect.value.toLowerCase()         : "all";
+        const selectedTopic   = topicSelect   ? topicSelect.value.toLowerCase()           : "all";
+
+        const cards = document.querySelectorAll(".interview-q-card");
+        let visible = 0;
+
+        cards.forEach(card => {
+            const text          = card.textContent.toLowerCase();
+            const companiesAttr = (card.getAttribute("data-companies") || "").toLowerCase();
+            const topicAttr     = (card.getAttribute("data-topic")     || "").toLowerCase();
+
+            const companiesList = companiesAttr.split(",").map(c => c.trim());
+
+            const matchText    = !query                    || text.includes(query);
+            const matchCompany = selectedCompany === "all" || companiesList.includes(selectedCompany);
+            const matchTopic   = selectedTopic   === "all" || topicAttr.includes(selectedTopic.toLowerCase());
+
+            const show = matchText && matchCompany && matchTopic;
+            card.style.display = show ? "" : "none";
+            if (show) visible++;
+        });
+
+        // Update live count label
+        if (countDisplay) {
+            countDisplay.textContent = visible === cards.length
+                ? `Showing all ${cards.length} questions`
+                : `Showing ${visible} of ${cards.length} questions`;
+        }
+    }
+
+    if (searchInput)   searchInput.addEventListener("input",  filterQuestions);
+    if (companySelect) companySelect.addEventListener("change", filterQuestions);
+    if (topicSelect)   topicSelect.addEventListener("change",  filterQuestions);
+
+    // Run once on load to set initial count
+    filterQuestions();
 }
 function loadPythonConcept(topic) {
 
@@ -2242,7 +2331,7 @@ async function loadPublicMessages(force = false) {
                             </div>
                         </div>
                     </div>
-                    <div class="bubble-text">${escapeHtml(m.message || '')}</div>
+                    <div class="bubble-text">${formatMessageText(m.message || '')}</div>
                     <div class="bubble-meta">
                         <span class="bubble-time">${timeStr}</span>
                         ${isMe ? `<span class="read-ticks" title="Sent">✓✓</span>` : ''}
@@ -2259,6 +2348,21 @@ async function loadPublicMessages(force = false) {
 
 function escapeHtml(str) {
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function formatMessageText(str) {
+    if (!str) return '';
+    let escaped = escapeHtml(str);
+    // Parse triple backticks (fenced code blocks)
+    escaped = escaped.replace(/```([\s\S]+?)```/g, (match, code) => {
+        return `<pre class="chat-code-block"><code>${code.trim()}</code></pre>`;
+    });
+    // Parse single backticks (inline code)
+    escaped = escaped.replace(/`([^`\n]+?)`/g, (match, code) => {
+        return `<code class="chat-inline-code">${code}</code>`;
+    });
+    // Convert newlines to break tags
+    return escaped.replace(/\n/g, '<br>');
 }
 
 /* =====================================================
@@ -2459,7 +2563,7 @@ async function loadPrivateMessages(force = false) {
                             </div>
                         </div>
                     </div>
-                    <div class="bubble-text">${escapeHtml(m.message || '')}</div>
+                    <div class="bubble-text">${formatMessageText(m.message || '')}</div>
                     <div class="bubble-meta">
                         <span class="bubble-time">${timeStr}</span>
                         ${isMe ? `<span class="read-ticks" title="Delivered">✓✓</span>` : ''}
@@ -2921,4 +3025,45 @@ function triggerPwaInstall() {
 window.addEventListener('appinstalled', (evt) => {
     const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
     if (sidebarInstallBtn) sidebarInstallBtn.style.display = "none";
-});
+});
+
+/* Fast Scroll to Top and Bottom (Fullscreen aware) */
+function getActiveScrollContainer() {
+    const fsElement = document.fullscreenElement || 
+                      document.webkitFullscreenElement || 
+                      document.mozFullScreenElement || 
+                      document.msFullscreenElement;
+    if (fsElement) {
+        return fsElement;
+    }
+    return document.querySelector('.main-content');
+}
+
+function scrollToTopFast() {
+    const container = getActiveScrollContainer();
+    if (container) {
+        container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function scrollToBottomFast() {
+    const container = getActiveScrollContainer();
+    if (container) {
+        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+}
+
+/* Fast Scroll to Top and Bottom for Concept Pages */
+function scrollToTopConcepts(containerId) {
+    const el = document.getElementById(containerId);
+    if (el) {
+        el.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function scrollToBottomConcepts(containerId) {
+    const el = document.getElementById(containerId);
+    if (el) {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    }
+}

@@ -1,222 +1,85 @@
-<h2>Java Classes</h2>
-<p>A class is a blueprint from which individual objects are created. It contains fields (variables) and methods.</p>
-<h3>Class Declaration in Java:</h3>
-<pre>
-access_modifier class <class_name> 
-{      
-data member;       
-method;       
-constructor;     
-nested class;     
-interface;
- }
-</pre>
-<strong>Key Features of a Class:</strong>
-<ul>
-  <li><strong>1. Fields:</strong> Variables that hold the state of the object.</li>
-  <li><strong>2. Methods:</strong> Functions that define the behavior of the object.</li>
-  <li><strong>3. Constructors:</strong> Special methods used to initialize objects.</li>
-  <li><strong>4. Access Modifiers:</strong> Control the visibility of the class and its members (e.g., public, private, protected).</li>
-</ul>
-<h3>Components of Java Class Declaration</h3>
-<p>In general, class declarations can include these components, in order:</p>
-<ul>
-  <li><strong>Modifiers:</strong> A class can be public or have package-private default access.</li>
-  <li><strong>Class keyword:</strong> The <code>class</code> keyword is used to declare a class.</li>
-  <li><strong>Class name:</strong> Capitalized by convention (e.g., <code>Student</code>).</li>
-  <li><strong>Superclass (if any):</strong> Name of the parent class preceded by <code>extends</code>.</li>
-  <li><strong>Interfaces (if any):</strong> Comma-separated list of interfaces preceded by <code>implements</code>.</li>
-  <li><strong>Body:</strong> Enclosed within curly braces <code>{ }</code>.</li>
-</ul>
+<h1>Classes & Objects</h1>
 
-<p>Constructors are used for initializing new objects. Fields are variables that provide the state of the class and its objects, and methods are used to implement the behavior of the class and its objects. There are various types of classes that are used in real-time applications such as nested classes, anonymous classes and lambda expressions.</p>
-<p><strong>Example:</strong>Here, the below Java code demonstrates the basic use of class in Java.</p>
-<pre>
-    // Java Class example
-class Student {
-  
-    // data member (also instance variable)
-    int id;
-  
-    // data member (also instance variable)
-    String n;
-  
-    public static void main(String args[]) {
-      
-        // creating an object of
-        // Student
-        Student s1 = new Student();
-        System.out.println(s1.id);
-        System.out.println(s1.n);
+<div class="concept-meta-badge">
+    <span class="badge-difficulty beginner">Beginner</span>
+    <span class="badge-time">Read Time: 9 mins</span>
+</div>
+
+<div class="section">
+    <h2>1. The Real-World Analogy: Blueprint vs. House</h2>
+    <p>Imagine an architect draws a detailed paper blueprint for a suburban villa. The blueprint is not a real house; you cannot sleep in it, cook in it, or stay warm in it. However, a builder can look at that blueprint and construct 10 physical houses in a neighborhood.</p>
+    <p>In Java, a <strong>Class</strong> is that paper blueprint (an abstract definition), and an <strong>Object</strong> is the actual physical house built on the ground (residing in Heap memory).</p>
+</div>
+
+<div class="section">
+    <h2>2. Anatomy of a Class</h2>
+    <p>A class wraps two main features to describe real-world entities:</p>
+    <ul>
+        <li><strong>State (Fields / Attributes):</strong> Variables that store data representing the object's properties (e.g., <code>color</code>, <code>size</code>).</li>
+        <li><strong>Behavior (Methods):</strong> Functions that define what actions the object can perform (e.g., <code>run()</code>, <code>stop()</code>).</li>
+    </ul>
+</div>
+
+<div class="warning-callout">
+    <h3>⚠️ Warning: The Dreaded NullPointerException!</h3>
+    <p>When you declare an object reference variable like <code>Car myCar;</code>, it starts as <code>null</code>. If you try to invoke a method on it (e.g., <code>myCar.drive()</code>) before assigning an actual object to it using the <code>new</code> keyword, Java throws a <strong>NullPointerException</strong> and stops execution.</p>
+</div>
+
+<div class="section">
+    <h2>3. Instantiation & Heap Allocation</h2>
+    <p>Objects are instantiated using the <code>new</code> keyword, which tells the JVM to allocate memory for the object's instance fields on the Heap.</p>
+    <pre><code class="language-java">// 'myCar' is a reference variable on the Stack pointing to a Car object on the Heap
+Car myCar = new Car(); </code></pre>
+</div>
+
+<div class="section">
+    <h2>💻 Example Code & Line-by-Line Breakdown</h2>
+    <pre><code class="language-java">public class Dog {
+    // State / Attributes
+    String breed;
+    int age;
+
+    // Behavior / Method
+    public void bark() {
+        System.out.println("Woof! Woof!");
     }
-}
-</pre>
-<strong>Output</strong>
-<pre>
-0
-null
-</pre>
 
-<h2>Objects in Java</h2>
-<p>In Java, objects are the fundamental building blocks of object-oriented programming. They represent real-world entities and are instances of classes. Here's a concise overview:</p>
-<h3>What is an Object?</h3>
-<strong>An object is a runtime entity that:</strong>
-<li><strong>Has State:</strong>Represented by fields (variables).</li>
-<li><strong>Has Behavior:</strong>Represented by methods (functions).</li>
-<li><strong>Has Identity:</strong>A unique reference in memory.</li>
-<p>
-
-</p>
-<p>For example, a Car object might have:</p>
-<li><strong>State:</strong>Color, brand, speed.</li>
-<li><strong>Behavior:</strong>Start, stop, accelerate.</li>
-<p>
-
-</p>
-<strong>Example</strong>
-<pre>
-// Example of object creation
-class Car {
-    String color;
-    int speed;
-
-    void start() {
-        System.out.println("Car started");
-    }
-}
-public class Main {
     public static void main(String[] args) {
-        Car myCar = new Car(); // Object creation
-        myCar.color = "Red";   // Setting state
-        myCar.start();         // Calling behavior
-    }
-}
-</pre>
-<hr>
-<h3>Difference Between</h3>
-<table style="width:100%">
-    <tr>
-        <th>Class</th>
-        <th>Objects</th>
-    </tr>
-    <tr>
-        <td>Class is the blueprint of an object. It is used to create objects.</td>
-        <td>An object is an instance of the class.</td>
-    </tr>
-    <tr>
-        <td>No memory is allocated when a class is declared. </td>
-        <td>Memory is allocated as soon as an object is created.</td>
+        // Instantiating objects
+        Dog puppy = new Dog();
+        puppy.breed = "Beagle";
+        puppy.age = 2;
 
-    </tr>
-    <tr>
-        <td>A class is a group of similar objects.</td>
-        <td>An object is a real-world entity such as a book, car, etc.</td>
-
-    </tr>
-    <tr>
-        <td>Class is a logical entity.</td>
-        <td>An object is a physical entity.</td>
-    </tr>
-    <tr>
-        <td>A class can only be declared once.</td>
-        <td>Objects can be created many times as per the requirement.</td>
-    </tr>
-    <tr>
-        <td>An example of class can be a car.</td>
-        <td>Objects of the class car can be BMW, Mercedes, Ferrari, etc.</td>
-    </tr>
-</table>
-<style>
-    table,th,td {
-        border:1px solid black;
-    }
-</style>
-<hr>
- <h1>Java Access Modifiers</h1>
-  <p>In Java, access modifiers are keywords used to set the visibility and accessibility of classes, methods, variables, and constructors. They help enforce encapsulation and control how different parts of a program interact. There are four main access modifiers:</p>
-
-  <h2 class="modifier">1. Public</h2>
-  <p><strong>Scope:</strong> Accessible from anywhere in the program, across all packages.<br>
-  <strong>Usage:</strong> Typically used for classes, methods, or variables that need to be universally accessible.</p>
-  <pre><code>public class MyClass {
-    public void display() {
-        System.out.println("This is a public method.");
+        puppy.bark(); // Prints "Woof! Woof!"
     }
 }</code></pre>
 
-  <h2 class="modifier">2. Private</h2>
-  <p><strong>Scope:</strong> Accessible only within the same class.<br>
-  <strong>Usage:</strong> Used to restrict access to sensitive data or methods, ensuring encapsulation.</p>
-  <pre><code>public class MyClass {
-    private int secretNumber = 42;
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>public class Dog</code>: Defines the class blueprint name.</li>
+        <li><code>String breed; int age;</code>: Fields representing the dog's state.</li>
+        <li><code>Dog puppy = new Dog();</code>: Allocates memory for a Dog instance on the Heap. The variable <code>puppy</code> on the Stack holds the memory address reference of that object.</li>
+        <li><code>puppy.breed = "Beagle";</code>: Accesses the instance fields of the Heap object using the dot (<code>.</code>) operator.</li>
+    </ul>
+</div>
 
-    private void showSecret() {
-        System.out.println("Secret: " + secretNumber);
-    }
-}</code></pre>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge google">Google</span>
+            <span class="company-badge amazon">Amazon</span>
+        </div>
+        <h4>Q1: What is the difference between a Class and an Object?</h4>
+        <p><strong>A:</strong> A Class is a logical template or blueprint defining properties and behaviors. An Object is a physical instance of that class allocated in memory, which holds its own runtime values for those fields.</p>
+    </div>
 
-  <h2 class="modifier">3. Protected</h2>
-  <p><strong>Scope:</strong> Accessible within the same package and by subclasses (even in different packages).<br>
-  <strong>Usage:</strong> Often used in inheritance to allow controlled access to members by child classes.</p>
-  <pre><code>public class Parent {
-    protected void greet() {
-        System.out.println("Hello from the parent class!");
-    }
-}
-
-public class Child extends Parent {
-    public void callGreet() {
-        greet(); // Accessible due to 'protected'
-    }
-}</code></pre>
-
-  <h2 class="modifier">4. Default (Package-Private)</h2>
-  <p><strong>Scope:</strong> Accessible only within the same package (no keyword is used).<br>
-  <strong>Usage:</strong> Useful for package-level encapsulation.</p>
-  <pre><code>
-class MyClass {
-void display() {
-System.out.println("This is a default method.");
-    }
-}</code></pre>
-
-  <h2>Summary Table</h2>
-  <table>
-    <tr>
-      <th>Modifier</th>
-      <th>Same Class</th>
-      <th>Same Package</th>
-      <th>Subclass (Different Package)</th>
-      <th>Other Packages</th>
-    </tr>
-    <tr>
-      <td>public</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-    </tr>
-    <tr>
-      <td>protected</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-    </tr>
-    <tr>
-      <td>default</td>
-      <td>✅</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-    </tr>
-    <tr>
-      <td>private</td>
-      <td>✅</td>
-      <td>❌</td>
-      <td>❌</td>
-      <td>❌</td>
-    </tr>
-  </table>
-
-  <p>By carefully choosing access modifiers, you can design robust, secure, and maintainable Java programs.</p>
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge apple">Apple</span>
+        </div>
+        <h4>Q2: What is class loading in Java?</h4>
+        <p><strong>A:</strong> When a program runs, the JVM's ClassLoader reads class metadata from the <code>.class</code> byte-code file, loads it into the Method Area, and creates a java.lang.Class object representing it before any object of that class can be created.</p>
+    </div>
+</div>

@@ -1,150 +1,108 @@
-<h2>Java Multithreading & Concurrency</h2>
+<h1>Multithreading & Concurrency</h1>
 
-<p>
-  <strong>Multithreading</strong> in Java is a process of executing multiple threads simultaneously to maximize CPU utilization. A thread is a lightweight sub-process, the smallest unit of processing.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty advanced">Advanced</span>
+    <span class="badge-time">Read Time: 15 mins</span>
+</div>
 
-<h3>Core Concepts: Thread vs Process</h3>
-<ul>
-  <li><strong>Process:</strong> An isolated program in execution with its own memory space.</li>
-  <li><strong>Thread:</strong> A subset of a process that shares memory and resources with other threads of the same process.</li>
-</ul>
+<div class="section">
+    <h2>1. The Real-World Analogy: Kitchen Chefs</h2>
+    <p>Imagine a busy restaurant kitchen. If you have only one chef (single thread), they must chop vegetables, boil pasta, and grill steak one after another. Food comes out slowly. 
+        If you hire 3 chefs (multithreading), one chops, one boils, and one grills simultaneously.
+    </p>
+    <p>In Java, <strong>Multithreading</strong> allows the CPU to run multiple paths of execution (threads) at the same time, maximizing hardware resources and completing tasks faster.</p>
+</div>
 
-<hr>
-
-<h3>1. Creating Threads in Java</h3>
-<p>There are two primary ways to create a thread in Java:</p>
-<ol>
-  <li>By extending the <code>Thread</code> class</li>
-  <li>By implementing the <code>Runnable</code> interface (Recommended)</li>
-</ol>
-
-<h4>Option A: Implementing <code>Runnable</code></h4>
-<pre><code>class MyRunnable implements Runnable {
-    @Override
+<div class="section">
+    <h2>2. Creating Threads: Thread Class vs. Runnable</h2>
+    <p>There are two primary ways to create an executable thread in Java:</p>
+    <ul>
+        <li><strong>Extending the Thread Class:</strong> Subclassing <code>Thread</code> directly. (Cannot inherit from any other class due to single inheritance).</li>
+        <li><strong>Implementing the Runnable Interface:</strong> Cleaner, more flexible, and lets you inherit from another base class. (Preferred practice).</li>
+    </ul>
+    <pre><code class="language-java">// Implementing Runnable
+class Worker implements Runnable {
     public void run() {
         System.out.println("Thread running: " + Thread.currentThread().getName());
     }
 }
+// Execution
+Thread t = new Thread(new Worker());
+t.start(); // Spawns the thread (do not call run() directly!)</code></pre>
+</div>
 
-public class Main {
-    public static void main(String[] args) {
-        Thread thread1 = new Thread(new MyRunnable(), "Worker-1");
-        Thread thread2 = new Thread(new MyRunnable(), "Worker-2");
-        
-        thread1.start();
-        thread2.start();
-    }
-}</code></pre>
+<div class="warning-callout">
+    <h3>⚠️ Warning: Deadlocks & Race Conditions!</h3>
+    <ul>
+        <li><strong>Race Condition:</strong> When multiple threads access shared mutable data simultaneously without coordination, resulting in corrupted values.</li>
+        <li><strong>Deadlock:</strong> When Thread A holds Lock 1 and waits for Lock 2, while Thread B holds Lock 2 and waits for Lock 1. Both threads wait forever, freezing the application.</li>
+    </ul>
+</div>
 
-<strong>Output:</strong>
-<pre><code>Thread running: Worker-1
-Thread running: Worker-2</code></pre>
+<div class="section">
+    <h2>3. Synchronization & Thread Safety</h2>
+    <p>To prevent race conditions, we coordinate thread execution:</p>
+    <ul>
+        <li><strong>Synchronized Block/Method:</strong> Locks the shared object. Only one thread can enter the synchronized section at a time.</li>
+        <li><strong>Volatile Keyword:</strong> Forces the CPU to read and write variables directly from main memory instead of caching them in local CPU registers, ensuring immediate **visibility** across threads.</li>
+        <li><strong>ReentrantLock:</strong> A more flexible, manual locking mechanism supporting try-lock and timeouts.</li>
+    </ul>
+</div>
 
-<hr>
-
-<h3>2. Thread Life Cycle & States</h3>
-<p>A Java thread can exist in one of the following states (defined in <code>Thread.State</code>):</p>
-<ul>
-  <li><strong>NEW:</strong> Created but not yet started.</li>
-  <li><strong>RUNNABLE:</strong> Executing in the JVM or ready to execute.</li>
-  <li><strong>BLOCKED:</strong> Waiting for a monitor lock to enter a synchronized block/method.</li>
-  <li><strong>WAITING:</strong> Waiting indefinitely for another thread to perform a specific action (`wait()`, `join()`).</li>
-  <li><strong>TIMED_WAITING:</strong> Waiting for a specified time (`sleep(ms)`, `wait(ms)`).</li>
-  <li><strong>TERMINATED:</strong> Finished execution.</li>
-</ul>
-
-<hr>
-
-<h3>3. Synchronization & Thread Safety</h3>
-<p>
-  When multiple threads access shared mutable data, race conditions can occur. Use the <code>synchronized</code> keyword or explicit locks to guarantee mutual exclusion.
-</p>
-
-<pre><code>class Counter {
+<div class="section">
+    <h2>💻 Example Code: Thread Synchronization</h2>
+    <pre><code class="language-java">public class CounterDemo {
     private int count = 0;
 
-    // Synchronized method prevents race condition
+    // 'synchronized' locks the CounterDemo instance so only one thread can increment at a time
     public synchronized void increment() {
         count++;
     }
 
-    public int getCount() {
-        return count;
-    }
-}
-
-public class SyncExample {
     public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
+        CounterDemo demo = new CounterDemo();
+        
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) demo.increment();
+        };
 
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) counter.increment();
-        });
-
-        Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) counter.increment();
-        });
-
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+        
         t1.start();
         t2.start();
-        t1.join();
-        t2.join();
+        t1.join(); // Wait for t1 to finish
+        t2.join(); // Wait for t2 to finish
 
-        System.out.println("Final Count: " + counter.getCount()); // Always 2000
+        System.out.println("Final Count: " + demo.count); // Output is guaranteed to be 2000
     }
 }</code></pre>
 
-<hr>
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>public synchronized void increment()</code>: If two threads call this method simultaneously, one is forced to wait in a <code>Blocked</code> state until the other completes.</li>
+        <li><code>t1.start();</code>: Asynchronously schedules the thread runner. (Calling <code>t1.run()</code> would execute it synchronously inside the main thread, defeating the purpose of multithreading).</li>
+        <li><code>t1.join();</code>: Forces the calling thread (main thread) to halt until thread <code>t1</code> terminates.</li>
+    </ul>
+</div>
 
-<h3>4. Inter-Thread Communication (`wait`, `notify`)</h3>
-<p>
-  Threads can communicate using <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code> methods inside a synchronized context.
-</p>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge netflix">Netflix</span>
+            <span class="company-badge amazon">Amazon</span>
+        </div>
+        <h4>Q1: What is the difference between Thread.start() and Thread.run()?</h4>
+        <p><strong>A:</strong> <code>start()</code> is used to spawn a new asynchronous operating system thread and runs the code inside the <code>run()</code> method on that new thread context. Calling <code>run()</code> directly does not spawn a new thread; it simply executes the code synchronously inside the current thread like a normal method call.</p>
+    </div>
 
-<pre><code>class SharedResource {
-    private boolean available = false;
-
-    public synchronized void produce() throws InterruptedException {
-        while (available) {
-            wait(); // Wait until consumed
-        }
-        System.out.println("Produced item.");
-        available = true;
-        notify(); // Notify consumer thread
-    }
-
-    public synchronized void consume() throws InterruptedException {
-        while (!available) {
-            wait(); // Wait until produced
-        }
-        System.out.println("Consumed item.");
-        available = false;
-        notify(); // Notify producer thread
-    }
-}</code></pre>
-
-<hr>
-
-<h3>5. Advanced Concurrency: <code>ExecutorService</code> & Concurrent Collections</h3>
-<p>
-  Instead of managing threads manually, Java 5 introduced <code>java.util.concurrent</code> with thread pools, <code>ExecutorService</code>, <code>Future</code>, and high-performance concurrent collections like <code>ConcurrentHashMap</code> and <code>CopyOnWriteArrayList</code>.
-</p>
-
-<pre><code>import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class ThreadPoolExample {
-    public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        for (int i = 1; i <= 5; i++) {
-            final int taskId = i;
-            executor.submit(() -> {
-                System.out.println("Executing Task " + taskId + " on thread: " + Thread.currentThread().getName());
-            });
-        }
-
-        executor.shutdown();
-    }
-}</code></pre>
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge oracle">Oracle</span>
+        </div>
+        <h4>Q2: What is the volatile keyword in Java?</h4>
+        <p><strong>A:</strong> The <code>volatile</code> keyword tells the compiler and JVM that the variable's value must always be read from and written to main memory, bypassing local CPU caches. This guarantees thread visibility but does not guarantee operations are atomic.</p>
+    </div>
+</div>

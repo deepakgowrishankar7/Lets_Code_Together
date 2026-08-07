@@ -1,181 +1,115 @@
-<h2>Java Packages</h2>
+<h1>Packages & Access Modifiers</h1>
 
-<p>Packages in Java are used to group related classes and interfaces. They help in avoiding name conflicts and can control access with protected and default access levels.</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty beginner">Beginner</span>
+    <span class="badge-time">Read Time: 8 mins</span>
+</div>
 
-<h3>Types of Packages:</h3>
-<ul>
-    <li><strong>Built-in Packages:</strong> Java provides many predefined packages (e.g., java.util, java.io).</li>
-    <li><strong>User-defined Packages:</strong> You can create your own packages to group your project classes logically.</li>
-</ul>
+<div class="section">
+    <h2>1. The Real-World Analogy: Directory Folders</h2>
+    <p>Imagine you have 1,000 documents on your computer. If you dump them all on your Desktop, you will have a chaotic mess. Instead, you create folders: 
+        <strong>"Taxes"</strong>, <strong>"Photos"</strong>, and <strong>"Resume"</strong>.
+    </p>
+    <p>In Java, <strong>Packages</strong> are those directories, letting you group related classes together so they are easy to locate, maintain, and secure.</p>
+</div>
 
-<hr>
+<div class="section">
+    <h2>2. Importing & Namespace Management</h2>
+    <p>Every class in Java resides inside a package. The package name corresponds directly to the directory path of the class file. To use a class located in another package, you must **import** it:</p>
+    <pre><code class="language-java">package com.company.app; // Declares the package
 
-<h3>1. Using a Built-in Package</h3>
-<p>These packages consist of a large number of classes which are a part of Java API.Some of the commonly used built-in packages are:</p>
-<li><strong>java.lang:</strong>Contains language support classes(e.g classes which defines primitive data types, math operations). This package is automatically imported.</li>
-<p><strong>java.lang Example:</strong>String class,Math class,Integer class,Object class</p>
-<pre>
-    public class Main {
-    public static void main(String[] args) {
-        // String class
-        String message = "Hello, World!";
-        System.out.println(message);
+import java.util.ArrayList; // Imports a specific class
+import java.util.Date;      // Imports another class</code></pre>
+</div>
 
-        // Math class
-        int number = 25;
-        double squareRoot = Math.sqrt(number);
-        System.out.println("Square root of " + number + ": " + squareRoot);
+<div class="warning-callout">
+    <h3>⚠️ Warning: Class Name Conflicts!</h3>
+    <p>If you import two packages containing classes with the exact same name (e.g., <code>java.util.Date</code> and <code>java.sql.Date</code>), Java won't know which one to instantiate. You must use the fully qualified class name in your code, like: <code>java.util.Date myDate = new java.util.Date();</code>.</p>
+</div>
 
-        // Integer class
-        String numberString = "123";
-        int parsedNumber = Integer.parseInt(numberString);
-        System.out.println("Parsed number: " + parsedNumber);
+<div class="section">
+    <h2>3. Access Modifiers: The Security Gates</h2>
+    <p>Access modifiers control who is allowed to view, modify, or instantiate classes, methods, and variables:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Modifier</th>
+                <th>Same Class</th>
+                <th>Same Package</th>
+                <th>Subclass (Different Package)</th>
+                <th>World (Anywhere)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>private</code></td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><i>default</i> (No keyword)</td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><code>protected</code></td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>✅ Yes (via inheritance)</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td><code>public</code></td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+                <td>✅ Yes</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-        // Object class (implicitly used by all classes)
-        Object obj = new Object();
-        System.out.println("Object: " + obj.toString());
-    }
-}
-</pre>
-<li><strong>java.util:</strong>Contains utility classes(e.g. collections framework, date and time facilities).</li>
-<h4>Example:</h4>
-<pre>
-import java.util.Scanner;
+<div class="section">
+    <h2>💻 Example Code & Line-by-Line Breakdown</h2>
+    <pre><code class="language-java">package com.academy.geometry;
 
-public class InputExample {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter name: ");
-        String name = sc.nextLine();
-        System.out.println("Hello, " + name);
-    }
-}
-</pre>
-<li><strong>java.io:</strong>Contains classes for supporting input / output operations.</li>
-<h4>java.io Example:<h4>(These examples will understand on going concepts)</h4></h4>
-<pre>
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class WriteFileExample {
-    public static void main(String[] args) {
-        try {
-            FileWriter writer = new FileWriter("example.txt");
-            BufferedWriter buffer = new BufferedWriter(writer);
-            buffer.write("Hello, World!");
-            buffer.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-}
-</pre>
-<li><strong>java.applet:</strong>Contains classes for creating Applets</li>
-<h4>Java.applet Example:</h4>
-<pre>
-import java.applet.Applet;
-import java.awt.Graphics;
-
-public class HelloWorldApplet extends Applet {
-    public void paint(Graphics g) {
-        g.drawString("Hello, World!", 50, 50);
-    }
-}
-</pre>
-<li><strong>java.awt:</strong> Contains classes for implementing Graphical User Interfaces (like Frame, Button, Panel).</li>
-<h4>java.awt Example:</h4>
-<pre><code>import java.awt.Button;
-import java.awt.Frame;
-
-public class AwtExample {
-    public static void main(String[] args) {
-        Frame frame = new Frame("AWT Window Example");
-        Button button = new Button("Click Me");
-        button.setBounds(50, 100, 80, 30);
-        frame.add(button);
-        frame.setSize(300, 300);
-        frame.setLayout(null);
-        System.out.println("AWT Frame initialized with title: " + frame.getTitle());
-    }
+public class Shape {
+    public String shapeName = "Circle"; // Accessible from anywhere
+    protected int area = 50;            // Subclasses & package-only
+    int perimeter = 30;                 // Package-only (default)
+    private String secretKey = "12345"; // Class-only
 }</code></pre>
-<li><strong>java.net:</strong>Contain classes for supporting networking operations.</li>
-<h4>java.net Example:</h4>
-<pre>
-       import java.io.BufferedReader;
-   import java.io.IOException;
-   import java.io.InputStreamReader;
-   import java.net.HttpURLConnection;
-   import java.net.URL;
 
-   public class HttpURLConnectionExample {
-       public static void main(String[] args) throws IOException {
-           URL url = new URL("https://www.example.com");
-           HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-           connection.setRequestMethod("GET");
+    <h4>Line-by-Line Breakdown:</h4>
+    <ul>
+        <li><code>package com.academy.geometry;</code>: Tells Java that this class file resides physically inside the folder path <code>com/academy/geometry/</code>.</li>
+        <li><code>public String shapeName;</code>: Any class in any project package can read this variable.</li>
+        <li><code>protected int area;</code>: If a class <code>Square</code> in package <code>com.academy.other</code> inherits from <code>Shape</code>, it can access <code>area</code>, but other external classes cannot.</li>
+        <li><code>private String secretKey;</code>: Absolutely no other class, not even a subclass, can see or access this field.</li>
+    </ul>
+</div>
 
-           int responseCode = connection.getResponseCode();
-           if (responseCode == HttpURLConnection.HTTP_OK) {
-               BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-               String inputLine;
-               StringBuffer response = new StringBuffer();
-               while ((inputLine = in.readLine()) != null) {
-                   response.append(inputLine);
-               }
-               in.close();
-               System.out.println(response.toString());
-           } else {
-               System.out.println("GET request failed with response code: " + responseCode);
-           }
-       }
-   }
-</pre>
-<h3>2.User-defined Packages:</h3>
-<h4>Creating and Using a User-defined Package</h4>
-<li><strong>Create the package:</strong></li>
-<p>
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge oracle">Oracle</span>
+        </div>
+        <h4>Q1: Explain the difference between protected and default (package-private) access modifiers.</h4>
+        <p><strong>A:</strong> A default member is accessible ONLY to classes located inside the same package. A protected member is accessible to classes in the same package, but is also visible to subclasses in different packages through inheritance (using <code>extends</code>).</p>
+    </div>
 
-</p>
-<p>
-    First we create a directory myPackage (name should be same as the name of the package). Then create the MyClass inside the directory with the first statement being the package names.
-</p>
-
-<pre>
-// Name of the package must be same as the directory
-// under which this file is saved
-package myPackage;
-
-public class MyClass
-{
-    public void getNames(String s)
-    {        
-        System.out.println(s);        
-    }
-}
-</pre>
-<li><strong>Use the Class in program:</strong></li>
-<p>Now we will use the <strong>MyClass</strong> class in our program.</p>
-<pre>
-    // import 'MyClass' class from 'names' myPackage 
-import myPackage.MyClass;
-
-public class Geeks {
-   public static void main(String args[]) {  
-     
-      // Initializing the String variable 
-      // with a value 
-      String s = "GeeksforGeeks";
-      
-      // Creating an instance of class MyClass in 
-      // the package.
-      MyClass o = new MyClass();
-      
-      o.getNames(s);
-   }
-}
-</pre>
-
-<p><strong>Conclusion:</strong> Packages help in organizing Java code and prevent class name conflicts, making large-scale applications easier to manage.</p>
-
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge amazon">Amazon</span>
+        </div>
+        <h4>Q2: What is a package-info.java file?</h4>
+        <p><strong>A:</strong> It is a Java file placed in a package folder to document package-level features, declare package-level annotations, and provide package-level Javadocs.</p>
+    </div>
+</div>

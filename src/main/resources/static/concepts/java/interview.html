@@ -1,0 +1,901 @@
+<div class="interview-hub-container">
+    <h2>☕ Java Interview Preparation Hub</h2>
+    <p class="subtitle">150 curated questions asked by top tech companies — searchable, filterable, and fully explained.</p>
+
+    <div class="interview-filters-row">
+        <div class="search-input-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="interview-search" placeholder="Search questions, answers, or companies...">
+        </div>
+        <div class="filter-select-box">
+            <select id="company-filter">
+                <option value="All">All Companies</option>
+                <option value="Google">Google</option>
+                <option value="Amazon">Amazon</option>
+                <option value="Microsoft">Microsoft</option>
+                <option value="Meta">Meta</option>
+                <option value="Netflix">Netflix</option>
+                <option value="Oracle">Oracle</option>
+                <option value="Uber">Uber</option>
+                <option value="Walmart">Walmart</option>
+                <option value="Apple">Apple</option>
+                <option value="Adobe">Adobe</option>
+                <option value="Infosys">Infosys</option>
+                <option value="TCS">TCS</option>
+                <option value="Wipro">Wipro</option>
+                <option value="Flipkart">Flipkart</option>
+            </select>
+        </div>
+        <div class="filter-select-box">
+            <select id="topic-filter">
+                <option value="All">All Topics</option>
+                <option value="Data Types">Data Types &amp; Variables</option>
+                <option value="Operators">Operators</option>
+                <option value="Arrays">Arrays</option>
+                <option value="Strings">Strings</option>
+                <option value="OOP">OOP</option>
+                <option value="Exception">Exception Handling</option>
+                <option value="Collections">Collections</option>
+                <option value="Multithreading">Multithreading</option>
+                <option value="JVM">JVM &amp; Memory</option>
+                <option value="Modern Java">Modern Java</option>
+                <option value="JDBC">JDBC</option>
+                <option value="Design Patterns">Design Patterns</option>
+                <option value="Generics">Generics</option>
+                <option value="I/O">Files &amp; I/O</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="interview-q-count" id="q-count-display">Showing all 150 questions</div>
+
+    <div class="interview-q-grid">
+
+        <!-- ===== DATA TYPES & VARIABLES (10) ===== -->
+        <div class="interview-q-card" data-companies="Google,Amazon" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge google">Google</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">Why does Java not support global variables, and how does it store variables in memory?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Java enforces OOP — all variables must reside inside classes. Primitives and object references are stored on the <strong>Stack</strong>; actual objects are stored on the <strong>Heap</strong>. This prevents namespace pollution and aids garbage collection.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Infosys,TCS" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge infosys">Infosys</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is autoboxing and unboxing in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Autoboxing</strong> is automatic conversion from a primitive to its wrapper class (e.g., <code>int → Integer</code>). <strong>Unboxing</strong> is the reverse. This allows primitives to be used in collections. Beware of <code>NullPointerException</code> when unboxing a <code>null</code> wrapper.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Wipro" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">What is the difference between <code>int</code> and <code>Integer</code> in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>int</code> is a primitive — stored directly in the stack. <code>Integer</code> is a wrapper object stored on the heap. <code>Integer</code> can be <code>null</code>, participates in generics, and has utility methods like <code>Integer.parseInt()</code>. For performance-critical code, prefer <code>int</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Adobe" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge oracle">Oracle</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is the range of <code>byte</code> in Java and why?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>byte</code> is 8 bits using two's complement, giving a range of <strong>-128 to 127</strong>. The MSB is a sign bit, so 7 bits represent magnitude: 2⁷ = 128 values positive + 128 negative (including 0 on positive side).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Flipkart" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge amazon">Amazon</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is the difference between <code>==</code> and <code>.equals()</code> for Integer objects?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>==</code> compares references. <code>Integer</code> caches values from -128 to 127 (Integer Pool), so <code>Integer a = 127; Integer b = 127; a == b</code> is <code>true</code>. But <code>Integer a = 200; Integer b = 200; a == b</code> is <code>false</code>. Always use <code>.equals()</code> for semantic equality.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Meta" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is <code>var</code> in Java 10+? What are its limitations?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>var</code> enables local variable type inference — the compiler infers the type. Limitations: cannot be used for method parameters, return types, fields, or where the type cannot be inferred (e.g., <code>var x = null</code> fails). It is purely a compile-time feature; no runtime overhead.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="TCS,Infosys" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge tcs">TCS</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What is the difference between instance, static, and local variables?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Instance variables</strong> belong to an object (heap). <strong>Static variables</strong> belong to the class (method area), shared across all instances. <strong>Local variables</strong> exist inside a method (stack) and are destroyed after method returns. Only instance and static variables get default values; local variables must be explicitly initialized.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Walmart" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge uber">Uber</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is the significance of the <code>final</code> keyword with variables?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A <code>final</code> variable can be assigned only once. For primitives, the value is constant. For object references, the reference is fixed but the object's internal state can still be mutated. <code>final</code> on a method prevents overriding; on a class, it prevents inheritance.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Netflix" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is the difference between <code>float</code> and <code>double</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>float</code> is 32-bit single-precision IEEE 754; <code>double</code> is 64-bit double-precision. <code>double</code> provides ~15 significant digits vs ~7 for <code>float</code>. Literals default to <code>double</code> — suffix with <code>f</code> for float. Use <code>BigDecimal</code> for financial accuracy.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Apple,Adobe" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Data Types &amp; Variables</span><span class="company-badge apple">Apple</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is type casting in Java? Explain widening vs narrowing.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Widening</strong> (implicit): smaller → larger type (e.g., <code>int → long</code>), no data loss. <strong>Narrowing</strong> (explicit cast required): larger → smaller (e.g., <code>double → int</code>), may lose precision. Object casting follows inheritance hierarchy; invalid casts throw <code>ClassCastException</code>.</p></div>
+        </div>
+
+        <!-- ===== OPERATORS & CONTROL FLOW (8) ===== -->
+        <div class="interview-q-card" data-companies="Microsoft,Uber" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">Explain short-circuit evaluation in <code>&amp;&amp;</code> and <code>||</code>.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>&amp;&amp;</code> stops evaluating if the first operand is <code>false</code>. <code>||</code> stops if the first is <code>true</code>. This prevents side effects and optimizes performance. <code>&amp;</code> and <code>|</code> always evaluate both sides even when the result is already known.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,TCS" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge google">Google</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is the ternary operator and when should you avoid it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>condition ? valueIfTrue : valueIfFalse</code>. Useful for simple inline assignments. Avoid for complex logic — nested ternaries reduce readability. Prefer if-else for non-trivial branches to maintain clean, maintainable code.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Infosys" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge amazon">Amazon</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">How does switch work with Strings in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Java 7+ supports String in switch. Internally, it first compares <code>hashCode()</code> for equality, then calls <code>.equals()</code> to confirm (handles hash collisions). This is a compiler transformation — the bytecode uses <code>tableswitch</code> or <code>lookupswitch</code> with int hash values.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Wipro" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge meta">Meta</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">What is the difference between <code>break</code>, <code>continue</code>, and <code>return</code> in loops?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>break</code> exits the loop entirely. <code>continue</code> skips the current iteration and jumps to the next. <code>return</code> exits the entire method. With labeled loops, <code>break label</code> and <code>continue label</code> can target outer loops.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Flipkart" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge oracle">Oracle</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is the difference between <code>i++</code> (post-increment) and <code>++i</code> (pre-increment)?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>i++</code> returns the current value first, then increments. <code>++i</code> increments first, then returns the new value. Example: if <code>i=5</code>, then <code>int a = i++</code> gives <code>a=5, i=6</code>; but <code>int a = ++i</code> gives <code>a=6, i=6</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Walmart,TCS" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge walmart">Walmart</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is the enhanced for-each loop and when can't you use it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>for (Type var : collection)</code> iterates cleanly over arrays and <code>Iterable</code>s. Limitations: you cannot modify the collection during iteration, cannot access the index directly, and cannot iterate backwards or skip elements. Use a traditional for loop in those cases.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Apple" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge netflix">Netflix</span><span class="company-badge apple">Apple</span></div>
+            <h4 class="q-title">What is the <code>instanceof</code> operator and how does Pattern Matching improve it in Java 16+?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>instanceof</code> checks if an object is of a given type. Java 16 adds pattern matching: <code>if (obj instanceof String s) { s.length(); }</code> — no need for explicit cast. Java 21 extends this to switch expressions for exhaustive type handling.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Adobe,Uber" data-topic="Operators">
+            <div class="card-meta-row"><span class="topic-tag">Operators</span><span class="company-badge adobe">Adobe</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is bitwise XOR and how can it swap two numbers without a temp variable?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> XOR (<code>^</code>) returns 1 only if bits differ. Swap: <code>a = a^b; b = a^b; a = a^b;</code>. After 3 operations, values are swapped with no temp variable and no risk of overflow. This is a classic bit-manipulation interview trick.</p></div>
+        </div>
+
+        <!-- ===== ARRAYS (8) ===== -->
+        <div class="interview-q-card" data-companies="Amazon,Apple" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge amazon">Amazon</span><span class="company-badge apple">Apple</span></div>
+            <h4 class="q-title">What happens when you declare an array in Java? Can you resize it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Declaring allocates a fixed contiguous memory block on the Heap. The size is locked at creation. To "resize," you must create a new array and copy elements — which <code>ArrayList</code> does automatically using <code>Arrays.copyOf()</code> internally.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Flipkart" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge google">Google</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is the difference between a 1D array and a 2D (jagged) array in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Java 2D arrays are arrays of arrays. Each row can have a different length — this is called a <strong>jagged array</strong>. <code>int[][] arr = new int[3][];</code> creates 3 rows with no column size set yet. This differs from true matrix types in languages like C.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Infosys" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">How does <code>Arrays.sort()</code> work internally?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> For primitive arrays, Java uses a <strong>Dual-Pivot Quicksort</strong> (O(n log n) average, O(n²) worst). For object arrays, it uses <strong>TimSort</strong> (a hybrid of merge sort + insertion sort), which is stable and performs O(n log n) in worst case. TimSort is optimal for nearly-sorted data.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Walmart" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge meta">Meta</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">How do you find the second largest element in an array without sorting?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Use two variables: <code>max</code> and <code>secondMax</code>. Traverse once: if element &gt; max, update secondMax = max, max = element; else if element &gt; secondMax and element != max, update secondMax. O(n) time, O(1) space.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Uber" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge oracle">Oracle</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is <code>System.arraycopy()</code> vs <code>Arrays.copyOf()</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>System.arraycopy()</code> is a native method — faster, copies into an existing destination array. <code>Arrays.copyOf()</code> creates a new array and uses <code>System.arraycopy()</code> internally, padding with defaults if new length is greater. Use <code>System.arraycopy()</code> when performance matters.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,TCS" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge netflix">Netflix</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is an ArrayIndexOutOfBoundsException and how do you prevent it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Thrown when accessing index &lt; 0 or ≥ array.length. Prevention: always check bounds before access, use <code>array.length</code> in loop conditions (not a hardcoded number), and prefer <code>ArrayList</code> with bounds-safe iterators when the size is dynamic.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Adobe" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge amazon">Amazon</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">How do you rotate an array to the right by k positions?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Efficient approach: reverse the entire array, then reverse the first k elements, then reverse the remaining. Uses O(1) space. Alternatively use <code>k = k % n</code> to handle k &gt; n. This is a classic in-place algorithm used in interview circuits.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Wipro" data-topic="Arrays">
+            <div class="card-meta-row"><span class="topic-tag">Arrays</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">What is the difference between shallow copy and deep copy of an array?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Shallow copy</strong> copies the array structure but not the referenced objects — both arrays share the same object references. <strong>Deep copy</strong> creates new instances of each referenced object. For primitive arrays, clone() is effectively a deep copy. For object arrays, use manual cloning or serialization.</p></div>
+        </div>
+
+        <!-- ===== STRINGS (10) ===== -->
+        <div class="interview-q-card" data-companies="Google,Meta,Microsoft" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is the String Constant Pool and why are Strings immutable?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> The String Pool is a special Heap region that caches unique string literals for reuse. Immutability enables: memory efficiency via sharing, thread safety (no synchronization needed), security (strings store passwords/credentials safely), and reliable hashCode caching for use as HashMap keys.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Oracle" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge amazon">Amazon</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the difference between <code>StringBuilder</code> and <code>StringBuffer</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Both are mutable string builders. <code>StringBuffer</code> is thread-safe (all methods are <code>synchronized</code>) but slower. <code>StringBuilder</code> is not thread-safe but faster. Use <code>StringBuilder</code> in single-threaded contexts (common in practice), <code>StringBuffer</code> only when shared across threads.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Flipkart,Uber" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge flipkart">Flipkart</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">How do you check if a string is a palindrome in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Use two-pointer approach: compare characters from both ends moving inward. O(n) time. Alternative: <code>new StringBuilder(s).reverse().toString().equals(s)</code>. For large strings, the two-pointer is preferred as it exits early on mismatch and avoids creating extra objects.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Adobe" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge netflix">Netflix</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What does <code>String.intern()</code> do?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>intern()</code> returns the canonical representation from the String Pool. If the pool already contains an equal string, it returns that reference. If not, it adds the string to the pool and returns it. Useful to reduce memory when many duplicate strings exist, but overuse can cause PermGen/Metaspace pressure.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Amazon" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge google">Google</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">How do you count the occurrences of each character in a string?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Use a <code>HashMap&lt;Character, Integer&gt;</code> or a <code>int[256]</code> frequency array (for ASCII). Traverse the string once, incrementing counts. O(n) time, O(1) or O(k) space where k is unique characters. In Java 8+: <code>str.chars().boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,TCS" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge meta">Meta</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is the difference between <code>compareTo()</code> and <code>compareToIgnoreCase()</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>compareTo()</code> does lexicographic comparison using Unicode values (case-sensitive). <code>compareToIgnoreCase()</code> converts both strings to the same case before comparing. Both return 0 (equal), negative (caller precedes arg), or positive (caller follows arg). Used for sorting strings.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Walmart,Wipro" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge walmart">Walmart</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">How do you reverse words in a sentence without using built-in <code>reverse()</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Split the string by spaces, iterate the words array from the end, and append each word to a <code>StringBuilder</code>. O(n) time. Alternatively: reverse the entire char array, then reverse each word in-place. Handle multiple spaces by trimming first.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Apple,Oracle" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge apple">Apple</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is <code>String.format()</code> and how is it different from concatenation?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>String.format()</code> creates formatted strings using format specifiers (<code>%s, %d, %f</code>). It uses a <code>Formatter</code> internally. Concatenation with <code>+</code> compiles to <code>StringBuilder.append()</code> chains. <code>String.format()</code> is more readable for complex formatting; in Java 15+ use <code>formatted()</code> on string literals or text blocks.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Infosys" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What are Text Blocks in Java 15+?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Text blocks use triple quotes (<code>"""</code>) for multi-line strings without escape characters. The compiler trims common leading whitespace. Useful for JSON, SQL, HTML. Example: <code>String json = """ { "name": "Java" } """;</code>. They are still <code>String</code> objects and interned normally.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Netflix" data-topic="Strings">
+            <div class="card-meta-row"><span class="topic-tag">Strings</span><span class="company-badge uber">Uber</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">Find the first non-repeating character in a string.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Use a <code>LinkedHashMap&lt;Character, Integer&gt;</code> to maintain insertion order. First pass: count frequencies. Second pass: iterate map entries and return the first character with count = 1. O(n) time. Alternative: use <code>int[26]</code> for lowercase-only input for O(1) space.</p></div>
+        </div>
+
+        <!-- ===== OOP (12) ===== -->
+        <div class="interview-q-card" data-companies="Meta,Netflix,Google" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge meta">Meta</span><span class="company-badge netflix">Netflix</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">Explain polymorphism and distinguish abstract classes from interfaces.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Polymorphism = one interface, many forms. Abstract classes represent "is-a" relationships, can have state and constructors. Interfaces represent "can-do" contracts, support multiple inheritance. Since Java 8, interfaces have <code>default</code> and <code>static</code> methods; since Java 9, <code>private</code> methods too.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Microsoft" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge amazon">Amazon</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is the difference between method overloading and method overriding?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Overloading</strong> (compile-time polymorphism) — same method name, different parameter signatures in the same class. <strong>Overriding</strong> (runtime polymorphism) — subclass provides its own implementation of a parent's method. Override requires same signature + <code>@Override</code> annotation. Cannot override <code>static</code>, <code>private</code>, or <code>final</code> methods.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,TCS" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge oracle">Oracle</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is encapsulation and how is it achieved in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Encapsulation = bundling data (fields) and behavior (methods) while restricting direct field access. Achieved via <code>private</code> fields + <code>public</code> getters/setters. Benefits: control over what can change, validation in setters, loose coupling between classes. The POJO pattern is the standard implementation.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Apple" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge google">Google</span><span class="company-badge apple">Apple</span></div>
+            <h4 class="q-title">What is the Liskov Substitution Principle (LSP)?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> LSP (the "L" in SOLID): objects of a superclass should be replaceable with objects of a subclass without breaking the application. A subclass must not strengthen preconditions or weaken postconditions. Violation example: <code>Square extends Rectangle</code> breaks LSP because setting width/height independently doesn't hold for squares.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Walmart" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge uber">Uber</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is the diamond problem and how does Java solve it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> The diamond problem occurs when a class inherits from two classes that have the same method, creating ambiguity. Java doesn't allow multiple class inheritance. For interfaces with <code>default</code> methods, the implementing class must explicitly override the conflicting method to resolve ambiguity.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Flipkart" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge meta">Meta</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is a constructor chaining and how do <code>this()</code> and <code>super()</code> work?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Constructor chaining = calling one constructor from another. <code>this()</code> calls another constructor in the same class. <code>super()</code> calls the parent class constructor. Both must be the first statement in the constructor. Used to avoid code duplication and ensure proper initialization order.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Infosys" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What is the difference between <code>static</code> and instance methods?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>static</code> methods belong to the class — called via <code>ClassName.method()</code>, no access to instance variables, no <code>this</code> reference. Instance methods belong to objects — require object instantiation, can access both static and instance state. Static methods cannot be overridden (only hidden).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Adobe" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge amazon">Amazon</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is an inner class vs a static nested class in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> An <strong>inner class</strong> (non-static) has access to all instance members of the outer class and requires an outer class instance to be created. A <strong>static nested class</strong> does not hold a reference to the outer class and can be instantiated independently. Inner classes are used for event handlers; static nested classes for logically grouped helper classes.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Oracle" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge netflix">Netflix</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is covariant return type in method overriding?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Since Java 5, an overriding method can return a subtype of the original return type. Example: if parent returns <code>Animal</code>, the child can return <code>Dog</code> (a subclass of Animal). This allows more specific return types without breaking the LSP contract and avoids unnecessary casting at call sites.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Uber" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge google">Google</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is an anonymous class and how does it differ from a lambda?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> An anonymous class is an inline class declaration that can implement an interface or extend a class with multiple methods. A lambda is a more concise syntax but only works with functional interfaces (exactly one abstract method). Anonymous classes have state (fields); lambdas close over effectively-final local variables only.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="TCS,Wipro" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge tcs">TCS</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">What are the four pillars of OOP and give a real-world analogy for each?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Encapsulation</strong> – medicine capsule hides ingredients. <strong>Inheritance</strong> – child inherits traits from parent. <strong>Polymorphism</strong> – a person behaves differently at work vs home. <strong>Abstraction</strong> – driving a car without knowing the engine internals. Together, they produce maintainable, extensible, and reusable code.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Microsoft" data-topic="OOP">
+            <div class="card-meta-row"><span class="topic-tag">OOP Concepts</span><span class="company-badge amazon">Amazon</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What are Records in Java 16+ and how do they replace POJOs?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Records are a concise way to declare immutable data classes. <code>record Point(int x, int y) {}</code> auto-generates constructor, getters, <code>equals()</code>, <code>hashCode()</code>, and <code>toString()</code>. Fields are <code>final</code> by default. Cannot extend other classes (implicitly extends <code>Record</code>). Ideal for DTOs, value objects, and data transfer classes.</p></div>
+        </div>
+
+        <!-- ===== EXCEPTION HANDLING (8) ===== -->
+        <div class="interview-q-card" data-companies="Amazon,Uber" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge amazon">Amazon</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">Explain Checked vs Unchecked exceptions and the <code>finally</code> block.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Checked exceptions (subclass of <code>Exception</code> except <code>RuntimeException</code>) must be handled or declared. Unchecked (RuntimeException subtypes) are programming errors. <code>finally</code> always executes — even after <code>return</code> or exception, except when <code>System.exit()</code> is called. Used for cleanup (close streams, release locks).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Netflix" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge google">Google</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is try-with-resources and which interface must a class implement?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Try-with-resources (Java 7+) automatically calls <code>close()</code> on resources when the block exits. The resource class must implement <code>AutoCloseable</code> (or <code>Closeable</code> for I/O). If both the try block and close() throw, the try exception is primary and the close exception is suppressed (retrievable via <code>getSuppressed()</code>).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Oracle" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is exception chaining and how do you implement it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Exception chaining preserves the original cause when wrapping exceptions. Use constructor: <code>throw new ServiceException("High-level error", originalException);</code> Access via <code>getCause()</code>. This maintains the full stack trace chain for debugging while presenting a meaningful higher-level exception to callers.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Adobe" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge meta">Meta</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is multi-catch (Java 7+) and when should you use it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>catch (IOException | SQLException e)</code> handles multiple unrelated exceptions in a single catch block. The caught exception type is effectively <code>final</code> (cannot be reassigned). Use when both exceptions warrant identical handling. Avoid if each exception needs specific recovery logic.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Flipkart,Walmart" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge flipkart">Flipkart</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is <code>StackOverflowError</code> and when does it occur?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>StackOverflowError</code> is thrown when the call stack exceeds its limit (typically due to infinite recursion). Each method call adds a frame to the stack; when the stack is full, the JVM throws this Error (not Exception — cannot normally be caught and recovered). Fix: add base case to recursive methods or refactor to iteration.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="TCS,Infosys" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge tcs">TCS</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What is the difference between <code>throw</code> and <code>throws</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>throw</code> is a statement that actually throws an exception object. <code>throws</code> is a method signature declaration that indicates what checked exceptions a method may propagate to its caller. <code>throw</code> takes a single exception; <code>throws</code> can list multiple exception types.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Apple,Uber" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge apple">Apple</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is <code>OutOfMemoryError</code> and how do you diagnose it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Thrown when the JVM cannot allocate an object because Heap space is exhausted. Common causes: memory leaks, too many objects retained, large data loads. Diagnose using: heap dump analysis (VisualVM, MAT), JVM flags like <code>-XX:+HeapDumpOnOutOfMemoryError</code>, and profiling tools. Fix: increase heap with <code>-Xmx</code>, fix leaks, or improve data structures.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Netflix" data-topic="Exception">
+            <div class="card-meta-row"><span class="topic-tag">Exception Handling</span><span class="company-badge amazon">Amazon</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">Should you catch <code>Error</code> in Java? When is it acceptable?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Generally no — <code>Error</code> indicates serious JVM-level problems (OOM, StackOverflow) that programs typically cannot recover from. Exception: in framework code that needs to log and cleanly shut down (e.g., catching <code>Throwable</code> in a top-level handler). Catching <code>Error</code> without proper handling can mask critical problems.</p></div>
+        </div>
+
+        <!-- ===== COLLECTIONS (12) ===== -->
+        <div class="interview-q-card" data-companies="Google,Microsoft,Meta" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge google">Google</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">How does HashMap work internally?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Uses an array of buckets. Key's <code>hashCode()</code> determines the bucket index. Collisions are chained as a <code>LinkedList</code>. When chain length ≥ 8 and total capacity ≥ 64, the chain converts to a <strong>Red-Black Tree</strong> (O(log n) lookup). Load factor default = 0.75; at 75% capacity it doubles and rehashes.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Oracle" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge amazon">Amazon</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the difference between <code>ArrayList</code> and <code>LinkedList</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>ArrayList</code>: dynamic array — O(1) random access, O(n) insertion/deletion at middle. <code>LinkedList</code>: doubly linked — O(n) random access, O(1) insertion/deletion at known positions. <code>ArrayList</code> has better cache locality and is preferred for most use cases. <code>LinkedList</code> is useful as a Deque.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Flipkart,Netflix" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge flipkart">Flipkart</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is the difference between <code>HashMap</code>, <code>LinkedHashMap</code>, and <code>TreeMap</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>HashMap</code>: unordered, O(1) operations. <code>LinkedHashMap</code>: maintains insertion order (or access order if configured) via a doubly linked list over the bucket entries. <code>TreeMap</code>: sorted by natural ordering or Comparator, O(log n) operations using a Red-Black Tree. Choose based on ordering requirements.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Uber" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge google">Google</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is <code>ConcurrentHashMap</code> and how does it differ from <code>Hashtable</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Hashtable</code> synchronizes every method (full lock). <code>ConcurrentHashMap</code> uses segment-level locking (Java 7) or bucket-level CAS operations (Java 8+) allowing concurrent reads without locking. <code>ConcurrentHashMap</code> does not allow null keys/values. It is far more performant for concurrent access patterns.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Meta" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge amazon">Amazon</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is <code>Iterator</code> vs <code>ListIterator</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Iterator</code> traverses forward only, supports <code>remove()</code>. <code>ListIterator</code> (for <code>List</code> only) supports bidirectional traversal, <code>set()</code>, <code>add()</code>, and index access. Both avoid <code>ConcurrentModificationException</code> when using their own remove methods during iteration (fail-fast check on modification count).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Oracle" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is a <code>PriorityQueue</code> and how does it work internally?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A <code>PriorityQueue</code> is a min-heap by default — the smallest element is always at the head. Internally backed by an array representing a binary heap. Insertion: O(log n), peek: O(1), poll: O(log n). Provide a custom <code>Comparator</code> for max-heap or custom ordering. Does not allow null elements.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="TCS,Wipro" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge tcs">TCS</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">What is the difference between <code>HashSet</code>, <code>LinkedHashSet</code>, and <code>TreeSet</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>HashSet</code>: backed by HashMap, unordered, O(1) ops. <code>LinkedHashSet</code>: maintains insertion order. <code>TreeSet</code>: sorted (natural or Comparator), backed by TreeMap, O(log n). All prevent duplicates using <code>equals()</code> and <code>hashCode()</code>. <code>TreeSet</code> requires elements to be <code>Comparable</code> or have a Comparator.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Adobe" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge netflix">Netflix</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is <code>Collections.unmodifiableList()</code> vs <code>List.of()</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Collections.unmodifiableList()</code> wraps an existing list — modifications to the backing list are reflected; it's a view. <code>List.of()</code> (Java 9+) creates a truly immutable list — no modifications allowed on it or its backing data. <code>List.of()</code> also rejects null elements.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Flipkart" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge amazon">Amazon</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is the contract between <code>equals()</code> and <code>hashCode()</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> If two objects are equal (<code>equals()</code> returns true), they MUST have the same <code>hashCode()</code>. The converse is not required (hash collisions are allowed). Violating this contract breaks <code>HashMap</code>, <code>HashSet</code> etc. Always override both together. Use <code>Objects.hash()</code> for clean implementation.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Walmart" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge google">Google</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is <code>Deque</code> and when do you use <code>ArrayDeque</code> over <code>Stack</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Deque</code> (Double-Ended Queue) supports insertion/removal from both ends. <code>ArrayDeque</code> is the preferred Stack implementation — no synchronization overhead, faster than <code>Stack</code> (which extends Vector and is synchronized). <code>ArrayDeque</code> is also a faster Queue alternative to <code>LinkedList</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Microsoft" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge meta">Meta</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What are <code>Comparable</code> and <code>Comparator</code> interfaces?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Comparable</code> defines natural ordering via <code>compareTo()</code> in the class itself (e.g., <code>String</code>, <code>Integer</code>). <code>Comparator</code> defines external comparison logic. In Java 8+: <code>Comparator.comparing(Employee::getSalary).thenComparing(Employee::getName)</code> for clean chained comparisons. Use Comparator for multiple sort strategies.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Uber" data-topic="Collections">
+            <div class="card-meta-row"><span class="topic-tag">Collections Framework</span><span class="company-badge oracle">Oracle</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is <code>CopyOnWriteArrayList</code> and when is it used?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A thread-safe <code>ArrayList</code> variant where every mutation creates a fresh copy of the underlying array. Reads are always safe without locking. Best for scenarios with many reads and very few writes (e.g., listeners list, event handlers). High write frequency makes it expensive due to constant array copying.</p></div>
+        </div>
+
+        <!-- ===== MULTITHREADING (12) ===== -->
+        <div class="interview-q-card" data-companies="Netflix,Oracle,Amazon" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge netflix">Netflix</span><span class="company-badge oracle">Oracle</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">What is the <code>volatile</code> keyword and how does it differ from <code>synchronized</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>volatile</code> ensures visibility — all threads read/write directly from main memory (no CPU cache). Does NOT guarantee atomicity for compound operations (e.g., i++). <code>synchronized</code> ensures both visibility AND atomicity — only one thread enters the block at a time. Use <code>volatile</code> for simple flags; <code>synchronized</code> or <code>AtomicXxx</code> for compound ops.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Meta" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is a deadlock? How do you prevent it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Deadlock: Thread A holds Lock 1 and waits for Lock 2; Thread B holds Lock 2 and waits for Lock 1 — circular waiting. Prevention strategies: always acquire locks in a consistent global order, use <code>tryLock()</code> with timeout, use lock-free data structures, prefer higher-level concurrency utilities like <code>java.util.concurrent</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Uber" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is the Java Memory Model (JMM)?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> The JMM defines how threads interact through memory — visibility of writes, ordering guarantees, and happens-before relationships. <code>synchronized</code>, <code>volatile</code>, and <code>final</code> fields create happens-before edges. Without JMM guarantees, threads may see stale cached values due to CPU optimizations and compiler reordering.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Netflix" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge amazon">Amazon</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is <code>ExecutorService</code> and why prefer it over raw threads?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>ExecutorService</code> manages a pool of reusable threads, reducing thread creation overhead. Raw threads are not reused. Key types: <code>FixedThreadPool</code>, <code>CachedThreadPool</code>, <code>ScheduledThreadPool</code>, <code>ForkJoinPool</code>. Submit tasks via <code>execute()</code> or <code>submit()</code> (returns Future). Always shutdown with <code>shutdown()</code> or <code>shutdownNow()</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Google" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge oracle">Oracle</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">What is <code>CompletableFuture</code> and how does it enable async programming?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>CompletableFuture</code> represents an async computation result. It supports chaining: <code>supplyAsync()</code> → <code>thenApply()</code> → <code>thenAccept()</code>. Use <code>thenCompose()</code> to chain futures, <code>thenCombine()</code> to combine two parallel futures. <code>exceptionally()</code> handles errors. Backed by ForkJoinPool by default.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Flipkart" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge meta">Meta</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is <code>ThreadLocal</code> and when is it useful?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>ThreadLocal</code> provides thread-scoped variable storage — each thread sees its own independent copy. Useful for storing per-request context (user session, transaction ID) in web frameworks without passing it through every method parameter. Always call <code>remove()</code> in thread pool environments to prevent memory leaks.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Walmart" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What are <code>ReentrantLock</code> advantages over <code>synchronized</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>ReentrantLock</code> offers: tryLock with timeout, interruptible locking, fairness policy (longest-waiting thread wins), separate Condition objects for fine-grained wait/notify, ability to query lock state. <code>synchronized</code> is simpler and JVM-optimized for contention-free cases. Use ReentrantLock for advanced control.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,TCS" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge amazon">Amazon</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is a race condition and how do you fix it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A race condition occurs when the correctness of a program depends on the relative timing of thread execution. Example: two threads incrementing a shared counter. Fix: use <code>synchronized</code>, <code>AtomicInteger</code>, or <code>LongAdder</code> (for high-contention counters). Design immutable objects where possible to eliminate races entirely.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Uber" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge netflix">Netflix</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is <code>CountDownLatch</code> vs <code>CyclicBarrier</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>CountDownLatch</code>: one-shot — threads wait until count reaches zero. Cannot be reset. <code>CyclicBarrier</code>: reusable — waits until all participating threads reach the barrier, then they all proceed together (and optionally runs a barrier action). Use <code>CountDownLatch</code> for startup gates; <code>CyclicBarrier</code> for iterative parallel phases.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Adobe" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge google">Google</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What are Virtual Threads (Java 21) and what problem do they solve?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Virtual Threads (Project Loom) are lightweight JVM-managed threads not tied 1:1 to OS threads. Millions can be created without exhausting system resources. Blocking I/O on a virtual thread unmounts it from the carrier OS thread (which can serve other virtual threads). They enable high-concurrency servers without reactive/async complexity.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Microsoft" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge oracle">Oracle</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is the <code>happens-before</code> relationship in Java concurrency?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A happens-before (HB) relationship guarantees that all memory writes by action A are visible to action B. Key HB rules: thread start, thread join, monitor unlock→lock, volatile write→read, static initializer completion. Without HB guarantees, threads may see out-of-date values even without explicit races.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Meta" data-topic="Multithreading">
+            <div class="card-meta-row"><span class="topic-tag">Multithreading &amp; Concurrency</span><span class="company-badge amazon">Amazon</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">Explain the producer-consumer pattern in Java.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Producer adds to a shared buffer; Consumer takes from it. Classic implementation: <code>BlockingQueue</code> (e.g., <code>LinkedBlockingQueue</code>) — <code>put()</code> blocks when full, <code>take()</code> blocks when empty. This decouples producers from consumers and handles backpressure naturally. Alternative: <code>wait()/notifyAll()</code> on a synchronized list (more error-prone).</p></div>
+        </div>
+
+        <!-- ===== JVM & MEMORY (8) ===== -->
+        <div class="interview-q-card" data-companies="Uber,Google" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge uber">Uber</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">Describe JVM Stack vs Heap memory and how GC works.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Stack: thread-private, stores frames (locals, operands). Heap: shared, stores objects. GC: marks live objects from GC roots (stack refs, static fields), sweeps unreachable objects. Modern GCs (G1, ZGC, Shenandoah) use generational hypothesis — most objects die young. Young gen collected frequently (minor GC); old gen less often (major/full GC).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Amazon" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge netflix">Netflix</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">What is Metaspace and how does it differ from PermGen?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> PermGen (pre-Java 8): fixed-size memory area for class metadata — caused <code>OutOfMemoryError: PermGen space</code>. Metaspace (Java 8+): grows dynamically in native memory (off-heap). No fixed limit by default (configurable via <code>-XX:MaxMetaspaceSize</code>). Class unloading still occurs; metaspace is reclaimed when classloaders are GC'd.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Microsoft" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge oracle">Oracle</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is JIT compilation and how does tiered compilation work?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> JIT compiles frequently executed bytecode to native machine code at runtime. Tiered compilation (Java 8+): Level 0 (interpreter) → Level 1-3 (C1 — client compiler, fast compile, basic optimization) → Level 4 (C2 — server compiler, aggressive optimization). Hot methods get promoted. C2 uses profiling data for speculative optimizations.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Meta" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is the difference between G1GC, ZGC, and Serial GC?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Serial GC</strong>: single-threaded, simple, for small apps. <strong>G1GC</strong> (default Java 9+): region-based, aims for predictable pause times (&lt;200ms), good for large heaps. <strong>ZGC</strong> (Java 15+): concurrent, sub-millisecond pause times regardless of heap size, ideal for latency-sensitive applications. <strong>Shenandoah</strong>: similar to ZGC, concurrent compaction.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Uber" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge amazon">Amazon</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is a memory leak in Java? How do you detect one?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A memory leak occurs when objects are no longer needed but are still referenced, preventing GC. Common causes: static collections holding objects, unclosed streams/connections, improper <code>ThreadLocal</code> use, listener registration without deregistration. Detection: heap profilers (VisualVM, JProfiler), heap dump analysis, monitoring heap growth with <code>jstat</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Oracle" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge netflix">Netflix</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the ClassLoader hierarchy in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Java uses a delegation model: <strong>Bootstrap ClassLoader</strong> (loads JDK core classes) → <strong>Extension/Platform ClassLoader</strong> (loads ext/modules) → <strong>Application ClassLoader</strong> (loads classpath). Each loader delegates to parent first. This prevents malicious replacement of core classes. Custom ClassLoaders are used by app servers for module isolation.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Microsoft" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge google">Google</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is escape analysis in the JVM?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Escape analysis determines if an object "escapes" a method or thread scope. If a JVM determines an object doesn't escape the creating method, it can: allocate it on the stack instead of the heap (stack allocation), eliminate synchronization on local objects (lock elision), and replace the object with scalar fields (scalar replacement). This reduces GC pressure significantly.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Walmart,TCS" data-topic="JVM">
+            <div class="card-meta-row"><span class="topic-tag">JVM &amp; Memory</span><span class="company-badge walmart">Walmart</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What are Weak, Soft, and Phantom references in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Strong</strong>: regular reference, prevents GC. <strong>Soft</strong>: collected only when JVM is memory-pressured — ideal for caches. <strong>Weak</strong>: collected at next GC — used in WeakHashMap. <strong>Phantom</strong>: object is already finalized, used for post-finalization cleanup. All accessible through <code>java.lang.ref</code> package and a <code>ReferenceQueue</code>.</p></div>
+        </div>
+
+        <!-- ===== MODERN JAVA (10) ===== -->
+        <div class="interview-q-card" data-companies="Microsoft,Netflix,Amazon" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge netflix">Netflix</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">Explain lambda expressions and intermediate vs terminal Stream operations.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Lambdas are inline functional interface implementations. <strong>Intermediate</strong> ops (filter, map, sorted, distinct, limit): lazy, return Stream, chain indefinitely. <strong>Terminal</strong> ops (collect, forEach, reduce, count, findFirst): trigger the pipeline and produce a result. Streams are consumed once; use <code>stream()</code> to create a fresh one.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Meta" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What are functional interfaces and what are the core ones in <code>java.util.function</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A functional interface has exactly one abstract method (SAM type). Core ones: <code>Function&lt;T,R&gt;</code> (apply), <code>Predicate&lt;T&gt;</code> (test), <code>Consumer&lt;T&gt;</code> (accept), <code>Supplier&lt;T&gt;</code> (get), <code>BiFunction&lt;T,U,R&gt;</code>, <code>UnaryOperator&lt;T&gt;</code>. Annotate custom ones with <code>@FunctionalInterface</code> for compile-time verification.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Uber" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge oracle">Oracle</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">How does <code>Optional</code> prevent NullPointerException?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Optional&lt;T&gt;</code> is a container that may or may not hold a value. Instead of returning <code>null</code>, return <code>Optional.empty()</code>. API: <code>isPresent()</code>, <code>get()</code>, <code>orElse()</code>, <code>orElseGet()</code>, <code>map()</code>, <code>flatMap()</code>, <code>filter()</code>. Do NOT use Optional as a method parameter or in collections — use it only as return types.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Microsoft" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge amazon">Amazon</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is method reference and what are the four types?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Method references are shorthand for lambdas calling a specific method. Types: 1) Static: <code>ClassName::staticMethod</code>, 2) Instance (bound): <code>instance::method</code>, 3) Instance (unbound): <code>ClassName::instanceMethod</code> (first lambda param becomes the receiver), 4) Constructor: <code>ClassName::new</code>. All are syntactic sugar for functional interface implementations.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Flipkart" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge netflix">Netflix</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is the difference between <code>map()</code> and <code>flatMap()</code> in Streams?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>map()</code> applies a function 1:1, returning a <code>Stream&lt;R&gt;</code>. <code>flatMap()</code> applies a function that returns a <code>Stream</code> and flattens the resulting stream-of-streams into a single <code>Stream</code>. Example: converting a list of sentences into a stream of words requires <code>flatMap(s -&gt; Arrays.stream(s.split(" ")))</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Oracle" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge google">Google</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What are Sealed Classes in Java 17?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Sealed classes restrict which classes can extend or implement them using the <code>sealed</code> and <code>permits</code> keywords. Permitted subclasses must be <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>. This enables exhaustive pattern matching in switch expressions and models closed hierarchies like algebraic data types (Sum types). Extremely useful for modelling domain events.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Walmart" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge meta">Meta</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is the <code>Collectors</code> class and which collectors do you use most?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Collectors</code> provides implementations for the <code>collect()</code> terminal operation. Key collectors: <code>toList()</code>, <code>toSet()</code>, <code>toMap()</code>, <code>groupingBy()</code> (multi-level grouping), <code>partitioningBy()</code> (split into two groups), <code>joining()</code> (string concatenation), <code>counting()</code>, <code>summarizingInt()</code>. In Java 16+: <code>toUnmodifiableList()</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Adobe" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge amazon">Amazon</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is <code>Stream.parallel()</code> and when should you NOT use it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>parallel()</code> splits the stream and processes chunks in the ForkJoinPool concurrently. Avoid for: small datasets (overhead outweighs gain), ordered pipelines (ordering forces merging), I/O-bound operations (blocking ties up FJP threads), and stateful/non-associative reduction operations. Use for CPU-intensive, large, order-independent workloads.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Uber" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What are <code>default</code> and <code>static</code> interface methods introduced in Java 8?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>default</code> methods provide a concrete implementation in an interface, enabling backward-compatible API evolution without breaking existing implementations. <code>static</code> interface methods are utility methods on the interface itself (not inherited). Both were added to support the Stream API without breaking existing <code>Collection</code> implementations.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Google" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Modern Java</span><span class="company-badge netflix">Netflix</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">What is a <code>Stream&lt;T&gt;</code> and how is it different from a <code>Collection</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A <code>Collection</code> stores elements in memory; a <code>Stream</code> is a computational pipeline over a data source — no storage. Streams are lazy (no work until terminal op), single-use (consumed once), and can be infinite (<code>Stream.generate()</code>). Collections are eagerly computed, reusable, and support mutation. Streams are for processing; collections are for storage.</p></div>
+        </div>
+
+        <!-- ===== GENERICS (6) ===== -->
+        <div class="interview-q-card" data-companies="Google,Amazon" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge google">Google</span><span class="company-badge amazon">Amazon</span></div>
+            <h4 class="q-title">What is type erasure in Java Generics?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Generic type information is erased at compile time and replaced with <code>Object</code> (or the upper bound). This maintains backward compatibility with pre-generics code. Consequences: cannot use <code>instanceof</code> with generic types, cannot create generic arrays, cannot catch generic exceptions. Runtime has no knowledge of <code>List&lt;String&gt;</code> vs <code>List&lt;Integer&gt;</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Oracle" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the difference between <code>&lt;? extends T&gt;</code> (upper bounded) and <code>&lt;? super T&gt;</code> (lower bounded)?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>&lt;? extends T&gt;</code> (PECS Producer): read from collection safely (covariant), cannot add. <code>&lt;? super T&gt;</code> (PECS Consumer): add T or subtypes safely (contravariant), can only read as Object. PECS = Producer Extends, Consumer Super. Example: <code>Collections.copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Netflix" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge meta">Meta</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is a bounded type parameter?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Constrains the generic type: <code>&lt;T extends Comparable&lt;T&gt;&gt;</code> ensures T supports comparison. Multiple bounds: <code>&lt;T extends Runnable &amp; Serializable&gt;</code> (class must come first if present). Used to write algorithms that work on a restricted set of types while retaining type safety and avoiding unchecked casts.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Wipro" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge uber">Uber</span><span class="company-badge wipro">Wipro</span></div>
+            <h4 class="q-title">Can you use generics with static methods and static fields?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Static methods can have their own type parameters: <code>public static &lt;T&gt; void swap(T[] arr, int i, int j)</code>. Static fields CANNOT use the class's generic type parameter because they are shared across all instances of the class (regardless of type argument). The compiler would reject it.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Infosys,TCS" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge infosys">Infosys</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is a raw type and why should it be avoided?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A raw type is a generic class used without type arguments (e.g., <code>List list = new ArrayList()</code>). Raw types bypass generic type safety, producing unchecked warnings and potential <code>ClassCastException</code> at runtime. They exist for backward compatibility only. Always use parameterized types or wildcard <code>&lt;?&gt;</code> instead.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Flipkart" data-topic="Generics">
+            <div class="card-meta-row"><span class="topic-tag">Generics</span><span class="company-badge amazon">Amazon</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is a generic method and how do you define one?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A generic method declares its own type parameter independent of the class: <code>public &lt;T extends Comparable&lt;T&gt;&gt; T max(T a, T b)</code>. Type is inferred from the arguments at the call site. Generic methods are more flexible than making the whole class generic when only one method needs genericity.</p></div>
+        </div>
+
+        <!-- ===== FILES & I/O (6) ===== -->
+        <div class="interview-q-card" data-companies="Oracle,Walmart" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge oracle">Oracle</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">Why use <code>PreparedStatement</code> instead of <code>Statement</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>PreparedStatement</code> pre-compiles the SQL on the DB side. Benefits: prevents SQL Injection (parameters are literal data, not parsed SQL), better performance for repeated queries (cached execution plan), cleaner code with typed parameter binding. Never concatenate user input into SQL strings.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Microsoft" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge google">Google</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is the difference between <code>FileInputStream</code> and <code>BufferedInputStream</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>FileInputStream</code> reads byte-by-byte from disk — one system call per byte, very slow. <code>BufferedInputStream</code> wraps it and reads large chunks into an in-memory buffer, reducing system calls dramatically. Always wrap file streams in buffered streams: <code>new BufferedReader(new FileReader(file))</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Netflix" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge amazon">Amazon</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is serialization and when should you use <code>transient</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Serialization converts an object to a byte stream for storage/transmission. Class must implement <code>Serializable</code>. <code>transient</code> marks fields to skip serialization (passwords, calculated fields, non-serializable references). Always define <code>serialVersionUID</code> to control version compatibility. Prefer JSON/Protobuf for cross-language serialization.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Uber" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge meta">Meta</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is NIO.2 (<code>java.nio.file</code>) and how does it improve over classic I/O?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> NIO.2 (Java 7) adds <code>Path</code>, <code>Files</code>, <code>FileSystem</code> APIs. Improvements: symbolic link support, file attribute access (creation time, size), directory watching (<code>WatchService</code>), atomic moves, non-blocking I/O with <code>AsynchronousFileChannel</code>. <code>Files.readAllLines()</code> and <code>Files.lines()</code> replace manual stream handling for text files.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,TCS" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge oracle">Oracle</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">How do you read a large file efficiently without loading it into memory?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Use <code>Files.lines(path)</code> (Java 8+) which returns a lazy <code>Stream&lt;String&gt;</code> — reads line-by-line. Alternatively use <code>BufferedReader.readLine()</code> in a loop. For binary: <code>FileInputStream</code> with a buffer array. For very large files: memory-mapped files (<code>MappedByteBuffer</code>) allow OS-level paging without explicit reads.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Walmart,Infosys" data-topic="I/O">
+            <div class="card-meta-row"><span class="topic-tag">Files &amp; I/O</span><span class="company-badge walmart">Walmart</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What is the difference between character streams and byte streams?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Byte streams (<code>InputStream</code>/<code>OutputStream</code>) handle raw binary data. Character streams (<code>Reader</code>/<code>Writer</code>) handle text and perform encoding/decoding (default or specified charset like UTF-8). Use character streams for text files. <code>InputStreamReader</code> and <code>OutputStreamWriter</code> are bridges between the two.</p></div>
+        </div>
+
+        <!-- ===== JDBC (6) ===== -->
+        <div class="interview-q-card" data-companies="Oracle,Walmart" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge oracle">Oracle</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is a connection pool and why is it important?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Creating a DB connection is expensive (network handshake, auth). A connection pool maintains a set of pre-established connections for reuse. Libraries: HikariCP (fastest), Apache DBCP, c3p0. Configurable parameters: min/max pool size, idle timeout, connection lifetime. Without pooling, high-traffic apps would be bottlenecked by connection setup latency.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Netflix" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge amazon">Amazon</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What are ACID properties in database transactions?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>A</strong>tomicity: all operations commit or all roll back. <strong>C</strong>onsistency: DB moves from one valid state to another. <strong>I</strong>solation: concurrent transactions don't see each other's intermediate states. <strong>D</strong>urability: committed data persists even after crashes. JDBC: <code>conn.setAutoCommit(false)</code>, <code>conn.commit()</code>/<code>rollback()</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Google" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">What are the transaction isolation levels and what anomalies do they prevent?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Read Uncommitted</strong>: allows dirty reads. <strong>Read Committed</strong>: prevents dirty reads. <strong>Repeatable Read</strong>: prevents dirty + non-repeatable reads. <strong>Serializable</strong>: prevents all anomalies (dirty, non-repeatable, phantom reads). Higher isolation = less concurrency. Set via <code>conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED)</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="TCS,Infosys" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge tcs">TCS</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">What is the difference between <code>Statement</code>, <code>PreparedStatement</code>, and <code>CallableStatement</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Statement</code>: simple SQL, no parameters, vulnerable to injection. <code>PreparedStatement</code>: parameterized SQL, pre-compiled, safe and performant. <code>CallableStatement</code>: executes stored procedures, supports IN/OUT/INOUT parameters. Use <code>PreparedStatement</code> for DML operations; <code>CallableStatement</code> for complex stored procedure calls.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,Uber" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge oracle">Oracle</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is batch processing in JDBC and why is it important?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Batch processing groups multiple SQL statements and sends them in one round-trip: <code>ps.addBatch()</code> + <code>ps.executeBatch()</code>. Dramatically reduces network latency for bulk inserts/updates. Always commit in controlled batch sizes (e.g., every 500-1000 rows) to avoid holding large transactions. Required for high-throughput data pipelines.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Meta" data-topic="JDBC">
+            <div class="card-meta-row"><span class="topic-tag">JDBC</span><span class="company-badge amazon">Amazon</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is a <code>ResultSet</code> and what are the different types?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> A <code>ResultSet</code> is a cursor to query results. Types: <strong>Forward-only</strong> (default, fastest), <strong>Scroll-insensitive</strong> (bidirectional, doesn't see DB changes), <strong>Scroll-sensitive</strong> (bidirectional, reflects DB changes). Concurrency: <strong>Read-only</strong> or <strong>Updatable</strong>. Always close in <code>finally</code> or try-with-resources to release DB cursor resources.</p></div>
+        </div>
+
+        <!-- ===== DESIGN PATTERNS (8) ===== -->
+        <div class="interview-q-card" data-companies="Google,Amazon,Microsoft" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge google">Google</span><span class="company-badge amazon">Amazon</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">What is the Singleton pattern and how do you make it thread-safe?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Singleton ensures one instance per JVM. Thread-safe implementations: 1) <strong>Eager initialization</strong>: static final field (JVM guarantees thread-safety). 2) <strong>Double-checked locking</strong> with <code>volatile</code>. 3) <strong>Initialization-on-demand holder</strong> (static inner class — laziest and safest). 4) <strong>Enum singleton</strong> — handles serialization and reflection attacks.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Netflix" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge meta">Meta</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is the Factory Method pattern vs Abstract Factory?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>Factory Method</strong>: defines an interface for creating one object; subclasses decide which class to instantiate. <strong>Abstract Factory</strong>: creates families of related objects without specifying their concrete classes. Use Factory Method for a single product; Abstract Factory when you need families of related products (e.g., UI widgets for Windows vs macOS).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Oracle" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge uber">Uber</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the Builder pattern and when should you use it?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Builder constructs complex objects step-by-step: <code>new Pizza.Builder().size(12).cheese(true).pepperoni(true).build()</code>. Use when: object has many optional parameters (avoids telescoping constructors), or when construction requires multiple steps. Lombok's <code>@Builder</code> generates it automatically. The pattern also enables immutable objects with readable construction.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Adobe" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge amazon">Amazon</span><span class="company-badge adobe">Adobe</span></div>
+            <h4 class="q-title">What is the Observer pattern and where is it used in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Observer defines a one-to-many dependency — when the subject changes, all observers are notified. Java examples: <code>java.util.Observer</code> (deprecated), event listeners in Swing/AWT, Spring's <code>ApplicationEvent</code>, and reactive streams. Modern Java: use <code>java.util.concurrent.Flow</code> (Reactive Streams) for backpressure-aware publish-subscribe.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Meta" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge google">Google</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is the Strategy pattern and how does it use polymorphism?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Strategy defines a family of interchangeable algorithms behind an interface. The context delegates to a strategy object at runtime. Example: sorting with different <code>Comparator</code> implementations. In Java 8+, lambdas are natural strategies for functional interfaces. Strategy promotes open/closed principle — add new strategies without modifying the context.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Netflix" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is the Decorator pattern?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Decorator wraps an object to add behavior dynamically without subclassing. Java's I/O streams are the classic example: <code>new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(file)))</code>. Each decorator adds one capability. Avoids class explosion from combining features. Follows the open/closed principle.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Flipkart,Walmart" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge flipkart">Flipkart</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What is the Proxy pattern and what are its types?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Proxy provides a surrogate to control access to an object. Types: <strong>Virtual</strong> (lazy initialization), <strong>Protection</strong> (access control), <strong>Remote</strong> (network delegation), <strong>Caching</strong> (result caching). Java's <code>java.lang.reflect.Proxy</code> creates dynamic proxies at runtime. Spring AOP uses CGLIB proxies to add cross-cutting concerns (logging, transactions) around beans.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Oracle,TCS" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Design Patterns</span><span class="company-badge oracle">Oracle</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is Dependency Injection (DI) and how does it relate to IoC?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Inversion of Control (IoC): the framework calls your code rather than you calling the framework. DI is an IoC implementation where dependencies are provided externally rather than created inside the class. Types: constructor injection (preferred — immutable, testable), setter injection, field injection. Spring's IoC container manages the object lifecycle and wires dependencies automatically.</p></div>
+        </div>
+
+        <!-- ===== PACKAGES & ACCESS MODIFIERS (4) ===== -->
+        <div class="interview-q-card" data-companies="Oracle,Infosys" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Packages &amp; Access Modifiers</span><span class="company-badge oracle">Oracle</span><span class="company-badge infosys">Infosys</span></div>
+            <h4 class="q-title">Explain the four access modifiers in Java.</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <strong>private</strong>: same class only. <strong>default</strong> (package-private, no keyword): same package. <strong>protected</strong>: same package + subclasses in any package. <strong>public</strong>: everywhere. For fields: use <code>private</code>. For overridable methods: <code>protected</code>. For APIs: <code>public</code>. Minimize access to the smallest needed scope (Principle of Least Privilege).</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Wipro,TCS" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Packages &amp; Access Modifiers</span><span class="company-badge wipro">Wipro</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is the Java Module System (JPMS) introduced in Java 9?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> JPMS (Project Jigsaw) adds a module layer above packages. A module declares what it exports (public API) and what it requires (dependencies) in <code>module-info.java</code>. Benefits: strong encapsulation (packages not exported cannot be accessed via reflection by default), reliable configuration (no more classpath ambiguity), smaller JRE images via <code>jlink</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Google" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Packages &amp; Access Modifiers</span><span class="company-badge amazon">Amazon</span><span class="company-badge google">Google</span></div>
+            <h4 class="q-title">What is the difference between <code>import</code> and <code>import static</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>import</code> brings a class or package into scope. <code>import static</code> brings static members (fields/methods) into scope directly without the class name: <code>import static java.lang.Math.PI;</code> then use <code>PI</code> directly. Useful for reducing verbosity with constants or utility methods, but overuse can obscure where members originate.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Walmart" data-topic="Data Types">
+            <div class="card-meta-row"><span class="topic-tag">Packages &amp; Access Modifiers</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">What does <code>package-private</code> (default) access mean in practice?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Default access (no modifier) restricts visibility to the same package. It enables package-internal implementation details to be shared among cooperating classes without exposing them to the wider codebase. This is how Java achieves package-level encapsulation — the package becomes a boundary for related collaborating classes.</p></div>
+        </div>
+
+        <!-- ===== REFLECTION & ANNOTATIONS (4) ===== -->
+        <div class="interview-q-card" data-companies="Google,Netflix" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Reflection &amp; Annotations</span><span class="company-badge google">Google</span><span class="company-badge netflix">Netflix</span></div>
+            <h4 class="q-title">What is Reflection in Java and what are its risks?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Reflection allows inspecting and manipulating classes, methods, fields, and constructors at runtime without knowing them at compile time. Used by frameworks (Spring, Hibernate, JUnit). Risks: performance overhead (slower than direct calls), breaks encapsulation (<code>setAccessible(true)</code>), security issues, and brittle code that fails silently when refactored. Use sparingly.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Oracle" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Reflection &amp; Annotations</span><span class="company-badge amazon">Amazon</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What are the retention policies for annotations in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>@Retention</code> controls annotation availability: <strong>SOURCE</strong> (compiler only, discarded in .class files — e.g., <code>@Override</code>), <strong>CLASS</strong> (in .class files but not at runtime — default), <strong>RUNTIME</strong> (available at runtime via reflection — e.g., <code>@Autowired</code>, <code>@Test</code>). Pair with <code>@Target</code> to restrict where the annotation can be applied.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,Microsoft" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Reflection &amp; Annotations</span><span class="company-badge meta">Meta</span><span class="company-badge microsoft">Microsoft</span></div>
+            <h4 class="q-title">How do you create a custom annotation?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Define with <code>@interface</code>: <code>@Retention(RUNTIME) @Target(METHOD) public @interface Audited { String value() default ""; }</code>. Process at runtime using reflection: <code>method.isAnnotationPresent(Audited.class)</code>. For compile-time processing, implement <code>javax.annotation.processing.Processor</code>. Custom annotations power frameworks like Spring, JUnit, and Hibernate.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Uber,Flipkart" data-topic="Design Patterns">
+            <div class="card-meta-row"><span class="topic-tag">Reflection &amp; Annotations</span><span class="company-badge uber">Uber</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is dynamic proxy in Java and how does it work?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>java.lang.reflect.Proxy.newProxyInstance()</code> creates a proxy implementing specified interfaces at runtime. Method calls go through an <code>InvocationHandler</code>'s <code>invoke()</code> method. Used by Spring AOP for interface-based proxies (CGLIB for class-based). Also used in RPC frameworks to intercept method calls and route them over the network.</p></div>
+        </div>
+
+        <!-- ===== BONUS: JAVA MISC (6) ===== -->
+        <div class="interview-q-card" data-companies="Google,Amazon,Meta" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge google">Google</span><span class="company-badge amazon">Amazon</span><span class="company-badge meta">Meta</span></div>
+            <h4 class="q-title">What is the difference between <code>Runnable</code> and <code>Callable</code>?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>Runnable.run()</code> returns void and cannot throw checked exceptions. <code>Callable&lt;T&gt;.call()</code> returns a result of type T and can throw checked exceptions. Use <code>Callable</code> with <code>ExecutorService.submit()</code> to get a <code>Future&lt;T&gt;</code> for the result. <code>Runnable</code> is for fire-and-forget tasks.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Netflix,Uber" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge netflix">Netflix</span><span class="company-badge uber">Uber</span></div>
+            <h4 class="q-title">What is the difference between <code>equals()</code> and <code>==</code> for strings?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>==</code> compares object references (memory addresses). <code>equals()</code> compares character sequences. For literals (<code>"hello"</code>), the String Pool may make <code>==</code> return true. For <code>new String("hello")</code>, always creates a new object — <code>==</code> returns false even if content is equal. Always use <code>.equals()</code> for string comparison.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Microsoft,Oracle" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge microsoft">Microsoft</span><span class="company-badge oracle">Oracle</span></div>
+            <h4 class="q-title">What is the difference between an enum and a class in Java?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Enums are implicitly <code>final</code> (cannot be extended), implicitly extend <code>java.lang.Enum</code>, have a fixed set of named constants, get free <code>values()</code> and <code>valueOf()</code> methods, and each constant is a singleton. Enums can have fields, methods, and constructors. They are inherently type-safe, serializable, and thread-safe, making them ideal for constants, state machines, and Strategy pattern implementations.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Amazon,Walmart" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge amazon">Amazon</span><span class="company-badge walmart">Walmart</span></div>
+            <h4 class="q-title">How does <code>hashCode()</code> work for custom objects?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> Override <code>hashCode()</code> using the same fields as <code>equals()</code>. Use <code>Objects.hash(field1, field2)</code> (Java 7+) for a clean, collision-resistant implementation. Good hash codes: fast to compute, consistent (same object = same hash), distribute evenly. A poor hash (e.g., returning constant) degrades HashMap to O(n) due to all entries falling in one bucket.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Google,Flipkart" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge google">Google</span><span class="company-badge flipkart">Flipkart</span></div>
+            <h4 class="q-title">What is <code>Object.clone()</code> and why is it problematic?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>clone()</code> creates a shallow copy. Problems: class must implement <code>Cloneable</code> (marker interface), otherwise throws <code>CloneNotSupportedException</code>; shallow copy shares nested object references; no type safety; no obvious constructor call. Effective Java recommends copy constructors or copy factory methods instead of <code>clone()</code>.</p></div>
+        </div>
+
+        <div class="interview-q-card" data-companies="Meta,TCS" data-topic="Modern Java">
+            <div class="card-meta-row"><span class="topic-tag">Java Core — Misc</span><span class="company-badge meta">Meta</span><span class="company-badge tcs">TCS</span></div>
+            <h4 class="q-title">What is the difference between <code>String</code>, <code>StringBuilder</code>, and <code>StringBuffer</code> performance-wise?</h4>
+            <div class="q-answer"><p><strong>Answer:</strong> <code>String</code>: immutable — concatenation in a loop creates many objects (O(n²) total). <code>StringBuilder</code>: mutable, not thread-safe, O(n) for building. <code>StringBuffer</code>: mutable, thread-safe (synchronized), ~2x slower than StringBuilder. Java compiler auto-converts simple <code>+</code> concat to StringBuilder in method scope. For loops, always use StringBuilder explicitly.</p></div>
+        </div>
+
+    </div>
+    <div class="interview-q-count" id="q-count-bottom" style="margin-top:20px; text-align:center;">End of Interview Prep Hub — 150 Questions</div>
+</div>

@@ -1,104 +1,107 @@
-<h2>JVM Architecture & Memory Management</h2>
+<h1>JVM Memory & Garbage Collection</h1>
 
-<p>
-  The <strong>Java Virtual Machine (JVM)</strong> is the execution engine for Java applications. Understanding JVM architecture, memory allocation, and Garbage Collection (GC) is vital for writing high-performance Java code.
-</p>
+<div class="concept-meta-badge">
+    <span class="badge-difficulty advanced">Advanced</span>
+    <span class="badge-time">Read Time: 12 mins</span>
+</div>
 
-<hr>
+<div class="section">
+    <h2>1. The Real-World Analogy: Desk Workspace vs. Central Warehouse</h2>
+    <p>Imagine working in a busy logistics company:</p>
+    <ul>
+        <li><strong>Your Desk Workspace (Stack):</strong> A small, private desk. When you work on a task, you write notes, use local tools, and compile frames. When you finish the task, you instantly wipe the desk clean. It is fast, private, but limited in size.</li>
+        <li><strong>The Central Warehouse (Heap):</strong> A massive, shared storage room. If you buy a huge container of goods (Object), you store it in the warehouse, and write down its address (reference) on your desk. Everyone can access the warehouse, and it needs a specialized cleaner (Garbage Collector) to sweep out boxes that are no longer referenced.</li>
+    </ul>
+</div>
 
-<h3>1. Architecture of JVM</h3>
-<p>The JVM is composed of three main subsystems:</p>
-<ol>
-  <li><strong>ClassLoader Subsystem:</strong> Loads, links, and initializes <code>.class</code> files.</li>
-  <li><strong>Runtime Data Areas (Memory):</strong> Allocates memory for program execution.</li>
-  <li><strong>Execution Engine:</strong> Executes bytecode via Interpreter, JIT Compiler, and Garbage Collector.</li>
-</ol>
+<div class="section">
+    <h2>2. Stack Memory vs. Heap Memory</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Stack Memory</th>
+                <th>Heap Memory</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Definition</strong></td>
+                <td>Stores method execution frames, local primitives, and object reference variables.</td>
+                <td>Stores all instantiated objects and arrays.</td>
+            </tr>
+            <tr>
+                <td><strong>Access scope</strong></td>
+                <td>Private to each individual thread (Thread-safe).</td>
+                <td>Shared globally across all threads in the application.</td>
+            </tr>
+            <tr>
+                <td><strong>Lifecycle</strong></td>
+                <td>Automatic (Pushed when method is called, popped when method returns).</td>
+                <td>Managed by the Garbage Collector (Removes objects when they lose references).</td>
+            </tr>
+            <tr>
+                <td><strong>Error Type</strong></td>
+                <td><code>java.lang.StackOverflowError</code> (Deep recursion).</td>
+                <td><code>java.lang.OutOfMemoryError</code> (Running out of Heap space).</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-<hr>
+<div class="warning-callout">
+    <h3>⚠️ Warning: Memory Leaks in Java!</h3>
+    <p>Even though Java has an automatic Garbage Collector, you can still experience **Memory Leaks**. If you hold onto references to unused objects (e.g. adding objects to static lists or caching data without timeouts), the Garbage Collector cannot clean them up, eventually triggering an <code>OutOfMemoryError</code>.</p>
+</div>
 
-<h3>2. JVM Runtime Memory Structure</h3>
-<p>The JVM runtime memory is divided into five key regions:</p>
+<div class="section">
+    <h2>3. How Garbage Collection (GC) Works</h2>
+    <p>Garbage Collection is a daemon thread run by the JVM to clean up Heap memory. The process uses a **generational hypothesis** (most objects die young) and divides the Heap into pools:</p>
+    <ol>
+        <li><strong>Young Generation:</strong> Newly created objects land in the **Eden space**. When it gets full, a minor GC runs, moving survivors to **Survivor spaces (S0, S1)**.</li>
+        <li><strong>Old (Tenured) Generation:</strong> Objects that survive multiple rounds of minor GC are promoted to the Old Generation, which stores long-lived objects. When this gets full, a Major/Full GC runs (causing "Stop the World" pauses).</li>
+    </ol>
+    <p>GC identifies dead objects using **Reachability Analysis** starting from predefined **GC Roots** (like local variables, active threads, and static references). Any object not reachable from a GC root is collected.</p>
+</div>
 
-<table border="1" cellpadding="8" style="width:100%; border-collapse: collapse; margin-top:10px;">
-  <thead>
-    <tr style="background: var(--bg-hover, #2a2a2a);">
-      <th>Memory Region</th>
-      <th>Scope</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Heap Memory</strong></td>
-      <td>Shared by all threads</td>
-      <td>Stores all instantiated objects and instance variables. Divided into Young Generation (Eden, Survivor spaces) and Old Generation.</td>
-    </tr>
-    <tr>
-      <td><strong>Stack Memory</strong></td>
-      <td>Per-thread</td>
-      <td>Stores local variables, method call frames, and primitive values. Destroyed when method execution ends.</td>
-    </tr>
-    <tr>
-      <td><strong>Metaspace</strong></td>
-      <td>Shared by all threads</td>
-      <td>Replaced PermGen in Java 8. Stores class metadata, static fields, and method bytecode. Allocates from native memory.</td>
-    </tr>
-    <tr>
-      <td><strong>PC Registers</strong></td>
-      <td>Per-thread</td>
-      <td>Holds the address of the currently executing JVM instruction for each thread.</td>
-    </tr>
-    <tr>
-      <td><strong>Native Method Stack</strong></td>
-      <td>Per-thread</td>
-      <td>Contains native method information (C/C++ native code execution).</td>
-    </tr>
-  </tbody>
-</table>
+<div class="section">
+    <h2>💻 Example Code: Stack overflow simulation</h2>
+    <pre><code class="language-java">public class MemoryDemo {
+    public static void recursiveCall(int num) {
+        // Deep recursion with no exit condition
+        recursiveCall(num + 1); // Triggers StackOverflowError
+    }
 
-<hr>
-
-<h3>3. Garbage Collection (GC) Mechanics</h3>
-<p>
-  Garbage Collection is the automatic process of identifying and reclaiming unreferenced memory from Heap space to prevent OutOfMemory errors.
-</p>
-
-<h4>GC Process: Mark, Sweep, and Compact</h4>
-<ol>
-  <li><strong>Mark:</strong> Identifies which objects are still in use (reachable from GC Roots) and which are unreferenced.</li>
-  <li><strong>Sweep:</strong> Removes unreferenced objects.</li>
-  <li><strong>Compact:</strong> Moves remaining live objects together to eliminate memory fragmentation.</li>
-</ol>
-
-<h4>Popular Java Garbage Collectors</h4>
-<ul>
-  <li><strong>Serial GC:</strong> Single-threaded collector designed for small applications.</li>
-  <li><strong>Parallel GC:</strong> Multi-threaded collector focusing on throughput.</li>
-  <li><strong>G1 GC (Garbage-First):</strong> Low-latency collector default in modern Java (Java 9+).</li>
-  <li><strong>ZGC / Shenandoah:</strong> Ultra-low latency collectors for large heap sizes (gigabytes to terabytes) with pause times under 1 millisecond.</li>
-</ul>
-
-<hr>
-
-<h3>4. Memory Leaks in Java & Prevention</h3>
-<p>
-  Even with Garbage Collection, memory leaks occur when unneeded objects remain reachable through strong references.
-</p>
-
-<h4>Common Causes of Memory Leaks:</h4>
-<ul>
-  <li>Unclosed connections, I/O streams, or readers.</li>
-  <li>Static variables holding references to large objects or collections indefinitely.</li>
-  <li>Unregistered event listeners or callbacks.</li>
-  <li>Incorrect <code>equals()</code> and <code>hashCode()</code> in <code>HashMap</code> keys.</li>
-</ul>
-
-<pre><code>// Preventing Memory Leaks: Use try-with-resources & clear references
-public void processData() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("file.txt"))) {
-        String line = reader.readLine();
-        // File automatically closed when block exits!
-    } catch (IOException e) {
-        e.printStackTrace();
+    public static void main(String[] args) {
+        // Local primitive 'x' is pushed to the Stack frame of main
+        int x = 50; 
+        
+        // Reference variable 'list' sits on Stack, pointing to ArrayList on Heap
+        java.util.List&lt;Object&gt; list = new java.util.ArrayList&lt;&gt;();
+        
+        recursiveCall(1);
     }
 }</code></pre>
+</div>
+
+<div class="interview-section">
+    <h2>💬 Topic Interview Prep Q&A</h2>
+    
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge uber">Uber</span>
+            <span class="company-badge google">Google</span>
+        </div>
+        <h4>Q1: Describe StackOverflowError vs. OutOfMemoryError in Java.</h4>
+        <p><strong>A:</strong> <code>StackOverflowError</code> occurs when the JVM's call stack size limit is exceeded (typically due to infinite recursion or excessively deep method calls). <code>OutOfMemoryError</code> occurs when the Heap memory runs out of space to allocate new objects and the Garbage Collector cannot reclaim any more memory.</p>
+    </div>
+
+    <div class="interview-card">
+        <div class="meta">
+            <span class="company-badge amazon">Amazon</span>
+        </div>
+        <h4>Q2: What are GC Roots in Java?</h4>
+        <p><strong>A:</strong> GC Roots are starting points from which reachability analysis begins. Examples include active local variables on thread stacks, JNI (Java Native Interface) global references, and active static variables inside classes.</p>
+    </div>
+</div>

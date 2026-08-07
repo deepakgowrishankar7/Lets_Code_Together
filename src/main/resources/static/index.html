@@ -118,6 +118,37 @@
             font-size: 3em;
             color: #fff;
         }
+        .guest-btn,
+        .app-install-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 24px;
+            border-radius: 999px;
+            padding: 14px 32px;
+            font-weight: 800;
+            cursor: pointer;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), inset 0 0 10px rgba(255, 255, 255, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+        }
+        .guest-btn:hover,
+        .app-install-btn:hover {
+            transform: translateY(-2px);
+            background-color: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.85), inset 0 0 12px rgba(255, 255, 255, 0.08);
+        }
+        .guest-btn:focus,
+        .app-install-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 12px 30px rgba(0, 0, 0, 0.8);
+        }
         .form-container {
             display: none;
             position: absolute;
@@ -128,13 +159,13 @@
             height: auto;
             max-height: 85vh;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            padding: 24px 26px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            background: rgba(8, 14, 30, 0.94);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding: 28px 28px;
+            border-radius: 22px;
+            border: 1px solid rgba(0, 245, 160, 0.18);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
             transform: translateX(100%);
             opacity: 0;
@@ -159,15 +190,15 @@
         }
         .form-container input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
-            font-size: 0.9em;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            font-size: 0.95em;
             outline: none;
             box-sizing: border-box;
-            background-color: rgba(0, 0, 0, 0.35);
-            color: white;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.04);
+            color: #edf2ff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
         .form-container input:focus {
             border-color: #00d084;
@@ -248,29 +279,35 @@
             box-shadow: none !important;
         }
         .form-container button[type="submit"] {
-            padding: 12px;
-            background: linear-gradient(135deg, #00d084 0%, #00b894 100%);
+            padding: 14px;
+            background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
             border: none;
-            border-radius: 8px;
-            color: #041a12;
-            font-size: 1.05em;
+            border-radius: 999px;
+            color: #02050d;
+            font-size: 1em;
             font-weight: 800;
             cursor: pointer;
-            margin-top: 14px;
+            margin-top: 18px;
             width: 100%;
-            box-shadow: 0 4px 14px rgba(0, 208, 132, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 16px 38px rgba(0, 245, 160, 0.22);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
         .form-container button[type="submit"]:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0, 208, 132, 0.5);
+            background: linear-gradient(135deg, #22ffb3 0%, #00ccf5 100%);
+            box-shadow: 0 18px 44px rgba(0, 245, 160, 0.30);
         }
         .form-container button.admin-btn {
-            background-color: #28a745;
-            margin-top: 10px;
+            background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
+            color: #02050d;
+            border-radius: 999px;
+            padding: 14px;
+            margin-top: 14px;
+            width: 100%;
+            box-shadow: 0 16px 38px rgba(0, 245, 160, 0.22);
         }
         .form-container button.admin-btn:hover {
-            background-color: #1e7e34;
+            background: linear-gradient(135deg, #22ffb3 0%, #00ccf5 100%);
         }
         .form-container .forgot-password {
             display: block;
@@ -423,41 +460,6 @@
         #logo {
            pointer-events: none;
        }
-       .guest-btn {
-  margin-top: 30px;
-  padding: 14px 40px;
-  font-size: 1.1em;
-  font-weight: 600;
-  border-radius: 30px;
-  cursor: pointer;
-
-  /* 🖤 Glassy Black Look */
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.6),
-    inset 0 0 10px rgba(255, 255, 255, 0.05);
-
-  transition: all 0.3s ease;
-}
-.guest-btn:hover {
-  background: rgba(0, 0, 0, 0.65);
-  box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.9),
-    inset 0 0 12px rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px) scale(1.04);
-}
-.guest-btn:focus {
-  outline: none;
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.25),
-    0 10px 30px rgba(0, 0, 0, 0.8);
-}
 
     </style>
 </head>
@@ -479,7 +481,7 @@
         <button class="guest-btn" onclick="goWithoutLogin()">
     Let’s Go
 </button>
-        <button id="pwa-install-welcome" class="guest-btn" style="display: none; background: linear-gradient(135deg, #00f5a0, #00d9f5); color: #000; margin-top: 15px; box-shadow: 0 4px 16px rgba(0, 245, 160, 0.4); border: none;" onclick="triggerPwaInstall()">
+        <button id="pwa-install-welcome" class="app-install-btn" style="display: none; margin-top: 15px;" onclick="triggerPwaInstall()">
             📲 Install Mobile App
         </button>
 
