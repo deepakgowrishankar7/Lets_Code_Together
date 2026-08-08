@@ -789,13 +789,19 @@ function downloadQuizCertificate(userName, courseTitle, score, total) {
 /* ================================================================
    QUIZ ANTI-CHEATING PROTECTION (DISABLE COPY, CUT, RIGHT-CLICK & SCREENSHOTS)
    ================================================================ */
-function initQuizAntiCheating() {
-    const quizSelector = "#quizzes, .quiz-container, .quiz-modal, .quiz-card, .quiz-question, .quiz-option, #quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz, .course-details-section";
+function isQuizCurrentlyActive() {
+    const activeQuizBlock = document.querySelector(".quiz-question, .quiz-card, .quiz-container, #quizContainer, #pythonQuizContainer, #sqlQuizContainer");
+    if (!activeQuizBlock) return false;
+    return (activeQuizBlock.offsetWidth > 0 || activeQuizBlock.offsetHeight > 0) && getComputedStyle(activeQuizBlock).display !== 'none';
+}
 
-    // Instant Text Selection Clearer
+function initQuizAntiCheating() {
+    const quizSelector = ".quiz-question, #quizContainer, #pythonQuizContainer, #sqlQuizContainer, .quiz-card, .quiz-container";
+
     document.addEventListener("selectionchange", () => {
-        if (window.getSelection && window.getSelection().toString().length > 0) {
-            const sel = window.getSelection();
+        if (!isQuizCurrentlyActive()) return;
+        const sel = window.getSelection();
+        if (sel && !sel.isCollapsed) {
             if (sel.anchorNode) {
                 const node = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode;
                 if (node && typeof node.closest === 'function' && node.closest(quizSelector)) {
@@ -807,7 +813,7 @@ function initQuizAntiCheating() {
 
     // Block selectstart
     window.addEventListener("selectstart", (e) => {
-        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
+        if (isQuizCurrentlyActive() && e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             return false;
         }
@@ -815,7 +821,7 @@ function initQuizAntiCheating() {
 
     // Block Right Click (Context Menu)
     window.addEventListener("contextmenu", (e) => {
-        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
+        if (isQuizCurrentlyActive() && e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             if (window.getSelection) window.getSelection().removeAllRanges();
             return false;
@@ -824,7 +830,7 @@ function initQuizAntiCheating() {
 
     // Block Copy and Cut operations
     window.addEventListener("copy", (e) => {
-        if (e.target && typeof e.target.closest === 'function' && (e.target.closest(quizSelector) || document.querySelector(".quiz-question"))) {
+        if (isQuizCurrentlyActive() && e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             if (e.clipboardData) e.clipboardData.setData("text/plain", "");
             if (window.getSelection) window.getSelection().removeAllRanges();
@@ -834,7 +840,7 @@ function initQuizAntiCheating() {
     }, true);
 
     window.addEventListener("cut", (e) => {
-        if (e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
+        if (isQuizCurrentlyActive() && e.target && typeof e.target.closest === 'function' && e.target.closest(quizSelector)) {
             e.preventDefault();
             return false;
         }
@@ -842,8 +848,7 @@ function initQuizAntiCheating() {
 
     // Block Shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, Ctrl+P, PrintScreen, Win+Shift+S)
     window.addEventListener("keydown", (e) => {
-        const isQuizActive = document.querySelector(".quiz-question, #quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
-        if (isQuizActive) {
+        if (isQuizCurrentlyActive()) {
             const isCtrl = e.ctrlKey || e.metaKey;
             
             if (isCtrl && ["c", "u", "s", "p", "a"].includes(e.key.toLowerCase())) {
@@ -867,9 +872,11 @@ function initQuizAntiCheating() {
 
     // Auto-blur quiz content when window loses focus (Snipping tool / Alt+Tab / Tab switch)
     window.addEventListener("blur", () => {
-        const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
-        if (activeQuiz) {
-            activeQuiz.classList.add("quiz-blur-protection");
+        if (isQuizCurrentlyActive()) {
+            const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+            if (activeQuiz) {
+                activeQuiz.classList.add("quiz-blur-protection");
+            }
         }
     });
 
@@ -881,12 +888,14 @@ function initQuizAntiCheating() {
     });
 
     document.addEventListener("visibilitychange", () => {
-        const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
-        if (activeQuiz) {
-            if (document.hidden) {
-                activeQuiz.classList.add("quiz-blur-protection");
-            } else {
-                activeQuiz.classList.remove("quiz-blur-protection");
+        if (isQuizCurrentlyActive()) {
+            const activeQuiz = document.querySelector("#quizContainer, #pythonQuizContainer, #sqlQuizContainer, #java-content-quiz, #python-content-quiz, #sql-content-quiz");
+            if (activeQuiz) {
+                if (document.hidden) {
+                    activeQuiz.classList.add("quiz-blur-protection");
+                } else {
+                    activeQuiz.classList.remove("quiz-blur-protection");
+                }
             }
         }
     });

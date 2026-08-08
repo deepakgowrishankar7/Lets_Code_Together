@@ -1652,8 +1652,34 @@ async function populateDashboard(force = false) {
                 topUsersContainer.innerHTML = `<div class="dash-empty-state">Log in to view your personal score history.</div>`;
             }
         }
+        updateDsaDashboardScore();
     } catch (err) {
         console.error("Failed to load dashboard:", err);
+    }
+}
+
+function updateDsaDashboardScore() {
+    try {
+        let solvedList = [];
+        if (typeof getSolvedProblems === 'function') {
+            solvedList = getSolvedProblems();
+        } else {
+            solvedList = JSON.parse(localStorage.getItem("solved_dsa_problems") || localStorage.getItem("dsa_solved_problems") || "[]");
+        }
+        
+        const solvedCount = Array.isArray(solvedList) ? solvedList.length : 0;
+        
+        const dsaKpiElem = document.getElementById("kpi-dsa-score");
+        if (dsaKpiElem) {
+            dsaKpiElem.innerHTML = `${solvedCount} <span class="stat-unit">Solved</span>`;
+        }
+        
+        const dsaSubElem = document.getElementById("kpi-dsa-quiz-sub");
+        if (dsaSubElem) {
+            dsaSubElem.innerText = solvedCount === 1 ? "1 DSA Coding Problem Completed" : `${solvedCount} DSA Coding Problems Completed`;
+        }
+    } catch(e) {
+        console.error("Error updating DSA dashboard score:", e);
     }
 }
 

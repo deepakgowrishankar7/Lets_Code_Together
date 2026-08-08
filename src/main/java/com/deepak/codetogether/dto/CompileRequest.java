@@ -5,6 +5,8 @@ public class CompileRequest {
     private String language;
     private String stdin;
 
+    private String input;
+
     public String getCode() {
         return code;
     }
@@ -22,10 +24,18 @@ public class CompileRequest {
     }
 
     public String getStdin() {
-        return stdin;
+        return stdin != null ? stdin : input;
     }
 
     public void setStdin(String stdin) {
         this.stdin = stdin;
+    }
+
+    public String getInput() {
+        return input != null ? input : stdin;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
     }
 }

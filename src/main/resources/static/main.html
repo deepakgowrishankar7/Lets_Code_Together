@@ -27,7 +27,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b1020">
     <!-- Link external CSS -->
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css?v=10">
     <link rel="stylesheet" href="mobile_fixes.css?v=2">
     <script>
         // Redirect to login page if user is NOT logged in AND NOT in guest mode
@@ -334,6 +334,27 @@ New Message
                             </div>
                         </div>
 
+                        <!-- Data Structures & Algorithms -->
+                        <div class="course-card ds-card" onclick="showSection('ds-course')">
+                            <div class="card-cover">
+                                <img src="image/Data_Structures.jpg" alt="Data Structures & Algorithms">
+                                <div class="card-cover-overlay"></div>
+                                <span class="card-badge">Available</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-header-row">
+                                    <span class="card-icon">🌳</span>
+                                    <span class="card-lang-tag">DSA</span>
+                                </div>
+                                <h3 class="card-title">Data Structures & Algorithms</h3>
+                                <p class="card-desc">Master Arrays, Trees, Graphs, Sorting & interactive coding practice platform.</p>
+                                <div class="card-footer-row">
+                                    <span class="difficulty-badge">⭐ Beginner → Expert</span>
+                                    <span class="card-start-prompt">Start →</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -411,15 +432,7 @@ New Message
                             </div>
                         </div>
 
-                        <div class="course-card upcoming ds-card">
-                            <div class="card-cover"><img src="image/Data_Structures.jpg" alt="Data Structures"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
-                            <div class="card-body">
-                                <div class="card-header-row"><span class="card-icon">🧩</span><span class="card-lang-tag">DSA</span></div>
-                                <h3 class="card-title">Data Structures</h3>
-                                <p class="card-desc">Arrays, trees, graphs, heaps and dynamic programming for interviews.</p>
-                                <div class="card-footer-row"><span class="difficulty-badge">⭐⭐⭐ Advanced</span><span class="card-upcoming-label">🔔 Notify Me</span></div>
-                            </div>
-                        </div>
+
 
                         <div class="course-card upcoming da-card">
                             <div class="card-cover"><img src="image/Data_Analysis.jpg" alt="Data Analysis"><div class="card-cover-overlay"></div><span class="card-badge">Coming Soon</span></div>
@@ -557,6 +570,14 @@ New Message
                             <div class="stat-label">Interactive Visualizers</div>
                             <div class="stat-number">6 <span class="stat-unit">Engines</span></div>
                             <div class="stat-sub">B-Trees, Joins & Divide/Conquer</div>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="stat-icon-wrapper" style="background: rgba(0, 245, 160, 0.15); color: #00f5a0;">🧩</div>
+                        <div class="stat-info">
+                            <div class="stat-label">DSA Questions Solved</div>
+                            <div id="kpi-dsa-score" class="stat-number">0 <span class="stat-unit">Solved</span></div>
+                            <div id="kpi-dsa-quiz-sub" class="stat-sub">0 DSA Coding Problems Completed</div>
                         </div>
                     </div>
                     <div class="dash-stat-card">
@@ -1505,39 +1526,85 @@ ORDER BY avg_sal DESC;</code></pre>
 <section id="ds-course" class="course-details-section" style="display:none;">
     <div class="course-layout">
         <nav class="course-sidebar">
-            <h3>Data Structures Tutorial</h3>
+            <h3>DSA Masterclass</h3>
             <ul>
-                <li class="course-topic active" onclick="showDsContent('intro')">Introduction</li>
-                <li class="course-topic" onclick="showDsContent('videos')">Videos</li>
-                <li class="course-topic" onclick="showDsContent('pdfs')">PDF Notes</li>
-                <li class="course-topic" onclick="showDsContent('basics')">Data Structures Basics</li>
-                <li class="course-topic" onclick="showDsContent('quiz')">Quiz</li>
+                <li class="course-topic active" onclick="showDsContent('intro')">📖 Introduction</li>
+                <li class="course-topic" onclick="showDsContent('concepts')">💡 DSA Concepts</li>
+                <li class="course-topic" onclick="showDsContent('practice')">🧩 Coding Practice</li>
+                <li class="course-topic" onclick="showDsContent('interview')">🧠 Interview Prep</li>
+                <li class="course-topic" onclick="showDsContent('quiz')">📝 Quiz</li>
+                <li class="course-topic" onclick="showDsContent('pdfs')">📑 PDF Notes</li>
             </ul>
         </nav>
         <div class="course-main-content">
+            <!-- 1. Introduction -->
             <div id="ds-content-intro" class="ds-content-block" style="display:block;">
-                <h2>Data Structures Introduction</h2>
-                <p>Data Structures help in organizing and storing data efficiently.</p>
+                <h2>🌳 Data Structures & Algorithms — Complete Roadmap</h2>
+                <p>Welcome to the ultimate <strong>Data Structures & Algorithms (DSA) Masterclass</strong>. DSA forms the foundational backbone of computer computer science, high-performance software engineering, and technical coding interviews at top tech companies like Google, Meta, Amazon, and Apple.</p>
+                
+                <h3>🔥 Master Complexity Cheat Sheet (Big-O Notation)</h3>
+                <table class="dsa-complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Data Structure / Algorithm</th>
+                            <th>Access / Search</th>
+                            <th>Insertion</th>
+                            <th>Deletion</th>
+                            <th>Space Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><b>Array / Vector</b></td><td><code>O(1)</code> / <code>O(N)</code></td><td><code>O(N)</code></td><td><code>O(N)</code></td><td><code>O(N)</code></td></tr>
+                        <tr><td><b>Linked List</b></td><td><code>O(N)</code></td><td><code>O(1)</code> (Head)</td><td><code>O(1)</code> (Head)</td><td><code>O(N)</code></td></tr>
+                        <tr><td><b>Stack / Queue</b></td><td><code>O(N)</code></td><td><code>O(1)</code></td><td><code>O(1)</code></td><td><code>O(N)</code></td></tr>
+                        <tr><td><b>Binary Search Tree (Balanced)</b></td><td><code>O(log N)</code></td><td><code>O(log N)</code></td><td><code>O(log N)</code></td><td><code>O(N)</code></td></tr>
+                        <tr><td><b>Hash Table</b></td><td><code>O(1) avg</code></td><td><code>O(1) avg</code></td><td><code>O(1) avg</code></td><td><code>O(N)</code></td></tr>
+                        <tr><td><b>Binary Search</b></td><td><code>O(log N)</code></td><td>—</td><td>—</td><td><code>O(1)</code></td></tr>
+                        <tr><td><b>Merge Sort / Quick Sort</b></td><td><code>O(N log N)</code></td><td>—</td><td>—</td><td><code>O(N)</code> / <code>O(log N)</code></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="dsa-info-banner">
+                    <h4>🚀 How to Use This Course:</h4>
+                    <p>
+                        • Click <b>💡 DSA Concepts</b> on the left to learn each data structure with explanations, diagrams, and <b>4-language code snippets (Java, Python, C++, C)</b>.<br>
+                        • Use the <b>"⚡ Try in Compiler"</b> button on any snippet to run it live.<br>
+                        • Practice real interview coding challenges in <b>🧩 Coding Practice</b> with instant test case execution!
+                    </p>
+                </div>
             </div>
-            <div id="ds-content-videos" class="ds-content-block" style="display:none;">
-    <div style="background: var(--bg-card, #0f172a); border: 1px solid var(--border-main, rgba(255,255,255,0.1)); border-radius: 16px; padding: 50px 24px; text-align: center; margin-top: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <div style="font-size: 52px; margin-bottom: 14px;">🎬</div>
-        <h3 style="font-size: 22px; font-weight: 700; color: var(--text-main, #f8fafc); margin-bottom: 8px;">Video Tutorials Uploading Soon</h3>
-        <p style="color: var(--text-muted, #94a3b8); font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.5;">High-quality video lessons for <strong>Data Structures</strong> are currently in production and will be available soon!</p>
-        <span style="display: inline-block; padding: 6px 18px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">⚡ Coming Soon</span>
-    </div>
-</div>
-                        <div id="ds-content-pdfs" class="ds-content-block" style="display:none;">
-                <h2>Data Structures PDF Notes</h2>
-                <a href="files/data-structures.pdf" target="_blank">Download Data Structures PDF</a>
+
+            <!-- 2. DSA Concepts (4-Language Code Switcher) -->
+            <div id="ds-content-concepts" class="ds-content-block" style="display:none;">
+                <div class="dsa-topic-selector" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+                    <button class="dsa-lang-btn dsa-topic-pill active" data-topic="arrays" onclick="renderDsaConcept('arrays')">1. Arrays & Dynamic Arrays</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="linked-lists" onclick="renderDsaConcept('linked-lists')">2. Linked Lists</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="stacks-queues" onclick="renderDsaConcept('stacks-queues')">3. Stacks & Queues</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="trees" onclick="renderDsaConcept('trees')">4. Trees & BST</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="graphs" onclick="renderDsaConcept('graphs')">5. Graphs & BFS/DFS</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="sorting-searching" onclick="renderDsaConcept('sorting-searching')">6. Sorting & Binary Search</button>
+                    <button class="dsa-lang-btn dsa-topic-pill" data-topic="dp" onclick="renderDsaConcept('dp')">7. Dynamic Programming</button>
+                </div>
+                <div id="dsa-concept-display"></div>
             </div>
-            <div id="ds-content-basics" class="ds-content-block" style="display:none;">
-                <h2>Data Structures Basics</h2>
-                <p>Concepts: Arrays, Linked Lists, Stacks, Queues, Trees, Graphs.</p>
-            </div>
-            <div id="ds-content-quiz" class="ds-content-block" style="display:none;">
-                <h2>Data Structures Quiz</h2>
-                <p>Coming soon...</p>
+
+            <!-- 3. Practice Problems -->
+            <div id="ds-content-practice" class="ds-content-block" style="display:none;"></div>
+
+            <!-- 4. Interview Prep -->
+            <div id="ds-content-interview" class="ds-content-block" style="display:none;"></div>
+
+            <!-- 5. Quiz -->
+            <div id="ds-content-quiz" class="ds-content-block" style="display:none;"></div>
+
+            <!-- 6. PDF Notes -->
+            <div id="ds-content-pdfs" class="ds-content-block" style="display:none;">
+                <h2>📑 Data Structures & Algorithms Cheat Sheets & PDF Notes</h2>
+                <p>Download comprehensive DSA reference sheets for offline studying:</p>
+                <ul>
+                    <li><a href="#" onclick="alert('Downloading Data Structures Master Cheat Sheet PDF...')">📥 Data Structures & Algorithms Comprehensive Guide (PDF)</a></li>
+                    <li><a href="#" onclick="alert('Downloading Big-O Complexity Wallchart PDF...')">📥 Big-O Complexity Wallchart (PDF)</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -1914,7 +1981,8 @@ ORDER BY avg_sal DESC;</code></pre>
 
 
     <!-- Link external JavaScript -->
-      <script src="quizzes.js"></script>
-   <script src="scripts.js" defer></script>
+    <script src="quizzes.js"></script>
+    <script src="scripts.js" defer></script>
+    <script src="dsa-course.js" defer></script>
 </body>
 </html>
