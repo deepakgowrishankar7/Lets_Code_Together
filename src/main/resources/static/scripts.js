@@ -7,7 +7,7 @@ const $$ = s => document.querySelectorAll(s);
 /* =====================================================
    APP SECTION HISTORY & NAVIGATION (System Gesture compatible)
 ===================================================== */
-const sectionHistory = [localStorage.getItem("isGuest") === "true" || !localStorage.getItem("loggedInEmail") ? "home" : "dashboard"];
+const sectionHistory = ["home"];
 
 function showSectionDirect(sectionId) {
     $$("main > section").forEach(sec => {
@@ -29,6 +29,33 @@ function showSectionDirect(sectionId) {
             headerSearch.style.display = "inline-block";
         } else {
             headerSearch.style.display = "none";
+        }
+    }
+
+    // Show navigation arrows (Back/Forward) ONLY inside opened selective course pages
+    const navHistoryWrap = document.querySelector(".nav-history-buttons");
+    if (navHistoryWrap) {
+        const isSelectiveCourseView = sectionId !== 'courses' &&
+                                      sectionId !== 'compiler' &&
+                                      sectionId !== 'visualizer' &&
+                                      sectionId !== 'animated-videos' &&
+                                      sectionId !== 'home' &&
+                                      sectionId !== 'dashboard' &&
+                                      sectionId !== 'user-communication' &&
+                                      sectionId !== 'notifications' &&
+                                      sectionId !== 'settings' && (
+                                        sectionId.includes('-course') || 
+                                        sectionId.startsWith('dsa-') ||
+                                        sectionId.startsWith('java-') ||
+                                        sectionId.startsWith('python-') ||
+                                        sectionId.startsWith('sql-') ||
+                                        sectionId.startsWith('cpp-')
+                                      );
+        
+        if (isSelectiveCourseView) {
+            navHistoryWrap.style.display = "inline-flex";
+        } else {
+            navHistoryWrap.style.display = "none";
         }
     }
 
@@ -70,18 +97,16 @@ function goBackSection() {
 
 function openProtectedSectionDirect(sectionId) {
     const protectedSections = [
-        "compiler",
-        "visualizer",
         "notifications",
         "user-communication",
-        "dashboard",
-        "ds-course"
+        "dashboard"
     ];
 
     if (state.isGuest && protectedSections.includes(sectionId)) {
         showGuestMessage();
         return;
     }
+    closeGuestMessage();
     showSectionDirect(sectionId);
 
     if (sectionId === 'user-communication') {
@@ -110,6 +135,39 @@ window.onpopstate = (event) => {
         history.pushState({ section: initialSec }, "", "");
     }
 };
+
+let currentCourseHistory = [];
+let currentCourseForwardHistory = [];
+
+function goAppBack() {
+    // If we have sub-topic history within the current opened course, step back through tabs first
+    if (currentCourseHistory.length > 1) {
+        const currentState = currentCourseHistory.pop();
+        currentCourseForwardHistory.push(currentState);
+        const prevState = currentCourseHistory[currentCourseHistory.length - 1];
+        if (prevState && prevState.course) {
+            switchCourseTabDirect(prevState.course, prevState.tab);
+            return;
+        }
+    }
+    
+    // Reset internal course sub-history when stepping out to selection list
+    currentCourseHistory = [];
+    currentCourseForwardHistory = [];
+    openProtectedSectionDirect('courses');
+}
+
+function goAppForward() {
+    if (currentCourseForwardHistory.length > 0) {
+        const nextState = currentCourseForwardHistory.pop();
+        currentCourseHistory.push(nextState);
+        if (nextState && nextState.course) {
+            switchCourseTabDirect(nextState.course, nextState.tab);
+        }
+    } else {
+        window.history.forward();
+    }
+}
 
 /* =====================================================
    GLOBAL STATE
@@ -174,18 +232,16 @@ document.addEventListener("DOMContentLoaded", initCourseSearch);
 ===================================================== */
 function openProtectedSection(sectionId) {
     const protectedSections = [
-        "compiler",
-        "visualizer",
         "notifications",
         "user-communication",
-        "dashboard",
-        "ds-course"
+        "dashboard"
     ];
 
     if (state.isGuest && protectedSections.includes(sectionId)) {
         showGuestMessage();
         return;
     }
+    closeGuestMessage();
     showSection(sectionId);
 
     if (sectionId === 'user-communication') {
@@ -212,8 +268,16 @@ function openProtectedSection(sectionId) {
 }
 
 function populateSettings() {
-    const username = localStorage.getItem("loggedInUserName") || localStorage.getItem("userName") || localStorage.getItem("username") || state.username || "Developer";
-    const email = localStorage.getItem("loggedInEmail") || localStorage.getItem("userEmail") || localStorage.getItem("email") || state.email || "student@campus.edu";
+    const isGuest = localStorage.getItem("isGuest") === "true" || !localStorage.getItem("loggedInEmail");
+
+    let username, email;
+    if (isGuest) {
+        username = "Guest";
+        email = "guest@letscode.com";
+    } else {
+        username = localStorage.getItem("loggedInUserName") || localStorage.getItem("userName") || localStorage.getItem("username") || state.username || "Developer";
+        email = localStorage.getItem("loggedInEmail") || localStorage.getItem("userEmail") || localStorage.getItem("email") || state.email || "student@campus.edu";
+    }
     const initials = getInitials(username);
 
     const nameEl = document.getElementById("settings-username");
@@ -468,6 +532,7 @@ function stopGlobalNotificationPolling() {
 let _originalGuestOverlayHTML = null;
 
 function showGuestMessage() {
+    if (sessionStorage.getItem("suppressGuestMsg") === "true") return;
     // ensure default markup restored before showing
     restoreGuestOverlay();
     $("#guest-message-overlay").style.display = "flex";
@@ -475,6 +540,7 @@ function showGuestMessage() {
 }
 
 function showGuestWelcome() {
+    if (sessionStorage.getItem("suppressGuestMsg") === "true") return;
     const overlay = $("#guest-message-overlay");
     if (!overlay) return;
     // cache original content the first time
@@ -620,11 +686,51 @@ if (searchInput) {
     });
 }
 
+function filterCoursesSection(query) {
+    const search = query.toLowerCase().trim();
+    const cards = document.querySelectorAll("#courses .course-card");
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(search)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
 /* =====================================================
    COURSE CONTENT SWITCHER (FINAL – WORKING)
 ===================================================== */
 
-function switchCourseTab(course, tab) {
+const courseSubjectTitles = {
+    'java': 'Java 21 Enterprise Masterclass',
+    'python': 'Python 3.12 Data & Systems',
+    'sql': 'SQL & Database Architecture',
+    'ds': 'Data Structures & Algorithms Masterclass',
+    'cpp': 'C++20 Programming Engine',
+    'c': 'C Programming Fundamentals',
+    'html': 'HTML5 & Modern Web Development',
+    'react': 'React.js Component Architecture',
+    'aws': 'AWS Cloud Essentials',
+    'dbms': 'Database Management Systems',
+    'data-analysis': 'Data Analysis & Scientific Python',
+    'nodejs': 'Node.js Backend Architecture',
+    'figma': 'Figma UI/UX Design',
+    'ethical-hacking': 'Ethical Hacking & Cybersecurity',
+    'photoshop': 'Adobe Photoshop Masterclass',
+    'design-thinking': 'Design Thinking & Innovation'
+};
+
+function updateCourseTopHeader(course) {
+    const mainContent = document.querySelector(`#${course}-course .course-main-content`);
+    if (!mainContent) return;
+
+    // Remove any existing top header or bottom nav bars completely
+    mainContent.querySelectorAll(".course-subject-top-header, .course-bottom-nav-bar").forEach(el => el.remove());
+}
+
+function switchCourseTabDirect(course, tab) {
     // 1️⃣ Hide all content blocks
     document
         .querySelectorAll(`#${course}-course .${course}-content-block`)
@@ -636,18 +742,13 @@ function switchCourseTab(course, tab) {
     const target = document.getElementById(`${course}-content-${tab}`);
     if (target) {
         target.style.display = "block";
-    } else {
-        console.error("Target not found:", `${course}-content-${tab}`);
     }
 
     // 3️⃣ Update sidebar active state
-    document
-        .querySelectorAll(`#${course}-course .course-topic`)
-        .forEach(btn => btn.classList.remove("active"));
-
     const sidebar = document.querySelector(`#${course}-course .course-sidebar`);
     if (sidebar) {
-        const buttons = sidebar.querySelectorAll(".course-topic");
+        const buttons = Array.from(sidebar.querySelectorAll(".course-topic"));
+        buttons.forEach(btn => btn.classList.remove("active"));
         buttons.forEach(btn => {
             const btnText = btn.textContent.toLowerCase();
             const searchTab = tab.toLowerCase();
@@ -657,6 +758,34 @@ function switchCourseTab(course, tab) {
         });
     }
 
+    // 4️⃣ Update Top Course Header
+    setTimeout(() => {
+        updateCourseTopHeader(course);
+    }, 10);
+}
+
+function switchCourseTab(course, tab) {
+    const currentState = { course, tab };
+    const lastState = currentCourseHistory[currentCourseHistory.length - 1];
+    if (!lastState || lastState.course !== course || lastState.tab !== tab) {
+        currentCourseHistory.push(currentState);
+    }
+    currentCourseForwardHistory = [];
+    switchCourseTabDirect(course, tab);
+}
+
+function navigateCourseTopic(course, index) {
+    const sidebar = document.querySelector(`#${course}-course .course-sidebar`);
+    if (!sidebar) return;
+    const buttons = Array.from(sidebar.querySelectorAll(".course-topic"));
+    if (buttons[index]) {
+        buttons[index].click();
+        const mainContent = document.querySelector(`#${course}-course .course-main-content`);
+        if (mainContent) {
+            mainContent.scrollTop = 0;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 function showJavaContent(tab) {
     switchCourseTab("java", tab);
@@ -752,7 +881,7 @@ function logout() {
 document.addEventListener("DOMContentLoaded", () => {
 
     /* Theme */
-    setTheme(localStorage.getItem("theme") || "dark");
+    setTheme(localStorage.getItem("theme") || "light");
 
     /* Guest / User Info */
     if ($("#settings-username")) {
@@ -793,7 +922,14 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#current-password")?.setAttribute("disabled", true);
         $("#change-password")?.setAttribute("disabled", true);
 
-        if (sessionStorage.getItem("justGuest")) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasTargetSection = urlParams.has("section");
+
+        if (hasTargetSection || sessionStorage.getItem("suppressGuestMsg")) {
+            sessionStorage.removeItem("suppressGuestMsg");
+            sessionStorage.removeItem("justGuest");
+            closeGuestMessage();
+        } else if (sessionStorage.getItem("justGuest")) {
             sessionStorage.removeItem("justGuest");
             showGuestWelcome();
         }
@@ -2308,6 +2444,27 @@ function formatChatTime(dateStr) {
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
+function getChatDateHeader(dateStr) {
+    if (!dateStr) return "Today";
+    const msgDate = new Date(dateStr);
+    if (isNaN(msgDate.getTime())) return "Today";
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const checkDate = new Date(msgDate.getFullYear(), msgDate.getMonth(), msgDate.getDate());
+
+    if (checkDate.getTime() === today.getTime()) {
+        return "Today";
+    } else if (checkDate.getTime() === yesterday.getTime()) {
+        return "Yesterday";
+    } else {
+        return checkDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+}
+
 async function sendPublicMessage() {
     const input = document.getElementById("public-chat-input");
     if (!input) return;
@@ -2354,12 +2511,25 @@ async function loadPublicMessages(force = false) {
         return;
     }
 
-    container.innerHTML = visibleMessages.map(m => {
+    let lastDateHeader = null;
+    let htmlContent = "";
+
+    visibleMessages.forEach(m => {
+        const dateHeader = getChatDateHeader(m.createdAt);
+        if (dateHeader !== lastDateHeader) {
+            htmlContent += `
+                <div class="chat-date-separator">
+                    <span>${dateHeader}</span>
+                </div>
+            `;
+            lastDateHeader = dateHeader;
+        }
+
         const isMe = (m.userName || 'Guest') === currentUser;
         const initials = getInitials(m.userName || 'Guest');
         const timeStr = formatChatTime(m.createdAt);
 
-        return `
+        htmlContent += `
             <div class="chat-row ${isMe ? 'my-row' : 'other-row'}">
                 ${!isMe ? `<div class="chat-avatar">${initials}</div>` : ''}
                 <div class="chat-bubble ${isMe ? 'my-bubble' : 'other-bubble'}">
@@ -2382,8 +2552,9 @@ async function loadPublicMessages(force = false) {
                 ${isMe ? `<div class="chat-avatar me-avatar">${initials}</div>` : ''}
             </div>
         `;
-    }).join("");
+    });
 
+    container.innerHTML = htmlContent;
     container.scrollTop = container.scrollHeight;
     setChatStatus("Public lounge connected · Auto-syncing");
 }
@@ -2468,15 +2639,57 @@ async function loadUsers(force = false) {
     }).join("");
 
     updateSelectedUserInfo();
+    searchUser();
 }
 
 function searchUser() {
-    const query = document.getElementById("private-user-search").value.trim().toLowerCase();
+    const input = document.getElementById("private-user-search");
+    if (!input) return;
+    const query = input.value.trim().toLowerCase();
+    const clearBtn = document.getElementById("clear-search-btn");
+    if (clearBtn) clearBtn.style.display = query.length > 0 ? "flex" : "none";
+
     const items = document.querySelectorAll("#private-user-list .user-item");
+    let matchCount = 0;
+
     items.forEach(item => {
-        const username = item.dataset.username || item.textContent.trim().toLowerCase();
-        item.style.display = username.includes(query) ? "flex" : "none";
+        const username = (item.dataset.username || "").toLowerCase();
+        const fullText = (item.textContent || "").toLowerCase();
+        const matches = query === "" || username.includes(query) || fullText.includes(query);
+        item.style.display = matches ? "flex" : "none";
+        if (matches) matchCount++;
     });
+
+    const userList = document.getElementById("private-user-list");
+    let noResultsEl = document.getElementById("no-search-results");
+
+    if (matchCount === 0 && items.length > 0 && query.length > 0) {
+        if (!noResultsEl && userList) {
+            noResultsEl = document.createElement("div");
+            noResultsEl.id = "no-search-results";
+            noResultsEl.className = "user-item-empty";
+            noResultsEl.style.padding = "20px 14px";
+            noResultsEl.style.textAlign = "center";
+            noResultsEl.style.fontSize = "0.85rem";
+            noResultsEl.style.color = "var(--text-tertiary)";
+            userList.appendChild(noResultsEl);
+        }
+        if (noResultsEl) {
+            noResultsEl.textContent = `🔍 No contacts found matching "${query}"`;
+            noResultsEl.style.display = "block";
+        }
+    } else if (noResultsEl) {
+        noResultsEl.style.display = "none";
+    }
+}
+
+function clearUserSearch() {
+    const input = document.getElementById("private-user-search");
+    if (input) {
+        input.value = "";
+        searchUser();
+        input.focus();
+    }
 }
 
 let selectedUser = null;
@@ -2585,13 +2798,26 @@ async function loadPrivateMessages(force = false) {
         return;
     }
 
-    container.innerHTML = visibleMessages.map(m => {
+    let lastDateHeader = null;
+    let htmlContent = "";
+
+    visibleMessages.forEach(m => {
+        const dateHeader = getChatDateHeader(m.createdAt);
+        if (dateHeader !== lastDateHeader) {
+            htmlContent += `
+                <div class="chat-date-separator">
+                    <span>${dateHeader}</span>
+                </div>
+            `;
+            lastDateHeader = dateHeader;
+        }
+
         const isMe = m.senderName === sender;
         const otherUser = isMe ? m.receiverName : m.senderName;
         const initials = getInitials(isMe ? sender : otherUser);
         const timeStr = formatChatTime(m.createdAt);
 
-        return `
+        htmlContent += `
             <div class="chat-row ${isMe ? 'my-row' : 'other-row'}">
                 ${!isMe ? `<div class="chat-avatar">${initials}</div>` : ''}
                 <div class="chat-bubble ${isMe ? 'my-bubble' : 'other-bubble'}">
@@ -2614,8 +2840,9 @@ async function loadPrivateMessages(force = false) {
                 ${isMe ? `<div class="chat-avatar me-avatar">${initials}</div>` : ''}
             </div>
         `;
-    }).join("");
+    });
 
+    container.innerHTML = htmlContent;
     container.scrollTop = container.scrollHeight;
     setChatStatus(`Connected with ${selectedUser}`);
 }
@@ -3016,11 +3243,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, { passive: true });
 
-    // Initial section routing based on user state (Home for Guest, Dashboard for Logged in)
-    if (state.isGuest) {
+    // Initial section routing based on URL section query parameter or user state
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetSection = urlParams.get("section");
+    const targetLang = urlParams.get("lang");
+
+    if (targetSection && document.getElementById(targetSection)) {
+        openProtectedSectionDirect(targetSection);
+    } else if (state.isGuest) {
         showSectionDirect("home");
     } else {
         showSectionDirect("dashboard");
+    }
+
+    if (targetLang) {
+        const langSelect = $("#compiler-language");
+        if (langSelect) {
+            langSelect.value = targetLang;
+            langSelect.dispatchEvent(new Event("change"));
+        }
     }
 
     // Run dynamic populate on load to update mobile drawer user profile details

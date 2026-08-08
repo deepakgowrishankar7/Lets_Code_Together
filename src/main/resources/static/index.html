@@ -4,30 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Let's Code Together — Interactive Developer Platform</title>
-    <meta name="description" content="Master Java, Python, C++, and SQL with Let's Code Together — an interactive developer platform founded by Deepak Gowri Shankar featuring real-time code execution, 3D visualizers, and official completion certificates.">
-    <meta name="keywords" content="Let's Code Together, Deepak Gowri Shankar, Java compiler, Python visualizer, online IDE, coding certificates, data structures, SQL online, interactive coding">
+    <meta name="description" content="Master Java, Python, C++, SQL, and Data Structures & Algorithms with Let's Code Together — featuring real-time online compilers, 3D visualizers, live collaborative code rooms, and completion certificates.">
+    <meta name="keywords" content="Let's Code Together, Deepak Gowri Shankar, Java compiler, Python visualizer, DSA roadmap, online IDE, coding certificates, SQL online, interactive coding">
     <meta name="author" content="Deepak Gowri Shankar — Founder & CEO, Let's Code Together">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="image/logo.png?v=3">
     <link rel="apple-touch-icon" href="image/logo.png?v=3">
 
-    <!-- OpenGraph (WhatsApp & LinkedIn Preview Cards) -->
-    <meta property="og:title" content="Let's Code Together — Interactive Developer Platform">
-    <meta property="og:description" content="Master Java, Python, C++, and SQL with interactive visualizers, live code compiler, and completion certificates.">
-    <meta property="og:image" content="https://lets-code-together.onrender.com/image/logo.png?v=3">
-    <meta property="og:url" content="https://lets-code-together.onrender.com/">
-    <meta property="og:type" content="website">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Let's Code Together — Interactive Developer Platform">
-    <meta name="twitter:description" content="Master Java, Python, C++, and SQL with interactive visualizers, live code compiler, and certificates.">
-    <meta name="twitter:image" content="https://lets-code-together.onrender.com/image/logo.png?v=3">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#090d16">
+    <!-- Custom Popup & Glassy Light Mode Styles -->
     <link rel="stylesheet" href="custom-popup.css">
+    <link rel="stylesheet" href="index-light.css">
     <script src="custom-popup.js"></script>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -35,563 +24,432 @@
             });
         }
     </script>
-
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('image/backgroundimage.avif') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        body {
-           -webkit-user-select: none; /* Chrome, Safari */
-           -moz-user-select: none;    /* Firefox */
-           -ms-user-select: none;     /* Internet Explorer/Edge */
-            user-select: none;         /* Standard */
-}
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background-color: transparent;
-        }
-        .navbar img {
-            height: 40px;
-            width: 40px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-        .navbar a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-            position: relative;
-            transition: color 0.3s;
-        }
-        .navbar a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            display: block;
-            margin-top: 5px;
-            right: 0;
-            background: #007BFF;
-            transition: width 0.3s ease;
-        }
-        .navbar a:hover::after {
-            width: 100%;
-            left: 0;
-            background: #007BFF;
-        }
-        .navbar a:hover {
-            color: #007BFF;
-        }
-        .content {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s ease;
-        }
-        .content.move-left {
-            transform: translateX(-20%);
-        }
-        .content h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-        .content p {
-            font-size: 3em;
-            color: #fff;
-        }
-        .guest-btn,
-        .app-install-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-top: 24px;
-            border-radius: 999px;
-            padding: 14px 32px;
-            font-weight: 800;
-            cursor: pointer;
-            color: #ffffff;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1.5px solid rgba(255, 255, 255, 0.22);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), inset 0 0 10px rgba(255, 255, 255, 0.05);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
-        }
-        .guest-btn:hover,
-        .app-install-btn:hover {
-            transform: translateY(-2px);
-            background-color: rgba(0, 0, 0, 0.7);
-            border-color: rgba(255, 255, 255, 0.45);
-            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.85), inset 0 0 12px rgba(255, 255, 255, 0.08);
-        }
-        .guest-btn:focus,
-        .app-install-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 12px 30px rgba(0, 0, 0, 0.8);
-        }
-        .form-container {
-            display: none;
-            position: absolute;
-            top: 12%;
-            right: 8%;
-            width: 350px;
-            max-width: 90vw;
-            height: auto;
-            max-height: 85vh;
-            overflow-y: auto;
-            background: rgba(8, 14, 30, 0.94);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            padding: 28px 28px;
-            border-radius: 22px;
-            border: 1px solid rgba(0, 245, 160, 0.18);
-            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-            transform: translateX(100%);
-            opacity: 0;
-            z-index: 2000;
-        }
-        .form-container.show {
-            display: block;
-            transform: translateX(0);
-            opacity: 1;
-        }
-        .form-container h2 {
-            margin-top: 0;
-            margin-bottom: 14px;
-            font-size: 1.4em;
-            font-weight: 800;
-            color: #fff;
-            text-align: center;
-        }
-        .form-container .input-group {
-            position: relative;
-            margin: 14px 0;
-        }
-        .form-container input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            font-size: 0.95em;
-            outline: none;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.04);
-            color: #edf2ff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-        .form-container input:focus {
-            border-color: #00d084;
-            box-shadow: 0 0 10px rgba(0, 208, 132, 0.25);
-        }
-        .form-container label {
-            position: absolute;
-            top: 50%;
-            left: 12px;
-            transform: translateY(-50%);
-            background: transparent;
-            padding: 0 4px;
-            color: #94a3b8;
-            font-size: 0.85em;
-            transition: 0.2s ease;
-            pointer-events: none;
-        }
-        .form-container input:focus + label,
-        .form-container input:not(:placeholder-shown) + label {
-            top: 0;
-            left: 10px;
-            font-size: 0.7em;
-            font-weight: 700;
-            color: #00d084;
-            background: #0f172a;
-            border-radius: 4px;
-            padding: 0 4px;
-        }
-        .name-row-group {
-            display: flex;
-            gap: 10px;
-        }
-        .name-row-group .input-group {
-            flex: 1;
-            margin: 10px 0 !important;
-        }
-        .handle-at-symbol {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 800;
-            color: #00d084;
-            font-size: 0.9em;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .email-otp-input-group {
-            position: relative;
-        }
-        .form-container .otp-send-badge-btn {
-            position: absolute !important;
-            right: 6px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            width: auto !important;
-            padding: 5px 12px !important;
-            margin-top: 0 !important;
-            background: linear-gradient(135deg, #00d084, #00b894) !important;
-            color: #041a12 !important;
-            font-size: 0.72rem !important;
-            font-weight: 800 !important;
-            border-radius: 14px !important;
-            box-shadow: 0 2px 6px rgba(0, 208, 132, 0.4) !important;
-            display: inline-block !important;
-            cursor: pointer !important;
-            z-index: 20 !important;
-            white-space: nowrap !important;
-        }
-        .form-container .otp-send-badge-btn:hover {
-            transform: translateY(-50%) scale(1.04) !important;
-            box-shadow: 0 4px 10px rgba(0, 208, 132, 0.6) !important;
-        }
-        .form-container .otp-send-badge-btn:disabled {
-            background: rgba(255, 255, 255, 0.15) !important;
-            color: #94a3b8 !important;
-            cursor: not-allowed !important;
-            box-shadow: none !important;
-        }
-        .form-container button[type="submit"] {
-            padding: 14px;
-            background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
-            border: none;
-            border-radius: 999px;
-            color: #02050d;
-            font-size: 1em;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 18px;
-            width: 100%;
-            box-shadow: 0 16px 38px rgba(0, 245, 160, 0.22);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-        .form-container button[type="submit"]:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #22ffb3 0%, #00ccf5 100%);
-            box-shadow: 0 18px 44px rgba(0, 245, 160, 0.30);
-        }
-        .form-container button.admin-btn {
-            background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
-            color: #02050d;
-            border-radius: 999px;
-            padding: 14px;
-            margin-top: 14px;
-            width: 100%;
-            box-shadow: 0 16px 38px rgba(0, 245, 160, 0.22);
-        }
-        .form-container button.admin-btn:hover {
-            background: linear-gradient(135deg, #22ffb3 0%, #00ccf5 100%);
-        }
-        .form-container .forgot-password {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 0.9em;
-            cursor: pointer;
-        }
-        .form-container .forgot-password:hover {
-            text-decoration: underline;
-        }
-        .form-container .switch-form {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 0.9em;
-            cursor: pointer;
-        }
-        .form-container .switch-form:hover {
-            text-decoration: underline;
-        }
-        .form-container p {
-            color: white;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .modal-content {
-            background-color: black;
-            color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        @media (max-width: 900px) {
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-                gap: 6px;
-                padding: 6px 12px;
-            }
-            .navbar img {
-                height: 30px !important;
-                width: 30px !important;
-            }
-            .navbar div {
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                width: 100%;
-                justify-content: flex-start;
-                gap: 6px;
-                padding: 4px 0;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-            }
-            .navbar div::-webkit-scrollbar {
-                display: none;
-            }
-            .navbar a {
-                flex-shrink: 0;
-                padding: 6px 12px;
-                font-size: 0.85rem;
-                width: auto;
-                text-align: center;
-                display: inline-block;
-            }
-            .content {
-                text-align: center;
-                padding: 24px 12px;
-            }
-            .form-container {
-                position: fixed;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                width: 92%;
-                max-width: 420px;
-                height: auto;
-                right: auto;
-                padding: 18px;
-                box-sizing: border-box;
-            }
-            .modal-content {
-                width: 94%;
-            }
-            .form-container input,
-            .form-container button {
-                font-size: 1rem;
-            }
-            .guest-btn {
-                width: 90%;
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            .form-container.show {
-                transform: translate(-50%, -50%) !important;
-            }
-            .content.move-left {
-                transform: none !important;
-            }
-        }
-        .success-message {
-            display: none;
-            color: white;
-            background-color: black;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        .success-message.show {
-            display: block;
-        }
-        .error-message {
-            color: #ff4d4d;
-            margin-top: 10px;
-            text-align: center;
-        }
-        #logo {
-           pointer-events: none;
-       }
-
-    </style>
 </head>
 <body>
-    <div class="navbar">
-        <img src="image/logo.png?v=3" id="logo" alt="Logo" draggable="false" ondragstart="return false" oncontextmenu="return false" style="pointer-events:none;">
-        <div>
-            <a href="#" onclick="toggleLoginForm(); return false;">Login</a>
-            <a href="#" onclick="toggleRegisterForm(); return false;">Register</a>
-            <a href="#" onclick="toggleAdminLoginForm(); return false;">Admin Login</a>
-            <a href="#" onclick="toggleModal(); return false;">Privacy Policy</a>
-            <a href="about.html">About</a>
-            <a href="help.html">Help</a>
+
+    <!-- Header & Navigation Bar -->
+    <header class="light-navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="image/logo.png?v=3" alt="Let's Code Together Logo">
+            <span>Let's Code Together</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="#dsa-section">DSA Roadmap</a></li>
+            <li><a href="#compilers-section">Compilers</a></li>
+            <li><a href="#visualizers-section">Visualizers</a></li>
+            <li><a href="#rooms-section">Live Rooms</a></li>
+            <li><a href="help.html">Help</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="admin.html" class="navbar-btn-admin">Admin Portal</a></li>
+        </ul>
+    </header>
+
+    <!-- Hero Section + White Glass Auth Card -->
+    <main>
+        <section class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>⚡ Next-Gen Interactive Developer Platform</span>
+                </div>
+                <h1 class="hero-title">
+                    Learn, Code & Master <span>Programming & DSA</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Real-time online compilers for Java, Python, C++, and SQL, step-by-step 3D algorithm visualizers, live collaborative code rooms, and official verified certificates.
+                </p>
+
+                <div class="hero-features-list">
+                    <span class="hero-feature-pill">🌳 DSA Masterclass</span>
+                    <span class="hero-feature-pill">☕ Java 21 Engine</span>
+                    <span class="hero-feature-pill">🐍 Python 3.12</span>
+                    <span class="hero-feature-pill">⚡ C++20</span>
+                    <span class="hero-feature-pill">🗄️ SQL RDBMS</span>
+                    <span class="hero-feature-pill">🌐 Live Rooms</span>
+                </div>
+
+                <div style="display:flex; gap:14px; align-items:center;">
+                    <button onclick="goWithoutLogin()" class="btn-auth-guest" style="width:auto; padding:12px 28px; font-size:1rem; margin:0;">
+                        🚀 Try Instant Guest Mode
+                    </button>
+                    <a href="#dsa-section" style="color:var(--accent-blue); font-weight:600; text-decoration:none; font-size:0.95rem;">
+                        Browse Features ↓
+                    </a>
+                </div>
+            </div>
+
+            <!-- Auth Card (White Glass) -->
+            <div class="auth-glass-card">
+                <div class="auth-nav-tabs">
+                    <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
+                    <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+                    <button class="auth-tab-btn" id="tab-forgot" onclick="switchAuthTab('forgot')">Reset Password</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginFormElement" onsubmit="handleUserLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                    </div>
+                    <div id="loginErrorMessage" style="color:#ef4444; font-size:0.875rem; margin-bottom:12px; display:none;"></div>
+                    <button type="submit" class="btn-auth-primary">Sign In to Platform</button>
+                </form>
+
+                <!-- Registration Form -->
+                <form id="registerFormElement" style="display:none;" onsubmit="handleUserRegister(event)">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label class="form-label" for="reg-firstname">First Name</label>
+                            <input type="text" id="reg-firstname" class="form-input" placeholder="First" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reg-lastname">Last Name</label>
+                            <input type="text" id="reg-lastname" class="form-input" placeholder="Last" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-username">Username</label>
+                        <input type="text" id="reg-username" class="form-input" placeholder="developer_username" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-email">Email Address</label>
+                        <div style="display:flex; gap:8px;">
+                            <input type="email" id="reg-email" class="form-input" placeholder="name@domain.com" required>
+                            <button type="button" id="sendOtpBtn" onclick="sendOtpCode()" style="padding:0 14px; background:var(--accent-blue); color:#fff; border:none; border-radius:10px; font-weight:600; font-size:0.813rem; cursor:pointer; white-space:nowrap;">Send OTP</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-otp">Enter OTP</label>
+                        <input type="text" id="reg-otp" class="form-input" placeholder="6-digit OTP code" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-password">Create Password</label>
+                        <input type="password" id="reg-password" class="form-input" placeholder="Strong password" required>
+                    </div>
+                    <div id="registerErrorMessage" style="color:#ef4444; font-size:0.875rem; margin-bottom:12px; display:none;"></div>
+                    <div id="successMessage" style="color:#059669; font-size:0.875rem; margin-bottom:12px; display:none;">Account created! Redirecting to login...</div>
+                    <button type="submit" class="btn-auth-primary">Create Free Account</button>
+                </form>
+
+                <!-- Forgot Password Form -->
+                <form id="forgotFormElement" style="display:none;" onsubmit="handleForgotPassword(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="forgot-email">Account Email</label>
+                        <input type="email" id="forgot-email" class="form-input" placeholder="registered@domain.com" required>
+                    </div>
+                    <button type="submit" class="btn-auth-primary">Send Reset OTP</button>
+                </form>
+
+                <!-- Guest Mode Button -->
+                <button type="button" onclick="goWithoutLogin()" class="btn-auth-guest">
+                    🚀 Continue as Guest (No Login Required)
+                </button>
+            </div>
+        </section>
+
+        <!-- Scroll Section 1: DSA Masterclass & Roadmap -->
+        <section id="dsa-section" class="scroll-section">
+            <div class="section-header">
+                <span class="section-tag">Curriculum & Roadmap</span>
+                <h2 class="section-title">🌳 Data Structures & Algorithms (DSA) Masterclass</h2>
+                <p class="section-desc">Master foundational data structures and algorithm patterns designed for technical coding interviews at top tech companies.</p>
+            </div>
+
+            <div class="grid-cards-3">
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">📊</div>
+                        <h3 class="card-title-text">1. Arrays & Dynamic Arrays</h3>
+                        <p class="card-body-text">Contiguous memory allocation, 2D matrices, sliding window technique, and two-pointer interview problems.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Arrays Module →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🔗</div>
+                        <h3 class="card-title-text">2. Linked Lists</h3>
+                        <p class="card-body-text">Singly, Doubly, and Circular Linked Lists, node manipulation, fast/slow pointer cycle detection.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Linked Lists →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🥞</div>
+                        <h3 class="card-title-text">3. Stacks & Queues</h3>
+                        <p class="card-body-text">LIFO stack memory frames, FIFO queues, deques, expression parsing, and monotonic stacks.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Stacks & Queues →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🌲</div>
+                        <h3 class="card-title-text">4. Trees & Binary Search Trees</h3>
+                        <p class="card-body-text">Binary Trees, BST operations, AVL balance, Tree traversals (Inorder, Preorder, Postorder, BFS Level-Order).</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Trees Module →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🕸️</div>
+                        <h3 class="card-title-text">5. Graphs & Algorithms</h3>
+                        <p class="card-body-text">Adjacency lists/matrices, Breadth-First Search (BFS), Depth-First Search (DFS), Dijkstra's shortest path.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Graph Module →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">⚡</div>
+                        <h3 class="card-title-text">6. Sorting & Searching</h3>
+                        <p class="card-body-text">Bubble, Merge, Quick, Heap sort algorithms, Binary Search variations, Big-O Time & Space complexity wallchart.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore Sorting & Searching →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scroll Section 2: Online Compilers -->
+        <section id="compilers-section" class="scroll-section" style="background: rgba(241, 245, 249, 0.5); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
+            <div class="section-header">
+                <span class="section-tag">Interactive Environment</span>
+                <h2 class="section-title">⚡ Multi-Language Online Compilers</h2>
+                <p class="section-desc">Write, compile, and execute code directly in your browser without local installation.</p>
+            </div>
+
+            <div class="grid-cards-4">
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#d97706; background:rgba(217,119,6,0.1);">☕</div>
+                        <h3 class="card-title-text">Java 21 Compiler</h3>
+                        <p class="card-body-text">Modern Java 21 engine with virtual threads, pattern matching, OOP constructs, and standard libraries.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('compiler', 'java')" class="card-link-btn">Launch Java IDE →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#2563eb; background:rgba(37,99,235,0.1);">🐍</div>
+                        <h3 class="card-title-text">Python 3.12</h3>
+                        <p class="card-body-text">Full Python 3 environment supporting data structures, OOP, list comprehensions, and algorithmic scripts.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('compiler', 'python')" class="card-link-btn">Launch Python IDE →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#7c3aed; background:rgba(124,58,237,0.1);">⚡</div>
+                        <h3 class="card-title-text">C++20 Engine</h3>
+                        <p class="card-body-text">High-performance GCC C++20 compiler with Standard Template Library (STL), pointers, and memory control.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('compiler', 'cpp')" class="card-link-btn">Launch C++ IDE →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#059669; background:rgba(5,150,105,0.1);">🗄️</div>
+                        <h3 class="card-title-text">SQL RDBMS</h3>
+                        <p class="card-body-text">Interactive relational database engine supporting SELECT queries, JOINs, GROUP BY aggregations, and schema tables.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('sql-course')" class="card-link-btn">Launch SQL Query Console →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scroll Section: Interactive Masterclass Courses -->
+        <section id="courses-section" class="scroll-section">
+            <div class="section-header">
+                <span class="section-tag">Structured Learning Path</span>
+                <h2 class="section-title">📚 Interactive Masterclass Courses</h2>
+                <p class="section-desc">Comprehensive step-by-step video lessons, concepts, quizzes, and hands-on coding milestones.</p>
+            </div>
+
+            <div class="grid-cards-4">
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#d97706; background:rgba(217,119,6,0.1);">☕</div>
+                        <h3 class="card-title-text">Java 21 Masterclass</h3>
+                        <p class="card-body-text">Complete Java roadmap from OOP fundamentals, Collections framework, Virtual Threads, to DSA algorithms.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('java-course')" class="card-link-btn">Explore Java Course →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#2563eb; background:rgba(37,99,235,0.1);">🐍</div>
+                        <h3 class="card-title-text">Python 3.12 Masterclass</h3>
+                        <p class="card-body-text">Pythonic coding practices, object-oriented programming, data structures, and algorithmic problem solving.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('python-course')" class="card-link-btn">Explore Python Course →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#059669; background:rgba(5,150,105,0.1);">🗄️</div>
+                        <h3 class="card-title-text">SQL Database Masterclass</h3>
+                        <p class="card-body-text">Relational database design, SELECT queries, JOINs, aggregate functions, indexes, and schema optimization.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('sql-course')" class="card-link-btn">Explore SQL Course →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge" style="color:#7c3aed; background:rgba(124,58,237,0.1);">🌳</div>
+                        <h3 class="card-title-text">DSA Masterclass</h3>
+                        <p class="card-body-text">Comprehensive Data Structures & Algorithms roadmap covering Arrays, Trees, Graphs, Sorting, and Dynamic Programming.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('ds-course')" class="card-link-btn">Explore DSA Course →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scroll Section 3: Visualizers & Pair Rooms -->
+        <section id="visualizers-section" class="scroll-section">
+            <div class="section-header">
+                <span class="section-tag">Interactive Features</span>
+                <h2 class="section-title">🎬 3D Visualizers & Live Code Rooms</h2>
+                <p class="section-desc">Experience step-by-step visual code execution and real-time pair programming.</p>
+            </div>
+
+            <div class="grid-cards-3">
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🎬</div>
+                        <h3 class="card-title-text">3D Algorithm Visualizers</h3>
+                        <p class="card-body-text">Watch sorting steps, tree graph traversals, and call-stack execution unfold in 3D interactive canvases.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('visualizer')" class="card-link-btn">Open Visualizer Engine →</a>
+                </div>
+
+                <div class="light-glass-card" id="rooms-section">
+                    <div>
+                        <div class="card-icon-badge">🌐</div>
+                        <h3 class="card-title-text">Live Collaborative Rooms</h3>
+                        <p class="card-body-text">Host live coding rooms with shareable links (`CT-ROOM-XXXXXX`) for instant peer mentoring and live interview practice.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('compiler')" class="card-link-btn">Create Live Room →</a>
+                </div>
+
+                <div class="light-glass-card">
+                    <div>
+                        <div class="card-icon-badge">🎓</div>
+                        <h3 class="card-title-text">Verified Certificates</h3>
+                        <p class="card-body-text">Earn official completion certificates upon finishing courses and passing quiz milestones to showcase your achievements.</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="openGuestFeature('home')" class="card-link-btn">View Certificates →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="light-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">Let's Code Together</div>
+                <div class="footer-copy">Founded by <strong>Deepak Gowri Shankar</strong> — Interactive Developer Platform</div>
+            </div>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="help.html">Help & FAQ</a>
+                <a href="admin.html">Admin Portal</a>
+                <a href="javascript:void(0)" onclick="goWithoutLogin()">Guest Mode</a>
+            </div>
         </div>
-    </div>
-    <div class="content" id="content">
-        <h1>Welcome to Our Website</h1>
-        <p>"Let's code together"</p>
-        <button class="guest-btn" onclick="goWithoutLogin()">
-    Let’s Go
-</button>
-        <button id="pwa-install-welcome" class="app-install-btn" style="display: none; margin-top: 15px;" onclick="triggerPwaInstall()">
-            📲 Install Mobile App
-        </button>
+    </footer>
 
-        <div id="successMessage" class="success-message">Registered successfully!</div>
-        <div id="forgotPasswordSuccessMessage" class="success-message">Link sent successfully!</div>
-    </div>
-    <div class="form-container" id="loginForm">
-        <h2>Login</h2>
-        <form id="login-form" onsubmit="loginUser(event)">
-            <div class="input-group">
-                <input type="email" name="email" id="login-email" placeholder=" " autocomplete="username" required>
-                <label for="login-email">Email</label>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="login-password" placeholder=" " autocomplete="current-password" required>
-                <label for="password">Password</label>
-            </div>
-            <button type="submit">Login</button>
-            <div id="loginErrorMessage" class="error-message"></div>
-            <a href="#" class="forgot-password" onclick="toggleForgotPasswordForm(); return false;">Forgot password?</a>
-            <div style="margin-top: 12px; font-size: 0.78rem; color: #94a3b8; text-align: center;">
-                Need Help? Contact Support: <a href="mailto:letscodetogethersupport@gmail.com" style="color: #00d084; text-decoration: underline; font-weight: 600;">letscodetogethersupport@gmail.com</a>
-            </div>
-        </form>
-    </div>
-
-    <div class="form-container" id="adminLoginForm">
-        <h2>Admin Login</h2>
-        <form id="admin-login-form" onsubmit="loginAdminUser(event)">
-            <div class="input-group">
-                <input type="email" name="email" id="admin-email" placeholder=" " autocomplete="username" required>
-                <label for="admin-email">Admin Email</label>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="admin-password" placeholder=" " autocomplete="current-password" required>
-                <label for="admin-password">Admin Password</label>
-            </div>
-            <button type="submit" class="admin-btn">Admin Login</button>
-            <div id="adminErrorMessage" class="error-message"></div>
-        </form>
-    </div>
-  <div class="form-container" id="registerForm">
-    <h2>Create Account</h2>
-    <form id="registerFormElement">
-        <div class="name-row-group">
-            <div class="input-group">
-                <input type="text" id="reg-firstname" placeholder=" " required>
-                <label for="reg-firstname">First Name</label>
-            </div>
-            <div class="input-group">
-                <input type="text" id="reg-lastname" placeholder=" " required>
-                <label for="reg-lastname">Surname (Last Name)</label>
-            </div>
-        </div>
-
-        <div class="input-group handle-input-group">
-            <span class="handle-at-symbol">@</span>
-            <input type="text" name="username" id="reg-username" placeholder=" " autocomplete="username" style="padding-left: 28px !important;" required>
-            <label for="reg-username" style="left: 28px;">Unique Handle (e.g. rahul_s)</label>
-        </div>
-
-        <div class="input-group email-otp-input-group">
-            <input type="email" name="email" id="reg-email" placeholder=" " required>
-            <label for="reg-email">Email Address</label>
-            <button type="button" class="otp-send-badge-btn" onclick="sendOTP(event)" id="sendOtpBtn">Send OTP</button>
-        </div>
-
-        <div class="input-group">
-            <input type="text" name="otp" id="reg-otp" placeholder=" " required>
-            <label for="reg-otp">Enter 6-Digit OTP</label>
-        </div>
-
-        <div class="input-group">
-            <input type="password" name="password" id="reg-password" placeholder=" " autocomplete="new-password" required>
-            <label for="reg-password">Password</label>
-        </div>
-
-        <button type="submit" class="register-submit-btn">Register</button>
-        <div id="registerErrorMessage" class="error-message"></div>
-    </form>
-</div>
-
-    <div class="form-container" id="forgotPasswordForm">
-        <h2>Forgot Password</h2>
-        <p>We will send a link to your email to reset your password.</p>
-        <form id="forgotPasswordFormElement">
-            <div class="input-group">
-                <input type="email" name="email" id="forgot-email" placeholder=" " required>
-                <label for="forgot-email">Email</label>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    <div id="privacyModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="toggleModal()">&times;</span>
-            <h2>Privacy Policy</h2>
-            <p>This is the privacy policy content. It explains how we handle your data and protect your privacy.</p>
-        </div>
-    </div>
+    <!-- Inline JS Handlers -->
     <script>
-        async function sendOTP(event) {
-            if (event) event.preventDefault();
+        function switchAuthTab(tabName) {
+            document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            document.getElementById('loginFormElement').style.display = tabName === 'login' ? 'block' : 'none';
+            document.getElementById('registerFormElement').style.display = tabName === 'register' ? 'block' : 'none';
+            document.getElementById('forgotFormElement').style.display = tabName === 'forgot' ? 'block' : 'none';
+        }
+
+        function openGuestFeature(sectionId, lang) {
+            localStorage.removeItem("loggedInEmail");
+            localStorage.removeItem("loggedInUserName");
+            localStorage.setItem("isGuest", "true");
+            try {
+                sessionStorage.removeItem("justGuest");
+                sessionStorage.setItem("suppressGuestMsg", "true");
+            } catch(e) {}
+            let targetUrl = "main.html?section=" + encodeURIComponent(sectionId || 'home');
+            if (lang) {
+                targetUrl += "&lang=" + encodeURIComponent(lang);
+            }
+            window.location.href = targetUrl;
+        }
+
+        function goWithoutLogin() {
+            localStorage.removeItem("loggedInEmail");
+            localStorage.removeItem("loggedInUserName");
+            localStorage.setItem("isGuest", "true");
+            localStorage.setItem("theme", "light");
+            try {
+                sessionStorage.removeItem("suppressGuestMsg");
+                sessionStorage.setItem("justGuest", "true");
+            } catch(e) {}
+            window.location.href = "main.html?section=home";
+        }
+
+        async function handleUserLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            const errorMsg = document.getElementById('loginErrorMessage');
+
+            try {
+                const response = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem("loggedInEmail", email);
+                    localStorage.setItem("loggedInUserName", data.userName);
+                    localStorage.setItem("theme", "light");
+                    localStorage.removeItem("isGuest");
+                    if (data.isNewUser || localStorage.getItem("isNewUser_" + email) === "true") {
+                        sessionStorage.setItem("isNewUser", "true");
+                        localStorage.removeItem("isNewUser_" + email);
+                    } else {
+                        sessionStorage.removeItem("isNewUser");
+                    }
+                    const pendingRoom = localStorage.getItem("pendingRoomId");
+                    if (pendingRoom) {
+                        window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
+                    } else {
+                        window.location.href = "main.html?section=home";
+                    }
+                } else {
+                    errorMsg.textContent = data.message || "Login failed";
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                errorMsg.textContent = "Error connecting to server.";
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        async function sendOtpCode() {
             const email = document.getElementById('reg-email').value.trim();
             const btn = document.getElementById('sendOtpBtn');
 
             if (!email) {
-                alert("Please enter your email address first.");
+                await customAlert("Please enter your email address first.");
                 document.getElementById('reg-email').focus();
                 return;
             }
@@ -610,7 +468,7 @@
 
                 const data = await response.json();
                 if (response.ok) {
-                    alert(data.message || "OTP sent to your email!");
+                    await customAlert(data.message || "OTP sent to your email!");
                     let countdown = 30;
                     const timer = setInterval(() => {
                         if (countdown <= 0) {
@@ -625,189 +483,22 @@
                         }
                     }, 1000);
                 } else {
-                    alert("Failed to send OTP: " + (data.message || "Unknown error"));
+                    await customAlert("Failed to send OTP: " + (data.message || "Unknown error"));
                     if (btn) {
                         btn.disabled = false;
                         btn.textContent = "Send OTP";
                     }
                 }
             } catch (error) {
-                alert("Error sending OTP. Please try again.");
+                await customAlert("Error sending OTP. Please try again.");
                 if (btn) {
                     btn.disabled = false;
                     btn.textContent = "Send OTP";
                 }
             }
         }
-        function toggleLoginForm() {
-            var loginForm = document.getElementById('loginForm');
-            var registerForm = document.getElementById('registerForm');
-            var adminLoginForm = document.getElementById('adminLoginForm');
-            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
-            var content = document.getElementById('content');
-            if (loginForm.classList.contains('show')) {
-                loginForm.classList.remove('show');
-                content.classList.remove('move-left');
-            } else {
-                loginForm.classList.add('show');
-                if (registerForm) registerForm.classList.remove('show');
-                if (adminLoginForm) adminLoginForm.classList.remove('show');
-                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
-                content.classList.add('move-left');
-            }
-        }
 
-        function toggleRegisterForm() {
-            var registerForm = document.getElementById('registerForm');
-            var loginForm = document.getElementById('loginForm');
-            var adminLoginForm = document.getElementById('adminLoginForm');
-            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
-            var content = document.getElementById('content');
-            if (registerForm.classList.contains('show')) {
-                registerForm.classList.remove('show');
-                content.classList.remove('move-left');
-            } else {
-                registerForm.classList.add('show');
-                if (loginForm) loginForm.classList.remove('show');
-                if (adminLoginForm) adminLoginForm.classList.remove('show');
-                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
-                content.classList.add('move-left');
-            }
-        }
-
-        function toggleAdminLoginForm() {
-            var adminLoginForm = document.getElementById('adminLoginForm');
-            var loginForm = document.getElementById('loginForm');
-            var registerForm = document.getElementById('registerForm');
-            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
-            var content = document.getElementById('content');
-            if (!adminLoginForm) return;
-
-            if (adminLoginForm.classList.contains('show')) {
-                adminLoginForm.classList.remove('show');
-                content.classList.remove('move-left');
-            } else {
-                adminLoginForm.classList.add('show');
-                if (loginForm) loginForm.classList.remove('show');
-                if (registerForm) registerForm.classList.remove('show');
-                if (forgotPasswordForm) forgotPasswordForm.classList.remove('show');
-                content.classList.add('move-left');
-            }
-        }
-
-        async function loginAdminUser(event) {
-            event.preventDefault();
-            const email = document.getElementById('admin-email').value.trim();
-            const password = document.getElementById('admin-password').value.trim();
-            const errorDiv = document.getElementById('adminErrorMessage');
-
-            if (errorDiv) {
-                errorDiv.textContent = "";
-                errorDiv.classList.remove('show');
-            }
-
-            try {
-                const response = await fetch('/api/admin-login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    localStorage.setItem('adminSession', 'true');
-                    localStorage.setItem('jwtToken', data.token);
-                    localStorage.setItem('loggedInEmail', email);
-                    window.location.href = 'admin-notifications.html';
-                } else {
-                    if (errorDiv) {
-                        errorDiv.textContent = data.message || "Invalid Admin Credentials";
-                        errorDiv.classList.add('show');
-                    }
-                }
-            } catch (error) {
-                if (errorDiv) {
-                    errorDiv.textContent = "Error connecting to server.";
-                    errorDiv.classList.add('show');
-                }
-            }
-        }
-
-        function toggleForgotPasswordForm() {
-            var forgotPasswordForm = document.getElementById('forgotPasswordForm');
-            var loginForm = document.getElementById('loginForm');
-            var registerForm = document.getElementById('registerForm');
-            var content = document.getElementById('content');
-            if (!forgotPasswordForm) return;
-
-            if (forgotPasswordForm.classList.contains('show')) {
-                forgotPasswordForm.classList.remove('show');
-                content.classList.remove('move-left');
-            } else {
-                // ensure the form is visible above everything
-                forgotPasswordForm.style.zIndex = 2000;
-                forgotPasswordForm.classList.add('show');
-                if (loginForm) loginForm.classList.remove('show');
-                if (registerForm) registerForm.classList.remove('show');
-                content.classList.add('move-left');
-            }
-        }
-
-        function toggleModal() {
-            var modal = document.getElementById('privacyModal');
-            if (modal.style.display === "block") {
-                modal.style.display = "none";
-            } else {
-                modal.style.display = "block";
-            }
-        }
-
-        /* ------------------------------------------------------------------
-           Login redirection helpers
-           - goToLogin from guest overlays should navigate to index.html and
-             remember that the login form needs to be shown automatically
-        ------------------------------------------------------------------ */
-        function markOpenLogin() {
-            // use session storage so flag expires on tab close
-            sessionStorage.setItem("openLogin", "true");
-        }
-
-        function handleAutoLogin() {
-            const shouldOpen = sessionStorage.getItem("openLogin");
-            if (shouldOpen) {
-                // clear before toggling so reloading won't loop
-                sessionStorage.removeItem("openLogin");
-                toggleLoginForm();
-            }
-        }
-
-        /* call on page load */
-        document.addEventListener("DOMContentLoaded", handleAutoLogin);
-
-        document.getElementById('forgotPasswordFormElement').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('forgot-email').value;
-
-            try {
-                const response = await fetch('/api/forgot-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    const emailValue = document.getElementById('forgot-email').value.trim();
-                    await customAlert(data.message || "OTP sent successfully.");
-                    window.location.href = `resetpassword.html?email=${encodeURIComponent(emailValue)}`;
-                } else {
-                    alert("Error: " + data.message);
-                }
-            } catch (error) {
-                alert("Error processing response");
-            }
-        });
-
-            document.getElementById('registerFormElement').addEventListener('submit', async function(event) {
+        async function handleUserRegister(event) {
             event.preventDefault();
             const firstName = document.getElementById('reg-firstname').value.trim();
             const lastName = document.getElementById('reg-lastname').value.trim();
@@ -816,6 +507,8 @@
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const otp = document.getElementById('reg-otp').value.trim();
+            const errorMsg = document.getElementById('registerErrorMessage');
+            const successMsg = document.getElementById('successMessage');
 
             try {
                 const response = await fetch('/api/register', {
@@ -827,136 +520,41 @@
                 const data = await response.json();
                 if (response.ok) {
                     localStorage.setItem("isNewUser_" + email, "true");
-                    document.getElementById('successMessage').classList.add('show');
+                    successMsg.style.display = 'block';
                     setTimeout(() => {
-                        document.getElementById('successMessage').classList.remove('show');
-                        toggleRegisterForm();
-                        toggleLoginForm();
+                        successMsg.style.display = 'none';
+                        switchAuthTab('login');
+                        document.getElementById('login-email').value = email;
                     }, 1500);
                 } else {
-                    document.getElementById('registerErrorMessage').textContent = data.message;
-                    document.getElementById('registerErrorMessage').classList.add('show');
+                    errorMsg.textContent = data.message || "Registration failed";
+                    errorMsg.style.display = 'block';
                 }
             } catch (error) {
-                alert('An error occurred while processing your request.');
+                await customAlert('An error occurred while processing your request.');
             }
-        });
-
-
-
-        function logout() {
-            localStorage.removeItem('loggedInEmail');
-            window.location.href = 'index.html'; // or your landing page
         }
 
-        function goToAdminLogin() {
-            toggleAdminLoginForm();
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('forgot-email').value.trim();
+            try {
+                const response = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    await customAlert(data.message || "OTP sent successfully.");
+                    window.location.href = `resetpassword.html?email=${encodeURIComponent(email)}`;
+                } else {
+                    await customAlert("Error: " + data.message);
+                }
+            } catch (error) {
+                await customAlert("Error processing request");
+            }
         }
-
-        const loggedInEmail = localStorage.getItem('loggedInEmail');
-
-         document.addEventListener('DOMContentLoaded', () => {
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('copy', e => e.preventDefault());
-        document.addEventListener('cut', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-    });
-    document.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-  });
-  document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-      e.preventDefault();
-    }
-  });
-   document.getElementById('logo').addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-  logo.addEventListener('dragstart', function(e) {
-    e.preventDefault();
-  });
-  async function loginUser(event) {
-    event.preventDefault(); // prevent form from submitting normally
-
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value.trim();
-    const errorMsg = document.getElementById("loginErrorMessage");
-
-    try {
-            const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("loggedInEmail", email);
-        localStorage.setItem("loggedInUserName", data.userName);
-        localStorage.removeItem("isGuest");
-        if (data.isNewUser || localStorage.getItem("isNewUser_" + email) === "true") {
-          sessionStorage.setItem("isNewUser", "true");
-          localStorage.removeItem("isNewUser_" + email);
-        } else {
-          sessionStorage.removeItem("isNewUser");
-        }
-        const pendingRoom = localStorage.getItem("pendingRoomId");
-        if (pendingRoom) {
-          window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
-        } else {
-          window.location.href = "main.html";
-        }
-      } else {
-        errorMsg.textContent = data.message || "Login failed";
-      }
-    } catch (error) {
-      errorMsg.textContent = "Error connecting to server.";
-    }
-  }
-async function goWithoutLogin() {
-  localStorage.removeItem("loggedInEmail");
-  localStorage.removeItem("loggedInUserName");
-  localStorage.setItem("isGuest", "true");
-  try { sessionStorage.setItem("justGuest", "true"); } catch(e) {}
-  await customAlert("You are now in guest mode. Some features will require login.");
-  const pendingRoom = localStorage.getItem("pendingRoomId");
-  if (pendingRoom) {
-    window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
-  } else {
-    window.location.href = "main.html";
-  }
-}
-
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
-  if (welcomeInstallBtn) {
-    welcomeInstallBtn.style.display = "inline-block";
-  }
-});
-
-function triggerPwaInstall() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    }
-    deferredPrompt = null;
-    const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
-    if (welcomeInstallBtn) welcomeInstallBtn.style.display = "none";
-  });
-}
-
-window.addEventListener('appinstalled', (evt) => {
-  const welcomeInstallBtn = document.getElementById("pwa-install-welcome");
-  if (welcomeInstallBtn) welcomeInstallBtn.style.display = "none";
-});
-
-</script>
-    
+    </script>
 </body>
 </html>

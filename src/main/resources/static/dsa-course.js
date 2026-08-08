@@ -249,14 +249,14 @@ function showAllSavedSolutionsModal() {
 
 // Company Metadata Definition
 const companyMeta = {
-    'google': { name: 'Google', class: 'google', icon: '🔴' },
-    'amazon': { name: 'Amazon', class: 'amazon', icon: '🟠' },
-    'meta': { name: 'Meta', class: 'meta', icon: '🔵' },
-    'microsoft': { name: 'Microsoft', class: 'microsoft', icon: '🟦' },
-    'apple': { name: 'Apple', class: 'apple', icon: '🍏' },
-    'uber': { name: 'Uber', class: 'uber', icon: '🚗' },
-    'netflix': { name: 'Netflix', class: 'netflix', icon: '🎬' },
-    'adobe': { name: 'Adobe', class: 'adobe', icon: '🅰️' }
+    'google': { name: 'Google', class: 'google', icon: '' },
+    'amazon': { name: 'Amazon', class: 'amazon', icon: '' },
+    'meta': { name: 'Meta', class: 'meta', icon: '' },
+    'microsoft': { name: 'Microsoft', class: 'microsoft', icon: '' },
+    'apple': { name: 'Apple', class: 'apple', icon: '' },
+    'uber': { name: 'Uber', class: 'uber', icon: '' },
+    'netflix': { name: 'Netflix', class: 'netflix', icon: '' },
+    'adobe': { name: 'Adobe', class: 'adobe', icon: '' }
 };
 
 // DSA Concept Data Store (7 Core Tutorial Modules with 3 Full Examples Each)
@@ -2081,22 +2081,22 @@ function renderDsaPracticeSection() {
 
     const companyFilterButtonsHtml = `
         <button class="dsa-filter-btn ${currentCompanyFilter === 'all' ? 'active' : ''}" onclick="filterByCompany('all')">All Companies</button>
-        <button class="dsa-filter-btn google ${currentCompanyFilter === 'google' ? 'active' : ''}" onclick="filterByCompany('google')">🔴 Google</button>
-        <button class="dsa-filter-btn amazon ${currentCompanyFilter === 'amazon' ? 'active' : ''}" onclick="filterByCompany('amazon')">🟠 Amazon</button>
-        <button class="dsa-filter-btn meta ${currentCompanyFilter === 'meta' ? 'active' : ''}" onclick="filterByCompany('meta')">🔵 Meta</button>
-        <button class="dsa-filter-btn microsoft ${currentCompanyFilter === 'microsoft' ? 'active' : ''}" onclick="filterByCompany('microsoft')">🟦 Microsoft</button>
-        <button class="dsa-filter-btn apple ${currentCompanyFilter === 'apple' ? 'active' : ''}" onclick="filterByCompany('apple')">🍏 Apple</button>
-        <button class="dsa-filter-btn uber ${currentCompanyFilter === 'uber' ? 'active' : ''}" onclick="filterByCompany('uber')">🚗 Uber</button>
+        <button class="dsa-filter-btn google ${currentCompanyFilter === 'google' ? 'active' : ''}" onclick="filterByCompany('google')">Google</button>
+        <button class="dsa-filter-btn amazon ${currentCompanyFilter === 'amazon' ? 'active' : ''}" onclick="filterByCompany('amazon')">Amazon</button>
+        <button class="dsa-filter-btn meta ${currentCompanyFilter === 'meta' ? 'active' : ''}" onclick="filterByCompany('meta')">Meta</button>
+        <button class="dsa-filter-btn microsoft ${currentCompanyFilter === 'microsoft' ? 'active' : ''}" onclick="filterByCompany('microsoft')">Microsoft</button>
+        <button class="dsa-filter-btn apple ${currentCompanyFilter === 'apple' ? 'active' : ''}" onclick="filterByCompany('apple')">Apple</button>
+        <button class="dsa-filter-btn uber ${currentCompanyFilter === 'uber' ? 'active' : ''}" onclick="filterByCompany('uber')">Uber</button>
     `;
 
     container.innerHTML = `
         <div class="dsa-practice-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-                <h2>🧩 Coding Practice Platform</h2>
+                <h2>Coding Practice Platform</h2>
                 <p>Solve curated interview questions frequently asked by Google, Meta, Amazon, Microsoft, Apple & Uber!</p>
             </div>
             <button id="dsa-fullscreen-btn" class="dsa-fullscreen-btn ${isDsaFullscreen ? 'active' : ''}" onclick="toggleDsaPracticeFullscreen()">
-                ${isDsaFullscreen ? '🗗 Exit Fullscreen' : '🖥️ Fullscreen Mode'}
+                ${isDsaFullscreen ? 'Exit Fullscreen' : 'Fullscreen Mode'}
             </button>
         </div>
 
@@ -2118,22 +2118,22 @@ function renderDsaPracticeSection() {
                 <div class="dsa-diff-group">
                     <span class="dsa-filter-label">Difficulty:</span>
                     <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'all' ? 'active' : ''}" onclick="filterByDifficulty('all')">All</button>
-                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'easy' ? 'active' : ''}" onclick="filterByDifficulty('easy')">🟢 Easy</button>
-                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'medium' ? 'active' : ''}" onclick="filterByDifficulty('medium')">🟡 Medium</button>
-                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'hard' ? 'active' : ''}" onclick="filterByDifficulty('hard')">🔴 Hard</button>
+                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'easy' ? 'active' : ''}" onclick="filterByDifficulty('easy')">Easy</button>
+                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'medium' ? 'active' : ''}" onclick="filterByDifficulty('medium')">Medium</button>
+                    <button class="dsa-sub-filter-btn ${currentDifficultyFilter === 'hard' ? 'active' : ''}" onclick="filterByDifficulty('hard')">Hard</button>
                 </div>
 
                 <div class="dsa-status-group">
                     <span class="dsa-filter-label">Status:</span>
                     <button class="dsa-sub-filter-btn ${currentStatusFilter === 'all' ? 'active' : ''}" onclick="filterByStatus('all')">All</button>
-                    <button class="dsa-sub-filter-btn ${currentStatusFilter === 'completed' ? 'active' : ''}" onclick="filterByStatus('completed')">✅ Completed</button>
-                    <button class="dsa-sub-filter-btn ${currentStatusFilter === 'uncompleted' ? 'active' : ''}" onclick="filterByStatus('uncompleted')">⏳ Uncompleted</button>
-                    <button class="dsa-sub-filter-btn active" style="background:rgba(0,245,160,0.15); border:1px solid rgba(0,245,160,0.4); color:#00f5a0; font-weight:700;" onclick="showAllSavedSolutionsModal()">📜 Saved Solutions History</button>
+                    <button class="dsa-sub-filter-btn ${currentStatusFilter === 'completed' ? 'active' : ''}" onclick="filterByStatus('completed')">Completed</button>
+                    <button class="dsa-sub-filter-btn ${currentStatusFilter === 'uncompleted' ? 'active' : ''}" onclick="filterByStatus('uncompleted')">Uncompleted</button>
+                    <button class="dsa-sub-filter-btn active" style="background:rgba(0,245,160,0.15); border:1px solid rgba(0,245,160,0.4); color:#00f5a0; font-weight:700;" onclick="showAllSavedSolutionsModal()">Saved Solutions History</button>
                 </div>
             </div>
 
             <div class="dsa-search-row" style="margin-top:12px;">
-                <input type="text" id="dsa-search-input" placeholder="🔍 Search by problem, pattern or company..." value="${escapeHtml(currentSearchQuery)}" oninput="searchDsaProblems(this.value)">
+                <input type="text" id="dsa-search-input" placeholder="Search by problem, pattern or company..." value="${escapeHtml(currentSearchQuery)}" oninput="searchDsaProblems(this.value)">
                 <span class="dsa-count-badge">Showing ${filteredProblems.length} / ${dsaPracticeProblems.length} Problems</span>
             </div>
         </div>
@@ -2150,11 +2150,11 @@ function renderDsaPracticeSection() {
                         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                             <span class="dsa-diff-pill ${problem.difficulty.toLowerCase()}">${problem.difficulty}</span>
                             <span class="dsa-acc-rate">Acceptance: ${problem.acceptanceRate}</span>
-                            ${isCurrentProblemSolved ? '<span class="solved-badge">✅ Solved</span>' : '<span class="unsolved-badge" style="font-size:0.75em; padding:4px 10px; border-radius:12px; background:rgba(255,255,255,0.06); color:var(--text-tertiary);">⏳ Unsolved</span>'}
+                            ${isCurrentProblemSolved ? '<span class="solved-badge">Solved</span>' : '<span class="unsolved-badge" style="font-size:0.75em; padding:4px 10px; border-radius:12px; background:rgba(255,255,255,0.06); color:var(--text-tertiary);">Unsolved</span>'}
                         </div>
                     </div>
                     <div class="dsa-company-row" style="margin-bottom:12px;">
-                        ${problem.companies.map(c => `<span class="company-pill ${companyMeta[c]?.class}">${companyMeta[c]?.icon} ${companyMeta[c]?.name}</span>`).join('')}
+                        ${problem.companies.map(c => `<span class="company-pill ${companyMeta[c]?.class}">${companyMeta[c]?.name}</span>`).join('')}
                     </div>
                     <div class="dsa-prob-description">${problem.description}</div>
                     
@@ -2174,9 +2174,9 @@ function renderDsaPracticeSection() {
                             </select>
                         </div>
                         <div class="dsa-editor-actions">
-                            <button class="dsa-btn-run" onclick="runPracticeTestCases()">▶ Run Test Cases</button>
-                            <button class="dsa-btn-submit" onclick="submitPracticeCode()">🚀 Submit Solution</button>
-                            ${getSubmittedSolution(problem.id) ? `<button class="dsa-sub-filter-btn active" style="padding:7px 14px; font-size:0.85em; font-weight:700;" onclick="showSubmittedSolutionModal('${problem.id}')">📜 Saved Solution</button>` : ''}
+                            <button class="dsa-btn-run" onclick="runPracticeTestCases()">Run Test Cases</button>
+                            <button class="dsa-btn-submit" onclick="submitPracticeCode()">Submit Solution</button>
+                            ${getSubmittedSolution(problem.id) ? `<button class="dsa-sub-filter-btn active" style="padding:7px 14px; font-size:0.85em; font-weight:700;" onclick="showSubmittedSolutionModal('${problem.id}')">Saved Solution</button>` : ''}
                         </div>
                     </div>
 
@@ -2187,7 +2187,7 @@ function renderDsaPracticeSection() {
 
                     <div id="dsa-practice-console" class="dsa-practice-console">
                         <div class="console-title">Console & Test Results</div>
-                        <div id="dsa-console-output" class="console-body">Click <b>"▶ Run Test Cases"</b> to execute your solution against sample test inputs.</div>
+                        <div id="dsa-console-output" class="console-body">Click <b>"Run Test Cases"</b> to execute your solution against sample test inputs.</div>
                     </div>
                 ` : '<div style="padding:40px; text-align:center;">Select a problem from the left sidebar to start coding!</div>'}
             </div>
