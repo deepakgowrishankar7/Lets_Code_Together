@@ -7,7 +7,7 @@ const $$ = s => document.querySelectorAll(s);
 /* =====================================================
    APP SECTION HISTORY & NAVIGATION (System Gesture compatible)
 ===================================================== */
-const sectionHistory = ["dashboard"];
+const sectionHistory = [localStorage.getItem("isGuest") === "true" || !localStorage.getItem("loggedInEmail") ? "home" : "dashboard"];
 
 function showSectionDirect(sectionId) {
     $$("main > section").forEach(sec => {
@@ -74,7 +74,8 @@ function openProtectedSectionDirect(sectionId) {
         "visualizer",
         "notifications",
         "user-communication",
-        "dashboard"
+        "dashboard",
+        "ds-course"
     ];
 
     if (state.isGuest && protectedSections.includes(sectionId)) {
@@ -95,7 +96,8 @@ function openProtectedSectionDirect(sectionId) {
 }
 
 // Browser back button / swipe back gesture interception
-history.pushState({ section: "dashboard" }, "", "");
+const initialSec = localStorage.getItem("isGuest") === "true" || !localStorage.getItem("loggedInEmail") ? "home" : "dashboard";
+history.pushState({ section: initialSec }, "", "");
 window.onpopstate = (event) => {
     if (sectionHistory.length > 1) {
         sectionHistory.pop(); // Pop current section
@@ -104,8 +106,8 @@ window.onpopstate = (event) => {
             openProtectedSectionDirect(prevSection);
         }
     } else {
-        // Prevent leaving main app / dashboard
-        history.pushState({ section: "dashboard" }, "", "");
+        // Prevent leaving main app
+        history.pushState({ section: initialSec }, "", "");
     }
 };
 
@@ -176,7 +178,8 @@ function openProtectedSection(sectionId) {
         "visualizer",
         "notifications",
         "user-communication",
-        "dashboard"
+        "dashboard",
+        "ds-course"
     ];
 
     if (state.isGuest && protectedSections.includes(sectionId)) {
@@ -348,7 +351,7 @@ async function dismissAllNotifications() {
         alert("No active notifications to dismiss.");
         return;
     }
-    if (!confirm("Are you sure you want to dismiss all active notifications?")) return;
+    if (!await customConfirm("Are you sure you want to dismiss all active notifications?")) return;
     list.forEach(btn => btn.click());
 }
 
@@ -1599,10 +1602,23 @@ async function populateDashboard(force = false) {
     updateCodingStreak();
     const scoreContainer = $("#scoreDashboardContent");
     const topUsersContainer = $("#topUsersTable");
-    const dashUserName = document.getElementById("dash-user-name");
-
     const currentUser = localStorage.getItem("loggedInUserName") || state.username || "Developer";
-    if (dashUserName) dashUserName.textContent = currentUser;
+    const isNewUser = sessionStorage.getItem("isNewUser") === "true";
+    
+    const dashHeroTitle = document.querySelector(".dash-hero-title");
+    const mobileWelcome = document.querySelector(".user-welcome-mobile");
+
+    if (dashHeroTitle) {
+        dashHeroTitle.innerHTML = isNewUser
+            ? `Welcome, <span id="dash-user-name">${currentUser}</span>! 👋`
+            : `Welcome back, <span id="dash-user-name">${currentUser}</span>! 👋`;
+    } else if (dashUserName) {
+        dashUserName.textContent = currentUser;
+    }
+
+    if (mobileWelcome) {
+        mobileWelcome.textContent = isNewUser ? "Welcome" : "Welcome back";
+    }
 
     if (!scoreContainer || !topUsersContainer) return;
 
@@ -2106,7 +2122,7 @@ function deleteMessageForMe(type, msgId) {
 }
 
 async function deleteMessageForEveryone(type, msgId) {
-    if (!confirm("Are you sure you want to delete this message for everyone?")) return;
+    if (!await customConfirm("Are you sure you want to delete this message for everyone?")) return;
     try {
         const url = type === 'public' ? `/api/public-message/${msgId}` : `/api/private-message/${msgId}`;
         const res = await fetch(url, { method: 'DELETE' });
@@ -2126,7 +2142,7 @@ async function clearCurrentChat(type) {
             alert("No contact selected to clear.");
             return;
         }
-        if (!confirm(`Are you sure you want to clear your conversation history with ${selectedUser}?`)) return;
+        if (!await customConfirm(`Are you sure you want to clear your conversation history with ${selectedUser}?`)) return;
 
         setChatStatus("Clearing conversation...");
         try {
@@ -2155,7 +2171,7 @@ async function clearCurrentChat(type) {
         loadPrivateMessages(true);
         setChatStatus(`Conversation history cleared.`);
     } else if (type === 'public') {
-        if (!confirm("Are you sure you want to clear the public community channel history?")) return;
+        if (!await customConfirm("Are you sure you want to clear the public community channel history?")) return;
 
         setChatStatus("Clearing channel...");
         try {
@@ -2999,6 +3015,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }, { passive: true });
+
+    // Initial section routing based on user state (Home for Guest, Dashboard for Logged in)
+    if (state.isGuest) {
+        showSectionDirect("home");
+    } else {
+        showSectionDirect("dashboard");
+    }
 
     // Run dynamic populate on load to update mobile drawer user profile details
     setTimeout(() => {

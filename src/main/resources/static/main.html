@@ -27,6 +27,8 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b1020">
     <!-- Link external CSS -->
+    <link rel="stylesheet" href="custom-popup.css">
+    <script src="custom-popup.js"></script>
     <link rel="stylesheet" href="styles.css?v=10">
     <link rel="stylesheet" href="mobile_fixes.css?v=2">
     <script>
@@ -77,11 +79,11 @@
                 Let's Code Together
             </h2>
           <nav>
-  <a href="javascript:void(0)" class="nav-link active"
+  <a href="javascript:void(0)" class="nav-link"
      data-section="dashboard"
      onclick="openProtectedSection('dashboard')">Dashboard</a>
 
-  <a href="javascript:void(0)" class="nav-link"
+  <a href="javascript:void(0)" class="nav-link active"
      data-section="home"
      onclick="showSection('home')">Home</a>
 
@@ -335,7 +337,7 @@ New Message
                         </div>
 
                         <!-- Data Structures & Algorithms -->
-                        <div class="course-card ds-card" onclick="showSection('ds-course')">
+                        <div class="course-card ds-card" onclick="openProtectedSection('ds-course')">
                             <div class="card-cover">
                                 <img src="image/Data_Structures.jpg" alt="Data Structures & Algorithms">
                                 <div class="card-cover-overlay"></div>

@@ -26,6 +26,8 @@
     <meta name="twitter:image" content="https://lets-code-together.onrender.com/image/logo.png?v=3">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090d16">
+    <link rel="stylesheet" href="custom-popup.css">
+    <script src="custom-popup.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -795,7 +797,7 @@
                 const data = await response.json();
                 if (response.ok) {
                     const emailValue = document.getElementById('forgot-email').value.trim();
-                    alert(data.message || "OTP sent successfully.");
+                    await customAlert(data.message || "OTP sent successfully.");
                     window.location.href = `resetpassword.html?email=${encodeURIComponent(emailValue)}`;
                 } else {
                     alert("Error: " + data.message);
@@ -824,6 +826,7 @@
 
                 const data = await response.json();
                 if (response.ok) {
+                    localStorage.setItem("isNewUser_" + email, "true");
                     document.getElementById('successMessage').classList.add('show');
                     setTimeout(() => {
                         document.getElementById('successMessage').classList.remove('show');
@@ -892,6 +895,12 @@
         localStorage.setItem("loggedInEmail", email);
         localStorage.setItem("loggedInUserName", data.userName);
         localStorage.removeItem("isGuest");
+        if (data.isNewUser || localStorage.getItem("isNewUser_" + email) === "true") {
+          sessionStorage.setItem("isNewUser", "true");
+          localStorage.removeItem("isNewUser_" + email);
+        } else {
+          sessionStorage.removeItem("isNewUser");
+        }
         const pendingRoom = localStorage.getItem("pendingRoomId");
         if (pendingRoom) {
           window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
@@ -905,12 +914,12 @@
       errorMsg.textContent = "Error connecting to server.";
     }
   }
-  function goWithoutLogin() {
+async function goWithoutLogin() {
   localStorage.removeItem("loggedInEmail");
   localStorage.removeItem("loggedInUserName");
   localStorage.setItem("isGuest", "true");
   try { sessionStorage.setItem("justGuest", "true"); } catch(e) {}
-  alert("You are now in guest mode. Some features will require login.");
+  await customAlert("You are now in guest mode. Some features will require login.");
   const pendingRoom = localStorage.getItem("pendingRoomId");
   if (pendingRoom) {
     window.location.href = "main.html?room=" + encodeURIComponent(pendingRoom);
