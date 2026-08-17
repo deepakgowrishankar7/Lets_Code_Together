@@ -1587,7 +1587,7 @@ body.light-mode .course-main-content pre code {
 .compiler-section > h2 {
   font-size: 1.3rem;
   margin-bottom: var(--s4);
-  color: #2563eb;
+  color: var(--text-primary);
 }
 
 .animated-videos-section {
@@ -1941,28 +1941,41 @@ body.light-mode .course-main-content pre code {
 }
 
 .compiler-label {
-  font-size: 0.97rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
+}
+
+body.light-mode .compiler-label {
+  color: #64748b;
 }
 
 .compiler-select {
-  padding: 9px var(--s4);
-  border-radius: var(--r-md);
-  border: 1px solid var(--border-soft);
-  background: var(--raised);
-  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: border-color var(--t-fast);
+  transition: all var(--t-fast);
+}
+
+body.light-mode .compiler-select {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .compiler-select:focus {
   outline: none;
   border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .compiler-editor,
@@ -2041,25 +2054,28 @@ body.light-mode .course-main-content pre code {
 /* Run / Visualize buttons */
 .compiler-run-btn,
 .visualizer-run-btn {
-  padding: 10px 24px;
-  border-radius: 10px;
+  padding: 8px 20px;
+  border-radius: 8px;
   border: none;
-  background: #2563eb;
+  background: linear-gradient(135deg, #10b981, #059669);
   color: #ffffff;
   font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 800;
+  font-size: 0.92rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.25);
   transition: all var(--t-mid);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .compiler-run-btn:hover,
 .visualizer-run-btn:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4), 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
 }
 
 /* Fullscreen button */
@@ -2067,24 +2083,29 @@ body.light-mode .course-main-content pre code {
   display: inline-flex;
   align-items: center;
   gap: var(--s2);
-  padding: 9px 16px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border-soft);
-  background: transparent;
-  color: var(--text-secondary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
   font-family: var(--font-body);
-  font-size: 0.97rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--t-fast);
-  float: right;
-  margin-bottom: var(--s4);
+}
+
+body.light-mode .fullscreen-toggle-btn {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #475569;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .fullscreen-toggle-btn:hover {
-  border-color: var(--border-medium);
-  color: #2563eb;
-  background: rgba(37, 99, 235, 0.06);
+  border-color: #94a3b8;
+  color: #0f172a;
+  background: #f1f5f9;
 }
 
 /* Visualizer iframe area */
@@ -5535,13 +5556,21 @@ body.light-mode .ide-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: #60a5fa;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #f8fafc;
   letter-spacing: -0.01em;
 }
 
+.ide-title-badge .ide-icon {
+  color: #38bdf8;
+}
+
 body.light-mode .ide-title-badge {
+  color: #0f172a;
+}
+
+body.light-mode .ide-title-badge .ide-icon {
   color: #2563eb;
 }
 
@@ -5829,24 +5858,31 @@ body.light-mode .ide-stat-val {
    ================================================================ */
 .host-room-btn {
   padding: 8px 16px !important;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 10px !important;
-  font-weight: 700 !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+  border: 1px solid rgba(37, 99, 235, 0.25) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
   font-size: 0.88rem !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+  box-shadow: none !important;
   transition: all 0.2s ease !important;
+}
+
+body.light-mode .host-room-btn {
+  background: rgba(37, 99, 235, 0.06) !important;
+  color: #1d4ed8 !important;
+  border-color: rgba(37, 99, 235, 0.25) !important;
 }
 
 .host-room-btn:hover {
   transform: translateY(-1px) !important;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
-  background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+  background: rgba(37, 99, 235, 0.15) !important;
+  border-color: rgba(37, 99, 235, 0.4) !important;
+  color: #1e40af !important;
 }
 
 .ide-room-banner {
