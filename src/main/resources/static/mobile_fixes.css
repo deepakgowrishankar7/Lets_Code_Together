@@ -400,6 +400,141 @@
     height: 28px !important;
     border-radius: 6px !important;
   }
+
+  /* 13. Mobile Sidebar Footer Nav (Install App & Logout Buttons Visibility) */
+  .sidebar-footer-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: auto !important;
+    padding-top: 16px !important;
+    padding-bottom: 28px !important;
+    border-top: 1px solid var(--border-soft) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sidebar-footer-btn,
+  #pwa-install-sidebar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+  }
+
+  #pwa-install-sidebar {
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  }
+
+  body.light-mode #pwa-install-sidebar {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    border-color: #a7f3d0 !important;
+  }
+
+  .sidebar-footer-btn.logout-btn-item {
+    background: rgba(239, 68, 68, 0.08) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  }
+
+  body.light-mode .sidebar-footer-btn.logout-btn-item {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+  }
+
+  /* 14. Mobile Header Zero Overlap & Brand Layout */
+  header::after,
+  .app-top-header::after {
+    display: none !important;
+  }
+
+  .mobile-header-brand {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .mobile-header-brand {
+      display: inline-block !important;
+      font-family: var(--font-body) !important;
+      font-size: 0.88rem !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.03em !important;
+      color: var(--jade) !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 140px !important;
+      flex-shrink: 1 !important;
+    }
+
+    body.light-mode .mobile-header-brand {
+      color: #0f172a !important;
+    }
+
+    .header-left {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      min-width: 0 !important;
+      flex: 1 !important;
+      max-width: none !important;
+    }
+
+    .profile {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      flex-shrink: 0 !important;
+    }
+
+    .header-icon-btn,
+    .theme-toggle-btn {
+      width: 34px !important;
+      height: 34px !important;
+      min-width: 34px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+
+    .header-chat-icon {
+      width: 16px !important;
+      height: 16px !important;
+    }
+
+    .header-unread-badge {
+      top: -2px !important;
+      right: -2px !important;
+      min-width: 16px !important;
+      height: 16px !important;
+      font-size: 0.62rem !important;
+    }
+
+    .theme-toggle-btn {
+      font-size: 0 !important;
+    }
+
+    .theme-toggle-btn::before {
+      content: "🌙" !important;
+      font-size: 1.05rem !important;
+    }
+
+    body.light-mode .theme-toggle-btn::before {
+      content: "☀️" !important;
+    }
+  }
 }
 
 /* 10. Mobile PWA & App Launch Screen Curved Edges and White Background */

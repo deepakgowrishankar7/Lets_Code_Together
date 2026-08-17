@@ -114,8 +114,7 @@
 </nav>
 
             <div class="sidebar-footer-nav">
-                <!-- Install App Button -->
-                <button id="pwa-install-sidebar" class="sidebar-footer-btn" style="display:none;" onclick="triggerPwaInstall()" title="Install App">
+                <button id="pwa-install-sidebar" class="sidebar-footer-btn" onclick="triggerPwaInstall()" title="Install App">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; flex-shrink: 0;">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -139,6 +138,7 @@
             <header class="app-top-header">
                 <div class="header-left" style="display: flex; align-items: center; gap: 12px; flex: 1; max-width: 480px;">
                     <button id="hamburger-menu-btn" class="hamburger-btn" aria-label="Open Menu">☰</button>
+                    <span class="mobile-header-brand">Let's Code Together</span>
                     <!-- Back & Forward Buttons (Shown inside opened selective course views) -->
                     <div class="nav-history-buttons" style="display: none; align-items: center; gap: 4px;">
                         <button id="nav-back-btn" class="nav-arrow-btn" onclick="goAppBack()" title="Go Back" aria-label="Go Back">

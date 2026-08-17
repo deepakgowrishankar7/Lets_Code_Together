@@ -3435,21 +3435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 200);
 });
 
-// Hide App Preloader once everything is completely loaded
-(() => {
-    const hidePreloader = () => {
-        const preloader = document.getElementById("app-preloader");
-        if (preloader && !preloader.classList.contains("fade-out")) {
-            preloader.classList.add("fade-out");
-            setTimeout(() => preloader.remove(), 600);
-        }
-    };
-    if (document.readyState === "complete") {
-        hidePreloader();
-    } else {
-        window.addEventListener("load", hidePreloader);
-    }
-})();
+
 
 // PWA Custom Installation Logic
 let deferredPrompt = null;
