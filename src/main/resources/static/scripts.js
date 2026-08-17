@@ -2725,6 +2725,7 @@ function selectUser(name) {
     if (title) title.textContent = name;
 
     updateSelectedUserInfo();
+    checkUserBlockStatus();
     loadUsers(true);
     loadPrivateMessages(true);
 }
@@ -2813,6 +2814,21 @@ function updateSoundButtonUI() {
 
 let _prevUnreadCount = -1;
 
+function getReadMessageIdsSet() {
+    try {
+        const stored = localStorage.getItem("readMessageIdsSet");
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch(e) {
+        return new Set();
+    }
+}
+
+function saveReadMessageIdsSet(set) {
+    try {
+        localStorage.setItem("readMessageIdsSet", JSON.stringify(Array.from(set)));
+    } catch(e) {}
+}
+
 function updateHeaderChatBadge(count) {
     const badge = document.getElementById("header-unread-count");
     if (!badge) return;
@@ -2826,14 +2842,33 @@ function updateHeaderChatBadge(count) {
 }
 
 async function fetchUnreadMessagesCount() {
-    const user = localStorage.getItem("loggedInUserName");
-    if (!user) return;
+    const currentUser = localStorage.getItem("loggedInUserName");
+    if (!currentUser) return;
     try {
-        const res = await fetch(`/api/private-messages/unread-count?receiverName=${encodeURIComponent(user)}`);
+        const res = await fetch(`/api/private-messages/received?receiverName=${encodeURIComponent(currentUser)}`);
         if (res.ok) {
-            const data = await res.json();
-            const count = data.count || 0;
+            const messages = await res.json();
+            const readSet = getReadMessageIdsSet();
+            const deletedSet = getDeletedForMeSet();
+
+            const unreadMessages = (messages || []).filter(m => {
+                if (!m.id || !m.senderName) return false;
+                if (m.senderName.toLowerCase() === currentUser.toLowerCase()) return false;
+                if (deletedSet.has(`private_${m.id}`)) return false;
+                if (readSet.has(m.id)) return false;
+                
+                // If chat with this sender is currently open and visible, mark read automatically
+                if (selectedUser && m.senderName.toLowerCase() === selectedUser.toLowerCase()) {
+                    readSet.add(m.id);
+                    saveReadMessageIdsSet(readSet);
+                    return false;
+                }
+                return true;
+            });
+
+            const count = unreadMessages.length;
             updateHeaderChatBadge(count);
+
             if (_prevUnreadCount >= 0 && count > _prevUnreadCount) {
                 playMessageChimeSound();
             }
@@ -2845,7 +2880,7 @@ async function fetchUnreadMessagesCount() {
 document.addEventListener("DOMContentLoaded", () => {
     updateSoundButtonUI();
     fetchUnreadMessagesCount();
-    setInterval(fetchUnreadMessagesCount, 3000);
+    setInterval(fetchUnreadMessagesCount, 2500);
 });
 
 function updateSelectedUserInfo() {
@@ -2934,7 +2969,14 @@ async function sendPrivateMessage() {
         if (!res.ok) {
             const tempEl = document.getElementById(tempId);
             if (tempEl) tempEl.style.opacity = "0.4";
-            setChatStatus("Failed to deliver message.");
+            if (res.status === 403) {
+                setChatStatus("Cannot send message: User has blocked messages or is blocked.");
+                if (typeof showPopup === 'function') {
+                    showPopup("You cannot send messages to this contact because messaging is blocked.", "🚫 Message Blocked", false);
+                }
+            } else {
+                setChatStatus("Failed to deliver message.");
+            }
             return;
         }
 
@@ -2945,6 +2987,113 @@ async function sendPrivateMessage() {
         const tempEl = document.getElementById(tempId);
         if (tempEl) tempEl.style.opacity = "0.4";
         setChatStatus("Delivery error.");
+    }
+}
+
+/* =====================================================
+   USER-TO-USER PRIVATE CHAT BLOCKING SYSTEM
+===================================================== */
+let _isCurrentTargetBlockedByMe = false;
+
+async function checkUserBlockStatus() {
+    const blockBtn = document.getElementById("block-user-btn");
+    const currentUser = localStorage.getItem("loggedInUserName");
+    const input = document.getElementById("private-chat-input");
+    const sendBtn = document.querySelector(".chat-send-btn");
+
+    if (!selectedUser || !currentUser) {
+        if (blockBtn) blockBtn.style.display = "none";
+        return;
+    }
+
+    if (blockBtn) blockBtn.style.display = "inline-flex";
+
+    try {
+        const res = await fetch(`/api/user-blocks/is-blocked?blockerUsername=${encodeURIComponent(currentUser)}&blockedUsername=${encodeURIComponent(selectedUser)}`);
+        const data = await res.json();
+        _isCurrentTargetBlockedByMe = data.isBlocked === true;
+
+        if (_isCurrentTargetBlockedByMe) {
+            if (blockBtn) {
+                blockBtn.textContent = "✅ Unblock Contact";
+                blockBtn.style.background = "rgba(16, 185, 129, 0.1)";
+                blockBtn.style.color = "#10b981";
+                blockBtn.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            }
+            if (input) {
+                input.placeholder = "You have blocked this contact. Unblock to resume messaging.";
+                input.disabled = true;
+            }
+            if (sendBtn) sendBtn.disabled = true;
+            setChatStatus(`You have blocked ${selectedUser}.`);
+            return;
+        }
+
+        const res2 = await fetch(`/api/user-blocks/is-blocked?blockerUsername=${encodeURIComponent(selectedUser)}&blockedUsername=${encodeURIComponent(currentUser)}`);
+        const data2 = await res2.json();
+        const isBlockedByTarget = data2.isBlocked === true;
+
+        if (blockBtn) {
+            blockBtn.textContent = "🚫 Block Contact";
+            blockBtn.style.background = "rgba(239, 68, 68, 0.1)";
+            blockBtn.style.color = "#ef4444";
+            blockBtn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+        }
+
+        if (isBlockedByTarget) {
+            if (input) {
+                input.placeholder = "This contact is not receiving messages from you.";
+                input.disabled = true;
+            }
+            if (sendBtn) sendBtn.disabled = true;
+            setChatStatus(`${selectedUser} is not accepting messages.`);
+        } else {
+            if (input) {
+                input.placeholder = "Message contact...";
+                input.disabled = false;
+            }
+            if (sendBtn) sendBtn.disabled = false;
+        }
+    } catch(e) {}
+}
+
+async function toggleBlockSelectedUser() {
+    const currentUser = localStorage.getItem("loggedInUserName");
+    if (!selectedUser || !currentUser) return;
+
+    const endpoint = _isCurrentTargetBlockedByMe ? "/api/user-blocks/unblock" : "/api/user-blocks/block";
+    const actionName = _isCurrentTargetBlockedByMe ? "Unblock" : "Block";
+
+    if (!_isCurrentTargetBlockedByMe) {
+        const confirmMsg = `Are you sure you want to block ${selectedUser}? They will not be able to send private messages to you.`;
+        if (typeof showCustomConfirm === 'function') {
+            const confirmed = await showCustomConfirm(confirmMsg);
+            if (!confirmed) return;
+        } else if (!confirm(confirmMsg)) {
+            return;
+        }
+    }
+
+    try {
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                blockerUsername: currentUser,
+                blockedUsername: selectedUser
+            })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            if (typeof showPopup === 'function') {
+                showPopup(data.message || `Contact ${actionName.toLowerCase()}ed.`, actionName + " Status", false);
+            }
+            checkUserBlockStatus();
+            loadPrivateMessages(true);
+        }
+    } catch(e) {
+        console.error("Block/Unblock error:", e);
     }
 }
 
@@ -2981,6 +3130,19 @@ async function loadPrivateMessages(force = false) {
             time: formatChatTime(lastM.createdAt),
             isMe: lastM.senderName === sender
         };
+
+        const readSet = getReadMessageIdsSet();
+        let readUpdated = false;
+        visibleMessages.forEach(m => {
+            if (m.id && m.senderName === selectedUser && !readSet.has(m.id)) {
+                readSet.add(m.id);
+                readUpdated = true;
+            }
+        });
+        if (readUpdated) {
+            saveReadMessageIdsSet(readSet);
+            fetchUnreadMessagesCount();
+        }
     }
 
     const newHash = JSON.stringify({ selectedUser, visibleMessages });

@@ -2011,7 +2011,8 @@ ORDER BY avg_sal DESC;</code></pre>
                                         <div id="selected-user-info" class="channel-status">Select a contact to begin messaging</div>
                                     </div>
                                 </div>
-                                <div class="channel-actions">
+                                <div class="channel-actions" style="display: flex; align-items: center; gap: 8px;">
+                                    <button id="block-user-btn" class="block-user-action-btn" onclick="toggleBlockSelectedUser()" style="display:none; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.1); color: #ef4444; transition: all 0.2s ease;" title="Block/Unblock Contact">🚫 Block Contact</button>
                                     <button class="clear-chat-btn" onclick="clearCurrentChat('private')" title="Clear Private Conversation">🗑️ Clear Chat</button>
                                 </div>
                             </div>

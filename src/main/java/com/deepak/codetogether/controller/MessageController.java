@@ -20,9 +20,11 @@ import com.deepak.codetogether.dto.PublicMessageRequest;
 import com.deepak.codetogether.entity.AdminMessage;
 import com.deepak.codetogether.entity.PrivateMessage;
 import com.deepak.codetogether.entity.PublicMessage;
+import com.deepak.codetogether.entity.UserBlock;
 import com.deepak.codetogether.repository.AdminMessageRepository;
 import com.deepak.codetogether.repository.PrivateMessageRepository;
 import com.deepak.codetogether.repository.PublicMessageRepository;
+import com.deepak.codetogether.repository.UserBlockRepository;
 import com.deepak.codetogether.repository.UserRepository;
 
 import java.util.Map;
@@ -49,6 +51,9 @@ public class MessageController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserBlockRepository userBlockRepository;
 
     @PostMapping("/heartbeat/{username}")
     public Map<String, Object> heartbeat(@PathVariable String username) {
@@ -135,6 +140,18 @@ public class MessageController {
         if (request.getSenderName() == null || request.getReceiverName() == null || request.getMessage() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sender, receiver, and message are required");
         }
+        String s = request.getSenderName().trim().toLowerCase();
+        String r = request.getReceiverName().trim().toLowerCase();
+
+        // Check if receiver blocked sender
+        if (userBlockRepository.existsByBlockerUsernameAndBlockedUsername(r, s)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot send messages to this user because they have blocked you.");
+        }
+        // Check if sender blocked receiver
+        if (userBlockRepository.existsByBlockerUsernameAndBlockedUsername(s, r)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You have blocked this user. Unblock them to send messages.");
+        }
+
         userLastHeartbeat.put(request.getSenderName(), System.currentTimeMillis());
         PrivateMessage message = new PrivateMessage();
         message.setSenderName(request.getSenderName());
@@ -159,6 +176,14 @@ public class MessageController {
         }
         List<PrivateMessage> messages = privateMessageRepository.findByReceiverName(receiverName.trim());
         return Map.of("count", messages != null ? messages.size() : 0);
+    }
+
+    @GetMapping("/private-messages/received")
+    public List<PrivateMessage> getReceivedPrivateMessages(@RequestParam String receiverName) {
+        if (receiverName == null || receiverName.trim().isEmpty()) {
+            return List.of();
+        }
+        return privateMessageRepository.findByReceiverName(receiverName.trim());
     }
 
     @DeleteMapping("/private-message/{id}")
