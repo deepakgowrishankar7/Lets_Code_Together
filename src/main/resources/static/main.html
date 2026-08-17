@@ -25,7 +25,10 @@
     <meta name="twitter:description" content="Master Java, Python, C++, and SQL with interactive visualizers, live code compiler, and certificates.">
     <meta name="twitter:image" content="https://lets-code-together.onrender.com/image/logo.png?v=3">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b1020">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="background-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <!-- Link external CSS -->
     <link rel="stylesheet" href="custom-popup.css">
     <script src="custom-popup.js"></script>
@@ -55,18 +58,6 @@
 </head>
 
 <body>
-    <!-- Beautiful Premium Preloader Splash Screen -->
-    <div id="app-preloader">
-        <div class="preloader-content">
-            <img src="image/logo.png?v=3" class="preloader-logo" alt="Loading Logo">
-            <h1 class="preloader-title">LET'S CODE TOGETHER</h1>
-            <div class="preloader-spinner-bar">
-                <div class="preloader-progress"></div>
-            </div>
-            <p class="preloader-status">Initializing modules...</p>
-        </div>
-    </div>
-
     <div class="dashboard">
         <!-- Sidebar Mobile Overlay -->
         <div id="sidebar-overlay" class="sidebar-overlay"></div>
@@ -170,7 +161,20 @@
                     <span id="message-alert" class="alert-badge" style="display:none">New Message</span>
                 </div>
 
-                <div class="profile">
+                <div class="profile" style="display: flex; align-items: center; gap: 10px;">
+                    <!-- Unread Chat Notification Button -->
+                    <button id="header-chat-btn" class="header-icon-btn" onclick="openProtectedSection('user-communication'); showChat('private');" title="Private Messages & Unread Notifications">
+                        <svg class="header-chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span id="header-unread-count" class="header-unread-badge" style="display:none;">0</span>
+                    </button>
+
+                    <!-- Mute / Unmute Notification Sound Button -->
+                    <button id="header-sound-btn" class="header-icon-btn" onclick="toggleChatSound()" title="Mute/Unmute Message Sound">
+                        <span id="sound-icon-symbol">🔔</span>
+                    </button>
+
                     <button id="theme-toggle" class="theme-toggle-btn" title="Toggle light/dark mode">Light Mode</button>
                 </div>
             </header>
@@ -704,26 +708,26 @@
 
             <!-- Settings Section -->
             <section id="settings" class="settings" style="display:none;">
-                <div class="settings-header-banner" style="background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(124,58,237,0.04)); border: 1px solid var(--border-medium); border-radius: 20px; padding: 28px 36px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-                    <div style="display: flex; align-items: center; gap: 20px;">
-                        <div class="settings-avatar-bubble" id="settings-avatar-bubble" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #ffffff; font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(37,99,235,0.25); border: 3px solid #ffffff; flex-shrink: 0;">GU</div>
+                <div class="settings-header-banner">
+                    <div class="settings-user-info-group">
+                        <div class="settings-avatar-bubble" id="settings-avatar-bubble">GU</div>
                         <div class="settings-profile-info">
-                            <h2 id="settings-username" class="settings-profile-name" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0;">Guest</h2>
-                            <div id="settings-email" class="settings-profile-email" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 8px;">guest@letscode.com</div>
-                            <div class="settings-profile-status" style="background: rgba(34,197,94,0.12); color: #16a34a; font-weight: 700; font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                            <h2 id="settings-username" class="settings-profile-name">Guest</h2>
+                            <div id="settings-email" class="settings-profile-email">guest@letscode.com</div>
+                            <div class="settings-profile-status">
                                 🟢 Active Student Account · Masterclass Access
                             </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 12px 20px; border-radius: 14px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-                            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">COURSE TIER</div>
-                            <div style="font-size: 0.95rem; font-weight: 800; color: #2563eb; margin-top: 2px;">✨ Pro Learner</div>
+                    <div class="settings-perks-group">
+                        <div class="settings-perk-card">
+                            <div class="perk-label">COURSE TIER</div>
+                            <div class="perk-val tier">✨ Pro Learner</div>
                         </div>
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 12px 20px; border-radius: 14px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-                            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">ENCRYPTION</div>
-                            <div style="font-size: 0.95rem; font-weight: 800; color: #7c3aed; margin-top: 2px;">🔒 AES-256 JWT</div>
+                        <div class="settings-perk-card">
+                            <div class="perk-label">ENCRYPTION</div>
+                            <div class="perk-val enc">🔒 AES-256 JWT</div>
                         </div>
                     </div>
                 </div>
@@ -949,8 +953,10 @@
     </div>
 
     <div class="visualizer-area" id="visualizer-area-container" style="margin-top: 15px; position: relative;">
-      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.03); padding: 12px 18px; border-bottom: 1px solid var(--border-faint);">
-        <strong style="border: none; padding: 0; background: transparent; color: var(--text-primary);">Output & Line-by-Line Execution:</strong>
+      <div class="visualizer-header-bar">
+        <strong class="visualizer-header-title">
+          <span style="color: #10b981;">⚡</span> Output & Line-by-Line Execution:
+        </strong>
         <button onclick="toggleVisualizerAreaFullscreen()" class="fullscreen-toggle-btn">🖥️ Fullscreen Visualizer</button>
       </div>
       <iframe id="visualizer-frame" width="100%" height="850" frameborder="0" src=""></iframe>
@@ -2015,7 +2021,7 @@ ORDER BY avg_sal DESC;</code></pre>
 
                             <div class="messenger-input-bar">
                                 <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('private-chat-input', this)">😊</button>
-                                <textarea id="private-chat-input" placeholder="Message selected user... (Press Enter to send)" rows="1"></textarea>
+                                <textarea id="private-chat-input" placeholder="Message contact..." rows="1"></textarea>
                                 <button class="chat-send-btn" onclick="sendPrivateMessage()">
                                     <span>Send</span>
                                     <span class="send-icon">🚀</span>

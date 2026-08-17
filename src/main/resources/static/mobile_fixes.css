@@ -181,15 +181,18 @@
     align-items: center !important;
   }
   .clear-chat-btn {
-    font-size: 0 !important; /* Hide text "Clear Chat" */
+    font-size: 0 !important; /* Hide text "Clear Chat" on mobile */
     padding: 0 !important;
-    width: 32px !important;
-    height: 32px !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 50% !important;
     flex-shrink: 0 !important;
+    border: 1px solid var(--border-soft) !important;
+    background: var(--surface) !important;
   }
   .clear-chat-btn::before {
     content: "🗑️" !important;
@@ -242,21 +245,48 @@
     display: inline-block !important;
   }
 
-  /* 9. Chat messenger input bar overrides to prevent Send button cut-off */
+  /* 9. Private Chat grid and messenger input bar overrides to prevent Send button & Clear chat cut-off */
+  .private-chat-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .private-chat-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
   .messenger-input-bar {
     padding: 10px 8px !important;
     gap: 8px !important;
     box-sizing: border-box !important;
     width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
   }
+
   .messenger-input-bar textarea {
+    flex: 1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
     padding: 10px 14px !important;
     min-height: 40px !important;
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
+    box-sizing: border-box !important;
   }
+
   .messenger-input-bar .chat-send-btn {
-    width: 40px !important;
-    height: 40px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
     padding: 0 !important;
     border-radius: 50% !important;
     display: flex !important;
@@ -264,13 +294,120 @@
     justify-content: center !important;
     flex-shrink: 0 !important;
     gap: 0 !important;
-    box-shadow: 0 4px 12px rgba(0, 245, 160, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
   }
+
   .messenger-input-bar .chat-send-btn span:first-child {
-    display: none !important; /* Hide "Send" text on mobile */
+    display: none !important;
   }
+
   .messenger-input-bar .chat-send-btn .send-icon {
     margin: 0 !important;
     font-size: 1.15rem !important;
   }
+
+  /* 11. Mobile Settings Profile Banner & Email Wrap Fixes */
+  .settings-header-banner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 14px !important;
+    gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .settings-user-info-group {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .settings-profile-info {
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .settings-profile-name {
+    font-size: 1.35rem !important;
+    text-align: center !important;
+  }
+
+  .settings-profile-email {
+    font-size: 0.85rem !important;
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-bottom: 6px !important;
+  }
+
+  .settings-profile-status {
+    font-size: 0.76rem !important;
+    padding: 6px 12px !important;
+    text-align: center !important;
+    justify-content: center !important;
+    word-break: break-word !important;
+  }
+
+  .settings-perks-group {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .settings-perk-card {
+    padding: 10px 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .setting-value-pill {
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+    max-width: 100% !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* 12. Mobile Header Back/Forward Navigation Arrow Overlap Fix */
+  body.nav-history-active header::after,
+  body.nav-history-active .app-top-header::after {
+    display: none !important;
+  }
+
+  .nav-history-buttons {
+    margin-left: 4px !important;
+    gap: 2px !important;
+    padding: 2px 4px !important;
+    border-radius: 10px !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+    z-index: 10 !important;
+  }
+
+  body.light-mode .nav-history-buttons {
+    background: rgba(241, 245, 249, 0.95) !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  .nav-arrow-btn {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 6px !important;
+  }
+}
+
+/* 10. Mobile PWA & App Launch Screen Curved Edges and White Background */
+img[src*="logo.png"],
+.splash-logo,
+.brand-logo-img,
+.app-logo-box {
+  border-radius: 24px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden !important;
 }

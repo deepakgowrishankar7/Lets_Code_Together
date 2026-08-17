@@ -54,8 +54,10 @@ function showSectionDirect(sectionId) {
         
         if (isSelectiveCourseView) {
             navHistoryWrap.style.display = "inline-flex";
+            document.body.classList.add("nav-history-active");
         } else {
             navHistoryWrap.style.display = "none";
+            document.body.classList.remove("nav-history-active");
         }
     }
 
@@ -1372,7 +1374,7 @@ function initAnimatedVideos() {
 }
 
 /* =====================================================
-   DYNAMIC CODING STREAK ENGINE
+   DYNAMIC DAILY LOGIN CODING STREAK ENGINE
 ===================================================== */
 function updateCodingStreak(recordActivity = false) {
     try {
@@ -1398,20 +1400,23 @@ function updateCodingStreak(recordActivity = false) {
             const diffDays = Math.round((dToday - dLast) / (1000 * 60 * 60 * 24));
 
             if (diffDays === 1) {
+                // Logged in on consecutive day -> Increase streak +1
                 currentCount += 1;
                 localStorage.setItem(lastDateKey, todayStr);
                 localStorage.setItem(countKey, currentCount.toString());
             } else if (diffDays > 1) {
+                // Missed a day -> Reset streak to 1
                 currentCount = 1;
                 localStorage.setItem(lastDateKey, todayStr);
                 localStorage.setItem(countKey, "1");
             }
         }
 
-        const streakEl = document.getElementById("dash-streak-count");
-        if (streakEl) {
-            streakEl.textContent = `${currentCount} Day${currentCount > 1 ? 's' : ''}`;
-        }
+        // Update all streak display elements across the DOM
+        const streakEls = document.querySelectorAll("#dash-streak-count, .streak-count-value");
+        streakEls.forEach(el => {
+            el.textContent = `${currentCount} Day${currentCount > 1 ? 's' : ''}`;
+        });
         return currentCount;
     } catch(e) {
         return 1;
@@ -2626,12 +2631,21 @@ async function loadUsers(force = false) {
         const statusLabel = status === 'online' ? '🟢 Online' : (status === 'away' ? '🟡 Away' : '⚪ Offline');
         const dotClass = status === 'online' ? 'online' : (status === 'away' ? 'away' : 'offline');
 
+        const lastMsgInfo = _lastMessagesMap[name];
+        const subContent = lastMsgInfo 
+            ? `<span style="color:var(--text-secondary); font-size:0.75rem; font-weight:500;">${lastMsgInfo.isMe ? 'You: ' : ''}${escapeHtml(lastMsgInfo.snippet)}</span>`
+            : statusLabel;
+        const timeDisplay = (lastMsgInfo && lastMsgInfo.time) ? `<span class="user-item-time">${lastMsgInfo.time}</span>` : '';
+
         return `
             <div class="user-item ${isActive ? 'active' : ''}" data-username="${name}" onclick="selectUser('${name}')">
                 <div class="user-item-avatar">${initials}</div>
                 <div class="user-item-info">
-                    <div class="user-item-name">${name} ${handle ? `<span style="font-size:0.75rem; color:var(--jade); font-weight:600; margin-left:4px;">${handle}</span>` : ''}</div>
-                    <div class="user-item-sub">${statusLabel}</div>
+                    <div class="user-item-header">
+                        <div class="user-item-name">${name} ${handle ? `<span style="font-size:0.75rem; color:var(--jade); font-weight:600; margin-left:4px;">${handle}</span>` : ''}</div>
+                        ${timeDisplay}
+                    </div>
+                    <div class="user-item-sub">${subContent}</div>
                 </div>
                 <span class="online-dot ${dotClass}" title="${statusLabel}"></span>
             </div>
@@ -2711,6 +2725,86 @@ function selectUser(name) {
     loadPrivateMessages(true);
 }
 
+// Sound & Notification Helper Functions
+function playMessageChimeSound() {
+    if (localStorage.getItem("chatSoundMuted") === "true") return;
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+            ctx.resume();
+        }
+        
+        const now = ctx.currentTime;
+        
+        // Note 1: D5 (587.33Hz)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now);
+        gain1.gain.setValueAtTime(0.15, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.22);
+
+        // Note 2: A5 (880Hz)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, now + 0.08);
+        gain2.gain.setValueAtTime(0.2, now + 0.08);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.08);
+        osc2.stop(now + 0.35);
+    } catch (e) {
+        console.warn("Audio chime play error:", e);
+    }
+}
+
+function toggleChatSound() {
+    const isMuted = localStorage.getItem("chatSoundMuted") === "true";
+    const newMuted = !isMuted;
+    localStorage.setItem("chatSoundMuted", newMuted ? "true" : "false");
+    updateSoundButtonUI();
+    
+    if (!newMuted) {
+        playMessageChimeSound();
+        setChatStatus("Message notifications unmuted 🔔");
+    } else {
+        setChatStatus("Message notifications muted 🔕");
+    }
+}
+
+function updateSoundButtonUI() {
+    const btnIcon = document.getElementById("sound-icon-symbol");
+    const soundBtn = document.getElementById("header-sound-btn");
+    const isMuted = localStorage.getItem("chatSoundMuted") === "true";
+    if (btnIcon) btnIcon.textContent = isMuted ? "🔕" : "🔔";
+    if (soundBtn) soundBtn.title = isMuted ? "Unmute Message Notifications" : "Mute Message Notifications";
+}
+
+let _totalUnreadCount = 0;
+
+function updateHeaderChatBadge(count) {
+    const badge = document.getElementById("header-unread-count");
+    if (!badge) return;
+    if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateSoundButtonUI();
+});
+
 function updateSelectedUserInfo() {
     const info = document.getElementById("selected-user-info");
     if (!info) return;
@@ -2725,6 +2819,8 @@ function updateSelectedUserInfo() {
     info.textContent = statusLabel;
 }
 
+const _lastMessagesMap = {};
+
 async function sendPrivateMessage() {
     const input = document.getElementById("private-chat-input");
     if (!input) return;
@@ -2732,28 +2828,81 @@ async function sendPrivateMessage() {
     const sender = localStorage.getItem("loggedInUserName");
 
     if (!selectedUser || !message) {
-        if (!selectedUser) alert("Please select a user to message from the contacts list.");
+        if (!selectedUser) customAlert("Please select a contact from the list to send a private message.");
         return;
     }
 
-    const res = await fetch("/api/private-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            senderName: sender,
-            receiverName: selectedUser,
-            message: message
-        })
-    });
+    const container = document.getElementById("private-chat-messages");
+    const tempId = "temp_msg_" + Date.now();
+    const nowISO = new Date().toISOString();
+    const timeStr = formatChatTime(nowISO);
+    const initials = getInitials(sender);
 
-    if (!res.ok) {
-        setChatStatus("Failed to deliver message.");
-        return;
+    // Check if recipient is online for WhatsApp double green ticks
+    const isRecipientOnline = _userStatuses[selectedUser] === 'online';
+    const tickColor = isRecipientOnline ? '#10b981' : '#94a3b8';
+    const tickTitle = isRecipientOnline ? 'Read' : 'Delivered';
+
+    // WhatsApp-style instant local message render
+    if (container) {
+        const emptyState = container.querySelector(".empty-chat-state");
+        if (emptyState) emptyState.remove();
+
+        const tempBubbleHtml = `
+            <div class="chat-row my-row" id="${tempId}" style="opacity: 0.9; transition: opacity 0.3s ease;">
+                <div class="chat-bubble my-bubble">
+                    <div class="bubble-top-row">
+                        <span class="bubble-sender">You</span>
+                    </div>
+                    <div class="bubble-text">${formatMessageText(message)}</div>
+                    <div class="bubble-meta">
+                        <span class="bubble-time">${timeStr}</span>
+                        <span class="read-ticks" style="color: ${tickColor}; font-weight: 800;" title="${tickTitle}">✓✓</span>
+                    </div>
+                </div>
+                <div class="chat-avatar me-avatar">${initials}</div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', tempBubbleHtml);
+        container.scrollTop = container.scrollHeight;
     }
+
+    // Update last message map locally for immediate sidebar update
+    _lastMessagesMap[selectedUser] = {
+        snippet: message.length > 25 ? message.substring(0, 25) + "..." : message,
+        time: timeStr,
+        isMe: true
+    };
+    loadUsers(true);
 
     input.value = "";
-    loadPrivateMessages(true);
-    setChatStatus("Message delivered.");
+
+    try {
+        const res = await fetch("/api/private-message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                senderName: sender,
+                receiverName: selectedUser,
+                message: message
+            })
+        });
+
+        if (!res.ok) {
+            const tempEl = document.getElementById(tempId);
+            if (tempEl) tempEl.style.opacity = "0.4";
+            setChatStatus("Failed to deliver message.");
+            return;
+        }
+
+        setChatStatus(`Delivered to ${selectedUser}`);
+        loadPrivateMessages(true);
+        loadUsers(true);
+    } catch (err) {
+        const tempEl = document.getElementById(tempId);
+        if (tempEl) tempEl.style.opacity = "0.4";
+        setChatStatus("Delivery error.");
+    }
 }
 
 async function loadPrivateMessages(force = false) {
@@ -2782,6 +2931,15 @@ async function loadPrivateMessages(force = false) {
     const messages = await res.json();
     const visibleMessages = (messages || []).filter(m => !deletedSet.has(`private_${m.id}`));
 
+    if (visibleMessages && visibleMessages.length > 0) {
+        const lastM = visibleMessages[visibleMessages.length - 1];
+        _lastMessagesMap[selectedUser] = {
+            snippet: lastM.message.length > 25 ? lastM.message.substring(0, 25) + "..." : lastM.message,
+            time: formatChatTime(lastM.createdAt),
+            isMe: lastM.senderName === sender
+        };
+    }
+
     const newHash = JSON.stringify({ selectedUser, visibleMessages });
     if (!force && newHash === _lastPrivateHash) return;
     _lastPrivateHash = newHash;
@@ -2800,6 +2958,7 @@ async function loadPrivateMessages(force = false) {
 
     let lastDateHeader = null;
     let htmlContent = "";
+    const isRecipientOnline = _userStatuses[selectedUser] === 'online';
 
     visibleMessages.forEach(m => {
         const dateHeader = getChatDateHeader(m.createdAt);
@@ -2816,6 +2975,10 @@ async function loadPrivateMessages(force = false) {
         const otherUser = isMe ? m.receiverName : m.senderName;
         const initials = getInitials(isMe ? sender : otherUser);
         const timeStr = formatChatTime(m.createdAt);
+
+        // WhatsApp Ticks: Emerald green double ticks if recipient is online, grey double ticks if offline
+        const tickColor = isRecipientOnline ? '#10b981' : '#94a3b8';
+        const tickTitle = isRecipientOnline ? 'Read' : 'Delivered';
 
         htmlContent += `
             <div class="chat-row ${isMe ? 'my-row' : 'other-row'}">
@@ -2834,7 +2997,7 @@ async function loadPrivateMessages(force = false) {
                     <div class="bubble-text">${formatMessageText(m.message || '')}</div>
                     <div class="bubble-meta">
                         <span class="bubble-time">${timeStr}</span>
-                        ${isMe ? `<span class="read-ticks" title="Delivered">✓✓</span>` : ''}
+                        ${isMe ? `<span class="read-ticks" style="color: ${tickColor}; font-weight: 800;" title="${tickTitle}">✓✓</span>` : ''}
                     </div>
                 </div>
                 ${isMe ? `<div class="chat-avatar me-avatar">${initials}</div>` : ''}
