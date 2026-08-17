@@ -3702,6 +3702,27 @@ async function triggerPwaInstall() {
         return;
     }
 
+    // Register service worker immediately if not active
+    if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
+        try {
+            await navigator.serviceWorker.register('/sw.js');
+        } catch(e) {}
+    }
+
+    // If prompt is not captured yet, wait up to 800ms for beforeinstallprompt event to fire
+    if (!deferredPrompt) {
+        await new Promise((resolve) => {
+            const timeout = setTimeout(resolve, 800);
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                clearTimeout(timeout);
+                resolve();
+            }, { once: true });
+        });
+    }
+
+    // Direct Native 1-Click Installation Prompt Trigger
     if (deferredPrompt) {
         try {
             deferredPrompt.prompt();
@@ -3728,8 +3749,8 @@ async function triggerPwaInstall() {
         return;
     }
 
-    // Android / Desktop Chrome / Mobile guidance
-    const guideMsg = "To install Let's Code Together on your phone / laptop:\n\n1. Tap the 3 dots (⋮) or Menu at top-right of browser.\n2. Select 'Install app' or 'Add to Home screen' 📲.\n\n(Opening in Chrome or Edge supports 1-click install).";
+    // Android / Browser Menu Fallback
+    const guideMsg = "To install Let's Code Together on your phone / laptop:\n\n1. Tap the 3 dots (⋮) or Menu at top-right of browser.\n2. Select 'Install app' or 'Add to Home screen' 📲.";
     if (typeof showPopup === 'function') {
         showPopup(guideMsg, "📲 Install App", false);
     } else {
