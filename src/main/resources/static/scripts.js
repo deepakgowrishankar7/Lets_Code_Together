@@ -2444,9 +2444,13 @@ function insertEmoji(inputId, emoji) {
 
 function formatChatTime(dateStr) {
     if (!dateStr) return '';
-    const d = new Date(dateStr);
+    let str = String(dateStr);
+    if (typeof dateStr === 'string' && !dateStr.includes('Z') && !dateStr.includes('+') && dateStr.includes('T')) {
+        str += 'Z';
+    }
+    const d = new Date(str);
     if (isNaN(d.getTime())) return '';
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 }
 
 function getChatDateHeader(dateStr) {
@@ -2942,6 +2946,14 @@ async function loadPrivateMessages(force = false) {
 
     const newHash = JSON.stringify({ selectedUser, visibleMessages });
     if (!force && newHash === _lastPrivateHash) return;
+    if (!force && _lastPrivateHash && newHash !== _lastPrivateHash) {
+        if (visibleMessages && visibleMessages.length > 0) {
+            const lastM = visibleMessages[visibleMessages.length - 1];
+            if (lastM.senderName === selectedUser) {
+                playMessageChimeSound();
+            }
+        }
+    }
     _lastPrivateHash = newHash;
 
     if (!visibleMessages || visibleMessages.length === 0) {

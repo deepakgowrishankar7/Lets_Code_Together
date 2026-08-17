@@ -211,10 +211,10 @@ public class MailService {
         String subject = "🔑 Reset Your Password — Let's Code Together";
         String html = buildOtpEmailTemplate(
             "Password Reset Request 🔐",
-            "We received a request to reset the password for your account. Enter the verification code below to verify your request and set a new password.",
+            "We received a request to reset the password for your account. Please enter the verification code below to verify your request and set a new password.",
             otp,
             "Password Reset OTP Code",
-            "#38bdf8"
+            "#22c55e"
         );
         sendHtmlEmail(to, subject, html);
     }
