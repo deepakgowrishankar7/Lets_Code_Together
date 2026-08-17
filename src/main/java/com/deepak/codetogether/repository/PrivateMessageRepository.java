@@ -17,6 +17,9 @@ public interface PrivateMessageRepository extends JpaRepository<PrivateMessage, 
     @Query("SELECT m FROM PrivateMessage m WHERE (m.senderName = :sender AND m.receiverName = :receiver) OR (m.senderName = :receiver AND m.receiverName = :sender) ORDER BY m.createdAt ASC")
     List<PrivateMessage> findConversation(@Param("sender") String senderName, @Param("receiver") String receiverName);
 
+    @Query("SELECT m FROM PrivateMessage m WHERE LOWER(m.receiverName) = LOWER(:receiver)")
+    List<PrivateMessage> findByReceiverName(@Param("receiver") String receiverName);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM PrivateMessage m WHERE (m.senderName = :sender AND m.receiverName = :receiver) OR (m.senderName = :receiver AND m.receiverName = :sender)")

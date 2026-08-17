@@ -2729,42 +2729,61 @@ function selectUser(name) {
     loadPrivateMessages(true);
 }
 
-// Sound & Notification Helper Functions
+// Web Audio API Audio Unlocking & Chime Synthesizer
+let _sharedAudioCtx = null;
+
+function unlockAudioEngine() {
+    try {
+        if (!_sharedAudioCtx) {
+            const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtxClass) {
+                _sharedAudioCtx = new AudioCtxClass();
+            }
+        }
+        if (_sharedAudioCtx && _sharedAudioCtx.state === 'suspended') {
+            _sharedAudioCtx.resume();
+        }
+    } catch(e) {}
+}
+
+document.addEventListener('click', unlockAudioEngine, { passive: true });
+document.addEventListener('touchstart', unlockAudioEngine, { passive: true });
+document.addEventListener('keydown', unlockAudioEngine, { passive: true });
+
 function playMessageChimeSound() {
     if (localStorage.getItem("chatSoundMuted") === "true") return;
     try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
+        unlockAudioEngine();
+        const ctx = _sharedAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        if (!ctx) return;
         if (ctx.state === 'suspended') {
             ctx.resume();
         }
         
         const now = ctx.currentTime;
         
-        // Note 1: D5 (587.33Hz)
+        // High-pitched double bell chime (Note 1: E6 1318.51Hz, Note 2: B6 1975.53Hz)
         const osc1 = ctx.createOscillator();
         const gain1 = ctx.createGain();
         osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(587.33, now);
-        gain1.gain.setValueAtTime(0.15, now);
-        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc1.frequency.setValueAtTime(1318.51, now);
+        gain1.gain.setValueAtTime(0.25, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc1.connect(gain1);
         gain1.connect(ctx.destination);
         osc1.start(now);
-        osc1.stop(now + 0.22);
+        osc1.stop(now + 0.18);
 
-        // Note 2: A5 (880Hz)
         const osc2 = ctx.createOscillator();
         const gain2 = ctx.createGain();
         osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(880, now + 0.08);
-        gain2.gain.setValueAtTime(0.2, now + 0.08);
-        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc2.frequency.setValueAtTime(1975.53, now + 0.09);
+        gain2.gain.setValueAtTime(0.3, now + 0.09);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
         osc2.connect(gain2);
         gain2.connect(ctx.destination);
-        osc2.start(now + 0.08);
-        osc2.stop(now + 0.35);
+        osc2.start(now + 0.09);
+        osc2.stop(now + 0.4);
     } catch (e) {
         console.warn("Audio chime play error:", e);
     }
@@ -2792,21 +2811,41 @@ function updateSoundButtonUI() {
     if (soundBtn) soundBtn.title = isMuted ? "Unmute Message Notifications" : "Mute Message Notifications";
 }
 
-let _totalUnreadCount = 0;
+let _prevUnreadCount = -1;
 
 function updateHeaderChatBadge(count) {
     const badge = document.getElementById("header-unread-count");
     if (!badge) return;
-    if (count > 0) {
-        badge.textContent = count > 99 ? '99+' : count;
+    const num = parseInt(count, 10) || 0;
+    if (num > 0) {
+        badge.textContent = num > 99 ? '99+' : num;
         badge.style.display = 'flex';
     } else {
         badge.style.display = 'none';
     }
 }
 
+async function fetchUnreadMessagesCount() {
+    const user = localStorage.getItem("loggedInUserName");
+    if (!user) return;
+    try {
+        const res = await fetch(`/api/private-messages/unread-count?receiverName=${encodeURIComponent(user)}`);
+        if (res.ok) {
+            const data = await res.json();
+            const count = data.count || 0;
+            updateHeaderChatBadge(count);
+            if (_prevUnreadCount >= 0 && count > _prevUnreadCount) {
+                playMessageChimeSound();
+            }
+            _prevUnreadCount = count;
+        }
+    } catch(e) {}
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     updateSoundButtonUI();
+    fetchUnreadMessagesCount();
+    setInterval(fetchUnreadMessagesCount, 3000);
 });
 
 function updateSelectedUserInfo() {

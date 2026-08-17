@@ -152,6 +152,15 @@ public class MessageController {
         return privateMessageRepository.findConversation(senderName, receiverName);
     }
 
+    @GetMapping("/private-messages/unread-count")
+    public Map<String, Integer> getUnreadMessageCount(@RequestParam String receiverName) {
+        if (receiverName == null || receiverName.trim().isEmpty()) {
+            return Map.of("count", 0);
+        }
+        List<PrivateMessage> messages = privateMessageRepository.findByReceiverName(receiverName.trim());
+        return Map.of("count", messages != null ? messages.size() : 0);
+    }
+
     @DeleteMapping("/private-message/{id}")
     public Map<String, String> deletePrivateMessage(@PathVariable Integer id) {
         privateMessageRepository.deleteById(id);
