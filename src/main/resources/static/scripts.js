@@ -3662,11 +3662,11 @@ function isMobileBrowser() {
 }
 
 function checkPwaInstallState() {
+    // Check if the current window is running as a real standalone PWA
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                          window.matchMedia('(display-mode: minimal-ui)').matches ||
                          window.matchMedia('(display-mode: fullscreen)').matches ||
-                         navigator.standalone === true ||
-                         localStorage.getItem('pwaAppInstalled') === 'true';
+                         navigator.standalone === true;
 
     const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
     const mainInstallBtn = document.querySelector(".pwa-install-btn");
@@ -3678,10 +3678,8 @@ function checkPwaInstallState() {
         return true;
     } else {
         document.body.classList.remove("app-is-installed");
-        if (deferredPrompt || isIosDevice() || isMobileBrowser()) {
-            if (sidebarInstallBtn) sidebarInstallBtn.style.display = "flex";
-            if (mainInstallBtn) mainInstallBtn.style.display = "flex";
-        }
+        if (sidebarInstallBtn) sidebarInstallBtn.style.display = "flex";
+        if (mainInstallBtn) mainInstallBtn.style.display = "flex";
         return false;
     }
 }
@@ -3693,9 +3691,14 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 async function triggerPwaInstall() {
-    if (checkPwaInstallState() || localStorage.getItem('pwaAppInstalled') === 'true') {
-        const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
-        if (sidebarInstallBtn) sidebarInstallBtn.style.setProperty("display", "none", "important");
+    // Only block if actually running inside the standalone installed window
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    if (isStandalone) {
+        if (typeof showPopup === 'function') {
+            showPopup("Let's Code Together is already running as an installed PWA! 🎉", "📱 Already Installed", false);
+        } else {
+            alert("Let's Code Together is already running as an installed app!");
+        }
         return;
     }
 
@@ -3708,21 +3711,29 @@ async function triggerPwaInstall() {
                 checkPwaInstallState();
             }
             deferredPrompt = null;
+            return;
         } catch(err) {
-            console.error('PWA Install Error:', err);
+            console.error('PWA Install Prompt Error:', err);
         }
-    } else if (isIosDevice()) {
+    }
+
+    // iOS Safari guidance
+    if (isIosDevice()) {
+        const iosMsg = "To install Let's Code Together on iPhone / iPad:\n\n1. Tap the Share button 📤 in Safari.\n2. Scroll down & select 'Add to Home Screen' 📲.";
         if (typeof showPopup === 'function') {
-            showPopup("To install Let's Code Together on iOS:\n\n1. Tap the Share button 📤 in Safari.\n2. Scroll down & select 'Add to Home Screen' 📲.", "📲 Install on iOS", false);
+            showPopup(iosMsg, "📲 Install on iOS", false);
         } else {
-            alert("To install on iOS:\nTap Share 📤 in Safari ➔ 'Add to Home Screen' 📲.");
+            alert(iosMsg);
         }
+        return;
+    }
+
+    // Android / Desktop Chrome / Mobile guidance
+    const guideMsg = "To install Let's Code Together on your phone / laptop:\n\n1. Tap the 3 dots (⋮) or Menu at top-right of browser.\n2. Select 'Install app' or 'Add to Home screen' 📲.\n\n(Opening in Chrome or Edge supports 1-click install).";
+    if (typeof showPopup === 'function') {
+        showPopup(guideMsg, "📲 Install App", false);
     } else {
-        if (typeof showPopup === 'function') {
-            showPopup("To install Let's Code Together on your device:\n\n1. Open browser menu (⋮ or ⚙️).\n2. Tap 'Install app' or 'Add to Home screen' 📲.", "📲 Install App", false);
-        } else {
-            alert("To install Let's Code Together:\nOpen your browser menu (⋮) ➔ select 'Install App' or 'Add to Home Screen'.");
-        }
+        alert(guideMsg);
     }
 }
 
