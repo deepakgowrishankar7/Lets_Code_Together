@@ -7,7 +7,7 @@ const ASSETS_TO_CACHE = [
   '/mobile_fixes.css',
   '/scripts.js',
   '/quizzes.js',
-  '/logo.png',
+  '/image/logo.png',
   '/manifest.json'
 ];
 

@@ -551,13 +551,13 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    await customAlert(data.message || "OTP sent successfully.");
+                    await customAlert("Password reset OTP has been sent to your registered email address. Please check your inbox.");
                     window.location.href = `resetpassword.html?email=${encodeURIComponent(email)}`;
                 } else {
-                    await customAlert("Error: " + data.message);
+                    await customAlert("Error: " + (data.message || "User not found"));
                 }
             } catch (error) {
-                await customAlert("Error processing request");
+                await customAlert("Error processing request. Please try again.");
             }
         }
     </script>

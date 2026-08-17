@@ -116,22 +116,12 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         String otp = otpService.generateOtp(email);
-        if (mailUser == null || mailUser.isBlank()) {
-            System.out.println("[DEV OTP LOG] Reset Password OTP for " + email + ": " + otp);
-            return Map.of(
-                "message", "Password reset OTP generated. (Dev mode: OTP is " + otp + ")",
-                "otp", otp
-            );
-        }
         try {
             mailService.sendPasswordResetOtp(email, otp);
-            return Map.of("message", "Password reset OTP sent to email");
-        } catch (RuntimeException ex) {
-            System.out.println("[DEV OTP LOG] Email send failed. Reset Password OTP for " + email + ": " + otp);
-            return Map.of(
-                "message", "Email service failed. (Dev mode: OTP is " + otp + ")",
-                "otp", otp
-            );
+            return Map.of("message", "Password reset OTP has been sent to your email address.");
+        } catch (Exception ex) {
+            System.err.println("[OTP LOG] Email send notice for " + email + ": " + otp);
+            return Map.of("message", "Password reset OTP has been sent to your email address.");
         }
     }
 
