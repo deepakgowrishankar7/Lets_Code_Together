@@ -413,8 +413,7 @@
     flex-shrink: 0 !important;
   }
 
-  .sidebar-footer-btn,
-  #pwa-install-sidebar {
+  .sidebar-footer-btn {
     display: flex !important;
     align-items: center !important;
     gap: 12px !important;
@@ -427,9 +426,26 @@
   }
 
   #pwa-install-sidebar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
     background: rgba(16, 185, 129, 0.1) !important;
     color: #10b981 !important;
     border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  }
+
+  body.app-is-installed #pwa-install-sidebar,
+  body.app-is-installed .pwa-install-btn,
+  #pwa-install-sidebar[style*="display: none"],
+  #pwa-install-sidebar[style*="display:none"],
+  #pwa-install-sidebar.hidden {
+    display: none !important;
   }
 
   body.light-mode #pwa-install-sidebar {

@@ -3437,34 +3437,96 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// PWA Custom Installation Logic
+// PWA Custom Installation & Installed State Engine
 let deferredPrompt = null;
+
+function isIosDevice() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent || navigator.vendor || window.opera);
+}
+
+function isMobileBrowser() {
+    return /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent || navigator.vendor || window.opera);
+}
+
+function checkPwaInstallState() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                         window.matchMedia('(display-mode: minimal-ui)').matches ||
+                         window.matchMedia('(display-mode: fullscreen)').matches ||
+                         navigator.standalone === true ||
+                         localStorage.getItem('pwaAppInstalled') === 'true';
+
+    const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
+    const mainInstallBtn = document.querySelector(".pwa-install-btn");
+
+    if (isStandalone) {
+        document.body.classList.add("app-is-installed");
+        if (sidebarInstallBtn) sidebarInstallBtn.style.setProperty("display", "none", "important");
+        if (mainInstallBtn) mainInstallBtn.style.setProperty("display", "none", "important");
+        return true;
+    } else {
+        document.body.classList.remove("app-is-installed");
+        if (deferredPrompt || isIosDevice() || isMobileBrowser()) {
+            if (sidebarInstallBtn) sidebarInstallBtn.style.display = "flex";
+            if (mainInstallBtn) mainInstallBtn.style.display = "flex";
+        }
+        return false;
+    }
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
-    if (sidebarInstallBtn) {
-        sidebarInstallBtn.style.display = "inline-flex";
-    }
+    checkPwaInstallState();
 });
 
-function triggerPwaInstall() {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-        }
-        deferredPrompt = null;
+async function triggerPwaInstall() {
+    if (checkPwaInstallState() || localStorage.getItem('pwaAppInstalled') === 'true') {
         const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
-        if (sidebarInstallBtn) sidebarInstallBtn.style.display = "none";
-    });
+        if (sidebarInstallBtn) sidebarInstallBtn.style.setProperty("display", "none", "important");
+        return;
+    }
+
+    if (deferredPrompt) {
+        try {
+            deferredPrompt.prompt();
+            const choiceResult = await deferredPrompt.userChoice;
+            if (choiceResult && choiceResult.outcome === 'accepted') {
+                localStorage.setItem('pwaAppInstalled', 'true');
+                checkPwaInstallState();
+            }
+            deferredPrompt = null;
+        } catch(err) {
+            console.error('PWA Install Error:', err);
+        }
+    } else if (isIosDevice()) {
+        if (typeof showPopup === 'function') {
+            showPopup("To install Let's Code Together on iOS:\n\n1. Tap the Share button 📤 in Safari.\n2. Scroll down & select 'Add to Home Screen' 📲.", "📲 Install on iOS", false);
+        } else {
+            alert("To install on iOS:\nTap Share 📤 in Safari ➔ 'Add to Home Screen' 📲.");
+        }
+    } else {
+        if (typeof showPopup === 'function') {
+            showPopup("To install Let's Code Together on your device:\n\n1. Open browser menu (⋮ or ⚙️).\n2. Tap 'Install app' or 'Add to Home screen' 📲.", "📲 Install App", false);
+        } else {
+            alert("To install Let's Code Together:\nOpen your browser menu (⋮) ➔ select 'Install App' or 'Add to Home Screen'.");
+        }
+    }
 }
 
 window.addEventListener('appinstalled', (evt) => {
-    const sidebarInstallBtn = document.getElementById("pwa-install-sidebar");
-    if (sidebarInstallBtn) sidebarInstallBtn.style.display = "none";
+    localStorage.setItem('pwaAppInstalled', 'true');
+    deferredPrompt = null;
+    checkPwaInstallState();
+    if (typeof showPopup === 'function') {
+        showPopup("App installed successfully! You can launch Let's Code Together directly from your home screen.", "🎉 Installation Complete", false);
+    }
 });
+
+document.addEventListener('DOMContentLoaded', checkPwaInstallState);
+window.addEventListener('load', checkPwaInstallState);
+try {
+    window.matchMedia('(display-mode: standalone)').addEventListener('change', checkPwaInstallState);
+} catch(e) {}
 
 /* Fast Scroll to Top and Bottom (Fullscreen aware) */
 function getActiveScrollContainer() {
