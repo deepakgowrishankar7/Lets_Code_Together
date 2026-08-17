@@ -1,6 +1,8 @@
 package com.deepak.codetogether.controller;
 
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,20 +137,107 @@ public class MessageController {
         return res;
     }
 
+    private Set<String> resolveUserIdentifiers(String identifier) {
+        Set<String> set = new HashSet<>();
+        if (identifier == null || identifier.isBlank()) return set;
+        String idLower = identifier.trim().toLowerCase();
+        set.add(idLower);
+
+        userRepository.findAll().stream()
+            .filter(u -> u != null && (
+                (u.getName() != null && idLower.equalsIgnoreCase(u.getName().trim())) ||
+                (u.getUsername() != null && idLower.equalsIgnoreCase(u.getUsername().trim())) ||
+                (u.getEmail() != null && idLower.equalsIgnoreCase(u.getEmail().trim()))
+            ))
+            .forEach(u -> {
+                if (u.getName() != null && !u.getName().isBlank()) set.add(u.getName().trim().toLowerCase());
+                if (u.getUsername() != null && !u.getUsername().isBlank()) set.add(u.getUsername().trim().toLowerCase());
+                if (u.getEmail() != null && !u.getEmail().isBlank()) set.add(u.getEmail().trim().toLowerCase());
+            });
+        return set;
+    }
+
+    private boolean isUserBlocked(String blocker, String blocked) {
+        Set<String> blockerIds = resolveUserIdentifiers(blocker);
+        Set<String> blockedIds = resolveUserIdentifiers(blocked);
+
+        List<UserBlock> allBlocks = userBlockRepository.findAll();
+        for (UserBlock block : allBlocks) {
+            if (block.getBlockerUsername() != null && block.getBlockedUsername() != null) {
+                String b1 = block.getBlockerUsername().trim().toLowerCase();
+                String b2 = block.getBlockedUsername().trim().toLowerCase();
+                if (blockerIds.contains(b1) && blockedIds.contains(b2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @PostMapping("/user-blocks/block")
+    public Map<String, String> blockUser(@RequestBody Map<String, String> body) {
+        String blocker = body.get("blockerUsername");
+        String blocked = body.get("blockedUsername");
+        if (blocker == null || blocked == null || blocker.isBlank() || blocked.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "blockerUsername and blockedUsername are required");
+        }
+        String b1 = blocker.trim().toLowerCase();
+        String b2 = blocked.trim().toLowerCase();
+        if (b1.equalsIgnoreCase(b2)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot block yourself");
+        }
+        if (!isUserBlocked(b1, b2)) {
+            userBlockRepository.save(new UserBlock(b1, b2));
+        }
+        return Map.of("status", "blocked", "message", "User has been blocked successfully.");
+    }
+
+    @PostMapping("/user-blocks/unblock")
+    public Map<String, String> unblockUser(@RequestBody Map<String, String> body) {
+        String blocker = body.get("blockerUsername");
+        String blocked = body.get("blockedUsername");
+        if (blocker == null || blocked == null || blocker.isBlank() || blocked.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "blockerUsername and blockedUsername are required");
+        }
+        Set<String> blockerIds = resolveUserIdentifiers(blocker);
+        Set<String> blockedIds = resolveUserIdentifiers(blocked);
+
+        List<UserBlock> allBlocks = userBlockRepository.findAll();
+        for (UserBlock block : allBlocks) {
+            if (block.getBlockerUsername() != null && block.getBlockedUsername() != null) {
+                String b1 = block.getBlockerUsername().trim().toLowerCase();
+                String b2 = block.getBlockedUsername().trim().toLowerCase();
+                if (blockerIds.contains(b1) && blockedIds.contains(b2)) {
+                    userBlockRepository.deleteById(block.getId());
+                }
+            }
+        }
+        return Map.of("status", "unblocked", "message", "User has been unblocked.");
+    }
+
+    @GetMapping("/user-blocks/is-blocked")
+    public Map<String, Boolean> checkIsBlocked(@RequestParam String blockerUsername, @RequestParam String blockedUsername) {
+        if (blockerUsername == null || blockedUsername == null) {
+            return Map.of("isBlocked", false);
+        }
+        boolean blocked = isUserBlocked(blockerUsername, blockedUsername);
+        return Map.of("isBlocked", blocked);
+    }
+
     @PostMapping("/private-message")
     public PrivateMessage sendPrivateMessage(@RequestBody PrivateMessageRequest request) {
         if (request.getSenderName() == null || request.getReceiverName() == null || request.getMessage() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sender, receiver, and message are required");
         }
-        String s = request.getSenderName().trim().toLowerCase();
-        String r = request.getReceiverName().trim().toLowerCase();
+        String s = request.getSenderName().trim();
+        String r = request.getReceiverName().trim();
 
         // Check if receiver blocked sender
-        if (userBlockRepository.existsByBlockerUsernameAndBlockedUsername(r, s)) {
+        if (isUserBlocked(r, s)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot send messages to this user because they have blocked you.");
         }
         // Check if sender blocked receiver
-        if (userBlockRepository.existsByBlockerUsernameAndBlockedUsername(s, r)) {
+        if (isUserBlocked(s, r)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You have blocked this user. Unblock them to send messages.");
         }
 
