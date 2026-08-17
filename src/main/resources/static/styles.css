@@ -6,6 +6,20 @@
 
 /* System fonts only — no external font imports needed */
 
+/* Mobile Header Brand Label: Hidden on Desktop Web, Visible ONLY on Mobile (<768px) */
+.mobile-header-brand {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-header-brand {
+    display: inline-block !important;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-main, #f8fafc);
+  }
+}
+
 /* ================================================================
    DESIGN TOKENS
    ================================================================ */
@@ -2270,21 +2284,26 @@ body.light-mode .visualizer-area strong { color: #0f172a !important; }
 
 .pdf-links {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--s3);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 68px;
+  gap: 14px;
+  width: 100%;
 }
 
 .pdf-links a {
   display: flex;
   align-items: center;
-  gap: var(--s3);
-  padding: var(--s3) var(--s4);
-  border-radius: var(--r-md);
+  gap: 10px;
+  padding: 12px 16px;
+  height: 68px;
+  box-sizing: border-box;
+  border-radius: 12px;
   background: var(--raised);
   border: 1px solid var(--border-soft);
   color: var(--text-secondary);
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.35;
   text-decoration: none;
   transition: all var(--t-mid);
   position: relative;
@@ -2298,7 +2317,6 @@ body.light-mode .visualizer-area strong { color: #0f172a !important; }
 .pdf-links a::after {
   content: '→';
   position: absolute;
-
   right: var(--s4);
   opacity: 0;
   transform: translateX(-8px);
@@ -9742,4 +9760,367 @@ body.light-mode #dsa-interview-search:focus, body.light-mode #dsa-search-input:f
   border-color: #007a42;
   box-shadow: 0 0 0 4px rgba(0, 122, 66, 0.15), 0 4px 16px rgba(0, 0, 0, 0.06);
   background-color: #ffffff;
+}
+
+/* =====================================================
+   EXECUTIVE ADMIN CONTROL CENTER STYLES
+===================================================== */
+.admin-panel-section {
+  padding: 24px;
+}
+
+.admin-hero-card {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(15, 23, 42, 0.4) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.admin-hero-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.admin-hero-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main, #f8fafc);
+  margin-bottom: 8px;
+}
+
+.admin-hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted, #94a3b8);
+  max-width: 680px;
+  margin-bottom: 24px;
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.admin-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--bg-card, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--border-main, rgba(255, 255, 255, 0.1));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.admin-stat-card .stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.admin-stat-card.emerald .stat-icon { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.admin-stat-card.blue .stat-icon { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.admin-stat-card.purple .stat-icon { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+.admin-stat-card.danger .stat-icon { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.admin-stat-card .stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main, #f8fafc);
+}
+
+.admin-stat-card .stat-lbl {
+  font-size: 0.8rem;
+  color: var(--text-muted, #94a3b8);
+  font-weight: 600;
+}
+
+.admin-tab-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.1));
+  padding-bottom: 12px;
+}
+
+.admin-tab-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted, #94a3b8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-tab-btn:hover {
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--text-main, #f8fafc);
+}
+
+.admin-tab-btn.active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.admin-box-card {
+  background: var(--bg-card, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--border-main, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.admin-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-box-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main, #f8fafc);
+  margin: 0;
+}
+
+.admin-box-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted, #94a3b8);
+  margin: 4px 0 0 0;
+}
+
+.admin-input-search, .admin-select, .admin-input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-main, rgba(255, 255, 255, 0.15));
+  background: var(--bg-sidebar, rgba(15, 23, 42, 0.8));
+  color: var(--text-main, #f8fafc);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.admin-input-search:focus, .admin-select:focus, .admin-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.admin-table-container {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th {
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--text-muted, #94a3b8);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.1));
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-main, rgba(255, 255, 255, 0.05));
+  vertical-align: middle;
+}
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-badge.admin-role { background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
+.admin-badge.student-role { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+.admin-badge.active-status { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.admin-badge.blocked-status { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.admin-badge.course-tag { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+.admin-btn-action {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.admin-btn-action.success { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3); }
+.admin-btn-action.warning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+.admin-btn-action.danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+
+.admin-btn-action:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.admin-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main, #f8fafc);
+}
+
+.admin-field .req {
+  color: #ef4444;
+}
+
+.admin-drop-zone {
+  border: 2px dashed rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.05);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-drop-zone:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.drop-zone-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.drop-zone-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main, #f8fafc);
+}
+
+.admin-form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-btn.primary {
+  padding: 12px 24px;
+  border-radius: 10px;
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.admin-btn.primary:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.student-pdf-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--bg-card, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--border-main, rgba(255, 255, 255, 0.1));
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.student-pdf-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.pdf-card-icon {
+  font-size: 2.2rem;
+}
+
+.pdf-card-info {
+  flex: 1;
+}
+
+.pdf-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main, #f8fafc);
+  margin-bottom: 4px;
+}
+
+.pdf-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted, #94a3b8);
+  margin-bottom: 6px;
+}
+
+.pdf-card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--text-muted, #94a3b8);
+  font-weight: 600;
+}
+
+.student-pdf-download-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.student-pdf-download-btn:hover {
+  background: #10b981;
+  color: #ffffff;
 }

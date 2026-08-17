@@ -1,5 +1,6 @@
 package com.deepak.codetogether.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -105,7 +106,8 @@ public class AuthController {
         return Map.of(
             "token", token,
             "userName", user.getName(),
-            "email", user.getEmail());
+            "email", user.getEmail(),
+            "isAdmin", String.valueOf(Boolean.TRUE.equals(user.getIsAdmin())));
     }
 
     @PostMapping("/forgot-password")
@@ -198,6 +200,40 @@ public class AuthController {
         return Map.of(
             "token", token,
             "userName", user.getName(),
-            "email", user.getEmail());
+            "email", user.getEmail(),
+            "isAdmin", "true");
+    }
+
+    @GetMapping("/users/all")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @PostMapping("/users/toggle-block")
+    public Map<String, Object> toggleBlockUser(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email is required");
+        }
+        User user = userRepository.findByEmail(email.trim().toLowerCase())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        boolean newBlocked = user.getIsBlocked() == null ? true : !user.getIsBlocked();
+        user.setIsBlocked(newBlocked);
+        userRepository.save(user);
+        return Map.of("status", "ok", "isBlocked", newBlocked, "email", user.getEmail());
+    }
+
+    @PostMapping("/users/toggle-admin")
+    public Map<String, Object> toggleAdminUser(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email is required");
+        }
+        User user = userRepository.findByEmail(email.trim().toLowerCase())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        boolean newAdmin = user.getIsAdmin() == null ? true : !user.getIsAdmin();
+        user.setIsAdmin(newAdmin);
+        userRepository.save(user);
+        return Map.of("status", "ok", "isAdmin", newAdmin, "email", user.getEmail());
     }
 }

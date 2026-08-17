@@ -120,6 +120,17 @@ function openProtectedSectionDirect(sectionId) {
     if (sectionId === 'settings') {
         populateSettings();
     }
+    if (sectionId === 'admin-panel') {
+        const isAdmin = localStorage.getItem("isAdmin") === "true";
+        if (!isAdmin) {
+            if (typeof showPopup === 'function') {
+                showPopup("Access Restricted: Administrator privileges required to access Admin Control Center.", "🛡️ Admin Access Required", false);
+            }
+            showSectionDirect('dashboard');
+            return;
+        }
+        loadAdminDashboardData();
+    }
 }
 
 // Browser back button / swipe back gesture interception
@@ -744,6 +755,11 @@ function switchCourseTabDirect(course, tab) {
     const target = document.getElementById(`${course}-content-${tab}`);
     if (target) {
         target.style.display = "block";
+    }
+
+    // 3️⃣ Auto-load PDFs when opening PDF Notes tab
+    if (tab === 'pdfs' || tab.includes('pdf')) {
+        loadCoursePdfsForStudents(course);
     }
 
     // 3️⃣ Update sidebar active state
@@ -2877,9 +2893,44 @@ async function fetchUnreadMessagesCount() {
     } catch(e) {}
 }
 
+async function checkAdminVisibility() {
+    const adminLink = document.getElementById("admin-sidebar-nav-link");
+    const email = localStorage.getItem("loggedInEmail");
+    const isGuest = localStorage.getItem("isGuest") === "true";
+
+    if (!adminLink) return;
+
+    if (isGuest || !email) {
+        adminLink.style.setProperty("display", "none", "important");
+        return;
+    }
+
+    const cachedIsAdmin = localStorage.getItem("isAdmin") === "true";
+    if (cachedIsAdmin) {
+        adminLink.style.setProperty("display", "flex", "important");
+    } else {
+        adminLink.style.setProperty("display", "none", "important");
+    }
+
+    try {
+        const res = await fetch(`/api/auth/user-details?email=${encodeURIComponent(email)}`);
+        if (res.ok) {
+            const user = await res.json();
+            const isAdmin = user && user.isAdmin === true;
+            localStorage.setItem("isAdmin", String(isAdmin));
+            if (isAdmin) {
+                adminLink.style.setProperty("display", "flex", "important");
+            } else {
+                adminLink.style.setProperty("display", "none", "important");
+            }
+        }
+    } catch(e) {}
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     updateSoundButtonUI();
     fetchUnreadMessagesCount();
+    checkAdminVisibility();
     setInterval(fetchUnreadMessagesCount, 2500);
 });
 
@@ -3812,4 +3863,425 @@ function scrollToBottomConcepts(containerId) {
     if (el) {
         el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }
+}
+
+/* =====================================================
+   EXECUTIVE ADMIN CONTROL CENTER ENGINE
+===================================================== */
+let _adminAllUsersCache = [];
+let _adminAllPdfsCache = [];
+
+function switchAdminTab(tabName, btn) {
+    const tabPanes = document.querySelectorAll(".admin-tab-pane");
+    const tabBtns = document.querySelectorAll(".admin-tab-btn");
+
+    tabPanes.forEach(pane => pane.style.display = "none");
+    tabBtns.forEach(b => b.classList.remove("active"));
+
+    const targetPane = document.getElementById(`admin-tab-${tabName}`);
+    if (targetPane) targetPane.style.display = "block";
+    if (btn) btn.classList.add("active");
+
+    if (tabName === 'users') {
+        loadAdminUserDirectory();
+    } else if (tabName === 'pdfs') {
+        loadAdminPdfsTable();
+    }
+}
+
+async function loadAdminDashboardData() {
+    await loadAdminUserDirectory();
+    await loadAdminPdfsTable();
+}
+
+async function loadAdminUserDirectory() {
+    const tbody = document.getElementById("admin-user-table-body");
+    if (!tbody) return;
+
+    try {
+        const res = await fetch("/api/auth/users/all");
+        if (res.ok) {
+            _adminAllUsersCache = await res.json();
+            renderAdminUserTable(_adminAllUsersCache);
+            updateAdminUserKpis(_adminAllUsersCache);
+        }
+    } catch(e) {
+        console.error("Admin user load error:", e);
+    }
+}
+
+function updateAdminUserKpis(users) {
+    const totalEl = document.getElementById("admin-stat-users");
+    const adminEl = document.getElementById("admin-stat-admins");
+    const blockedEl = document.getElementById("admin-stat-blocked");
+
+    if (!users) return;
+
+    const total = users.length;
+    const admins = users.filter(u => u.isAdmin === true).length;
+    const blocked = users.filter(u => u.isBlocked === true).length;
+
+    if (totalEl) totalEl.textContent = total;
+    if (adminEl) adminEl.textContent = admins;
+    if (blockedEl) blockedEl.textContent = blocked;
+}
+
+function renderAdminUserTable(users) {
+    const tbody = document.getElementById("admin-user-table-body");
+    if (!tbody) return;
+
+    if (!users || !users.length) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    No registered user accounts found.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = users.map(user => {
+        const name = user.name || user.username || "Student Developer";
+        const email = user.email || "N/A";
+        const initials = getInitials(name);
+        const isAdmin = user.isAdmin === true;
+        const isBlocked = user.isBlocked === true;
+
+        const roleBadge = isAdmin ?
+            `<span class="admin-badge admin-role">🛡️ Administrator</span>` :
+            `<span class="admin-badge student-role">🎓 Student</span>`;
+
+        const statusBadge = isBlocked ?
+            `<span class="admin-badge blocked-status">🚫 Blocked</span>` :
+            `<span class="admin-badge active-status">🟢 Active</span>`;
+
+        return `
+            <tr>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-avatar-circle" style="width: 36px; height: 36px; border-radius: 50%; background: #10b981; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;">${initials}</div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--text-main);">${escapeHtml(name)}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">@${escapeHtml(user.username || 'user')}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-size: 0.9rem; color: var(--text-main);">${escapeHtml(email)}</td>
+                <td>${roleBadge}</td>
+                <td>${statusBadge}</td>
+                <td style="text-align: right;">
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <button class="admin-btn-action ${isAdmin ? 'warning' : 'success'}" onclick="toggleAdminRole('${escapeHtml(email)}')" title="Toggle Admin Rights">
+                            ${isAdmin ? 'Revoke Admin' : 'Make Admin'}
+                        </button>
+                        <button class="admin-btn-action ${isBlocked ? 'success' : 'danger'}" onclick="toggleAdminBlock('${escapeHtml(email)}')" title="Toggle Block Access">
+                            ${isBlocked ? 'Unblock' : 'Block User'}
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function filterAdminUserTable() {
+    const input = document.getElementById("admin-user-search");
+    if (!input) return;
+    const query = input.value.trim().toLowerCase();
+    if (!query) {
+        renderAdminUserTable(_adminAllUsersCache);
+        return;
+    }
+    const filtered = _adminAllUsersCache.filter(u => 
+        (u.name && u.name.toLowerCase().includes(query)) ||
+        (u.email && u.email.toLowerCase().includes(query)) ||
+        (u.username && u.username.toLowerCase().includes(query))
+    );
+    renderAdminUserTable(filtered);
+}
+
+async function toggleAdminRole(email) {
+    if (!confirm(`Are you sure you want to change admin permissions for ${email}?`)) return;
+    try {
+        const res = await fetch("/api/auth/users/toggle-admin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email })
+        });
+        if (res.ok) {
+            if (typeof showPopup === 'function') {
+                showPopup("User role permissions updated successfully.", "🛡️ Role Updated", false);
+            }
+            loadAdminUserDirectory();
+        }
+    } catch(e) {
+        console.error("Toggle admin role error:", e);
+    }
+}
+
+async function toggleAdminBlock(email) {
+    if (!confirm(`Are you sure you want to toggle block status for ${email}?`)) return;
+    try {
+        const res = await fetch("/api/auth/users/toggle-block", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email })
+        });
+        if (res.ok) {
+            if (typeof showPopup === 'function') {
+                showPopup("User account status updated.", "🚫 Status Updated", false);
+            }
+            loadAdminUserDirectory();
+        }
+    } catch(e) {
+        console.error("Toggle admin block error:", e);
+    }
+}
+
+/* --- COURSE PDF MANAGEMENT --- */
+function updateAdminPdfFileName(input) {
+    const label = document.getElementById("admin-pdf-file-text");
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        if (label) label.textContent = `Selected: ${file.name} (${sizeMb} MB)`;
+    } else {
+        if (label) label.textContent = "Click or drag & drop a PDF file here (Max 15MB)";
+    }
+}
+
+async function handleAdminPdfUpload(event) {
+    event.preventDefault();
+    const courseId = document.getElementById("admin-pdf-course").value;
+    const title = document.getElementById("admin-pdf-title").value.trim();
+    const description = document.getElementById("admin-pdf-desc").value.trim();
+    const fileInput = document.getElementById("admin-pdf-file-input");
+    const submitBtn = document.getElementById("admin-pdf-submit-btn");
+
+    if (!fileInput.files || !fileInput.files[0]) {
+        if (typeof showPopup === 'function') showPopup("Please select a PDF file to upload.", "⚠️ Missing File", false);
+        return;
+    }
+
+    const file = fileInput.files[0];
+    if (file.size > 15 * 1024 * 1024) {
+        if (typeof showPopup === 'function') showPopup("File size exceeds 15MB limit. Please upload a smaller PDF.", "⚠️ File Too Large", false);
+        return;
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.querySelector("span").textContent = "Uploading PDF Resource...";
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const fileData = e.target.result;
+        const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+        try {
+            const res = await fetch("/api/course-pdfs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    courseId: courseId,
+                    title: title,
+                    description: description,
+                    fileData: fileData,
+                    fileName: file.name,
+                    fileSize: fileSize
+                })
+            });
+
+            if (res.ok) {
+                if (typeof showPopup === 'function') {
+                    showPopup("Course PDF study guide uploaded successfully! It is now available to students.", "🎉 PDF Uploaded", false);
+                }
+                document.getElementById("admin-pdf-form").reset();
+                updateAdminPdfFileName(fileInput);
+                loadAdminPdfsTable();
+                loadCoursePdfsForStudents(courseId);
+            } else {
+                if (typeof showPopup === 'function') showPopup("Failed to upload PDF resource.", "⚠️ Upload Failed", false);
+            }
+        } catch(err) {
+            console.error("PDF upload error:", err);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector("span").textContent = "📤 Upload & Attach to Course";
+            }
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+async function loadAdminPdfsTable() {
+    const tbody = document.getElementById("admin-pdf-table-body");
+    const filterSelect = document.getElementById("admin-pdf-filter-course");
+    const pdfStatEl = document.getElementById("admin-stat-pdfs");
+    if (!tbody) return;
+
+    const courseId = filterSelect ? filterSelect.value : "all";
+    let dynamicPdfs = [];
+
+    try {
+        const url = courseId && courseId !== "all" ? `/api/course-pdfs?courseId=${courseId}` : "/api/course-pdfs";
+        const res = await fetch(url);
+        if (res.ok) {
+            dynamicPdfs = await res.json();
+        }
+    } catch(e) {
+        console.error("Fetch dynamic PDFs error:", e);
+    }
+
+    const filteredStatic = typeof PREEXISTING_STATIC_PDFS !== 'undefined' ?
+        (courseId === "all" ? PREEXISTING_STATIC_PDFS : PREEXISTING_STATIC_PDFS.filter(p => p.courseId === courseId)) : [];
+    
+    _adminAllPdfsCache = [...dynamicPdfs, ...filteredStatic];
+    if (pdfStatEl) pdfStatEl.textContent = _adminAllPdfsCache.length;
+
+    if (!_adminAllPdfsCache || !_adminAllPdfsCache.length) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    No PDF resources found for this course.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    const courseNames = {
+        java: "☕ Java Masterclass",
+        python: "🐍 Python Masterclass",
+        cpp: "⚡ C++ Course",
+        sql: "🗄️ SQL & Databases",
+        dsa: "🌲 Data Structures",
+        webdev: "🌐 Full-Stack Web"
+    };
+
+    tbody.innerHTML = _adminAllPdfsCache.map(pdf => {
+        const cName = courseNames[pdf.courseId] || pdf.courseId.toUpperCase();
+        const dateStr = pdf.uploadedAt ? new Date(pdf.uploadedAt).toLocaleDateString() : 'System Default';
+        const isStatic = pdf.isStatic === true;
+
+        const sourceBadge = isStatic ?
+            `<span class="admin-badge student-role" style="font-size: 10px; margin-left: 6px;">Pre-installed</span>` :
+            `<span class="admin-badge active-status" style="font-size: 10px; margin-left: 6px;">Uploaded</span>`;
+
+        const deleteBtn = isStatic ?
+            `<button class="admin-btn-action" style="opacity:0.5; cursor:not-allowed;" title="System PDF">System PDF</button>` :
+            `<button class="admin-btn-action danger" onclick="deleteAdminPdf(${pdf.id})">🗑️ Delete</button>`;
+
+        return `
+            <tr>
+                <td><span class="admin-badge course-tag">${escapeHtml(cName)}</span></td>
+                <td>
+                    <div style="font-weight: 700; color: var(--text-main); display:flex; align-items:center;">${escapeHtml(pdf.title)} ${sourceBadge}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(pdf.description || 'No description.')}</div>
+                </td>
+                <td style="font-size: 0.85rem; font-weight: 600;">${escapeHtml(pdf.fileSize || '1.0 MB')}</td>
+                <td style="font-size: 0.85rem; color: var(--text-muted);">${dateStr}</td>
+                <td style="text-align: right;">
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <a href="${pdf.fileData}" download="${escapeHtml(pdf.fileName || pdf.title + '.pdf')}" class="admin-btn-action success" style="text-decoration:none;">📥 Download</a>
+                        ${deleteBtn}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+async function deleteAdminPdf(id) {
+    if (!confirm("Are you sure you want to delete this course PDF resource?")) return;
+    try {
+        const res = await fetch(`/api/course-pdfs/${id}`, { method: "DELETE" });
+        if (res.ok) {
+            if (typeof showPopup === 'function') {
+                showPopup("PDF resource deleted from course library.", "🗑️ PDF Deleted", false);
+            }
+            loadAdminPdfsTable();
+        }
+    } catch(e) {
+        console.error("Delete PDF error:", e);
+    }
+}
+
+async function handleAdminBroadcastSubmit(event) {
+    event.preventDefault();
+    const title = document.getElementById("admin-broadcast-title").value.trim();
+    const content = document.getElementById("admin-broadcast-content").value.trim();
+
+    try {
+        const res = await fetch("/api/notifications", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contentTitle: title,
+                content: content
+            })
+        });
+
+        if (res.ok) {
+            if (typeof showPopup === 'function') {
+                showPopup("Broadcast announcement published to all users successfully!", "📢 Broadcast Sent", false);
+            }
+            document.getElementById("admin-broadcast-form").reset();
+        }
+    } catch(e) {
+        console.error("Broadcast submit error:", e);
+    }
+}
+
+function openPdfInNewTab(event, fileData) {
+    if (event) event.preventDefault();
+    if (!fileData) return;
+
+    if (fileData.startsWith("data:application/pdf")) {
+        try {
+            const base64Parts = fileData.split(",");
+            const byteString = atob(base64Parts[1]);
+            const mimeString = base64Parts[0].split(":")[1].split(";")[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ab], { type: mimeString });
+            const blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl, "_blank");
+        } catch (e) {
+            console.error("Open PDF Blob error:", e);
+            window.open(fileData, "_blank");
+        }
+    } else {
+        window.open(fileData, "_blank");
+    }
+}
+
+async function loadCoursePdfsForStudents(courseId) {
+    const container = document.getElementById(`${courseId}-pdf-container`);
+    if (!container) return;
+
+    let dynamicPdfs = [];
+    try {
+        const res = await fetch(`/api/course-pdfs?courseId=${encodeURIComponent(courseId)}`);
+        if (res.ok) {
+            dynamicPdfs = await res.json();
+        }
+    } catch(e) {}
+
+    if (!dynamicPdfs || !dynamicPdfs.length) {
+        container.innerHTML = "";
+        return;
+    }
+
+    container.innerHTML = dynamicPdfs.map(pdf => `
+        <a href="${pdf.fileData}" target="_blank" onclick="openPdfInNewTab(event, '${pdf.fileData}')">
+            📄 ${escapeHtml(pdf.title)}
+        </a>
+    `).join("");
 }

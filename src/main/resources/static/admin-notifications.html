@@ -733,29 +733,61 @@ body.light .toast-info { background: #e0f2fe; color: #075985; border-color: #38b
 
 /* ─── LIGHT MODE ─── */
 body.light {
-  background: #f4f7fb;
+  background: #f8fafc;
   color: #0f172a;
   background-image: none;
-}
-
-body.light {
-  --bg-deep: #eef2f8;
-  --bg-mid: #e4eaf4;
+  --bg-deep: #f8fafc;
+  --bg-mid: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #f8fafd;
-  --border: rgba(0,0,0,0.07);
-  --border-glow: rgba(34,197,94,0.3);
+  --bg-card-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --border-glow: rgba(34,197,94,0.4);
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --shadow-card: 0 2px 16px rgba(0,0,0,0.08);
+  --shadow-card: 0 4px 20px rgba(15,23,42,0.06);
 }
 
-body.light .sidebar { box-shadow: 2px 0 16px rgba(0,0,0,0.06); }
+body.light .sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  box-shadow: 4px 0 20px rgba(15,23,42,0.05);
+}
+
+body.light .sidebar button {
+  color: #475569;
+}
+
+body.light .sidebar button:hover,
+body.light .sidebar button.active {
+  background: rgba(34,197,94,0.12);
+  color: #059669;
+  font-weight: 700;
+}
+
+body.light .export-card,
+body.light .card,
+body.light .analytics-card,
+body.light .chart-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.05);
+}
+
+body.light .export-card h3,
+body.light .card h3,
+body.light .analytics-card h3,
+body.light .chart-card h3 {
+  color: #0f172a;
+}
 
 body.light input,
 body.light textarea,
-body.light select { background: #f8fafd; color: #0f172a; }
+body.light select {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
 
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp {
@@ -996,6 +1028,9 @@ body.light select { background: #f8fafd; color: #0f172a; }
 
   <div class="nav-label">Tools</div>
 
+  <button onclick="openCoursePdfs()" id="nav-course-pdfs">
+    <span class="nav-icon">📚</span> Course PDFs
+  </button>
   <button onclick="openBulkEmail()" id="nav-bulk-email">
     <span class="nav-icon">📧</span> Email All Users
   </button>
@@ -1223,6 +1258,100 @@ body.light select { background: #f8fafd; color: #0f172a; }
 
   </div>
 
+  <!-- COURSE PDFS SECTION -->
+  <div id="course-pdfs-section" style="display:none">
+    <div style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(34,197,94,0.12) 0%, rgba(15,23,42,0.4) 100%); border: 1px solid rgba(34,197,94,0.25); border-radius: var(--radius-lg); padding: 24px 28px;">
+      <span style="display:inline-block; padding: 4px 12px; border-radius: 20px; background: rgba(34,197,94,0.15); color: #22c55e; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px;">📚 COURSE ASSETS</span>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; color: var(--text-primary);">Course Study Guides & PDF Management</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Upload PDF notes, cheatsheets, and reference guides for specific courses. Students will immediately get 1-click access in their course library.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: start;">
+      
+      <!-- Upload Form Card -->
+      <div class="card" style="margin: 0;">
+        <h3 style="display:flex; align-items:center; gap:8px;"><span>📤</span> Upload PDF Resource</h3>
+        <form id="admin-pdf-form-standalone" onsubmit="handleAdminPdfUploadStandalone(event)">
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display:block; margin-bottom: 4px;">Target Course <span style="color:var(--danger)">*</span></label>
+            <select id="admin-pdf-course-standalone" required>
+              <option value="java">☕ Java Masterclass</option>
+              <option value="python">🐍 Python Masterclass</option>
+              <option value="cpp">⚡ C++ Programming</option>
+              <option value="sql">🗄️ SQL & Relational Databases</option>
+              <option value="dsa">🌲 Data Structures & Algorithms</option>
+              <option value="webdev">🌐 Full-Stack Web Development</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display:block; margin-bottom: 4px;">Document Title <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="admin-pdf-title-standalone" placeholder="e.g. Core Java Complete Notes PDF" required>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display:block; margin-bottom: 4px;">Resource Description</label>
+            <textarea id="admin-pdf-desc-standalone" placeholder="Brief summary of chapters or topics covered in this PDF..." style="min-height:70px;"></textarea>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display:block; margin-bottom: 4px;">Select PDF File <span style="color:var(--danger)">*</span></label>
+            <div style="border: 2px dashed var(--border-glow); background: rgba(34,197,94,0.04); border-radius: var(--radius-md); padding: 20px; text-align: center; cursor: pointer;" onclick="document.getElementById('admin-pdf-file-input-standalone').click()">
+              <div style="font-size: 24px; margin-bottom: 6px;">📄</div>
+              <div id="admin-pdf-file-text-standalone" style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Click or drag & drop a PDF file here (Max 15MB)</div>
+              <input type="file" id="admin-pdf-file-input-standalone" accept="application/pdf" style="display:none;" onchange="updateAdminPdfFileNameStandalone(this)">
+            </div>
+          </div>
+
+          <button type="submit" class="btn" id="admin-pdf-submit-btn-standalone" style="width:100%; justify-content:center; padding:11px;">
+            <span>📤 Upload & Attach to Course</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Library Table Card -->
+      <div class="card" style="margin: 0;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; flex-wrap:wrap; gap: 12px;">
+          <div>
+            <h3 style="margin:0;">Attached Course PDF Library</h3>
+            <span style="font-size:12px; color:var(--text-secondary);">Manage and remove active course documents</span>
+          </div>
+          <select id="admin-pdf-filter-standalone" style="width:auto; margin:0; padding:6px 12px; font-size:12px;" onchange="loadAdminPdfsTableStandalone()">
+            <option value="all">All Courses</option>
+            <option value="java">Java Masterclass</option>
+            <option value="python">Python Masterclass</option>
+            <option value="cpp">C++ Course</option>
+            <option value="sql">SQL & Databases</option>
+            <option value="dsa">Data Structures</option>
+            <option value="webdev">Full-Stack Web</option>
+          </select>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:13px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--text-secondary);">
+                <th style="padding:10px;">Course</th>
+                <th style="padding:10px;">Document Details</th>
+                <th style="padding:10px;">Size</th>
+                <th style="padding:10px;">Date</th>
+                <th style="padding:10px; text-align:right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-pdf-table-body-standalone">
+              <tr>
+                <td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">
+                  Loading course PDF resources...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -1274,6 +1403,8 @@ function hideAllSections() {
   document.getElementById('bulk-email-section').style.display="none";
   document.getElementById('quiz-mgmt-section').style.display="none";
   document.getElementById('export-section').style.display="none";
+  const pdfSec = document.getElementById('course-pdfs-section');
+  if (pdfSec) pdfSec.style.display="none";
 }
 
 function refreshCurrentSection() {
@@ -1283,6 +1414,235 @@ function refreshCurrentSection() {
   else if (currentActiveSection === 'bulk-email-section') openBulkEmail();
   else if (currentActiveSection === 'quiz-mgmt-section') openQuizMgmt();
   else if (currentActiveSection === 'export-section') openExportData();
+  else if (currentActiveSection === 'course-pdfs-section') openCoursePdfs();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function openPdfInNewTab(event, fileData) {
+  if (event) event.preventDefault();
+  if (!fileData) return;
+
+  if (fileData.startsWith("data:application/pdf")) {
+    try {
+      const base64Parts = fileData.split(",");
+      const byteString = atob(base64Parts[1]);
+      const mimeString = base64Parts[0].split(":")[1].split(";")[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeString });
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
+    } catch (e) {
+      console.error("Open PDF Blob error:", e);
+      window.open(fileData, "_blank");
+    }
+  } else {
+    window.open(fileData, "_blank");
+  }
+}
+
+function openCoursePdfs(){
+  hideAllSections();
+  const pdfSec = document.getElementById('course-pdfs-section');
+  if (pdfSec) pdfSec.style.display="block";
+  setActiveNav('nav-course-pdfs');
+  currentActiveSection = 'course-pdfs-section';
+  loadAdminPdfsTableStandalone();
+}
+
+/* COURSE PDF MANAGEMENT STANDALONE ENGINE */
+function updateAdminPdfFileNameStandalone(input) {
+  const label = document.getElementById("admin-pdf-file-text-standalone");
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+    if (label) label.textContent = `Selected: ${file.name} (${sizeMb} MB)`;
+  } else {
+    if (label) label.textContent = "Click or drag & drop a PDF file here (Max 15MB)";
+  }
+}
+
+async function handleAdminPdfUploadStandalone(event) {
+  event.preventDefault();
+  const courseId = document.getElementById("admin-pdf-course-standalone").value;
+  const title = document.getElementById("admin-pdf-title-standalone").value.trim();
+  const description = document.getElementById("admin-pdf-desc-standalone").value.trim();
+  const fileInput = document.getElementById("admin-pdf-file-input-standalone");
+  const submitBtn = document.getElementById("admin-pdf-submit-btn-standalone");
+
+  if (!fileInput.files || !fileInput.files[0]) {
+    showToast("Please select a PDF file to upload.", "error");
+    return;
+  }
+
+  const file = fileInput.files[0];
+  if (file.size > 15 * 1024 * 1024) {
+    showToast("File size exceeds 15MB limit. Please upload a smaller PDF.", "error");
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "<span>Uploading PDF Resource...</span>";
+  }
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const fileData = e.target.result;
+    const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+    try {
+      const res = await fetch("/api/course-pdfs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId: courseId,
+          title: title,
+          description: description,
+          fileData: fileData,
+          fileName: file.name,
+          fileSize: fileSize
+        })
+      });
+
+      if (res.ok) {
+        showToast("Course PDF study guide uploaded successfully! Available to students.", "success");
+        document.getElementById("admin-pdf-form-standalone").reset();
+        updateAdminPdfFileNameStandalone(fileInput);
+        loadAdminPdfsTableStandalone();
+      } else {
+        showToast("Failed to upload PDF resource.", "error");
+      }
+    } catch(err) {
+      console.error("PDF upload error:", err);
+      showToast("Error uploading PDF resource.", "error");
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "<span>📤 Upload & Attach to Course</span>";
+      }
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+const PREEXISTING_STATIC_PDFS = [
+  { id: 'static-1', courseId: 'java', title: 'Core Java Master Guide PDF', description: 'Comprehensive reference guide covering Java OOP, syntax, JVM memory & collections.', fileName: 'Core-java-material_copy.pdf', fileSize: '1.39 MB', fileData: 'pdfs/Core-java-material_copy.pdf', isStatic: true },
+  { id: 'static-2', courseId: 'java', title: 'Data Types, Variables & Operators', description: 'Java primitives, operators, variable scopes, and type casting.', fileName: 'java1.pdf', fileSize: '0.13 MB', fileData: 'pdfs/java1.pdf', isStatic: true },
+  { id: 'static-3', courseId: 'java', title: 'Methods & Conditionals', description: 'If-else statements, switch blocks, and method definition patterns.', fileName: 'java2.pdf', fileSize: '0.15 MB', fileData: 'pdfs/java2.pdf', isStatic: true },
+  { id: 'static-4', courseId: 'java', title: 'Loops & Arrays in Java', description: 'For, while, do-while loops, 1D/2D arrays, and iteration algorithms.', fileName: 'java3.pdf', fileSize: '0.15 MB', fileData: 'pdfs/java3.pdf', isStatic: true },
+  { id: 'static-5', courseId: 'java', title: 'Classes & Objects Master Guide', description: 'Constructors, encapsulation, getters/setters, static members, and object instances.', fileName: 'java4.pdf', fileSize: '0.20 MB', fileData: 'pdfs/java4.pdf', isStatic: true },
+  { id: 'static-6', courseId: 'java', title: 'Packages & Java API', description: 'Organizing code into packages, imports, and Java standard library modules.', fileName: 'java5.pdf', fileSize: '0.21 MB', fileData: 'pdfs/java5.pdf', isStatic: true },
+  { id: 'static-7', courseId: 'java', title: 'Interfaces, Abstraction & Debugging', description: 'Abstract classes, default interface methods, and IDE debugging techniques.', fileName: 'java6.pdf', fileSize: '0.18 MB', fileData: 'pdfs/java6.pdf', isStatic: true },
+  { id: 'static-8', courseId: 'java', title: 'Exception Handling & File I/O', description: 'Try-catch-finally blocks, custom exceptions, FileReader/FileWriter, and streams.', fileName: 'java7.pdf', fileSize: '0.19 MB', fileData: 'pdfs/java7.pdf', isStatic: true },
+  { id: 'static-9', courseId: 'java', title: 'Java Notes (David Eck 5th Ed)', description: 'Introduction to programming using Java, comprehensive textbook edition.', fileName: 'javanotes5_copy.pdf', fileSize: '5.00 MB', fileData: 'pdfs/javanotes5_copy.pdf', isStatic: true },
+  { id: 'static-10', courseId: 'java', title: 'Learn Java by Laura Lemay', description: 'Full course textbook on Java programming language fundamentals.', fileName: 'LearnJava_copy.pdf', fileSize: '5.72 MB', fileData: 'pdfs/LearnJava_copy.pdf', isStatic: true },
+  { id: 'static-11', courseId: 'python', title: 'Python 3 Complete Master Guide', description: 'Complete reference for Python 3 syntax, control flow, functions, and modules.', fileName: 'python-master-guide.pdf', fileSize: '1.8 KB', fileData: 'pdfs/python-master-guide.pdf', isStatic: true },
+  { id: 'static-12', courseId: 'python', title: 'Python Data Structures & Collections', description: 'Deep dive into Lists, Tuples, Sets, Dictionaries, and List Comprehensions.', fileName: 'python-data-structures.pdf', fileSize: '1.7 KB', fileData: 'pdfs/python-data-structures.pdf', isStatic: true },
+  { id: 'static-13', courseId: 'python', title: 'Python OOP & Decorators Cheatsheet', description: 'Classes, inheritance, dunder methods, classmethod, staticmethod & custom decorators.', fileName: 'python-oop-decorators.pdf', fileSize: '1.7 KB', fileData: 'pdfs/python-oop-decorators.pdf', isStatic: true },
+  { id: 'static-14', courseId: 'sql', title: 'SQL & Relational Databases Master Guide', description: 'DDL, DML, DQL statements, primary keys, foreign keys, and table normalization.', fileName: 'sql-master-guide.pdf', fileSize: '1.7 KB', fileData: 'pdfs/sql-master-guide.pdf', isStatic: true },
+  { id: 'static-15', courseId: 'sql', title: 'Advanced SQL Joins & Analytics', description: 'INNER, LEFT, RIGHT, FULL OUTER joins, GROUP BY, HAVING & window functions.', fileName: 'sql-joins-analytics.pdf', fileSize: '1.7 KB', fileData: 'pdfs/sql-joins-analytics.pdf', isStatic: true },
+  { id: 'static-16', courseId: 'sql', title: 'SQL Query Optimization & Security', description: 'Indexing strategies, query execution plans, transactions & SQL injection prevention.', fileName: 'sql-optimization-security.pdf', fileSize: '1.6 KB', fileData: 'pdfs/sql-optimization-security.pdf', isStatic: true }
+];
+
+async function loadAdminPdfsTableStandalone() {
+  const tbody = document.getElementById("admin-pdf-table-body-standalone");
+  const filterSelect = document.getElementById("admin-pdf-filter-standalone");
+  if (!tbody) return;
+
+  const courseId = filterSelect ? filterSelect.value : "all";
+  let dynamicPdfs = [];
+
+  try {
+    const url = courseId && courseId !== "all" ? `/api/course-pdfs?courseId=${courseId}` : "/api/course-pdfs";
+    const res = await fetch(url);
+    if (res.ok) {
+      dynamicPdfs = await res.json();
+    }
+  } catch(e) {
+    console.error("Fetch dynamic PDFs error:", e);
+  }
+
+  // Filter static PDFs by course if selected
+  const filteredStatic = courseId === "all" ? PREEXISTING_STATIC_PDFS : PREEXISTING_STATIC_PDFS.filter(p => p.courseId === courseId);
+  const combinedPdfs = [...dynamicPdfs, ...filteredStatic];
+
+  if (!combinedPdfs.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+          No PDF resources found for this course.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const courseNames = {
+    java: "☕ Java Masterclass",
+    python: "🐍 Python Masterclass",
+    cpp: "⚡ C++ Course",
+    sql: "🗄️ SQL & Databases",
+    dsa: "🌲 Data Structures",
+    webdev: "🌐 Full-Stack Web"
+  };
+
+  tbody.innerHTML = combinedPdfs.map(pdf => {
+    const cName = courseNames[pdf.courseId] || pdf.courseId.toUpperCase();
+    const dateStr = pdf.uploadedAt ? new Date(pdf.uploadedAt).toLocaleDateString() : 'System Default';
+    const isStatic = pdf.isStatic === true;
+
+    const sourceBadge = isStatic ?
+      `<span style="display:inline-block; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:700; background:rgba(59,130,246,0.15); color:#3b82f6; border:1px solid rgba(59,130,246,0.3); margin-left:6px;">Pre-installed</span>` :
+      `<span style="display:inline-block; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:700; background:rgba(34,197,94,0.15); color:#22c55e; border:1px solid rgba(34,197,94,0.3); margin-left:6px;">Uploaded</span>`;
+
+    const deleteBtn = isStatic ?
+      `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; opacity:0.5; cursor:not-allowed;" title="Built-in platform document">System PDF</button>` :
+      `<button class="btn delete" onclick="deleteAdminPdfStandalone(${pdf.id})" style="padding:4px 8px; font-size:11px;">🗑️ Delete</button>`;
+
+    return `
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px;"><span style="display:inline-block; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:700; background:rgba(245,158,11,0.15); color:#f59e0b; border:1px solid rgba(245,158,11,0.3);">${cName}</span></td>
+        <td style="padding:10px;">
+          <div style="font-weight: 700; color: var(--text-primary); display:flex; align-items:center;">${escapeHtml(pdf.title)} ${sourceBadge}</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">${escapeHtml(pdf.description || 'No description.')}</div>
+        </td>
+        <td style="padding:10px; font-size: 12px; font-weight: 600;">${escapeHtml(pdf.fileSize || '1.0 MB')}</td>
+        <td style="padding:10px; font-size: 12px; color: var(--text-secondary);">${dateStr}</td>
+        <td style="padding:10px; text-align: right;">
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+            <a href="${pdf.fileData}" target="_blank" onclick="openPdfInNewTab(event, '${pdf.fileData}')" class="btn" style="padding:4px 8px; font-size:11px; text-decoration:none;">📄 Open PDF</a>
+            ${deleteBtn}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+async function deleteAdminPdfStandalone(id) {
+  if (!confirm("Are you sure you want to delete this course PDF resource?")) return;
+  try {
+    const res = await fetch(`/api/course-pdfs/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      showToast("PDF resource deleted from course library.", "success");
+      loadAdminPdfsTableStandalone();
+    }
+  } catch(e) {
+    console.error("Delete PDF error:", e);
+  }
 }
 
 function openAnalytics(){

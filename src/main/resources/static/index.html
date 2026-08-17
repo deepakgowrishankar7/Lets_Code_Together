@@ -425,6 +425,7 @@
                 if (response.ok) {
                     localStorage.setItem("loggedInEmail", email);
                     localStorage.setItem("loggedInUserName", data.userName);
+                    localStorage.setItem("isAdmin", String(data.isAdmin === "true" || data.isAdmin === true));
                     localStorage.setItem("theme", "light");
                     localStorage.removeItem("isGuest");
                     if (data.isNewUser || localStorage.getItem("isNewUser_" + email) === "true") {
