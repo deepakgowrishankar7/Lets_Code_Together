@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -13,20 +12,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -45,9 +44,7 @@ public class ZetroxAgentController {
 
     private static final String[] CANDIDATE_MODELS = {
         "gemini-2.5-flash",
-        "gemini-1.5-flash",
-        "gemini-1.5-flash-8b",
-        "gemini-2.0-flash-exp"
+        "gemini-flash-latest"
     };
 
     private final Map<String, List<Map<String,Object>>> sessions = new ConcurrentHashMap<>();
@@ -98,8 +95,14 @@ public class ZetroxAgentController {
         if (request.get("history") instanceof List) {
             List<?> rawHistory = (List<?>) request.get("history");
             for (Object item : rawHistory) {
-                if (item instanceof Map) {
-                    history.add((Map<String,Object>) item);
+                if (item instanceof Map<?, ?> rawTurn) {
+                    Map<String, Object> turn = new LinkedHashMap<>();
+                    rawTurn.forEach((key, value) -> {
+                        if (key instanceof String stringKey) {
+                            turn.put(stringKey, value);
+                        }
+                    });
+                    history.add(turn);
                 }
             }
         }
@@ -127,10 +130,14 @@ public class ZetroxAgentController {
             logger.error("[ZETROX AI] Error calling Gemini API: {}", e.getMessage(), e);
             String raw = safeError(e);
             String errMsg;
-            if (raw.contains("401") || raw.contains("400") || raw.contains("403") || raw.contains("UNAUTHENTICATED") || raw.contains("INVALID") || raw.contains("ACCESS_TOKEN")) {
+            if (raw.contains("401") || raw.contains("403") || raw.contains("UNAUTHENTICATED") || raw.contains("ACCESS_TOKEN")) {
                 errMsg = "🔑 **Gemini API Key Required**: Please get a free API Key starting with `AIzaSy...` from Google AI Studio (https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY` in Render Environment variables.";
+            } else if (raw.contains("400") || raw.contains("INVALID_ARGUMENT")) {
+                errMsg = "🧩 **Gemini request rejected**: The conversation format or selected model was rejected. Please retry; the request history has been reset safely.";
+            } else if (raw.contains("429") || raw.contains("RESOURCE_EXHAUSTED")) {
+                errMsg = "⏳ **Gemini API Limit Exceeded**: Free tier request quota reached. Please wait 15 seconds before asking your next question, or configure your personal API key in Render Environment.";
             } else {
-                errMsg = "⏳ **Gemini API Limit Exceeded**: Free tier request quota reached. Please wait **15 seconds** before asking your next question, or configure your personal API key in Render Environment.";
+                errMsg = "⚠️ **Gemini service unavailable**: " + raw;
             }
             return ResponseEntity.status(200).body(Map.of(
                     "success", false,
@@ -193,7 +200,7 @@ public class ZetroxAgentController {
             if (!modelsToTry.contains(m)) modelsToTry.add(m);
         }
 
-        Exception rateLimitException = null;
+        Exception providerException = null;
         Exception lastException = null;
         for (String modelName : modelsToTry) {
             String url = "https://generativelanguage.googleapis.com/v1beta/models/" + modelName + ":generateContent?key=" + effectiveKey;
@@ -201,27 +208,30 @@ public class ZetroxAgentController {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             try {
-                ResponseEntity<String> response = http.exchange(
-                        url, HttpMethod.POST,
-                        new HttpEntity<>(mapper.writeValueAsString(payload), headers),
-                        String.class);
+                ResponseEntity<String> response = http.postForEntity(
+                    url, new HttpEntity<>(mapper.writeValueAsString(payload), headers), String.class);
 
                 if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                     JsonNode root = mapper.readTree(response.getBody());
                     if (!root.has("error")) {
                         return root;
                     }
+                    providerException = new IllegalStateException(providerError(root));
                 }
-            } catch (Exception e) {
+            } catch (RestClientException | JsonProcessingException e) {
                 lastException = e;
-                if (e.getMessage() != null && (e.getMessage().contains("429") || e.getMessage().contains("RESOURCE_EXHAUSTED"))) {
-                    rateLimitException = e;
-                }
                 logger.warn("[ZETROX AI] Model {} failed: {}", modelName, e.getMessage());
             }
         }
-        if (rateLimitException != null) throw rateLimitException;
+        if (providerException != null) throw providerException;
         throw lastException != null ? lastException : new IllegalStateException("All Gemini candidate models failed.");
+    }
+
+    private String providerError(JsonNode root) {
+        JsonNode error = root.path("error");
+        String status = error.path("status").asText("");
+        String message = error.path("message").asText("Gemini returned an error.");
+        return status.isBlank() ? message : status + ": " + message;
     }
 
     private String buildContext(Map<String,Object> c) {

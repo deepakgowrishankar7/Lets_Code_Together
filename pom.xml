@@ -34,6 +34,7 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+		<postgresql.version>42.7.12</postgresql.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -71,7 +72,6 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.7.12</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

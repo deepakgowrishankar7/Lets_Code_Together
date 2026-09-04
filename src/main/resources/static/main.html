@@ -378,7 +378,7 @@
                             <span class="metric-title">Active Masterclasses</span>
                             <span class="metric-icon">🎓</span>
                         </div>
-                        <div class="metric-big-val" id="dash-masterclasses-count">3 <span>Courses</span></div>
+                        <div class="metric-big-val" id="dash-masterclasses-count">0 <span>Courses</span></div>
                         <div class="metric-legend-list">
                             <div class="legend-item"><span class="legend-dot progressing"></span> Progressing</div>
                             <div class="legend-item"><span class="legend-dot upcoming"></span> Upcoming</div>
@@ -396,12 +396,12 @@
                             <div class="donut-ring-container">
                                 <svg viewBox="0 0 36 36" class="circular-chart green">
                                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path class="circle" id="dash-quiz-ring" stroke-dasharray="90, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle" id="dash-quiz-ring" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                 </svg>
                                 <div class="donut-center-trophy">🏆</div>
                             </div>
                             <div class="donut-val-info">
-                                <div class="donut-count-num" id="dash-quizzes-count">10</div>
+                                <div class="donut-count-num" id="dash-quizzes-count">0</div>
                                 <div class="donut-count-label">Levels Passed</div>
                             </div>
                         </div>
@@ -413,7 +413,7 @@
                             <span class="metric-title">Interactive Visualizers</span>
                             <span class="metric-icon">🎬</span>
                         </div>
-                        <div class="metric-big-val" id="dash-visualizers-count">6 <span>Engines</span></div>
+                        <div class="metric-big-val" id="dash-visualizers-count">0 <span>Engines</span></div>
                         <div class="sparkline-container">
                             <svg viewBox="0 0 120 40" class="sparkline-svg">
                                 <path d="M0,35 Q20,10 40,25 T80,5 T120,30" fill="none" stroke="var(--jade, #00f5a0)" stroke-width="2.5" />
@@ -428,9 +428,9 @@
                             <span class="metric-title">DSA Questions Solved</span>
                             <span class="metric-icon">🧩</span>
                         </div>
-                        <div class="metric-big-val" id="dash-dsa-count">12 <span>Solved</span></div>
+                        <div class="metric-big-val" id="dash-dsa-count">0 <span>Solved</span></div>
                         <div class="dsa-progress-bar-bg">
-                            <div class="dsa-progress-bar-fill" id="dash-dsa-bar" style="width: 75%;"></div>
+                            <div class="dsa-progress-bar-fill" id="dash-dsa-bar" style="width: 0%;"></div>
                         </div>
                         <button class="dsa-start-btn" onclick="openProtectedSection('ds-course')">Start New Problem →</button>
                     </div>
@@ -476,42 +476,14 @@
                         <!-- Tab Content: Masterclasses -->
                         <div id="learning-tab-masterclasses" class="learning-log-content" style="display:none;">
                             <div class="log-items-list">
-                                <div class="log-item-row">
-                                    <div class="log-item-info">
-                                        <span class="log-item-badge java">JAVA</span>
-                                        <span class="log-item-title">Java Masterclass — 8/10 Modules</span>
-                                    </div>
-                                    <div class="log-item-progress">
-                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:80%;"></div></div>
-                                        <button class="review-btn" onclick="showSection('java-course')">Resume ›</button>
-                                    </div>
-                                </div>
-                                <div class="log-item-row">
-                                    <div class="log-item-info">
-                                        <span class="log-item-badge python">PYTHON</span>
-                                        <span class="log-item-title">Python Basics — 6/8 Modules</span>
-                                    </div>
-                                    <div class="log-item-progress">
-                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:75%;"></div></div>
-                                        <button class="review-btn" onclick="showSection('python-course')">Resume ›</button>
-                                    </div>
-                                </div>
+                                <div class="dash-empty-state">No masterclass progress recorded yet.</div>
                             </div>
                         </div>
 
                         <!-- Tab Content: Visualizers -->
                         <div id="learning-tab-visualizers" class="learning-log-content" style="display:none;">
                             <div class="log-items-list">
-                                <div class="log-item-row">
-                                    <div class="log-item-info">
-                                        <span class="log-item-badge dsa">VISUALIZER</span>
-                                        <span class="log-item-title">Binary Search Tree Traversal</span>
-                                    </div>
-                                    <div class="log-item-progress">
-                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:100%;"></div></div>
-                                        <button class="review-btn" onclick="showSection('visualizer')">Launch ›</button>
-                                    </div>
-                                </div>
+                                <div class="dash-empty-state">No visualizer activity recorded yet.</div>
                             </div>
                         </div>
 

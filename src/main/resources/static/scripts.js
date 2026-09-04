@@ -1957,7 +1957,6 @@ async function populateDashboard(force = false) {
         } else {
             topUsersContainer.innerHTML = `<div class="dash-empty-state">Log in to view your personal score history.</div>`;
         }
-        updateDsaDashboardScore();
     } catch (err) {
         console.error("Failed to load dashboard:", err);
     }
@@ -1965,19 +1964,16 @@ async function populateDashboard(force = false) {
 
 function updateDsaDashboardScore() {
     try {
-        let solvedList = [];
-        if (typeof getSolvedProblems === 'function') {
-            solvedList = getSolvedProblems();
-        } else {
-            solvedList = JSON.parse(localStorage.getItem("solved_dsa_problems") || localStorage.getItem("dsa_solved_problems") || "[]");
-        }
+        const solvedCount = arguments.length > 0 && Number.isFinite(Number(arguments[0]))
+            ? Number(arguments[0])
+            : 0;
         
-        const solvedCount = Array.isArray(solvedList) ? solvedList.length : 0;
-        
-        const dsaKpiElem = document.getElementById("kpi-dsa-score");
-        if (dsaKpiElem) {
-            dsaKpiElem.innerHTML = `${solvedCount} <span class="stat-unit">Solved</span>`;
-        }
+        ["kpi-dsa-score", "dash-dsa-count"].forEach(id => {
+            const dsaKpiElem = document.getElementById(id);
+            if (dsaKpiElem) dsaKpiElem.innerHTML = `${solvedCount} <span class="stat-unit">Solved</span>`;
+        });
+        const dsaBar = document.getElementById("dash-dsa-bar");
+        if (dsaBar) dsaBar.style.width = `${Math.min(100, solvedCount)}%`;
         
         const dsaSubElem = document.getElementById("kpi-dsa-quiz-sub");
         if (dsaSubElem) {
@@ -4582,7 +4578,7 @@ function goToLeaderboardPage(p) {
 
 async function loadAcademyDashboardStats() {
     try {
-        const email = localStorage.getItem("loggedInEmail") || (typeof state !== 'undefined' ? state.email : "") || "deepakgowrishankar7@gmail.com";
+        const email = localStorage.getItem("loggedInEmail") || (typeof state !== 'undefined' ? state.email : "") || "";
         const res = await fetch(`/api/dashboard/stats?email=${encodeURIComponent(email)}`);
         if (!res.ok) return;
         const data = await res.json();
@@ -4596,39 +4592,48 @@ async function loadAcademyDashboardStats() {
         // 2. Metric Stat Cards
         const masterclassesEl = document.getElementById("kpi-masterclasses-count") || document.getElementById("dash-masterclasses-count");
         if (masterclassesEl) {
-            masterclassesEl.innerHTML = `${data.activeMasterclassesCount || 3} <span class="stat-unit">Courses</span>`;
+            masterclassesEl.innerHTML = `${data.activeMasterclassesCount ?? 0} <span class="stat-unit">Courses</span>`;
         }
 
         const quizzesCountEl = document.getElementById("kpi-quizzes-count") || document.getElementById("dash-quizzes-count");
         if (quizzesCountEl) {
-            quizzesCountEl.innerHTML = `${data.quizzesCompletedCount || 0} <span class="stat-unit">Levels</span>`;
+            quizzesCountEl.innerHTML = `${data.quizzesCompletedCount ?? 0} <span class="stat-unit">Levels</span>`;
         }
 
         const visEl = document.getElementById("kpi-visualizers-count") || document.getElementById("dash-visualizers-count");
         if (visEl) {
-            visEl.innerHTML = `${data.interactiveVisualizersCount || 6} <span class="stat-unit">Engines</span>`;
+            visEl.innerHTML = `${data.interactiveVisualizersCount ?? 0} <span class="stat-unit">Engines</span>`;
         }
 
         const dsaEl = document.getElementById("kpi-dsa-score") || document.getElementById("dash-dsa-count");
         if (dsaEl) {
-            dsaEl.innerHTML = `${data.dsaQuestionsSolvedCount || 0} <span class="stat-unit">Solved</span>`;
+            dsaEl.innerHTML = `${data.dsaQuestionsSolvedCount ?? 0} <span class="stat-unit">Solved</span>`;
         }
 
         const dsaSubElem = document.getElementById("kpi-dsa-quiz-sub");
         if (dsaSubElem) {
-            const count = data.dsaQuestionsSolvedCount || 0;
+            const count = data.dsaQuestionsSolvedCount ?? 0;
             dsaSubElem.innerText = count === 1 ? "1 DSA Coding Problem Completed" : `${count} DSA Coding Problems Completed`;
         }
+        updateDsaDashboardScore(data.dsaQuestionsSolvedCount ?? 0);
 
         const rankEl = document.getElementById("kpi-campus-rank") || document.getElementById("dash-user-rank");
         if (rankEl) {
-            rankEl.innerHTML = `Rank #${data.userRank || 1} <span class="stat-unit">Position</span>`;
+            rankEl.innerHTML = `Rank #${data.userRank ?? 0} <span class="stat-unit">Position</span>`;
         }
 
         const rankSubElem = document.getElementById("kpi-campus-sub");
         if (rankSubElem) {
-            rankSubElem.innerText = `Level ${data.userLevel || 1} · ${data.userXp || 0} XP Points`;
+            rankSubElem.innerText = `Level ${data.userLevel ?? 0} · ${data.userXp ?? 0} XP Points`;
         }
+
+        _allQuizLogs = Array.isArray(data.quizLogs) ? data.quizLogs : [];
+        _currentLogPage = 1;
+        renderPaginatedLogs();
+
+        _allLeaderboardUsers = Array.isArray(data.leaderboard) ? data.leaderboard : [];
+        _currentLeaderboardPage = 1;
+        renderPaginatedLeaderboard();
 
     } catch (e) {
         console.warn("[DASHBOARD STATS] Could not load dashboard stats:", e);
@@ -5017,9 +5022,6 @@ async function sendZetroxMessage() {
         user: "deepak"
     };
 
-    // Store user turn in conversation history
-    zetroxConversationHistory.push({ role: "user", parts: [{ text: userText }] });
-
     function getZetroxSessionId() {
         let sid = localStorage.getItem("zetrox_session_id");
         if (!sid) {
@@ -5046,7 +5048,10 @@ async function sendZetroxMessage() {
         const data = await response.json();
         clearInterval(reasonTimer);
 
-        if (data && data.reply) {
+        if (data && data.success && data.reply) {
+            // Add both turns only after the request succeeds so the current
+            // prompt is not sent twice in the next Gemini contents payload.
+            zetroxConversationHistory.push({ role: "user", parts: [{ text: userText }] });
             // Store model response in conversation history
             zetroxConversationHistory.push({ role: "model", parts: [{ text: data.reply }] });
         }
