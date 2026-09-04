@@ -1129,6 +1129,107 @@ function initIdeGutterSync() {
     bindEditorGutter("#visualizer-editor", "#visualizer-gutter", "#visualizer-cursor-pos");
 }
 
+/* =====================================================
+   SQL CLIENT-SIDE ENGINE (sql.js / WebAssembly)
+===================================================== */
+let sqlJsInstance = null;
+
+const DEFAULT_SQL_STARTER = `-- Create a sample Employees table
+CREATE TABLE IF NOT EXISTS Employees (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    department TEXT NOT NULL,
+    salary REAL
+);
+
+-- Insert sample records
+INSERT INTO Employees (id, name, department, salary) VALUES
+(1, 'Alice', 'Engineering', 85000),
+(2, 'Bob', 'Marketing', 62000),
+(3, 'Charlie', 'Engineering', 90000),
+(4, 'Diana', 'HR', 58000),
+(5, 'Evan', 'Sales', 72000);
+
+-- Query employee summary grouped by department
+SELECT 
+    department, 
+    COUNT(*) AS total_employees, 
+    PRINTF('$%.2f', AVG(salary)) AS avg_salary,
+    PRINTF('$%.2f', MAX(salary)) AS max_salary
+FROM Employees
+GROUP BY department
+ORDER BY AVG(salary) DESC;`;
+
+async function executeSqlCode(code) {
+    if (!code || !code.trim()) {
+        return { success: false, output: "Error: SQL code is empty." };
+    }
+
+    if (!sqlJsInstance) {
+        if (typeof initSqlJs !== "function") {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.src = "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js";
+                script.onload = resolve;
+                script.onerror = () => reject(new Error("Failed to load sql.js library."));
+                document.head.appendChild(script);
+            });
+        }
+        sqlJsInstance = await initSqlJs({
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        });
+    }
+
+    try {
+        const db = new sqlJsInstance.Database();
+        const results = db.exec(code);
+        db.close();
+
+        if (!results || results.length === 0) {
+            return { success: true, output: "Query executed successfully. (0 rows returned or DDL/DML statement completed)" };
+        }
+
+        let formattedOutput = "";
+        results.forEach((res, idx) => {
+            if (results.length > 1) {
+                formattedOutput += `=== Query ${idx + 1} Result ===\n`;
+            }
+            const cols = res.columns || [];
+            const rows = res.values || [];
+
+            if (cols.length === 0) return;
+
+            const colWidths = cols.map((col, cIdx) => {
+                let maxW = String(col).length;
+                rows.forEach(r => {
+                    const valStr = r[cIdx] === null ? "NULL" : String(r[cIdx]);
+                    if (valStr.length > maxW) maxW = valStr.length;
+                });
+                return Math.max(maxW, 3);
+            });
+
+            const headerRow = cols.map((c, i) => String(c).padEnd(colWidths[i])).join(" | ");
+            const separator = colWidths.map(w => "-".repeat(w)).join("-+-");
+
+            formattedOutput += headerRow + "\n" + separator + "\n";
+
+            rows.forEach(r => {
+                const rowLine = r.map((val, i) => {
+                    const valStr = val === null ? "NULL" : String(val);
+                    return valStr.padEnd(colWidths[i]);
+                }).join(" | ");
+                formattedOutput += rowLine + "\n";
+            });
+
+            formattedOutput += `\n(${rows.length} row${rows.length === 1 ? "" : "s"} returned)\n\n`;
+        });
+
+        return { success: true, output: formattedOutput.trim() };
+    } catch (err) {
+        return { success: false, output: "SQL Syntax / Execution Error:\n" + err.message };
+    }
+}
+
 function attachCompilerButtonListener() {
     const runBtn = $(".compiler-run-btn");
     const editor = $(".compiler-editor");
@@ -1142,6 +1243,38 @@ function attachCompilerButtonListener() {
         runBtn.textContent = "Running...";
         runBtn.disabled = true;
         const startTime = performance.now();
+
+        if (langSel && langSel.value === "sql") {
+            try {
+                const sqlRes = await executeSqlCode(editor ? editor.value : "");
+                const duration = Math.round(performance.now() - startTime);
+                output.textContent = sqlRes.output;
+
+                const timeStat = $("#ide-stat-time");
+                const statusStat = $("#ide-stat-status");
+                const langStat = $("#ide-stat-lang");
+                if (timeStat) timeStat.textContent = `${duration} ms`;
+                if (statusStat) {
+                    statusStat.textContent = sqlRes.success ? "0 (Success)" : "1 (Error)";
+                    statusStat.className = sqlRes.success ? "ide-stat-val success" : "ide-stat-val error";
+                }
+                if (langStat && langSel) {
+                    langStat.textContent = langSel.options[langSel.selectedIndex]?.text || "SQL";
+                }
+
+                switchIdeTab("output");
+
+                if (typeof sendRoomCode === "function" && currentRoomId) {
+                    sendRoomCode(output.textContent);
+                }
+            } catch (sqlErr) {
+                output.textContent = "SQL Error: " + sqlErr.message;
+            } finally {
+                runBtn.textContent = "▶ Run (Ctrl+Enter)";
+                runBtn.disabled = false;
+            }
+            return;
+        }
 
         try {
             const res = await fetch("/api/compile", {
@@ -1192,7 +1325,23 @@ function attachCompilerButtonListener() {
     };
 }
 attachCompilerButtonListener();
-document.addEventListener("DOMContentLoaded", initIdeGutterSync);
+
+document.addEventListener("DOMContentLoaded", () => {
+    initIdeGutterSync();
+    const langSel = document.getElementById("compiler-language");
+    const editor = document.getElementById("compiler-editor");
+    if (langSel && editor) {
+        langSel.addEventListener("change", () => {
+            if (langSel.value === "sql" && (!editor.value || editor.value.trim() === "" || editor.dataset.lastLang !== "sql")) {
+                editor.value = DEFAULT_SQL_STARTER;
+                editor.dataset.lastLang = "sql";
+                if (typeof updateGutter === "function") updateGutter();
+            } else if (langSel.value !== "sql") {
+                editor.dataset.lastLang = langSel.value;
+            }
+        });
+    }
+});
 
 function initAnimatedVideos() {
     const videos = [

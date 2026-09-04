@@ -762,7 +762,7 @@ function downloadQuizCertificate(userName, courseTitle, score, total) {
   ctx.textAlign = 'right';
   ctx.fillStyle = '#0f172a';
   ctx.font = 'italic bold 36px "Dancing Script", "Brush Script MT", "Great Vibes", cursive, serif';
-  ctx.fillText('Deepak Gowri Shankar', 1440, footerY - 10);
+  ctx.fillText('Deepak Gowri Shankar Enduri', 1440, footerY - 10);
 
   ctx.strokeStyle = '#cbd5e1';
   ctx.lineWidth = 1.5;
@@ -773,7 +773,7 @@ function downloadQuizCertificate(userName, courseTitle, score, total) {
 
   ctx.fillStyle = '#1e293b';
   ctx.font = 'bold 20px sans-serif';
-  ctx.fillText('Deepak Gowri Shankar', 1440, footerY + 30);
+  ctx.fillText('Deepak Gowri Shankar Enduri', 1440, footerY + 30);
 
   ctx.fillStyle = '#64748b';
   ctx.font = '16px sans-serif';

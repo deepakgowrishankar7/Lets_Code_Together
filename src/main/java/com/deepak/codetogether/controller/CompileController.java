@@ -103,6 +103,7 @@ public class CompileController {
                 case "go" -> runGo(tempDir, code, stdin);
                 case "ruby" -> runInterpreter(tempDir, code, stdin, "ruby", "script.rb");
                 case "php" -> runInterpreter(tempDir, code, stdin, "php", "script.php");
+                case "sql", "sqlite" -> runSqlite(tempDir, code, stdin);
                 default -> throw new IllegalArgumentException("Unsupported language: " + language);
             };
         } finally {
@@ -142,6 +143,15 @@ public class CompileController {
         Path source = tempDir.resolve(fileName);
         Files.writeString(source, code, StandardCharsets.UTF_8);
         return runProcess(tempDir, List.of(executable, source.toString()), stdin, 20);
+    }
+
+    private String runSqlite(Path tempDir, String code, String stdin) throws Exception {
+        Path source = tempDir.resolve("query.sql");
+        Files.writeString(source, code, StandardCharsets.UTF_8);
+        if (isExecutableAvailable("sqlite3")) {
+            return runProcess(tempDir, List.of("sqlite3", "-header", "-column", "", "-init", source.toString()), stdin, 20);
+        }
+        return "SQLite client-side engine (sql.js) is supported directly in the browser workbench UI.";
     }
 
     private String runNative(Path tempDir, String code, String stdin, String compiler, String fileName, String outputName)

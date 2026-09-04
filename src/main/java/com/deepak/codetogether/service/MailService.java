@@ -198,11 +198,11 @@ public class MailService {
     public void sendRegistrationOtp(String to, String otp) {
         String subject = "⚡ Verify Your Account — Let's Code Together";
         String html = buildOtpEmailTemplate(
-            "Welcome to Let's Code Together! 🚀",
-            "Thank you for joining our developer community. Please enter the verification code below to verify your email address and activate your account.",
+            "Welcome to Let's Code Together",
+            "Please enter the verification code below to verify your email address and activate your account.",
             otp,
             "Registration OTP Code",
-            "#22c55e"
+            "#007a42"
         );
         sendHtmlEmail(to, subject, html);
     }
@@ -210,11 +210,11 @@ public class MailService {
     public void sendPasswordResetOtp(String to, String otp) {
         String subject = "🔑 Reset Your Password — Let's Code Together";
         String html = buildOtpEmailTemplate(
-            "Password Reset Request 🔐",
-            "We received a request to reset the password for your account. Please enter the verification code below to verify your request and set a new password.",
+            "Password Reset Request",
+            "We received a request to reset your account password. Use the verification code below to set a new password.",
             otp,
             "Password Reset OTP Code",
-            "#22c55e"
+            "#007a42"
         );
         sendHtmlEmail(to, subject, html);
     }
@@ -227,43 +227,56 @@ public class MailService {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             </head>
-            <body style="margin:0; padding:0; background-color:#060b18; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:#f0f6ff;">
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#060b18; padding: 40px 10px;">
+            <body style="margin:0; padding:0; background-color:#f8fafd; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#0f172a; -webkit-font-smoothing:antialiased;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f8fafd; padding: 48px 16px;">
                 <tr>
                   <td align="center">
-                    <table width="600" border="0" cellspacing="0" cellpadding="0" style="max-width:600px; background-color:#0d1626; border:1px solid rgba(255,255,255,0.1); border-radius:16px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5);">
+                    <table width="540" border="0" cellspacing="0" cellpadding="0" style="max-width:540px; background-color:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);">
                       
-                      <!-- HEADER -->
+                      <!-- TOP ACCENT LINE -->
                       <tr>
-                        <td align="center" style="padding: 32px 40px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); background: linear-gradient(135deg, rgba(34,197,94,0.08) 0%, transparent 100%);">
-                          <div style="font-size:24px; font-weight:800; color:""" + accentColor + """
-                            ; letter-spacing:0.5px;">⚡ Let's Code Together</div>
-                          <div style="font-size:11px; color:#7a8fa8; text-transform:uppercase; letter-spacing:2px; margin-top:4px;">Official Verification Service</div>
+                        <td style="height:4px; background-color:#007a42; font-size:0; line-height:0;">&nbsp;</td>
+                      </tr>
+
+                      <!-- HEADER LOGO -->
+                      <tr>
+                        <td align="center" style="padding: 36px 40px 24px;">
+                          <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                              <td align="center" style="background:rgba(0, 122, 66, 0.08); border:1px solid rgba(0, 122, 66, 0.2); border-radius:8px; width:34px; height:34px; font-size:16px; line-height:34px; color:#007a42;">⚡</td>
+                              <td style="padding-left:10px; font-size:21px; font-weight:800; color:#0f172a; letter-spacing:-0.4px;">Let's Code Together</td>
+                            </tr>
+                          </table>
+                          <div style="font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:2px; margin-top:8px;">Account Security Service</div>
                         </td>
                       </tr>
 
-                      <!-- BODY -->
+                      <!-- DIVIDER -->
                       <tr>
-                        <td style="padding: 36px 40px;">
-                          <h2 style="font-size:22px; font-weight:700; color:#ffffff; margin:0 0 12px; letter-spacing:-0.3px;">""" + title + """
-                          </h2>
-                          <p style="font-size:14px; line-height:1.6; color:#a0aec0; margin:0 0 24px;">""" + description + """
+                        <td style="padding:0 40px;"><div style="border-top:1px solid #f1f5f9; font-size:0; line-height:0;"></div></td>
+                      </tr>
+
+                      <!-- MAIN CONTENT -->
+                      <tr>
+                        <td style="padding: 32px 40px 28px;">
+                          <h1 style="font-size:20px; font-weight:700; color:#0f172a; margin:0 0 10px; letter-spacing:-0.3px;">""" + title + """
+                          </h1>
+                          <p style="font-size:14px; line-height:1.6; color:#475569; margin:0 0 24px;">""" + description + """
                           </p>
 
-                          <!-- OTP BOX -->
-                          <div style="background-color:#111c2e; border:1px solid """ + accentColor + """
-                            ; border-radius:12px; padding:28px; text-align:center; margin:28px 0;">
-                            <div style="font-size:11px; font-weight:600; color:#7a8fa8; text-transform:uppercase; letter-spacing:2px; margin-bottom:10px;">""" + badgeLabel + """
+                          <!-- PROFESSIONAL CLEAN OTP BOX -->
+                          <div style="background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 20px; text-align:center;">
+                            <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:2px; margin-bottom:12px;">""" + badgeLabel + """
                             </div>
-                            <div style="font-family:'Courier New', Courier, monospace; font-size:42px; font-weight:800; letter-spacing:12px; color:""" + accentColor + """
-                            ;">""" + otp + """
+                            <div style="font-family:-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, monospace; font-size:38px; font-weight:800; letter-spacing:12px; color:#0f172a; text-indent:12px;">""" + otp + """
                             </div>
-                            <div style="font-size:11px; color:#64748b; margin-top:12px;">Valid for 5 minutes • Do not share</div>
+                            <div style="font-size:12px; color:#64748b; margin-top:12px; font-weight:500;">Valid for 5 minutes • Do not share this code</div>
                           </div>
 
-                          <div style="background:rgba(245,158,11,0.08); border-left:3px solid #f59e0b; padding:14px 16px; border-radius:6px; margin-top:24px;">
-                            <p style="font-size:12px; color:#f59e0b; margin:0; line-height:1.5;">
-                              <strong>🔒 Security Notice:</strong> If you did not request this email, please ignore it or secure your account. Our team will never ask for your OTP.
+                          <!-- SECURITY NOTICE -->
+                          <div style="background-color:#ffffff; border:1px dashed #cbd5e1; border-radius:8px; padding:12px 16px; margin-top:24px;">
+                            <p style="font-size:12.5px; color:#475569; margin:0; line-height:1.5;">
+                              <strong>🔒 Security Note:</strong> If you did not request this email, you can safely ignore it. Our team will never ask for your verification code.
                             </p>
                           </div>
                         </td>
@@ -271,9 +284,10 @@ public class MailService {
 
                       <!-- FOOTER -->
                       <tr>
-                        <td align="center" style="padding: 24px 40px; background-color:#080e1a; border-top:1px solid rgba(255,255,255,0.05); font-size:12px; color:#64748b;">
-                          <p style="margin:0 0 6px;">Sent by <strong>Let's Code Together</strong> Security Service</p>
-                          <p style="margin:0; font-size:11px; color:#475569;">© 2026 Let's Code Together. All rights reserved.</p>
+                        <td align="center" style="padding: 24px 40px; background-color:#f8fafc; border-top:1px solid #f1f5f9; font-size:12px; color:#64748b;">
+                          <p style="margin:0 0 4px; font-weight:600; color:#334155;">Let's Code Together Platform</p>
+                          <p style="margin:0 0 4px; font-size:11px; color:#64748b;">Founded by <strong>Deepak Gowri Shankar Enduri</strong></p>
+                          <p style="margin:0; font-size:11px; color:#94a3b8;">© 2026 Let's Code Together. All rights reserved.</p>
                         </td>
                       </tr>
 
@@ -293,27 +307,31 @@ public class MailService {
             <head>
             <meta charset="UTF-8">
             </head>
-            <body style="margin:0; padding:0; background-color:#060b18; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:#f0f6ff;">
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#060b18; padding: 40px 10px;">
+            <body style="margin:0; padding:0; background-color:#f8fafd; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#0f172a; -webkit-font-smoothing:antialiased;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f8fafd; padding: 48px 16px;">
                 <tr>
                   <td align="center">
-                    <table width="600" border="0" cellspacing="0" cellpadding="0" style="max-width:600px; background-color:#0d1626; border:1px solid rgba(255,255,255,0.1); border-radius:16px; overflow:hidden;">
+                    <table width="540" border="0" cellspacing="0" cellpadding="0" style="max-width:540px; background-color:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);">
                       <tr>
-                        <td align="center" style="padding: 28px 40px; border-bottom: 1px solid rgba(255,255,255,0.06); background: linear-gradient(135deg, rgba(34,197,94,0.08) 0%, transparent 100%);">
-                          <div style="font-size:22px; font-weight:800; color:#22c55e;">⚡ Let's Code Together</div>
+                        <td style="height:4px; background-color:#007a42; font-size:0; line-height:0;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="padding: 32px 40px 20px;">
+                          <div style="font-size:21px; font-weight:800; color:#0f172a;">⚡ Let's Code Together</div>
                         </td>
                       </tr>
                       <tr>
-                        <td style="padding: 32px 40px;">
-                          <h2 style="font-size:20px; font-weight:700; color:#ffffff; margin:0 0 16px;">""" + title + """
+                        <td style="padding: 28px 40px 36px;">
+                          <h2 style="font-size:19px; font-weight:700; color:#0f172a; margin:0 0 16px;">""" + title + """
                           </h2>
-                          <div style="font-size:14px; line-height:1.7; color:#a0aec0; white-space: pre-wrap;">""" + bodyContent + """
+                          <div style="font-size:14px; line-height:1.7; color:#475569; white-space: pre-wrap;">""" + bodyContent + """
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td align="center" style="padding: 20px 40px; background-color:#080e1a; font-size:11px; color:#475569;">
-                          © 2026 Let's Code Together. All rights reserved.
+                        <td align="center" style="padding: 20px 40px; background-color:#f8fafc; border-top:1px solid #f1f5f9; font-size:11px; color:#94a3b8;">
+                          <p style="margin:0 0 4px; font-weight:500; color:#64748b;">Founded by <strong>Deepak Gowri Shankar Enduri</strong></p>
+                          <p style="margin:0;">© 2026 Let's Code Together. All rights reserved.</p>
                         </td>
                       </tr>
                     </table>
@@ -325,4 +343,3 @@ public class MailService {
             """;
     }
 }
-
