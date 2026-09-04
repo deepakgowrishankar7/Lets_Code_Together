@@ -261,9 +261,10 @@ function openProtectedSection(sectionId) {
         showChat('public');
     }
 
-    // when dashboard section is opened, fetch scores
+    // when dashboard section is opened, fetch scores and academy stats
     if (sectionId === 'dashboard') {
         populateDashboard();
+        loadAcademyDashboardStats();
     }
 
     // when settings section is opened, populate user profile
@@ -1784,9 +1785,9 @@ function renderFilteredLeaderboard() {
         }).join("");
     }
 
-    // Filter raw scores by selected level
     const targetOpt = filterOptions.find(o => o.label === _activeLeaderboardLangFilter) || filterOptions[0];
-    const rawFiltered = _cachedLeaderboardScores.filter(r => {
+
+    let rawFiltered = _cachedLeaderboardScores.filter(r => {
         const q = (r.quiz || '').toLowerCase();
         if (targetOpt.key === 'java beginner') return q.includes('java') && (q.includes('beginner') || (!q.includes('intermediate') && !q.includes('advanced')));
         if (targetOpt.key === 'java intermediate') return q.includes('java') && q.includes('intermediate');
@@ -1795,6 +1796,10 @@ function renderFilteredLeaderboard() {
         if (targetOpt.key === 'sql') return q.includes('sql');
         return true;
     });
+
+    if (!rawFiltered.length && _cachedLeaderboardScores.length > 0) {
+        rawFiltered = _cachedLeaderboardScores;
+    }
 
     // Group by user email / name to compute top score per developer
     const userMap = new Map();
@@ -1926,25 +1931,10 @@ async function populateDashboard(force = false) {
         mobileWelcome.textContent = isNewUser ? "Welcome" : "Welcome back";
     }
 
-    if (!scoreContainer || !topUsersContainer) return;
-
-    // Show initial loading text ONLY IF containers are currently empty
-    if (!scoreContainer.children.length && !scoreContainer.innerHTML.trim()) {
-        scoreContainer.innerHTML = `<div class="dash-loader">Loading leaderboard...</div>`;
-    }
-    if (!topUsersContainer.children.length && !topUsersContainer.innerHTML.trim()) {
-        topUsersContainer.innerHTML = `<div class="dash-loader">Loading scores...</div>`;
-    }
-
     try {
         const res = await fetch("/api/leaderboard");
-        if (!res.ok) throw new Error(`Server responded ${res.status}`);
-        const rawScores = await res.json();
-
-        // Check if leaderboard data has changed before mutating DOM
-        const newLeaderboardHash = JSON.stringify(rawScores);
-        if (force || newLeaderboardHash !== _lastLeaderboardHash) {
-            _lastLeaderboardHash = newLeaderboardHash;
+        if (res.ok) {
+            const rawScores = await res.json();
             _cachedLeaderboardScores = rawScores;
             renderFilteredLeaderboard();
         }
@@ -1956,23 +1946,16 @@ async function populateDashboard(force = false) {
                 const personalRes = await fetch(`/api/get-quiz-scores?email=${encodeURIComponent(userEmail)}`);
                 const personal = personalRes.ok ? await personalRes.json() : [];
 
-                const newPersonalHash = JSON.stringify(personal);
-                if (force || newPersonalHash !== _lastPersonalScoreHash) {
-                    _lastPersonalScoreHash = newPersonalHash;
+                const kpiCount = document.getElementById("kpi-quizzes-count");
+                if (kpiCount) kpiCount.innerHTML = `${personal.length || 0} <span class="stat-unit">Levels</span>`;
 
-                    const kpiCount = document.getElementById("kpi-quizzes-count");
-                    if (kpiCount) kpiCount.innerHTML = `${personal.length || 0} <span class="stat-unit">Levels</span>`;
-
-                    _cachedPersonalScores = personal;
-                    renderFilteredQuizScores();
-                }
+                _cachedPersonalScores = personal;
+                renderFilteredQuizScores();
             } catch (err) {
                 console.error('Error loading personal scores', err);
             }
         } else {
-            if (!topUsersContainer.children.length || topUsersContainer.innerHTML.includes("Loading")) {
-                topUsersContainer.innerHTML = `<div class="dash-empty-state">Log in to view your personal score history.</div>`;
-            }
+            topUsersContainer.innerHTML = `<div class="dash-empty-state">Log in to view your personal score history.</div>`;
         }
         updateDsaDashboardScore();
     } catch (err) {
@@ -4434,3 +4417,961 @@ async function loadCoursePdfsForStudents(courseId) {
         </a>
     `).join("");
 }
+
+/* =====================================================
+   ACADEMY DASHBOARD API INTEGRATION & TAB ENGINE
+===================================================== */
+function switchLearningLogTab(tabName) {
+    const tabs = ['quizzes', 'masterclasses', 'visualizers'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const content = document.getElementById(`learning-tab-${t}`);
+        if (btn) {
+            btn.classList.toggle('active', t === tabName);
+        }
+        if (content) {
+            content.style.display = (t === tabName) ? 'block' : 'none';
+        }
+    });
+}
+
+let _allQuizLogs = [];
+let _currentLogPage = 1;
+const _logPerPage = 4;
+
+let _allLeaderboardUsers = [];
+let _currentLeaderboardPage = 1;
+const _leaderboardPerPage = 4;
+
+function renderPaginatedLogs() {
+    const logContainer = document.getElementById("dash-quiz-logs-container");
+    const paginationBar = document.getElementById("dash-log-pagination");
+    if (!logContainer) return;
+
+    if (!_allQuizLogs || !_allQuizLogs.length) {
+        logContainer.innerHTML = `<div class="dash-empty-state">No quiz activity logged yet.</div>`;
+        if (paginationBar) paginationBar.innerHTML = "";
+        return;
+    }
+
+    const totalPages = Math.ceil(_allQuizLogs.length / _logPerPage);
+    if (_currentLogPage > totalPages) _currentLogPage = totalPages;
+    if (_currentLogPage < 1) _currentLogPage = 1;
+
+    const startIdx = (_currentLogPage - 1) * _logPerPage;
+    const pageItems = _allQuizLogs.slice(startIdx, startIdx + _logPerPage);
+
+    logContainer.innerHTML = pageItems.map(log => {
+        const qTitle = log.quizTitle || "Quiz";
+        const qLower = qTitle.toLowerCase();
+        let badgeClass = "dsa";
+        let badgeText = "QUIZ";
+        if (qLower.includes("java")) { badgeClass = "java"; badgeText = "JAVA"; }
+        else if (qLower.includes("python")) { badgeClass = "python"; badgeText = "PYTHON"; }
+        else if (qLower.includes("sql")) { badgeClass = "sql"; badgeText = "SQL"; }
+
+        const pct = log.percentage || 90;
+        return `
+            <div class="log-item-row">
+                <div class="log-item-info">
+                    <span class="log-item-badge ${badgeClass}">${badgeText}</span>
+                    <span class="log-item-title">${escapeHtml(qTitle)} — ${log.score}/${log.totalQuestions} (${pct}%)</span>
+                </div>
+                <div class="log-item-progress">
+                    <div class="log-bar-bg"><div class="log-bar-fill" style="width:${pct}%;"></div></div>
+                    <button class="review-btn" onclick="openProtectedSection('dashboard')">Review ›</button>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    if (paginationBar) {
+        if (totalPages <= 1) {
+            paginationBar.innerHTML = "";
+            return;
+        }
+        let pageBtnsHtml = `<button class="page-btn" ${_currentLogPage === 1 ? 'disabled' : ''} onclick="changeLogPage(-1)">‹</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            pageBtnsHtml += `<button class="page-btn ${i === _currentLogPage ? 'active' : ''}" onclick="goToLogPage(${i})">${i}</button>`;
+        }
+        pageBtnsHtml += `<button class="page-btn" ${_currentLogPage === totalPages ? 'disabled' : ''} onclick="changeLogPage(1)">›</button>`;
+        paginationBar.innerHTML = pageBtnsHtml;
+    }
+}
+
+function changeLogPage(delta) {
+    _currentLogPage += delta;
+    renderPaginatedLogs();
+}
+
+function goToLogPage(p) {
+    _currentLogPage = p;
+    renderPaginatedLogs();
+}
+
+function renderPaginatedLeaderboard() {
+    const leaderboardBody = document.getElementById("dash-leaderboard-body");
+    const paginationBar = document.getElementById("dash-leaderboard-pagination");
+    if (!leaderboardBody) return;
+
+    if (!_allLeaderboardUsers || !_allLeaderboardUsers.length) {
+        leaderboardBody.innerHTML = `<tr><td colspan="4">No leaderboard users found.</td></tr>`;
+        if (paginationBar) paginationBar.innerHTML = "";
+        return;
+    }
+
+    const totalPages = Math.ceil(_allLeaderboardUsers.length / _leaderboardPerPage);
+    if (_currentLeaderboardPage > totalPages) _currentLeaderboardPage = totalPages;
+    if (_currentLeaderboardPage < 1) _currentLeaderboardPage = 1;
+
+    const startIdx = (_currentLeaderboardPage - 1) * _leaderboardPerPage;
+    const pageItems = _allLeaderboardUsers.slice(startIdx, startIdx + _leaderboardPerPage);
+
+    leaderboardBody.innerHTML = pageItems.map(user => {
+        const rankClass = user.rank === 1 ? "rank-1" : (user.rank === 2 ? "rank-2" : (user.rank === 3 ? "rank-3" : "rank-other"));
+        const isYou = user.currentUser;
+        const name = user.name || "Developer";
+        const initials = getInitials(name);
+        const handle = user.username ? `@${user.username}` : `@${name.toLowerCase().replaceAll('\\s+', '')}`;
+
+        return `
+            <tr class="${isYou ? 'current-user-row' : ''}">
+                <td>
+                    <div class="leader-rank-badge ${rankClass}">${user.rank}</div>
+                </td>
+                <td>
+                    <div class="developer-user-cell">
+                        <div class="developer-avatar">${initials}</div>
+                        <div class="developer-name-group">
+                            <div class="developer-name">${escapeHtml(name)} ${isYou ? '<span class="you-tag">you</span>' : ''}</div>
+                            <div class="developer-handle">${escapeHtml(handle)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="score-val">${user.score} pts</span></td>
+                <td align="right">
+                    ${!isYou ? `<button class="action-msg-btn" onclick="openPrivateChatWith('${escapeHtml(name)}')">💬 Message</button>` : `<span style="font-size:0.75rem; color:var(--jade); font-weight:700;">Active</span>`}
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    if (paginationBar) {
+        if (totalPages <= 1) {
+            paginationBar.innerHTML = "";
+            return;
+        }
+        let pageBtnsHtml = `<button class="page-btn" ${_currentLeaderboardPage === 1 ? 'disabled' : ''} onclick="changeLeaderboardPage(-1)">‹</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+            pageBtnsHtml += `<button class="page-btn ${i === _currentLeaderboardPage ? 'active' : ''}" onclick="goToLeaderboardPage(${i})">${i}</button>`;
+        }
+        pageBtnsHtml += `<button class="page-btn" ${_currentLeaderboardPage === totalPages ? 'disabled' : ''} onclick="changeLeaderboardPage(1)">›</button>`;
+        paginationBar.innerHTML = pageBtnsHtml;
+    }
+}
+
+function changeLeaderboardPage(delta) {
+    _currentLeaderboardPage += delta;
+    renderPaginatedLeaderboard();
+}
+
+function goToLeaderboardPage(p) {
+    _currentLeaderboardPage = p;
+    renderPaginatedLeaderboard();
+}
+
+async function loadAcademyDashboardStats() {
+    try {
+        const email = localStorage.getItem("loggedInEmail") || (typeof state !== 'undefined' ? state.email : "") || "deepakgowrishankar7@gmail.com";
+        const res = await fetch(`/api/dashboard/stats?email=${encodeURIComponent(email)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // 1. Header Banner
+        const userNameEl = document.getElementById("dash-user-name");
+        if (userNameEl && data.userName) {
+            userNameEl.textContent = data.userName;
+        }
+
+        // 2. Metric Stat Cards
+        const masterclassesEl = document.getElementById("kpi-masterclasses-count") || document.getElementById("dash-masterclasses-count");
+        if (masterclassesEl) {
+            masterclassesEl.innerHTML = `${data.activeMasterclassesCount || 3} <span class="stat-unit">Courses</span>`;
+        }
+
+        const quizzesCountEl = document.getElementById("kpi-quizzes-count") || document.getElementById("dash-quizzes-count");
+        if (quizzesCountEl) {
+            quizzesCountEl.innerHTML = `${data.quizzesCompletedCount || 0} <span class="stat-unit">Levels</span>`;
+        }
+
+        const visEl = document.getElementById("kpi-visualizers-count") || document.getElementById("dash-visualizers-count");
+        if (visEl) {
+            visEl.innerHTML = `${data.interactiveVisualizersCount || 6} <span class="stat-unit">Engines</span>`;
+        }
+
+        const dsaEl = document.getElementById("kpi-dsa-score") || document.getElementById("dash-dsa-count");
+        if (dsaEl) {
+            dsaEl.innerHTML = `${data.dsaQuestionsSolvedCount || 0} <span class="stat-unit">Solved</span>`;
+        }
+
+        const dsaSubElem = document.getElementById("kpi-dsa-quiz-sub");
+        if (dsaSubElem) {
+            const count = data.dsaQuestionsSolvedCount || 0;
+            dsaSubElem.innerText = count === 1 ? "1 DSA Coding Problem Completed" : `${count} DSA Coding Problems Completed`;
+        }
+
+        const rankEl = document.getElementById("kpi-campus-rank") || document.getElementById("dash-user-rank");
+        if (rankEl) {
+            rankEl.innerHTML = `Rank #${data.userRank || 1} <span class="stat-unit">Position</span>`;
+        }
+
+        const rankSubElem = document.getElementById("kpi-campus-sub");
+        if (rankSubElem) {
+            rankSubElem.innerText = `Level ${data.userLevel || 1} · ${data.userXp || 0} XP Points`;
+        }
+
+    } catch (e) {
+        console.warn("[DASHBOARD STATS] Could not load dashboard stats:", e);
+    }
+}
+
+/* =====================================================
+   AI CODE MENTOR, REASONING & AUTO-CORRECTION (GEMINI 2.5 FLASH)
+===================================================== */
+let _latestAiCorrectedCode = "";
+
+async function triggerAiMentor() {
+    const modal = document.getElementById("ai-mentor-modal");
+    const bodyContent = document.getElementById("ai-mentor-body-content");
+    if (!modal || !bodyContent) return;
+
+    modal.style.display = "flex";
+
+    // Extract current code, selected language, and terminal output
+    const editorEl = document.getElementById("compiler-editor");
+    const langSelectEl = document.getElementById("compiler-language");
+    const outputEl = document.querySelector(".compiler-output");
+
+    const code = editorEl ? editorEl.value : "";
+    const language = langSelectEl ? langSelectEl.value : "java";
+    const errorLog = outputEl ? outputEl.textContent : "";
+
+    if (!code || !code.trim()) {
+        bodyContent.innerHTML = `
+            <div class="ai-card-block">
+                <div class="ai-card-title root-cause">⚠️ Code Missing</div>
+                <p class="ai-card-text">Please type or paste some source code in the compiler workspace before requesting AI Mentor analysis.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Render Animated Loading & Timer State
+    bodyContent.innerHTML = `
+        <div style="text-align: center; padding: 36px 20px;">
+            <div class="ai-loading-icon">🤖</div>
+            <h4 style="margin: 0 0 4px 0; font-size: 1.15rem; color: var(--text-main, #f8fafc); font-weight: 700;">Zetrox AI Mentor is Analyzing Your Code...</h4>
+            <div>
+                <div class="ai-timer-badge" id="ai-mentor-timer-display">⏱️ 0.0s</div>
+            </div>
+            <p id="ai-mentor-status-text" style="margin: 6px 0 10px 0; font-size: 0.92rem; color: var(--text-muted, #94a3b8); font-weight: 500; min-height: 24px;">
+                ⚡ Initializing Zetrox 2.5 Flash Agent...
+            </p>
+            <div class="ai-progress-track">
+                <div class="ai-progress-fill" id="ai-mentor-progress-bar"></div>
+            </div>
+        </div>
+    `;
+
+    // Start Realtime Execution Timer & Phase Message Dispatcher
+    const startTime = Date.now();
+    const mentorTimer = setInterval(() => {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        const timerEl = document.getElementById("ai-mentor-timer-display");
+        const statusEl = document.getElementById("ai-mentor-status-text");
+        const progressEl = document.getElementById("ai-mentor-progress-bar");
+
+        if (timerEl) timerEl.textContent = `⏱️ ${elapsed}s`;
+
+        const sec = parseFloat(elapsed);
+        if (statusEl && progressEl) {
+            if (sec < 0.8) {
+                statusEl.textContent = "⚡ Initializing Zetrox 2.5 Flash Agent...";
+                progressEl.style.width = "18%";
+            } else if (sec < 1.8) {
+                statusEl.textContent = "🔍 Analyzing Code & Error Stack Traces...";
+                progressEl.style.width = "40%";
+            } else if (sec < 3.0) {
+                statusEl.textContent = "💡 Performing Socratic Root-Cause Reasoning...";
+                progressEl.style.width = "65%";
+            } else if (sec < 4.2) {
+                statusEl.textContent = "🛠️ Formulating Auto-Corrected Code Solution...";
+                progressEl.style.width = "85%";
+            } else {
+                statusEl.textContent = "🚀 Almost Ready! Finalizing AI Insights...";
+                progressEl.style.width = "95%";
+            }
+        }
+    }, 100);
+
+    try {
+        const response = await fetch('/api/ai/diagnose', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, language, errorLog })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: Unable to reach AI Mentor service.`);
+        }
+
+        const data = await response.json();
+        _latestAiCorrectedCode = data.correctedCode || code;
+
+        clearInterval(mentorTimer);
+
+        bodyContent.innerHTML = `
+            <div class="ai-card-block">
+                <div class="ai-card-title root-cause">📊 Execution Status & Summary</div>
+                <p class="ai-card-text"><strong>${escapeHtml(data.errorSummary || "Code Analysis Complete")}</strong></p>
+            </div>
+
+            <div class="ai-card-block">
+                <div class="ai-card-title why">🔍 Why It Is Wrong (Root Cause Analysis)</div>
+                <p class="ai-card-text">${escapeHtml(data.whyItIsWrong || "Review syntax standards and logic constructs.")}</p>
+            </div>
+
+            <div class="ai-card-block">
+                <div class="ai-card-title how">🛠️ How To Clear The Error</div>
+                <p class="ai-card-text">${escapeHtml(data.howToFix || "Follow the step-by-step fix guide to clear errors.")}</p>
+            </div>
+
+            <div class="ai-card-block">
+                <div class="ai-card-title learn">🎯 What We Want To Make (Learning Concept)</div>
+                <p class="ai-card-text">${escapeHtml(data.whatToLearn || "Language Syntax & Fundamentals")}</p>
+            </div>
+
+            <div class="ai-card-block" style="text-align: center; background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                <div class="ai-card-title fix" style="justify-content: center; font-size: 0.95rem;">⚡ AI Code Auto-Correction Ready</div>
+                <p class="ai-card-text" style="margin-bottom: 14px; font-size: 0.88rem; color: var(--text-muted, #7d90b0);">Click below to automatically clear errors and watch the AI type the corrected code into your editor workspace.</p>
+                <button class="ai-autofix-btn" onclick="applyAiAutoCorrection()">
+                    <span>✨ Auto-Fix & Type Code into Editor</span>
+                </button>
+            </div>
+        `;
+
+    } catch (err) {
+        clearInterval(mentorTimer);
+        console.error("[AI MENTOR] Failed to query AI Mentor:", err);
+        bodyContent.innerHTML = `
+            <div class="ai-card-block">
+                <div class="ai-card-title root-cause">⚠️ Diagnostic Service Status</div>
+                <p class="ai-card-text">Unable to complete live AI analysis: ${escapeHtml(err.message)}</p>
+                <p class="ai-card-text" style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">Ensure your server is running and GEMINI_API_KEY is configured.</p>
+            </div>
+        `;
+    }
+}
+
+function applyAiAutoCorrection() {
+    if (!_latestAiCorrectedCode) {
+        alert("No AI auto-correction available.");
+        return;
+    }
+
+    closeAiMentorModal();
+
+    const editorEl = document.getElementById("compiler-editor");
+    const wrapperEl = document.querySelector(".ide-editor-wrapper");
+    if (!editorEl) return;
+
+    // Highlight editor container with glowing green border
+    if (wrapperEl) {
+        wrapperEl.style.transition = "all 0.3s ease";
+        wrapperEl.style.boxShadow = "0 0 30px rgba(16, 185, 129, 0.6), inset 0 0 15px rgba(16, 185, 129, 0.2)";
+        wrapperEl.style.borderColor = "#10b981";
+    }
+
+    // Scroll smoothly to compiler workspace
+    editorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Animate Line-by-Line Code Typing
+    const lines = _latestAiCorrectedCode.split("\n");
+    let currentLineIndex = 0;
+    editorEl.value = ""; // Clear current code
+
+    const typingInterval = setInterval(() => {
+        if (currentLineIndex < lines.length) {
+            editorEl.value += (currentLineIndex === 0 ? "" : "\n") + lines[currentLineIndex];
+            currentLineIndex++;
+
+            // Trigger live line number gutter & cursor updates
+            editorEl.dispatchEvent(new Event("input", { bubbles: true }));
+            editorEl.scrollTop = editorEl.scrollHeight;
+        } else {
+            clearInterval(typingInterval);
+            editorEl.focus();
+            editorEl.dispatchEvent(new Event("change", { bubbles: true }));
+
+            // Remove glow effect after typing animation ends
+            setTimeout(() => {
+                if (wrapperEl) {
+                    wrapperEl.style.boxShadow = "";
+                    wrapperEl.style.borderColor = "";
+                }
+            }, 1200);
+        }
+    }, 45); // 45ms smooth typing speed per line
+}
+
+function closeAiMentorModal() {
+    const modal = document.getElementById("ai-mentor-modal");
+    if (modal) modal.style.display = "none";
+}
+
+/* =====================================================
+   ZETROX AI CODING AGENT & TOOL SUITE (CHAT INTERFACE)
+===================================================== */
+function toggleZetroxChat() {
+    const drawer = document.getElementById("zetrox-chat-drawer");
+    if (!drawer) return;
+    if (drawer.style.display === "none" || !drawer.style.display) {
+        drawer.style.display = "flex";
+        const input = document.getElementById("zetrox-chat-input");
+        if (input) input.focus();
+    } else {
+        drawer.style.display = "none";
+    }
+}
+
+function parseZetroxMarkdown(text) {
+    if (!text) return "";
+
+    // Clean raw LaTeX math markers like ($O(1)$), \($O(N)$\), $O(N \log N)$ -> O(1), O(N), O(N log N)
+    text = text.replace(/[\(\$]*\\?\$?O\(([^)]+)\)\\?\$?[\)\$]*/gi, 'O($1)');
+    text = text.replace(/\\sqrt\{N\}/gi, '√N');
+    text = text.replace(/\$\$?\s*([^\$]+)\s*\$\$?/g, '$1');
+
+    let html = escapeHtml(text);
+
+    // Markdown Data Tables (| Col1 | Col2 |\n| :--- | :--- |\n| Val1 | Val2 |)
+    html = html.replace(/((?:\|[^\n]+\|\r?\n?)+)/g, function(match, tableBlock) {
+        const rawLines = tableBlock.trim().split('\n').map(l => l.trim()).filter(l => l.startsWith('|'));
+        if (rawLines.length < 2) return match;
+
+        let tableHtml = '<div style="overflow-x: auto; margin: 12px 0;"><table class="zetrox-data-table"><thead>';
+
+        // Extract header
+        const headers = rawLines[0].split('|').slice(1, -1).map(h => h.trim());
+        tableHtml += '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+
+        // Check if second line is a separator line (| :--- | :--- |)
+        const startIndex = (rawLines[1] && rawLines[1].includes('---')) ? 2 : 1;
+
+        for (let i = startIndex; i < rawLines.length; i++) {
+            const cells = rawLines[i].split('|').slice(1, -1).map(c => c.trim());
+            if (cells.length > 0) {
+                tableHtml += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+            }
+        }
+
+        tableHtml += '</tbody></table></div>';
+        return tableHtml;
+    });
+
+    // Code blocks ```lang ... ```
+    html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, function(match, lang, code) {
+        const langTag = lang ? lang.toUpperCase() : "CODE";
+        return `
+            <div style="margin: 14px 0; background: #090d16; border: 1px solid rgba(99,102,241,0.35); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
+                <div style="padding: 7px 14px; background: rgba(30,41,59,0.9); font-size: 0.74rem; font-weight: 800; color: #a5b4fc; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px;">
+                    <span>⚡ ${langTag} SNIPPET</span>
+                    <span style="font-size: 0.7rem; color: #10b981;">Zetrox Verified</span>
+                </div>
+                <pre class="ai-code-box" style="margin: 0; padding: 14px 18px; border: none; border-radius: 0; max-height: 240px; font-size: 0.86rem; line-height: 1.55; color: #34d399; font-family: 'JetBrains Mono', monospace;"><code>${code.trim()}</code></pre>
+            </div>
+        `;
+    });
+
+    // Inline code `code`
+    html = html.replace(/`([^`]+)`/g, '<code style="background: rgba(99,102,241,0.18); color: #38bdf8; padding: 2px 7px; border-radius: 5px; font-family: monospace; font-size: 0.86rem; font-weight: 600;">$1</code>');
+
+    // Headings ### Header
+    html = html.replace(/^###\s+(.*)$/gm, '<h4 style="margin: 18px 0 8px 0; font-size: 0.98rem; font-weight: 700; color: #38bdf8; border-bottom: 1px solid rgba(56,189,248,0.25); padding-bottom: 4px;">$1</h4>');
+    html = html.replace(/^##\s+(.*)$/gm, '<h3 style="margin: 20px 0 10px 0; font-size: 1.08rem; font-weight: 800; color: #10b981; border-bottom: 1px solid rgba(16,185,129,0.3); padding-bottom: 4px;">$1</h3>');
+
+    // Horizontal rules ---
+    html = html.replace(/^---$/gm, '<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 16px 0;">');
+
+    // Bold **text**
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--text-main, #f8fafc); font-weight: 700;">$1</strong>');
+
+    // Italic *text*
+    html = html.replace(/\*([^*]+)\*/g, '<em style="color: #cbd5e1;">$1</em>');
+
+    // Bullet points - item or * item
+    html = html.replace(/^[\-\*]\s+(.*)$/gm, '<div style="margin-left: 8px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start;"><span style="color: #10b981; font-weight: bold; font-size: 1rem;">•</span><span style="flex:1; line-height: 1.6;">$1</span></div>');
+
+    // Numbered lists 1. item
+    html = html.replace(/^(\d+)\.\s+(.*)$/gm, '<div style="margin-left: 8px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start;"><span style="color: #6366f1; font-weight: 800; font-size: 0.88rem;">$1.</span><span style="flex:1; line-height: 1.6;">$2</span></div>');
+
+    // Paragraph spacing
+    html = html.replace(/\n\n/g, '<div style="height: 12px;"></div>');
+    html = html.replace(/\n/g, '<br>');
+
+    return html;
+}
+
+function streamTypewriterResponse(containerEl, formattedHtml, scrollContainer) {
+    let index = 0;
+    const speed = 8; // 8ms high-speed tick
+    const fullText = formattedHtml;
+
+    containerEl.innerHTML = '<span class="zetrox-typing-cursor">▌</span>';
+
+    const streamInterval = setInterval(() => {
+        if (index < fullText.length) {
+            // Handle HTML tags as a single step so tags like <strong> don't break mid-air
+            if (fullText[index] === '<') {
+                const closingIdx = fullText.indexOf('>', index);
+                if (closingIdx !== -1) {
+                    index = closingIdx + 1;
+                } else {
+                    index++;
+                }
+            } else {
+                index += 3; // Stream 3 characters per tick for fluid, high-speed response
+                if (index > fullText.length) index = fullText.length;
+            }
+
+            containerEl.innerHTML = fullText.substring(0, index) + '<span class="zetrox-typing-cursor">▌</span>';
+            if (scrollContainer) scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        } else {
+            clearInterval(streamInterval);
+            containerEl.innerHTML = fullText; // Final clean HTML without cursor
+            if (scrollContainer) scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+    }, speed);
+}
+
+// Global Multi-Turn Conversation Memory for Zetrox AI
+const zetroxConversationHistory = [];
+
+async function sendZetroxMessage() {
+    const input = document.getElementById("zetrox-chat-input");
+    const list = document.getElementById("zetrox-messages-list");
+    if (!input || !list) return;
+
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    // Append user message
+    const userMsgEl = document.createElement("div");
+    userMsgEl.className = "zetrox-msg user";
+    userMsgEl.innerHTML = `
+        <div class="zetrox-avatar">👤</div>
+        <div class="zetrox-bubble">${escapeHtml(userText)}</div>
+    `;
+    list.appendChild(userMsgEl);
+
+    input.value = "";
+    list.scrollTop = list.scrollHeight;
+
+    // Start Live Reasoning Timer
+    const startTime = Date.now();
+    const typingEl = document.createElement("div");
+    typingEl.className = "zetrox-msg agent";
+    typingEl.id = "zetrox-typing-indicator";
+    typingEl.innerHTML = `
+        <div class="zetrox-avatar">🤖</div>
+        <div class="zetrox-bubble" style="font-style: normal; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+            <span class="ai-typing-pulse">🧠</span> Zetrox AI is reasoning... <span class="zetrox-reason-timer" id="zetrox-live-timer">0.0s</span>
+        </div>
+    `;
+    list.appendChild(typingEl);
+    list.scrollTop = list.scrollHeight;
+
+    const reasonTimer = setInterval(() => {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        const timerEl = document.getElementById("zetrox-live-timer");
+        if (timerEl) timerEl.textContent = elapsed + "s";
+    }, 100);
+
+    const activeNav = document.querySelector('.nav-link.active, .sidebar-item.active, .nav-item.active');
+    const pageName = activeNav ? activeNav.innerText.trim().toLowerCase() : 'dashboard';
+
+    const editorEl = document.getElementById("compiler-editor");
+    const langSelectEl = document.getElementById("compiler-language");
+    const outputEl = document.getElementById("compiler-output");
+    const courseCardEl = document.querySelector('.course-card.active, .module-card.active, h2, h3');
+
+    const code = editorEl ? editorEl.value : "";
+    const language = langSelectEl ? langSelectEl.value : "java";
+
+    const contextPayload = {
+        page: pageName,
+        language: language,
+        code: code,
+        output: outputEl ? outputEl.innerText : "",
+        courseTopic: courseCardEl ? courseCardEl.innerText.trim() : "",
+        user: "deepak"
+    };
+
+    // Store user turn in conversation history
+    zetroxConversationHistory.push({ role: "user", parts: [{ text: userText }] });
+
+    function getZetroxSessionId() {
+        let sid = localStorage.getItem("zetrox_session_id");
+        if (!sid) {
+            sid = "user-session-" + Date.now() + "-" + Math.random().toString(36).substring(2, 9);
+            localStorage.setItem("zetrox_session_id", sid);
+        }
+        return sid;
+    }
+
+    try {
+        const response = await fetch('/api/zetrox/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: userText,
+                sessionId: getZetroxSessionId(),
+                code,
+                language,
+                context: contextPayload,
+                history: zetroxConversationHistory.slice(-10)
+            })
+        });
+
+        const data = await response.json();
+        clearInterval(reasonTimer);
+
+        if (data && data.reply) {
+            // Store model response in conversation history
+            zetroxConversationHistory.push({ role: "model", parts: [{ text: data.reply }] });
+        }
+
+        const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
+
+        const indicator = document.getElementById("zetrox-typing-indicator");
+        if (indicator) indicator.remove();
+
+        const msgId = "zetrox-stream-" + Date.now();
+        const replyContent = (data && data.reply && data.reply.trim()) ? data.reply : "🤖 **Zetrox AI Response**\n\nI have processed your query. Please let me know if you would like me to generate code, explain errors, or break down concepts!";
+        const formattedHtml = parseZetroxMarkdown(replyContent);
+
+        const agentMsgEl = document.createElement("div");
+        agentMsgEl.className = "zetrox-msg agent";
+        agentMsgEl.style.maxWidth = "92%";
+        agentMsgEl.innerHTML = `
+            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-bubble" style="width: 100%;">
+                <div class="zetrox-card-header">
+                    <span class="zetrox-badge">🤖 ZETROX 2.5 FLASH AGENT</span>
+                    <span class="zetrox-time-badge">⚡ Reasoned in ${elapsedSec}s</span>
+                </div>
+                <div id="${msgId}" class="zetrox-stream-body"></div>
+            </div>
+        `;
+        list.appendChild(agentMsgEl);
+        list.scrollTop = list.scrollHeight;
+
+        const targetEl = document.getElementById(msgId);
+        if (targetEl) {
+            streamTypewriterResponse(targetEl, formattedHtml, list);
+        }
+
+    } catch (err) {
+        clearInterval(reasonTimer);
+        const indicator = document.getElementById("zetrox-typing-indicator");
+        if (indicator) indicator.remove();
+
+        const errEl = document.createElement("div");
+        errEl.className = "zetrox-msg agent";
+        errEl.innerHTML = `
+            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-bubble" style="color: #f43f5e;">Unable to reach Zetrox AI Agent. Ensure server is active.</div>
+        `;
+        list.appendChild(errEl);
+        list.scrollTop = list.scrollHeight;
+    }
+}
+
+async function callAgentTool(toolName) {
+    const toolBox = document.getElementById("zetrox-tool-output-container");
+    const list = document.getElementById("zetrox-messages-list");
+    const editorEl = document.getElementById("compiler-editor");
+    const langSelectEl = document.getElementById("compiler-language");
+
+    const code = editorEl ? editorEl.value : "";
+    const language = langSelectEl ? langSelectEl.value : "java";
+
+    if (!toolBox) return;
+
+    toolBox.style.display = "block";
+    toolBox.innerHTML = `<div style="text-align: center; color: #38bdf8;">⏳ Executing Zetrox Agent Tool <code>${toolName}()</code>...</div>`;
+
+    try {
+        const response = await fetch('/api/zetrox/tool', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tool: toolName, code, language })
+        });
+
+        const data = await response.json();
+
+        if (toolName === 'generate_quiz' && data.quiz) {
+            const q = data.quiz;
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                optionsHtml += `<button class="zetrox-quiz-option-btn" onclick="submitZetroxQuizAnswer(${q.correctAnswerIndex}, ${idx}, '${escapeHtml(q.explanation)}')">${escapeHtml(opt)}</button>`;
+            });
+
+            toolBox.innerHTML = `
+                <div style="font-weight: 700; color: #10b981; margin-bottom: 6px;">🧩 ${escapeHtml(q.title)}</div>
+                <div style="margin-bottom: 8px;">${escapeHtml(q.question)}</div>
+                <div id="zetrox-quiz-options">${optionsHtml}</div>
+                <div id="zetrox-quiz-feedback" style="margin-top: 8px; font-weight: 600;"></div>
+            `;
+        } else if (toolName === 'get_user_progress') {
+            toolBox.innerHTML = `
+                <div style="font-weight: 700; color: #fbbf24; margin-bottom: 6px;">🏆 Zetrox AI Mastery Stats</div>
+                <div>🔥 Current Streak: <strong>${data.currentStreak}</strong></div>
+                <div>⚡ Total Executions: <strong>${data.totalExecutions}</strong></div>
+                <div>🧩 Quizzes Solved: <strong>${data.quizzesSolved}</strong></div>
+                <div>🎯 Mastery Rating: <strong>${data.masteryScore} (${data.rank})</strong></div>
+            `;
+        } else if (toolName === 'get_course_topic' && data.modules) {
+            let modsHtml = data.modules.map(m => `
+                <div style="background: rgba(30, 41, 59, 0.8); padding: 8px 10px; border-radius: 8px; margin-top: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-weight: 700; color: #38bdf8;">${escapeHtml(m.title)} <span style="font-size: 0.7rem; color: #94a3b8;">(${escapeHtml(m.difficulty)})</span></div>
+                    <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 2px;">${escapeHtml(m.description)}</div>
+                </div>
+            `).join('');
+            toolBox.innerHTML = `
+                <div style="font-weight: 700; color: #8b5cf6; margin-bottom: 6px;">📚 Zetrox Recommended Learning Modules</div>
+                ${modsHtml}
+            `;
+        } else if (toolName === 'compile_code' || toolName === 'run_code') {
+            const runBtn = document.querySelector(".compiler-run-btn");
+            if (runBtn) runBtn.click();
+            toolBox.innerHTML = `
+                <div style="color: #34d399; font-weight: 600;">⚡ Tool <code>run_code()</code> executed! Compiler triggered for ${language.toUpperCase()}.</div>
+            `;
+        } else if (toolName === 'explain_error') {
+            toolBox.innerHTML = `
+                <div style="font-weight: 500;">${data.explanation ? parseZetroxMarkdown(data.explanation) : 'Error Analysis Complete.'}</div>
+            `;
+        } else {
+            toolBox.innerHTML = `<div style="color: #34d399;">Result: ${escapeHtml(JSON.stringify(data))}</div>`;
+        }
+
+        if (list) list.scrollTop = list.scrollHeight;
+    } catch (err) {
+        toolBox.innerHTML = `<div style="color: #f43f5e;">Tool execution failed: ${escapeHtml(err.message)}</div>`;
+    }
+}
+
+function submitZetroxQuizAnswer(correctIdx, selectedIdx, explanation) {
+    const feedbackEl = document.getElementById("zetrox-quiz-feedback");
+    if (!feedbackEl) return;
+
+    if (selectedIdx === correctIdx) {
+        feedbackEl.style.color = "#10b981";
+        feedbackEl.innerHTML = `✅ <strong>Correct!</strong> ${explanation}`;
+    } else {
+        feedbackEl.style.color = "#f43f5e";
+        feedbackEl.innerHTML = `❌ <strong>Incorrect.</strong> ${explanation}`;
+    }
+}
+
+/* =====================================================
+   ZETROX AI AGENT CONTEXT
+   ===================================================== */
+
+function getZetroxContext() {
+    const editor = document.getElementById("compiler-editor");
+    const language = document.getElementById("compiler-language");
+    const input = document.getElementById("compiler-user-input");
+    const output = document.querySelector(".compiler-output");
+
+    const activeSection =
+        document.querySelector("main > section.active-section");
+
+    return {
+        page: activeSection?.id || "",
+        section: activeSection?.id || "",
+
+        course:
+            document.querySelector(".course-subject-top-header h1")?.textContent?.trim() || "",
+
+        lesson:
+            document.querySelector(".course-topic.active")?.textContent?.trim() || "",
+
+        courseTopic:
+            document.querySelector(".course-topic.active")?.textContent?.trim() || "",
+
+        courseContent:
+            activeSection?.innerText || "",
+
+        language: language?.value || "",
+
+        code: editor?.value || "",
+
+        stdin: input?.value || "",
+
+        output: output?.textContent || "",
+
+        compilerError: output?.textContent || "",
+
+        displayName:
+            localStorage.getItem("loggedInUserName") ||
+            localStorage.getItem("userName") ||
+            "",
+
+        email:
+            localStorage.getItem("loggedInEmail") || "",
+
+        platformCapabilities: [
+            "Courses",
+            "Online Compiler",
+            "Code Visualizer",
+            "Code Rooms",
+            "Public Chat",
+            "Private 1-on-1 Messaging",
+            "Notifications",
+            "Quizzes",
+            "Leaderboard",
+            "Settings"
+        ]
+    };
+}
+
+
+async function askZetrox(message) {
+
+    let sessionId = localStorage.getItem("zetroxSessionId");
+
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        localStorage.setItem("zetroxSessionId", sessionId);
+    }
+
+    const response = await fetch("/api/zetrox/chat", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            sessionId: sessionId,
+            message: message,
+            context: getZetroxContext()
+        })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+        throw new Error(
+            data.error || "ZETROX request failed."
+        );
+    }
+
+    return data.reply;
+}
+
+/* =====================================================
+   COMPILER OUTPUT DRAG RESIZER & FULLSCREEN MODE
+===================================================== */
+function toggleOutputFullscreen() {
+    const container = document.getElementById("ide-terminal-container");
+    const iconEl = document.getElementById("output-fullscreen-icon");
+    const textEl = document.getElementById("output-fullscreen-text");
+    if (!container) return;
+
+    const isFullscreen = container.classList.toggle("fullscreen-output-mode");
+    if (isFullscreen) {
+        if (iconEl) iconEl.textContent = "🗗";
+        if (textEl) textEl.textContent = "Exit Full Screen";
+    } else {
+        if (iconEl) iconEl.textContent = "⛶";
+        if (textEl) textEl.textContent = "Full Screen";
+    }
+}
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        const container = document.getElementById("ide-terminal-container");
+        if (container && container.classList.contains("fullscreen-output-mode")) {
+            toggleOutputFullscreen();
+        }
+    }
+});
+
+function initCompilerTerminalResize() {
+    const handle = document.getElementById("ide-resize-handle");
+    const body = document.querySelector(".ide-terminal-body");
+    if (!handle || !body) return;
+
+    let isDragging = false;
+    let startY = 0;
+    let startHeight = 0;
+
+    handle.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        startHeight = body.getBoundingClientRect().height;
+        handle.classList.add("dragging");
+        document.body.style.cursor = "ns-resize";
+        document.body.style.userSelect = "none";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        const dy = startY - e.clientY;
+        const newHeight = Math.max(100, Math.min(window.innerHeight * 0.82, startHeight + dy));
+        body.style.height = `${newHeight}px`;
+        body.style.maxHeight = `${newHeight}px`;
+    });
+
+    document.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            handle.classList.remove("dragging");
+            document.body.style.cursor = "";
+            document.body.style.userSelect = "";
+        }
+    });
+
+    handle.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+            isDragging = true;
+            startY = e.touches[0].clientY;
+            startHeight = body.getBoundingClientRect().height;
+            handle.classList.add("dragging");
+        }
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        if (isDragging && e.touches.length === 1) {
+            const dy = startY - e.touches[0].clientY;
+            const newHeight = Math.max(100, Math.min(window.innerHeight * 0.82, startHeight + dy));
+            body.style.height = `${newHeight}px`;
+            body.style.maxHeight = `${newHeight}px`;
+        }
+    });
+
+    document.addEventListener("touchend", () => {
+        isDragging = false;
+        handle.classList.remove("dragging");
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initCompilerTerminalResize();
+});
+
+
+

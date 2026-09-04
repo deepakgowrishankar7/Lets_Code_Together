@@ -347,6 +347,211 @@
 
                         
 
+            <!-- Academy Dashboard Section -->
+            <section id="dashboard" class="content-section dashboard-academy-section" style="display: none; padding: 24px 0 40px;">
+                
+                <!-- Header Greeting Banner -->
+                <div class="academy-hero-banner">
+                    <div class="hero-left-info">
+                        <div class="hero-sub-tag">Academy Dashboard</div>
+                        <h1 class="hero-welcome-title">Welcome back, <span id="dash-user-name">Developer</span>! 👋</h1>
+                        <p class="hero-welcome-desc">
+                            Track your masterclass progress, quiz achievements, algorithm visualizer metrics, and global leaderboard rankings in real time.
+                        </p>
+                    </div>
+                    <div class="hero-action-buttons">
+                        <button class="hero-btn primary-hero-btn" onclick="showSection('java-course')">
+                            <span>☕</span> Resume Java Course
+                        </button>
+                        <button class="hero-btn secondary-hero-btn" onclick="showSection('python-course')">
+                            <span>🐍</span> Open Python Masterclass
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Top 5 Metric Cards Grid -->
+                <div class="academy-metrics-grid">
+                    
+                    <!-- Card 1: Active Masterclasses -->
+                    <div class="metric-card masterclasses-card">
+                        <div class="metric-card-header">
+                            <span class="metric-title">Active Masterclasses</span>
+                            <span class="metric-icon">🎓</span>
+                        </div>
+                        <div class="metric-big-val" id="dash-masterclasses-count">3 <span>Courses</span></div>
+                        <div class="metric-legend-list">
+                            <div class="legend-item"><span class="legend-dot progressing"></span> Progressing</div>
+                            <div class="legend-item"><span class="legend-dot upcoming"></span> Upcoming</div>
+                            <div class="legend-item"><span class="legend-dot completed"></span> Completed</div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Quizzes Completed -->
+                    <div class="metric-card quizzes-card">
+                        <div class="metric-card-header">
+                            <span class="metric-title">Quizzes Completed</span>
+                            <span class="metric-icon">📝</span>
+                        </div>
+                        <div class="donut-chart-wrapper">
+                            <div class="donut-ring-container">
+                                <svg viewBox="0 0 36 36" class="circular-chart green">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle" id="dash-quiz-ring" stroke-dasharray="90, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="donut-center-trophy">🏆</div>
+                            </div>
+                            <div class="donut-val-info">
+                                <div class="donut-count-num" id="dash-quizzes-count">10</div>
+                                <div class="donut-count-label">Levels Passed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Interactive Visualizers -->
+                    <div class="metric-card visualizer-card">
+                        <div class="metric-card-header">
+                            <span class="metric-title">Interactive Visualizers</span>
+                            <span class="metric-icon">🎬</span>
+                        </div>
+                        <div class="metric-big-val" id="dash-visualizers-count">6 <span>Engines</span></div>
+                        <div class="sparkline-container">
+                            <svg viewBox="0 0 120 40" class="sparkline-svg">
+                                <path d="M0,35 Q20,10 40,25 T80,5 T120,30" fill="none" stroke="var(--jade, #00f5a0)" stroke-width="2.5" />
+                                <circle cx="80" cy="5" r="4" fill="var(--jade, #00f5a0)" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: DSA Questions Solved -->
+                    <div class="metric-card dsa-card">
+                        <div class="metric-card-header">
+                            <span class="metric-title">DSA Questions Solved</span>
+                            <span class="metric-icon">🧩</span>
+                        </div>
+                        <div class="metric-big-val" id="dash-dsa-count">12 <span>Solved</span></div>
+                        <div class="dsa-progress-bar-bg">
+                            <div class="dsa-progress-bar-fill" id="dash-dsa-bar" style="width: 75%;"></div>
+                        </div>
+                        <button class="dsa-start-btn" onclick="openProtectedSection('ds-course')">Start New Problem →</button>
+                    </div>
+
+                    <!-- Card 5: Campus Standing -->
+                    <div class="metric-card campus-standing-card">
+                        <div class="metric-card-header">
+                            <span class="metric-title">Campus Standing</span>
+                            <span class="metric-icon">👑</span>
+                        </div>
+                        <div class="rank-badge-box">
+                            <div class="rank-badge-number" id="dash-user-rank">Rank #1</div>
+                            <div class="rank-badge-sub">Top Performer</div>
+                        </div>
+                        <div class="user-xp-badge" id="dash-user-level">⚡ Level 12 · Code Ninja</div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Section: Learning Log + Leaderboard -->
+                <div class="academy-widgets-grid">
+
+                    <!-- Widget 1: Your Learning Log -->
+                    <div class="dashboard-widget-box learning-log-box">
+                        <div class="widget-header-row">
+                            <h3 class="widget-title">
+                                <span class="widget-title-icon">👤</span> Your Learning Log
+                            </h3>
+                            <div class="widget-tabs">
+                                <button class="widget-tab-btn active" id="tab-btn-quizzes" onclick="switchLearningLogTab('quizzes')">Quizzes</button>
+                                <button class="widget-tab-btn" id="tab-btn-masterclasses" onclick="switchLearningLogTab('masterclasses')">Masterclasses</button>
+                                <button class="widget-tab-btn" id="tab-btn-visualizers" onclick="switchLearningLogTab('visualizers')">Visualizers</button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Quizzes -->
+                        <div id="learning-tab-quizzes" class="learning-log-content active">
+                            <div class="log-items-list" id="dash-quiz-logs-container">
+                                <!-- Populated dynamically via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Masterclasses -->
+                        <div id="learning-tab-masterclasses" class="learning-log-content" style="display:none;">
+                            <div class="log-items-list">
+                                <div class="log-item-row">
+                                    <div class="log-item-info">
+                                        <span class="log-item-badge java">JAVA</span>
+                                        <span class="log-item-title">Java Masterclass — 8/10 Modules</span>
+                                    </div>
+                                    <div class="log-item-progress">
+                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:80%;"></div></div>
+                                        <button class="review-btn" onclick="showSection('java-course')">Resume ›</button>
+                                    </div>
+                                </div>
+                                <div class="log-item-row">
+                                    <div class="log-item-info">
+                                        <span class="log-item-badge python">PYTHON</span>
+                                        <span class="log-item-title">Python Basics — 6/8 Modules</span>
+                                    </div>
+                                    <div class="log-item-progress">
+                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:75%;"></div></div>
+                                        <button class="review-btn" onclick="showSection('python-course')">Resume ›</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Visualizers -->
+                        <div id="learning-tab-visualizers" class="learning-log-content" style="display:none;">
+                            <div class="log-items-list">
+                                <div class="log-item-row">
+                                    <div class="log-item-info">
+                                        <span class="log-item-badge dsa">VISUALIZER</span>
+                                        <span class="log-item-title">Binary Search Tree Traversal</span>
+                                    </div>
+                                    <div class="log-item-progress">
+                                        <div class="log-bar-bg"><div class="log-bar-fill" style="width:100%;"></div></div>
+                                        <button class="review-btn" onclick="showSection('visualizer')">Launch ›</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Widget Pagination Bar -->
+                        <div class="widget-pagination-bar" id="dash-log-pagination"></div>
+                    </div>
+
+                    <!-- Widget 2: Global Campus Leaderboard -->
+                    <div class="dashboard-widget-box leaderboard-box">
+                        <div class="widget-header-row">
+                            <h3 class="widget-title">
+                                <span class="widget-title-icon">👑</span> Global Campus Leaderboard
+                            </h3>
+                            <span class="leaderboard-live-pill">● Live Updates</span>
+                        </div>
+
+                        <div class="leaderboard-table-container">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">RANK</th>
+                                        <th width="45%">DEVELOPER</th>
+                                        <th width="25%">SCORE</th>
+                                        <th width="20%" style="text-align:right;">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-leaderboard-body">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Widget Pagination Bar -->
+                        <div class="widget-pagination-bar" id="dash-leaderboard-pagination"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
             <!-- Courses Section -->
             <section id="courses" class="my-courses">
                 <h3>Courses</h3>
@@ -827,6 +1032,9 @@
                     <option value="sql">🗄️ SQL (SQLite WASM)</option>
                 </select>
                 <button class="compiler-run-btn">▶ Run <span class="kbd-shortcut">(Ctrl+Enter)</span></button>
+                <button class="ai-mentor-btn" onclick="triggerAiMentor()" title="Ask Zetrox AI Mentor to analyze code and debug errors">
+                    <span>🤖</span> Zetrox AI Mentor
+                </button>
                 <button class="host-room-btn" onclick="hostRoom()">
                     <span>🌐</span> Host Code Room
                 </button>
@@ -866,12 +1074,23 @@
         </div>
 
         <!-- Integrated Terminal & Console Tabs -->
-        <div class="ide-terminal-container">
+        <div class="ide-terminal-container" id="ide-terminal-container">
+            <!-- Drag Resize Splitter Handle Bar -->
+            <div class="ide-resize-handle" id="ide-resize-handle" title="Drag up or down to expand output view">
+                <div class="resize-handle-line"></div>
+            </div>
+
             <div class="ide-terminal-tabs">
                 <button class="ide-tab-btn active" id="tab-btn-output" onclick="switchIdeTab('output')">🖥️ Terminal Output</button>
                 <button class="ide-tab-btn" id="tab-btn-stdin" onclick="switchIdeTab('stdin')">📥 Program Stdin Input</button>
                 <button class="ide-tab-btn" id="tab-btn-stats" onclick="switchIdeTab('stats')">⏱️ Execution Stats</button>
-                <button class="ide-copy-output-btn" onclick="copyCompilerOutput()" title="Copy Output">📋 Copy Output</button>
+                
+                <div style="display: flex; gap: 8px; align-items: center; margin-left: auto;">
+                    <button class="ide-copy-output-btn" onclick="copyCompilerOutput()" title="Copy Output">📋 Copy</button>
+                    <button class="ide-fullscreen-output-btn" id="btn-maximize-output" onclick="toggleOutputFullscreen()" title="Maximize / Fullscreen Output Console">
+                        <span id="output-fullscreen-icon">⛶</span> <span id="output-fullscreen-text">Full Screen</span>
+                    </button>
+                </div>
             </div>
 
             <div class="ide-terminal-body">
@@ -2077,6 +2296,59 @@ ORDER BY avg_sal DESC;</code></pre>
 </div>
 
 
+
+<!-- AI Code Mentor Modal Overlay -->
+<div id="ai-mentor-modal" class="ai-mentor-overlay" style="display:none;" onclick="if(event.target===this) closeAiMentorModal()">
+    <div class="ai-mentor-container">
+        <div class="ai-mentor-header">
+            <div>
+                <span class="ai-mentor-badge">🤖 ZETROX 2.5 FLASH AGENT</span>
+                <h3>Zetrox AI Code Mentor & Socratic Debugger</h3>
+            </div>
+            <button class="ai-mentor-close-btn" onclick="closeAiMentorModal()">&times;</button>
+        </div>
+        <div class="ai-mentor-body" id="ai-mentor-body-content">
+            <!-- Dynamic content loaded via triggerAiMentor() in scripts.js -->
+        </div>
+    </div>
+</div>
+
+<button id="zetrox-chat-trigger-btn" class="zetrox-chat-fab" onclick="toggleZetroxChat()" title="Open Zetrox AI Coding Assistant & Context Engine">
+    <span class="zetrox-fab-status" title="Zetrox Agent Active"></span>
+    <span class="zetrox-fab-icon">🤖</span>
+    <span class="zetrox-fab-label">Zetrox AI Agent</span>
+</button>
+
+<!-- Zetrox AI Coding Agent Chat Drawer -->
+<div id="zetrox-chat-drawer" class="zetrox-drawer" style="display:none;">
+    <div class="zetrox-drawer-header">
+        <div class="zetrox-drawer-title">
+            <span class="zetrox-badge">🤖 ZETROX AI AGENT</span>
+            <h4>Zetrox Coding Assistant & Pair Programmer</h4>
+        </div>
+        <button class="zetrox-drawer-close" onclick="toggleZetroxChat()">&times;</button>
+    </div>
+    
+    <!-- Chat Messages Stream -->
+    <div class="zetrox-messages-container" id="zetrox-messages-list">
+        <div class="zetrox-msg agent">
+            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-bubble">
+                Hello! I am <strong>Zetrox AI</strong>, your autonomous coding agent. 
+                I can compile code, explain errors, track your progress, recommend learning topics, or generate interactive quizzes!
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Tool Result / Quiz Container -->
+    <div id="zetrox-tool-output-container" class="zetrox-tool-box" style="display:none;"></div>
+
+    <!-- Chat Input Area -->
+    <div class="zetrox-input-area">
+        <input type="text" id="zetrox-chat-input" placeholder="Ask Zetrox AI anything about code..." onkeypress="if(event.key==='Enter') sendZetroxMessage()">
+        <button class="zetrox-send-btn" onclick="sendZetroxMessage()">Send 🚀</button>
+    </div>
+</div>
 
     <!-- Link external JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
