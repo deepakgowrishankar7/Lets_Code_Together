@@ -75,21 +75,23 @@ public class AuthController {
     public User register(@Valid @RequestBody RegisterRequest request) {
         String name = request.getName();
         String email = request.getEmail().toLowerCase();
+        String username = request.getUsername();
+        if (username == null || username.isBlank()) {
+            username = email.split("@")[0];
+        }
+        username = username.replaceAll("^@+", "").trim().toLowerCase();
 
         if (!otpService.verifyOtp(email, request.getOtp())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired OTP");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired OTP code");
         }
 
         if (userRepository.existsByEmail(email)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
-        }
-
-        if (userRepository.existsByName(name)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "An account with this email already exists");
         }
 
         User user = new User();
         user.setName(name);
+        user.setUsername(username);
         user.setEmail(email);
         user.setPassword(request.getPassword());
 
