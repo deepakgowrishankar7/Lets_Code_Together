@@ -1,89 +1,67 @@
 <div align="center">
 
-# 🚀 Let's Code Together
+# 🚀 Let's Code Together — Interactive Developer & Learning Platform
 
-### _An All-in-One Interactive Coding, Learning & Community Platform_
+### _Full-Stack Interactive IDE, Multi-Language Compiler, 3D Visualizer, Zetrox AI Agent & Code Mentor_
 
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.14-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-21%20LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-Zetrox%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**Learn · Code · Compile · Visualize · Communicate — All in One Place**
+**Learn · Code · Compile · Visualize · Pair Program · Zetrox AI Mentor — All in One Workspace**
 
-_A premium, full-stack web platform where students can learn programming through structured courses, compile code in 8+ languages, visualize execution step-by-step, take quizzes, and chat with peers — all wrapped in a glassmorphic, modern UI._
+_A next-generation, glassmorphic interactive web platform featuring an 8-language real-time online compiler, resizable IDE output console, autonomous Zetrox AI coding assistant, 3D algorithm visualizers, live collaborative code rooms, scored quizzes, and real-time community chat._
 
 <br/>
 
-[🌐 Live Demo](https://lets-code-together.onrender.com) · [🐛 Report Bug](https://github.com/deepakgowrishankar7/Lets_Code_Together/issues) · [✨ Request Feature](https://github.com/deepakgowrishankar7/Lets_Code_Together/issues)
+[🌐 Live Platform Demo](https://lets-code-together.onrender.com) · [🐛 Report Bug](https://github.com/deepakgowrishankar7/Lets_Code_Together/issues) · [✨ Request Feature](https://github.com/deepakgowrishankar7/Lets_Code_Together/issues)
 
 </div>
 
 ---
 
-## 📸 Preview
-
-<div align="center">
-
-| Light Mode | Dark Mode |
-|:---:|:---:|
-| ![Light Mode](https://img.shields.io/badge/🌞-Light%20Mode-f8fafc?style=for-the-badge) | ![Dark Mode](https://img.shields.io/badge/🌙-Dark%20Mode-0f172a?style=for-the-badge) |
-
-</div>
-
-> **💡 Tip:** The app launches in **Light Mode** by default and supports a seamless theme toggle between Light and Dark modes across all pages.
-
----
-
-## ✨ Features at a Glance
+## 🌟 Platform Highlights & Core Capabilities
 
 <table>
 <tr>
 <td width="50%">
 
-### 🎓 Learning Hub
-- **4 Active Courses** — Java, Python, SQL, Data Structures & Algorithms
-- **12+ Upcoming Courses** — C++, C, HTML/CSS, Web Dev, React, AWS, DBMS, Data Analytics, Node.js, Figma, Cybersecurity, Photoshop, Design Thinking
-- **Structured Curriculum** — Topic-by-topic learning with PDF resources
-- **Animated Video Lessons** — Visual concept explanations
-- **Interactive Quizzes** — Test knowledge with scored assessments
+### 🤖 Zetrox AI Agent & Code Mentor
+- **Context-Aware Pair Programmer** — Multi-turn conversation synchronized with your active editor code, compiler output, and page context.
+- **AI Code Mentor & Auto-Corrector** — Line-by-line syntax diagnosis, time/space complexity analysis, and 100% automated error fixes.
+- **Dynamic Interactive Quizzes** — On-demand quiz generation tailored to your language and learning progress.
 
 </td>
 <td width="50%">
 
-### 💻 IDE Workbench
-- **Multi-Language Online Compiler** — Python 3, Java 21, C++ (GCC), C (GCC), JavaScript (Node.js), Go, Ruby, PHP
-- **Code Execution Visualizer** — Line-by-line execution with Python Tutor integration
-- **Live Code Rooms** — Real-time collaborative coding sessions
-- **Keyboard Shortcuts** — `Ctrl+Enter` to run code
-- **Execution Stats** — Runtime, memory, and status tracking
+### ⚡ IDE Workbench & Multi-Language Compiler
+- **8 Supported Languages** — Java 21, Python 3.12, GCC C++, GCC C, Node.js JavaScript, Go, Ruby, PHP, SQL RDBMS.
+- **Resizable Output Splitter** — Drag handle to expand/collapse terminal console output height seamlessly.
+- **Edge-to-Edge Full Screen Mode** — Maximize output console to full display for distraction-free output reading.
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-### 💬 Communication Hub
-- **Public Chat** — Community-wide discussions
-- **Private Messaging** — Direct messaging between users
-- **Admin Announcements** — Broadcast messages from admins
-- **Real-Time Search** — Multi-field user search (name/handle)
-- **Date-Grouped Messages** — Today, Yesterday, and date headers
+### 🎬 3D Visualizers & Live Code Rooms
+- **3D Algorithm Visualizer** — Step-by-step visual execution of sorting algorithms, binary search, tree traversals, and call stacks.
+- **Live Collaborative Rooms** — Instant room creation (`CT-ROOM-XXXXXX`) for real-time pair programming and technical interviews.
+- **Concept Canvases** — Visual memory frames for stack, heap, and pointer operations.
 
 </td>
 <td width="50%">
 
-### 🛡️ Platform Features
-- **JWT Authentication** — Secure login with token-based auth
-- **Admin Dashboard** — User management, analytics, notifications
-- **Quiz Score Tracking** — Performance analytics with charts
-- **Email Integration** — Password reset via email
-- **PWA Support** — Installable as a native-like app
-- **Dark/Light Theme** — System-wide theme toggle
+### 📚 Masterclass Courses & Global Leaderboard
+- **Structured Curriculum** — Comprehensive tracks for Java 21, Python 3, SQL, and DSA (Arrays, Trees, Graphs, DP).
+- **Interactive Quiz Hub** — Scored assessments with category score logging and progress tracking.
+- **Campus Leaderboard** — Real-time user rankings by language tier (Java Beginner/Inter/Adv, Python, SQL).
 
 </td>
 </tr>
@@ -91,281 +69,179 @@ _A premium, full-stack web platform where students can learn programming through
 
 ---
 
-## 🏗️ Tech Stack
+## 🤖 Zetrox AI Autonomous Architecture
+
+Zetrox AI operates directly inside the platform as a context-aware pair programmer powered by Google Gemini AI:
+
+```mermaid
+graph TD
+    A["👤 User Prompt / Code Error"] --> B["🖥️ Frontend IDE Workbench"]
+    B --> C{"⚡ Context Extractor"}
+    C -->|Editor Code + Terminal Log + Active Page| D["☕ ZetroxAgentController (/api/zetrox/chat)"]
+    D --> E["🤖 Google Gemini AI Engine (gemini-3.6-flash / gemini-3.5-flash-lite)"]
+    E --> F["🧠 Reasoning & Solution Generation"]
+    F --> G["💬 Real-Time UI Chatbox & Code Fix Action Buttons"]
+```
+
+---
+
+## 💻 IDE Workbench & Multi-Language Compiler
+
+The **Let's Code Together IDE** delivers a full desktop-class coding environment inside the web browser:
+
+| Language | Engine / Compiler Version | Execution Capabilities |
+|:---|:---|:---|
+| **Java** | Java 21 LTS OpenJDK | Virtual threads, record types, pattern matching, full OOP |
+| **Python** | Python 3.12 | Standard libraries, algorithmic scripts, data structure handling |
+| **C++** | GCC C++20 | STL containers, pointers, manual memory management |
+| **C** | GCC C17 | Low-level memory, pointers, struct manipulation |
+| **JavaScript** | Node.js v18+ | ES6 Async/Await, JSON parsing, algorithmic problems |
+| **Go** | Go 1.22+ | Goroutines, channels, fast compilation |
+| **Ruby** | Ruby 3.x | Object-oriented scripts, string manipulation |
+| **PHP** | PHP 8.x | Command-line scripting, array processing |
+| **SQL** | In-Browser RDBMS / SQLite | Interactive query engine, JOINs, GROUP BY aggregations |
+
+---
+
+## 🏗️ Technical Stack & Architecture
 
 <div align="center">
 
-### Backend
-| Technology | Purpose |
+### Backend Architecture
+| Layer | Technologies |
 |:---|:---|
-| **Spring Boot 3.5** | Core framework & REST API |
-| **Spring Security** | Authentication & authorization |
-| **Spring Data JPA** | Database ORM & repository layer |
-| **Spring Mail** | Email services (password reset) |
-| **JWT (jjwt 0.12.5)** | Token-based authentication |
-| **MySQL** | Relational database |
-| **Lombok** | Boilerplate reduction |
-| **SpringDoc OpenAPI** | API documentation (Swagger UI) |
+| **Framework** | Spring Boot 3.5.14 |
+| **Language** | Java 21 LTS |
+| **AI Integration** | Google Gemini API (v1beta REST API with failover model fallback) |
+| **Security** | Spring Security & JWT Token-based Authentication |
+| **Database ORM** | Spring Data JPA & Hibernate 6.6 |
+| **Database** | MySQL 8.0 RDBMS |
+| **Mail & OTP** | Spring Mail (SMTP SSL) with Brevo & Resend HTTP Fallbacks |
+| **API Docs** | SpringDoc OpenAPI (Swagger UI) |
 
-### Frontend
-| Technology | Purpose |
+### Frontend Architecture
+| Layer | Technologies |
 |:---|:---|
-| **Vanilla HTML/CSS/JS** | Core UI — no framework overhead |
-| **Glassmorphic Design System** | Premium UI with `backdrop-filter: blur` |
-| **Chart.js** | Quiz score analytics & visualizations |
-| **Google Fonts (Inter)** | Modern typography |
-| **Service Worker** | PWA offline support |
-
-### DevOps & Deployment
-| Technology | Purpose |
-|:---|:---|
-| **Docker** | Multi-stage build with compiler runtimes |
-| **Render** | Cloud hosting with auto-deploy from GitHub |
-| **Maven** | Build automation |
+| **UI Framework** | Vanilla HTML5 / CSS3 / ES6+ JavaScript (Zero framework bloat) |
+| **Design System** | Modern Glassmorphism (`backdrop-filter: blur`, custom CSS variables) |
+| **Analytics** | Chart.js for Quiz analytics & Leaderboard charts |
+| **PWA & Offline** | Web App Manifest & Service Worker (`sw.js`) |
 
 </div>
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository Directory Overview
 
 ```
 Lets_Code_Together/
 ├── 📂 src/main/java/com/deepak/codetogether/
-│   ├── 📂 config/           # Security config, CORS, app configuration
-│   ├── 📂 controller/       # REST API controllers
-│   │   ├── AuthController          # Login, register, password reset
-│   │   ├── CompileController       # Multi-language code compilation
-│   │   ├── MessageController       # Public, private & admin messaging
-│   │   ├── QuizController          # Quiz submission & score tracking
-│   │   ├── NotificationController  # Admin notifications & dismissals
-│   │   ├── RoomController          # Live collaborative code rooms
-│   │   ├── JavaConceptController   # Java concept content API
-│   │   └── SseController           # Server-Sent Events for real-time
-│   ├── 📂 dto/              # Data Transfer Objects
-│   ├── 📂 entity/           # JPA entities
-│   │   ├── User                    # User accounts
-│   │   ├── PublicMessage           # Public chat messages
-│   │   ├── PrivateMessage          # Direct messages
-│   │   ├── AdminMessage            # Admin broadcast messages
-│   │   ├── QuizScore               # Quiz attempt records
-│   │   ├── Notification            # Platform notifications
-│   │   └── JavaConcept             # Java learning content
-│   ├── 📂 repository/       # Spring Data JPA repositories
-│   ├── 📂 security/         # JWT service & token management
-│   └── 📂 service/          # Business logic layer
+│   ├── 📂 config/                 # CORS, Security, and App Configuration
+│   ├── 📂 controller/             # REST API Controllers
+│   │   ├── AuthController.java            # User authentication, OTP verification, password reset
+│   │   ├── CompileController.java         # Multi-language local & JDoodle compilation
+│   │   ├── ZetroxAgentController.java     # Autonomous Zetrox AI chat & Gemini failover engine
+│   │   ├── AiMentorController.java        # AI Code Mentor line-by-line diagnostic fixer
+│   │   ├── RoomController.java            # Live collaborative code room manager
+│   │   ├── QuizController.java            # Quiz submission, scoring & analytics
+│   │   ├── NotificationController.java    # System-wide & user notification broadcasts
+│   │   ├── MessageController.java         # Public community chat & 1-on-1 direct messaging
+│   │   └── DashboardController.java       # User progress & campus metrics
+│   ├── 📂 dto/                    # Data Transfer Objects
+│   ├── 📂 entity/                 # JPA Entity Models (User, QuizScore, PrivateMessage, etc.)
+│   ├── 📂 repository/             # Spring Data JPA Repositories
+│   ├── 📂 security/               # JWT token utilities & user details service
+│   └── 📂 service/                # Business logic & mail services
 │
 ├── 📂 src/main/resources/
-│   ├── 📄 application.properties   # App config (DB, mail, JWT)
-│   └── 📂 static/                  # Frontend assets
-│       ├── 📄 index.html           # Landing page & login/register
-│       ├── 📄 main.html            # Main dashboard (SPA)
-│       ├── 📄 admin.html           # Admin panel
-│       ├── 📄 about.html           # About page
-│       ├── 📄 help.html            # Help & FAQ page
-│       ├── 📄 styles.css           # Core design system (~9500 lines)
-│       ├── 📄 scripts.js           # Core application logic
-│       ├── 📄 dsa-course.js        # DSA course content & modules
-│       ├── 📄 quizzes.js           # Quiz question banks
-│       ├── 📄 manifest.json        # PWA manifest
-│       ├── 📄 sw.js                # Service worker
-│       └── 📂 pdfs/                # Course PDF resources
+│   ├── 📄 application.properties  # Central application configuration
+│   └── 📂 static/                 # Single-Page Web Frontend Assets
+│       ├── 📄 index.html          # Landing page, feature showcase & authentication
+│       ├── 📄 main.html           # Main SPA workbench (IDE, Visualizer, Courses, Chat)
+│       ├── 📄 admin.html          # Admin control panel
+│       ├── 📄 about.html          # About & platform story page
+│       ├── 📄 help.html           # Help, FAQ & User Guide
+│       ├── 📄 styles.css          # Glassmorphic CSS design system
+│       ├── 📄 scripts.js          # Core frontend application logic & resizer engine
+│       ├── 📄 dsa-course.js       # DSA curriculum & module data
+│       ├── 📄 quizzes.js          # Quiz question banks
+│       ├── 📄 manifest.json       # PWA manifest
+│       └── 📄 sw.js               # Service worker offline caching
 │
-├── 📄 Dockerfile                   # Multi-stage Docker build
-├── 📄 pom.xml                      # Maven dependencies
-└── 📄 README.md                    # You are here!
+├── 📄 Dockerfile                  # Multi-stage containerization with compiler runtimes
+├── 📄 pom.xml                     # Maven project configuration
+└── 📄 README.md                   # Platform documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Local Installation & Setup Guide
 
-### Prerequisites
+### 1️⃣ Prerequisites
+- **Java JDK**: 21 or higher
+- **Maven**: 3.9+ (or use the included `./mvnw` wrapper)
+- **MySQL**: 8.0+
 
-| Requirement | Version |
-|:---|:---|
-| **Java JDK** | 21+ |
-| **Maven** | 3.9+ (or use included `mvnw` wrapper) |
-| **MySQL** | 8.0+ |
-| **Node.js** _(optional, for JS compilation)_ | 18+ |
-
-### 1️⃣ Clone the Repository
-
+### 2️⃣ Clone the Repository
 ```bash
 git clone https://github.com/deepakgowrishankar7/Lets_Code_Together.git
 cd Lets_Code_Together
 ```
 
-### 2️⃣ Configure the Database
-
+### 3️⃣ Setup Database
 Create a MySQL database and update `src/main/resources/application.properties`:
-
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/codetogether
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
+spring.datasource.username=root
+spring.datasource.password=your_mysql_password
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-### 3️⃣ Configure Email (Optional)
-
-For password reset functionality, configure your email credentials:
-
+### 4️⃣ Configure Gemini AI (Optional for Zetrox AI)
+To enable live Zetrox AI responses, set your API key in `application.properties` or environment variables:
 ```properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=your_email@gmail.com
-spring.mail.password=your_app_password
+gemini.api.key=AIzaSy...YOUR_GOOGLE_AI_STUDIO_KEY...
 ```
 
-### 4️⃣ Run the Application
-
+### 5️⃣ Run the Platform
 ```bash
-# Using Maven wrapper (recommended)
+# Using Maven Wrapper (Windows PowerShell)
+.\mvnw spring-boot:run
+
+# Using Maven Wrapper (Linux / macOS)
 ./mvnw spring-boot:run
-
-# Or with Maven installed
-mvn spring-boot:run
 ```
 
-### 5️⃣ Open in Browser
-
-```
-http://localhost:8081
-```
+Access the app in your browser at: **`http://localhost:8081`**
 
 ---
 
 ## 🐳 Docker Deployment
 
-The Docker image includes compilers for **Java, Python, C, C++, and Node.js** for the online code compiler.
+The multi-stage `Dockerfile` packages Spring Boot alongside GCC, Python 3, Node.js, and Java runtimes:
 
 ```bash
-# Build the image
-docker build -t codetogether .
+# Build Docker image
+docker build -t lets-code-together .
 
-# Run the container
-docker run -p 8081:8081 \
-  -e SPRING_DATASOURCE_URL=jdbc:mysql://host:3306/codetogether \
-  -e SPRING_DATASOURCE_USERNAME=your_user \
-  -e SPRING_DATASOURCE_PASSWORD=your_pass \
-  codetogether
+# Run Docker container
+docker run -d -p 8081:8081 \
+  -e DB_URL=jdbc:mysql://host.docker.internal:3306/mydatabase \
+  -e DB_USER=root \
+  -e DB_PASS=your_password \
+  --name lets-code-together-app lets-code-together
 ```
 
 ---
 
-## ☁️ Render Deployment
-
-This project is configured for **automatic deployment** on [Render](https://render.com):
-
-1. Connect your GitHub repository to Render
-2. Set the **Docker** build option
-3. Configure environment variables for database and email
-4. Push to `main` branch — Render auto-deploys! 🚀
-
----
-
-## 📡 API Documentation
-
-Once the app is running, access the interactive API docs at:
-
-```
-http://localhost:8081/swagger-ui.html
-```
-
-### Key API Endpoints
-
-| Method | Endpoint | Description |
-|:---|:---|:---|
-| `POST` | `/api/auth/register` | Register a new user |
-| `POST` | `/api/auth/login` | Authenticate & receive JWT |
-| `POST` | `/api/auth/forgot-password` | Send password reset email |
-| `POST` | `/compile/run` | Compile & execute code |
-| `GET` | `/api/messages/public` | Fetch public chat messages |
-| `POST` | `/api/messages/public` | Send a public message |
-| `GET` | `/api/messages/private/{email}` | Fetch private conversation |
-| `POST` | `/api/messages/private` | Send a private message |
-| `GET` | `/api/quiz/scores` | Get quiz scores |
-| `POST` | `/api/quiz/submit` | Submit quiz answers |
-| `GET` | `/api/notifications` | Get platform notifications |
-
----
-
-## 🎨 Design Philosophy
-
-<table>
-<tr>
-<td>
-
-**🪟 Glassmorphism**
-<br/>Frosted glass cards with `backdrop-filter: blur` for depth and elegance
-
-</td>
-<td>
-
-**🎯 Royal Blue Palette**
-<br/>Consistent `#2563eb` accent across all interactive elements
-
-</td>
-<td>
-
-**✨ Micro-Animations**
-<br/>Smooth transitions, hover effects, and reveal animations throughout
-
-</td>
-</tr>
-<tr>
-<td>
-
-**📱 Responsive**
-<br/>Fully adaptive layout for desktop, tablet, and mobile devices
-
-</td>
-<td>
-
-**🌗 Dual Theme**
-<br/>Light and Dark modes with seamless toggling
-
-</td>
-<td>
-
-**⚡ Performance**
-<br/>Vanilla JS — zero framework overhead, instant load times
-
-</td>
-</tr>
-</table>
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
----
-
-## 📄 License
+## 📄 License & Attribution
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
----
-
-## 👨‍💻 Author
+Developed & Maintained by **Deepak Gowri Shankar Enduri** (Founder & CEO, *Let's Code Together*).
 
 <div align="center">
 
-**Deepak Gowrishankar**
-
-[![GitHub](https://img.shields.io/badge/GitHub-deepakgowrishankar7-181717?style=for-the-badge&logo=github)](https://github.com/deepakgowrishankar7)
-
----
-
-<sub>⭐ If you found this project useful, please consider giving it a star!</sub>
+<sub>⭐ If you find this platform helpful, please consider giving the repository a star on GitHub!</sub>
 
 </div>
