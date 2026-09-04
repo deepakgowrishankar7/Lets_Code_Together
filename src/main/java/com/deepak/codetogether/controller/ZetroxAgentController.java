@@ -128,10 +128,10 @@ public class ZetroxAgentController {
             logger.error("[ZETROX AI] Error calling Gemini API: {}", e.getMessage(), e);
             String raw = safeError(e);
             String errMsg;
-            if (raw.contains("401") || raw.contains("UNAUTHENTICATED") || raw.contains("ACCESS_TOKEN_TYPE_UNSUPPORTED")) {
-                errMsg = "🔑 **Gemini API Key Required**: Please copy your API Key starting with `AIzaSy...` from Google AI Studio (https://aistudio.google.com/app/apikey) and update `gemini.api.key` in `application.properties`.";
+            if (raw.contains("401") || raw.contains("400") || raw.contains("403") || raw.contains("UNAUTHENTICATED") || raw.contains("INVALID") || raw.contains("ACCESS_TOKEN")) {
+                errMsg = "🔑 **Gemini API Key Required**: Please get a free API Key starting with `AIzaSy...` from Google AI Studio (https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY` in Render Environment variables.";
             } else {
-                errMsg = "⏳ **Gemini API Limit Exceeded**: Free tier request quota reached. Please wait **15 seconds** before asking your next question, or configure your personal API key in `application.properties`.";
+                errMsg = "⏳ **Gemini API Limit Exceeded**: Free tier request quota reached. Please wait **15 seconds** before asking your next question, or configure your personal API key in Render Environment.";
             }
             return ResponseEntity.status(200).body(Map.of(
                     "success", false,
