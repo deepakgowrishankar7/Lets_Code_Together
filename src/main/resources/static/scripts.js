@@ -18,9 +18,20 @@ function showSectionDirect(sectionId) {
     const target = document.getElementById(sectionId);
     if (!target) return;
 
-    target.style.display = "block";
+    // Chat section needs display:flex to work as a flex column layout
+    target.style.display = (sectionId === 'user-communication') ? "flex" : "block";
     target.classList.add("active-section");
     setActiveSidebar(sectionId);
+
+    // Toggle chat-mode class on main-content so chat fits in viewport without page scroll
+    const mainContent = document.querySelector(".main-content");
+    if (mainContent) {
+        if (sectionId === 'user-communication') {
+            mainContent.classList.add("main-content--chat-mode");
+        } else {
+            mainContent.classList.remove("main-content--chat-mode");
+        }
+    }
 
     // Show top course search bar ONLY on courses section
     const headerSearch = $("#header-search-courses");
@@ -1993,8 +2004,8 @@ function showChat(type){
 const publicBtn = document.querySelector('.chat-toggle-buttons button:nth-child(1)');
 const privateBtn = document.querySelector('.chat-toggle-buttons button:nth-child(2)');
 
-$("#public-chat").style.display = type === "public" ? "block" : "none";
-$("#private-chat").style.display = type === "private" ? "block" : "none";
+$("#public-chat").style.display = type === "public" ? "flex" : "none";
+$("#private-chat").style.display = type === "private" ? "flex" : "none";
 
 if (publicBtn && privateBtn) {
     publicBtn.classList.toggle('active', type === 'public');
@@ -2532,52 +2543,105 @@ function toggleEmojiPicker(inputId, btnElement) {
     parentBar.style.position = 'relative';
 
     let picker = parentBar.querySelector('.emoji-picker-popup');
+
+    // If picker already exists, toggle with animation
     if (picker) {
-        picker.style.display = picker.style.display === 'none' ? 'grid' : 'none';
+        if (picker.classList.contains('emoji-picker-open')) {
+            picker.classList.remove('emoji-picker-open');
+            picker.classList.add('emoji-picker-close');
+            setTimeout(() => { picker.style.display = 'none'; picker.classList.remove('emoji-picker-close'); }, 200);
+        } else {
+            picker.style.display = 'grid';
+            requestAnimationFrame(() => picker.classList.add('emoji-picker-open'));
+        }
         return;
     }
 
-    document.querySelectorAll('.emoji-picker-popup').forEach(p => p.style.display = 'none');
+    // Close any other open pickers
+    document.querySelectorAll('.emoji-picker-popup').forEach(p => {
+        p.classList.remove('emoji-picker-open');
+        p.style.display = 'none';
+    });
+
+    // Detect light mode
+    const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
 
     picker = document.createElement('div');
     picker.className = 'emoji-picker-popup';
     picker.style.cssText = `
         position: absolute;
-        bottom: 64px;
-        left: 16px;
+        bottom: 68px;
+        left: 12px;
         z-index: 9999;
-        background: rgba(15, 23, 42, 0.98);
-        backdrop-filter: blur(18px);
-        border: 1px solid rgba(0, 208, 132, 0.4);
-        border-radius: 16px;
-        padding: 10px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+        background: ${isLight ? 'rgba(255,255,255,0.97)' : 'rgba(22, 28, 45, 0.97)'};
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid ${isLight ? 'rgba(16,185,129,0.25)' : 'rgba(16,185,129,0.3)'};
+        border-radius: 20px;
+        padding: 14px 12px 10px;
+        box-shadow: ${isLight
+            ? '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(16,185,129,0.1)'
+            : '0 20px 60px rgba(0,0,0,0.6), 0 4px 16px rgba(16,185,129,0.15)'};
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        gap: 5px;
-        width: 285px;
+        gap: 6px;
+        width: 295px;
         box-sizing: border-box;
         overflow: hidden;
+        transform-origin: bottom left;
+        transform: scale(0.7) translateY(10px);
+        opacity: 0;
+        transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease;
     `;
 
-    picker.innerHTML = _EMOJI_LIST.map(e => `
-        <button type="button" 
-                style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; font-size:1.15rem; height:34px; width:100%; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-sizing:border-box; transition:all 0.15s ease;"
-                onmouseover="this.style.background='rgba(0,208,132,0.25)'; this.style.transform='scale(1.15)';"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='scale(1)';"
-                onclick="insertEmoji('${inputId}', '${e}'); this.closest('.emoji-picker-popup').style.display='none';">
+    // Header label
+    const header = document.createElement('div');
+    header.style.cssText = `
+        grid-column: 1 / -1;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: ${isLight ? '#10b981' : '#34d399'};
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        padding: 0 2px;
+    `;
+    header.textContent = '😊 Pick an Emoji';
+    picker.appendChild(header);
+
+    // Emoji buttons
+    const btnBg   = isLight ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.06)';
+    const btnBdr  = isLight ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.1)';
+    const hoverBg = 'rgba(16,185,129,0.22)';
+
+    picker.insertAdjacentHTML('beforeend', _EMOJI_LIST.map(e => `
+        <button type="button"
+                style="background:${btnBg}; border:1px solid ${btnBdr}; border-radius:10px; font-size:1.2rem; height:36px; width:100%; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-sizing:border-box; transition:all 0.14s ease;"
+                onmouseover="this.style.background='${hoverBg}'; this.style.transform='scale(1.2)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.25)';"
+                onmouseout="this.style.background='${btnBg}'; this.style.transform='scale(1)'; this.style.boxShadow='none';"
+                onclick="insertEmoji('${inputId}', '${e}'); this.closest('.emoji-picker-popup').classList.remove('emoji-picker-open'); setTimeout(()=>{ this.closest('.emoji-picker-popup').style.display='none'; }, 150);">
             ${e}
         </button>
-    `).join("");
+    `).join(""));
 
     parentBar.appendChild(picker);
 
-    document.addEventListener('click', (e) => {
+    // Trigger open animation
+    requestAnimationFrame(() => {
+        picker.style.display = 'grid';
+        requestAnimationFrame(() => picker.classList.add('emoji-picker-open'));
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function closeHandler(e) {
         if (!picker.contains(e.target) && e.target !== btnElement) {
-            picker.style.display = 'none';
+            picker.classList.remove('emoji-picker-open');
+            setTimeout(() => { picker.style.display = 'none'; }, 200);
+            document.removeEventListener('click', closeHandler);
         }
     });
 }
+
 
 function insertEmoji(inputId, emoji) {
     const input = document.getElementById(inputId);
@@ -5649,12 +5713,162 @@ function initUpcomingCourseClickHandlers() {
     });
 }
 
+/* =================================================================
+   P2P LIVE PAIR PROGRAMMING ANIMATION ENGINE (HERO SECTION)
+   ================================================================= */
+function initHeroPairCodingAnimation() {
+    const u1CodeEl = document.getElementById('u1-code-display');
+    const u2CodeEl = document.getElementById('u2-code-display');
+    const u1TermEl = document.getElementById('u1-term-display');
+    const u2TermEl = document.getElementById('u2-term-display');
+    const u1Status = document.getElementById('u1-status');
+    const u2Status = document.getElementById('u2-status');
+
+    if (!u1CodeEl || !u2CodeEl) return;
+
+    const scenario = [
+        {
+            user: 'alex',
+            raw: 'public class LivePairDemo {',
+            html: '<span class="kw">public class</span> <span class="cls">LivePairDemo</span> {'
+        },
+        {
+            user: 'alex',
+            raw: '    public static void main(String[] args) {',
+            html: '    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {'
+        },
+        {
+            user: 'alex',
+            raw: '        int number = 42;',
+            html: '        <span class="kw">int</span> number = <span class="num">42</span>;'
+        },
+        {
+            user: 'sarah',
+            raw: '        if (number % 2 == 0) {',
+            html: '        <span class="kw">if</span> (number % <span class="num">2</span> == <span class="num">0</span>) {'
+        },
+        {
+            user: 'sarah',
+            raw: '            System.out.println("Even: " + number);',
+            html: '            System.out.<span class="fn">println</span>(<span class="str">"Even: "</span> + number);',
+            term: '❯ Even: 42 [Execution: 0.12ms]'
+        },
+        {
+            user: 'alex',
+            raw: '        }',
+            html: '        }'
+        },
+        {
+            user: 'alex',
+            raw: '    }',
+            html: '    }'
+        },
+        {
+            user: 'alex',
+            raw: '}',
+            html: '}'
+        }
+    ];
+
+    let completedHtmlLines = [];
+    let currentLineIdx = 0;
+    let currentCharIdx = 0;
+    let animTimer = null;
+
+    const u1Pos = document.getElementById('u1-pos');
+    const u2Pos = document.getElementById('u2-pos');
+
+    function renderState(currentRawText, user) {
+        const cursorTag = user === 'alex' 
+            ? '<span class="typing-cursor-bar alex">|</span>' 
+            : '<span class="typing-cursor-bar sarah">|</span>';
+
+        let codeHtml = completedHtmlLines.join('\n');
+        if (currentRawText !== null) {
+            if (codeHtml.length > 0) codeHtml += '\n';
+            codeHtml += escapeHtmlText(currentRawText) + cursorTag;
+        }
+
+        u1CodeEl.innerHTML = codeHtml;
+        u2CodeEl.innerHTML = codeHtml;
+
+        const colNum = currentRawText !== null ? currentRawText.length + 1 : 1;
+        const lineNum = currentLineIdx + 1;
+        if (u1Pos) u1Pos.textContent = `Ln ${lineNum}, Col ${colNum}`;
+        if (u2Pos) u2Pos.textContent = `Ln ${lineNum}, Col ${colNum}`;
+
+        if (u1CodeEl.parentElement) u1CodeEl.parentElement.scrollTop = u1CodeEl.parentElement.scrollHeight;
+        if (u2CodeEl.parentElement) u2CodeEl.parentElement.scrollTop = u2CodeEl.parentElement.scrollHeight;
+    }
+
+    function escapeHtmlText(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function startTypingStep() {
+        if (currentLineIdx >= scenario.length) {
+            u1Status.className = 'typing-status-badge synced';
+            u1Status.textContent = 'Synced';
+            u2Status.className = 'typing-status-badge synced';
+            u2Status.textContent = 'Synced';
+
+            animTimer = setTimeout(() => {
+                completedHtmlLines = [];
+                currentLineIdx = 0;
+                currentCharIdx = 0;
+                u1TermEl.textContent = '❯ Ready';
+                u2TermEl.textContent = '❯ Ready';
+                startTypingStep();
+            }, 4000);
+            return;
+        }
+
+        const lineObj = scenario[currentLineIdx];
+        const activeUser = lineObj.user;
+
+        if (activeUser === 'alex') {
+            u1Status.className = 'typing-status-badge alex';
+            u1Status.textContent = 'Typing...';
+            u2Status.className = 'typing-status-badge synced';
+            u2Status.textContent = 'Synced';
+        } else {
+            u2Status.className = 'typing-status-badge sarah';
+            u2Status.textContent = 'Typing...';
+            u1Status.className = 'typing-status-badge synced';
+            u1Status.textContent = 'Synced';
+        }
+
+        if (currentCharIdx <= lineObj.raw.length) {
+            const partialRaw = lineObj.raw.substring(0, currentCharIdx);
+            renderState(partialRaw, activeUser);
+            currentCharIdx++;
+            animTimer = setTimeout(startTypingStep, Math.floor(Math.random() * 20) + 25);
+        } else {
+            completedHtmlLines.push(lineObj.html);
+            renderState(null, activeUser);
+
+            if (lineObj.term) {
+                u1TermEl.textContent = lineObj.term;
+                u2TermEl.textContent = lineObj.term;
+            }
+
+            currentLineIdx++;
+            currentCharIdx = 0;
+            animTimer = setTimeout(startTypingStep, 350);
+        }
+    }
+
+    startTypingStep();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initCompilerTerminalResize();
     if (typeof loadAcademyDashboardStats === 'function') {
         loadAcademyDashboardStats();
     }
+    initHeroPairCodingAnimation();
 });
+
 
 
 

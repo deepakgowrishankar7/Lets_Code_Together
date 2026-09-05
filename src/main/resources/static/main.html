@@ -32,7 +32,7 @@
     <!-- Link external CSS -->
     <link rel="stylesheet" href="custom-popup.css">
     <script src="custom-popup.js"></script>
-    <link rel="stylesheet" href="styles.css?v=50">
+    <link rel="stylesheet" href="styles.css?v=70">
     <link rel="stylesheet" href="mobile_fixes.css?v=2">
     <script>
         // Apply Light Mode by default unless user explicitly selected dark mode
@@ -184,170 +184,215 @@
                 </div>
             </header>
 
-            <!-- Home Section (Premium Interactive Hub) -->
+            <!-- Home Section (Modern Conversion Layout) -->
             <section id="home" class="dashboard-overview active-section">
-                <!-- Hero Hub Card -->
-                <div class="edu-hero" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.06)); border: 1px solid var(--border-medium); border-radius: 20px; padding: 40px; margin-bottom: 36px;">
-                    <div class="edu-hero-content">
-                        <div class="hero-badge-pill" style="background:rgba(37,99,235,0.1); color:var(--accent-blue); padding:6px 14px; border-radius:20px; font-weight:700; display:inline-block; margin-bottom:16px; font-size:0.813rem;">
-                            ⚡ NEXT-GEN INTERACTIVE DEVELOPER PLATFORM
+                
+                <!-- 1. HERO SECTION -->
+                <div class="home-hero-container">
+                    <div class="home-hero-content">
+                        <div class="home-badge-pill">
+                            ⚡ NEXT-GEN PAIR-PROGRAMMING PLATFORM
                         </div>
-                        <h1 style="font-size: 2.5rem; font-weight: 800; line-height: 1.25; margin: 0 0 16px 0; color: var(--text-main);">
-                            Master Software Engineering, <span style="background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Data Structures & Compilers</span>
+                        <h1 class="home-hero-headline">
+                            Never Code <span class="gradient-text">Alone Again.</span>
                         </h1>
-                        <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin: 0 0 28px 0; max-width: 750px;">
-                            Structured Java 21, Python 3.12, SQL, and DSA Masterclasses featuring real-time multi-language compilers, step-by-step 3D algorithm visualizers, live collaborative code rooms, and verified certificates.
+                        <p class="home-hero-subheadline">
+                            Join interactive pair-programming rooms, tackle real-world tracks, and level up with peer accountability.
                         </p>
+                        <div class="home-hero-ctas">
+                            <button class="cta-btn primary-cta" onclick="showSection('courses')">
+                                🚀 Start Coding Free
+                            </button>
+                            <button class="cta-btn secondary-cta" onclick="showSection('compiler')">
+                                🌐 Explore Live Rooms
+                            </button>
+                        </div>
+                    </div>
 
-                        <div class="edu-hero-actions" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
-                            <button onclick="showSection('java-course')" style="padding: 12px 22px; font-weight: 700; font-size: 0.95rem; border-radius: 10px; cursor: pointer; background: #059669; color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.25); display: flex; align-items: center; gap: 8px;">
-                                <span>☕ Java 21 Masterclass</span>
-                            </button>
-                            <button onclick="showSection('python-course')" style="padding: 12px 22px; font-weight: 700; font-size: 0.95rem; border-radius: 10px; cursor: pointer; background: #2563eb; color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(37,99,235,0.25); display: flex; align-items: center; gap: 8px;">
-                                <span>🐍 Python 3.12 Masterclass</span>
-                            </button>
-                            <button onclick="showSection('ds-course')" style="padding: 12px 22px; font-weight: 700; font-size: 0.95rem; border-radius: 10px; cursor: pointer; background: #7c3aed; color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(124,58,237,0.25); display: flex; align-items: center; gap: 8px;">
-                                <span>🌳 DSA Roadmap</span>
-                            </button>
-                            <button onclick="showSection('compiler')" style="padding: 12px 22px; font-weight: 700; font-size: 0.95rem; border-radius: 10px; cursor: pointer; background: #0891b2; color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(8,145,178,0.25); display: flex; align-items: center; gap: 8px;">
-                                <span>💻 Multi-Compiler IDE</span>
-                            </button>
+                    <!-- Single Master IDE Window Box containing Both Users in Split Panes -->
+                    <div class="home-ide-preview-box">
+                        <!-- Master Top Header Bar -->
+                        <div class="ide-preview-header">
+                            <div class="ide-header-left">
+                                <div class="ide-header-dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="ide-preview-title">
+                                    <span class="pulse-dot"></span> P2P Live Session — Room #9284
+                                </div>
+                            </div>
+                            <div class="ide-preview-status-pill">
+                                🟢 Synced (4ms)
+                            </div>
+                        </div>
+
+                        <!-- Master Split Container (Both users in 1 box) -->
+                        <div class="ide-split-container">
+                            
+                            <!-- LEFT PANE: USER 1 (Alex) -->
+                            <div class="ide-pane-window user1-pane">
+                                <div class="pane-tab-bar">
+                                    <div class="pane-user-info">
+                                        <span class="user-pill alex">Alex (Host)</span>
+                                        <span class="pane-file">Solution.java</span>
+                                    </div>
+                                    <span class="pane-status-badge alex" id="u1-status">Typing...</span>
+                                </div>
+                                <div class="pane-editor-body">
+                                    <div class="pane-gutter">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</div>
+                                    <div class="pane-code-viewport">
+                                        <pre class="pane-animated-code"><code id="u1-code-display"></code></pre>
+                                    </div>
+                                </div>
+                                <div class="pane-terminal-output">
+                                    <span class="term-prompt">❯ Output:</span>
+                                    <span class="term-content" id="u1-term-display">Ready</span>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT PANE: USER 2 (Sarah) -->
+                            <div class="ide-pane-window user2-pane">
+                                <div class="pane-tab-bar">
+                                    <div class="pane-user-info">
+                                        <span class="user-pill sarah">Sarah (Peer)</span>
+                                        <span class="pane-file">Solution.java</span>
+                                    </div>
+                                    <span class="pane-status-badge sarah" id="u2-status">Synced</span>
+                                </div>
+                                <div class="pane-editor-body">
+                                    <div class="pane-gutter">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</div>
+                                    <div class="pane-code-viewport">
+                                        <pre class="pane-animated-code"><code id="u2-code-display"></code></pre>
+                                    </div>
+                                </div>
+                                <div class="pane-terminal-output">
+                                    <span class="term-prompt">❯ Output:</span>
+                                    <span class="term-content" id="u2-term-display">Ready</span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- Learning Tracks Grid -->
-                <div class="learning-domains" style="margin-bottom: 40px;">
-                    <div class="section-title-row" style="margin-bottom: 24px;">
-                        <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px 0;">Available Masterclasses & Interactive Environments</h2>
-                        <p class="section-subtitle" style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
-                            Deep-dive curriculum tracks engineered for computer science students and software developers.
-                        </p>
+
+
+                <!-- 4. LEARNING TRACKS & STACKS -->
+                <div class="home-tracks-section">
+                    <div class="section-title-row">
+                        <h2>Learning Tracks & Stacks</h2>
+                        <p class="section-subtitle">Categorized paths designed for immediate skill escalation</p>
                     </div>
-
-                    <div class="domain-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px;">
-                        <div class="domain-card track-card" onclick="showSection('java-course')" style="cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                            <div class="track-icon-badge java" style="font-size: 1.8rem; margin-bottom: 12px;">☕</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Java 21 Enterprise Masterclass</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 16px 0;">23 concept modules covering OOP, Generics, Stream API, Virtual Threads, Multithreading & GC Tuning.</p>
-                            <div class="track-footer" style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; color: var(--accent-blue);"><span>23 Modules • Notes</span> <span>Explore Course →</span></div>
+                    <div class="home-tracks-grid">
+                        
+                        <div class="home-track-card" onclick="showSection('java-course')">
+                            <div class="track-card-top">
+                                <span class="track-icon">☕</span>
+                                <span class="difficulty-badge beginner">⭐ Beginner → Expert</span>
+                            </div>
+                            <h3>Full-Stack Java Enterprise</h3>
+                            <p>Master Java 21, Spring Boot, OOP, Multithreading, REST APIs & Microservices architecture.</p>
+                            <div class="track-card-footer">
+                                <span>23 Modules</span>
+                                <span class="explore-link">Start Track →</span>
+                            </div>
                         </div>
 
-                        <div class="domain-card track-card" onclick="showSection('python-course')" style="cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                            <div class="track-icon-badge python" style="font-size: 1.8rem; margin-bottom: 12px;">🐍</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Python 3 Data & Systems</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 16px 0;">22 concept modules covering Pythonic Data Structures, Sorting Algorithms, Generators & AsyncIO.</p>
-                            <div class="track-footer" style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; color: var(--accent-blue);"><span>22 Modules • Playground</span> <span>Explore Course →</span></div>
+                        <div class="home-track-card" onclick="showSection('ds-course')">
+                            <div class="track-card-top">
+                                <span class="track-icon">🌳</span>
+                                <span class="difficulty-badge intermediate">⭐⭐ Intermediate</span>
+                            </div>
+                            <h3>Data Structures & Algorithms</h3>
+                            <p>Master Arrays, Trees, Graphs, Sorting, Dynamic Programming & interview problem solving.</p>
+                            <div class="track-card-footer">
+                                <span>DSA Roadmap</span>
+                                <span class="explore-link">Start Track →</span>
+                            </div>
                         </div>
 
-                        <div class="domain-card track-card" onclick="showSection('sql-course')" style="cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                            <div class="track-icon-badge sql" style="font-size: 1.8rem; margin-bottom: 12px;">📊</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">SQL & Database Architecture</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 16px 0;">17 concept modules across DDL/DML, GROUP BY pipelines, INNER/LEFT JOINs & B-Tree Indexes.</p>
-                            <div class="track-footer" style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; color: var(--accent-blue);"><span>17 Modules • SQL Console</span> <span>Explore Course →</span></div>
+                        <div class="home-track-card" onclick="showSection('python-course')">
+                            <div class="track-card-top">
+                                <span class="track-icon">🐍</span>
+                                <span class="difficulty-badge beginner">⭐ Beginner</span>
+                            </div>
+                            <h3>Backend & Systems Engineering</h3>
+                            <p>Build scalable APIs with Python 3, Generators, AsyncIO, and relational SQL engines.</p>
+                            <div class="track-card-footer">
+                                <span>22 Modules</span>
+                                <span class="explore-link">Start Track →</span>
+                            </div>
                         </div>
 
-                        <div class="domain-card track-card" onclick="showSection('ds-course')" style="cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                            <div class="track-icon-badge dsa" style="font-size: 1.8rem; margin-bottom: 12px;">🌳</div>
-                            <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">DSA Interview Roadmap</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 16px 0;">Foundational DSA topics: Arrays, Linked Lists, Stacks, Queues, Binary Trees, Graphs & Dynamic Programming.</p>
-                            <div class="track-footer" style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; color: var(--accent-blue);"><span>Full Roadmap • Quizzes</span> <span>Explore Roadmap →</span></div>
+                        <div class="home-track-card" onclick="showSection('sql-course')">
+                            <div class="track-card-top">
+                                <span class="track-icon">📊</span>
+                                <span class="difficulty-badge advanced">⭐⭐⭐ Advanced</span>
+                            </div>
+                            <h3>Cloud & Database Architecture</h3>
+                            <p>Query, index, and architect high-performance relational databases and cloud pipelines.</p>
+                            <div class="track-card-footer">
+                                <span>17 Modules</span>
+                                <span class="explore-link">Start Track →</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 5. HOW IT WORKS (3-STEP FLOW) -->
+                <div class="home-three-step-flow">
+                    <div class="section-title-row">
+                        <h2>How It Works</h2>
+                        <p class="section-subtitle">Clarify your peer-learning loop in under 10 seconds</p>
+                    </div>
+                    <div class="flow-grid">
+                        <div class="flow-card">
+                            <div class="flow-num-badge">01</div>
+                            <h3>1. Pick a Topic</h3>
+                            <p>Choose a learning track, real-world project, or daily coding challenge.</p>
+                        </div>
+                        <div class="flow-card">
+                            <div class="flow-num-badge">02</div>
+                            <h3>2. Match or Invite</h3>
+                            <p>Pair up with a peer at your skill level or invite a friend via shareable room link.</p>
+                        </div>
+                        <div class="flow-card">
+                            <div class="flow-num-badge">03</div>
+                            <h3>3. Build & Review</h3>
+                            <p>Code live in shared browser environments with real-time feedback and execution logs.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Interactive Features Showcase Grid -->
-                <div class="platform-tools-grid" style="margin-bottom: 40px;">
-                    <div class="section-title-row" style="margin-bottom: 24px;">
-                        <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px 0;">Interactive Execution Tools</h2>
-                        <p class="section-subtitle" style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
-                            Real-time code compilation, step-by-step visual execution, and live collaborative pair programming.
-                        </p>
-                    </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; display:flex; flex-direction:column; justify-content:space-between;">
-                            <div>
-                                <div style="width:44px; height:44px; border-radius:12px; background:rgba(37,99,235,0.1); color:var(--accent-blue); display:flex; align-items:center; justify-content:center; font-size:1.35rem; margin-bottom:14px;">💻</div>
-                                <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Multi-Language Compiler IDE</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 16px 0;">Write, compile, and execute code in 8 programming languages directly in your browser with real-time output logs.</p>
-                            </div>
-                            <button onclick="showSection('compiler')" style="align-self:flex-start; padding:8px 18px; background:rgba(37,99,235,0.08); color:var(--accent-blue); border:1px solid rgba(37,99,235,0.2); border-radius:8px; font-weight:600; font-size:0.875rem; cursor:pointer;">
-                                Launch Compiler IDE →
-                            </button>
-                        </div>
 
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; display:flex; flex-direction:column; justify-content:space-between;">
-                            <div>
-                                <div style="width:44px; height:44px; border-radius:12px; background:rgba(124,58,237,0.1); color:#7c3aed; display:flex; align-items:center; justify-content:center; font-size:1.35rem; margin-bottom:14px;">🎬</div>
-                                <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">3D Algorithm & Memory Visualizer</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 16px 0;">Watch step-by-step sorting iterations, tree graph traversals, call-stack frames, and recursion unfold visually.</p>
-                            </div>
-                            <button onclick="showSection('visualizer')" style="align-self:flex-start; padding:8px 18px; background:rgba(124,58,237,0.08); color:#7c3aed; border:1px solid rgba(124,58,237,0.2); border-radius:8px; font-weight:600; font-size:0.875rem; cursor:pointer;">
-                                Open Visualizer Engine →
-                            </button>
-                        </div>
 
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; display:flex; flex-direction:column; justify-content:space-between;">
-                            <div>
-                                <div style="width:44px; height:44px; border-radius:12px; background:rgba(5,150,105,0.1); color:#059669; display:flex; align-items:center; justify-content:center; font-size:1.35rem; margin-bottom:14px;">🌐</div>
-                                <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Live Collaborative Code Rooms</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 16px 0;">Host instant pair programming rooms with unique shareable links (`CT-ROOM-XXXXXX`) for real-time peer coding.</p>
-                            </div>
-                            <button onclick="showSection('compiler')" style="align-self:flex-start; padding:8px 18px; background:rgba(5,150,105,0.08); color:#059669; border:1px solid rgba(5,150,105,0.2); border-radius:8px; font-weight:600; font-size:0.875rem; cursor:pointer;">
-                                Create Live Code Room →
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 4-Step Learning Workflow -->
-                <div class="learning-flow" style="margin-bottom: 30px;">
-                    <div class="section-title-row" style="margin-bottom: 24px;">
-                        <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px 0;">How Let's Code Together Works</h2>
-                        <p class="section-subtitle" style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
-                            An integrated, hands-on learning pipeline designed for deep understanding and software engineering mastery.
-                        </p>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <span style="background: rgba(37,99,235,0.12); color: var(--accent-blue); font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;">STEP 01</span>
-                                <span style="font-size: 1.4rem;">📘</span>
-                            </div>
-                            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Master Concepts</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; margin: 0;">Study structured lessons with interactive code snippets, architecture diagrams, and downloadable PDF guides.</p>
-                        </div>
-
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <span style="background: rgba(124,58,237,0.12); color: #7c3aed; font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;">STEP 02</span>
-                                <span style="font-size: 1.4rem;">🎬</span>
-                            </div>
-                            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Visualize Execution</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; margin: 0;">Watch step-by-step Divide & Conquer algorithms, tree graph traversals, and memory call-stack frames in action.</p>
-                        </div>
-
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <span style="background: rgba(8,145,178,0.12); color: #0891b2; font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;">STEP 03</span>
-                                <span style="font-size: 1.4rem;">⚡</span>
-                            </div>
-                            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Compile & Share Code</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; margin: 0;">Write and run code in 8 languages with our multi-language online compiler and host live collaborative pair rooms.</p>
-                        </div>
-
-                        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: 16px; padding: 24px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <span style="background: rgba(5,150,105,0.12); color: #059669; font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;">STEP 04</span>
-                                <span style="font-size: 1.4rem;">🏆</span>
-                            </div>
-                            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 8px 0; color: var(--text-main);">Test & Rank Up</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; margin: 0;">Complete multi-level quizzes, track personal score history, unlock achievements, and earn verified certificates.</p>
-                        </div>
-                    </div>
-                </div>
             </section>
 
                         
@@ -2393,7 +2438,7 @@ ORDER BY avg_sal DESC;</code></pre>
     <!-- Link external JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js" defer></script>
     <script src="quizzes.js" defer></script>
-    <script src="scripts.js?v=50" defer></script>
+    <script src="scripts.js?v=57" defer></script>
     <script src="dsa-course.js?v=30" defer></script>
 </body>
 </html>
