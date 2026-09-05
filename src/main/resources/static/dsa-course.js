@@ -69,6 +69,9 @@ function markProblemAsSolved(id) {
     if (!solved.includes(id)) {
         solved.push(id);
         localStorage.setItem('solved_dsa_problems', JSON.stringify(solved));
+        if (typeof loadAcademyDashboardStats === 'function') {
+            loadAcademyDashboardStats();
+        }
     }
 }
 

@@ -32,7 +32,7 @@
     <!-- Link external CSS -->
     <link rel="stylesheet" href="custom-popup.css">
     <script src="custom-popup.js"></script>
-    <link rel="stylesheet" href="styles.css?v=30">
+    <link rel="stylesheet" href="styles.css?v=50">
     <link rel="stylesheet" href="mobile_fixes.css?v=2">
     <script>
         // Apply Light Mode by default unless user explicitly selected dark mode
@@ -49,7 +49,12 @@
         }
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW Reg Fail:', err));
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                    }
+                });
+                navigator.serviceWorker.register('/sw.js?v=12').catch(err => console.log('SW Reg Fail:', err));
             });
         }
     </script>
@@ -360,12 +365,20 @@
                         </p>
                     </div>
                     <div class="hero-action-buttons">
-                        <button class="hero-btn primary-hero-btn" onclick="showSection('java-course')">
-                            <span>☕</span> Resume Java Course
-                        </button>
-                        <button class="hero-btn secondary-hero-btn" onclick="showSection('python-course')">
-                            <span>🐍</span> Open Python Masterclass
-                        </button>
+                        <div class="glassy-course-pill-container">
+                            <button class="hero-btn primary-hero-btn glass-btn" onclick="showSection('java-course')">
+                                <span class="btn-icon">☕</span> Open Java Course
+                            </button>
+                            <button class="hero-btn secondary-hero-btn glass-btn" onclick="showSection('python-course')">
+                                <span class="btn-icon">🐍</span> Open Python Course
+                            </button>
+                            <button class="hero-btn secondary-hero-btn glass-btn" onclick="showSection('sql-course')">
+                                <span class="btn-icon">🗄️</span> Open SQL Course
+                            </button>
+                            <button class="hero-btn secondary-hero-btn glass-btn" onclick="openProtectedSection('ds-course')">
+                                <span class="btn-icon">🌳</span> Open DSA Platform
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -378,11 +391,25 @@
                             <span class="metric-title">Active Masterclasses</span>
                             <span class="metric-icon">🎓</span>
                         </div>
-                        <div class="metric-big-val" id="dash-masterclasses-count">0 <span>Courses</span></div>
+                        <div class="metric-big-val" id="dash-masterclasses-count">8 <span>Courses</span></div>
+                        <div class="masterclass-bar-chart-container">
+                            <div class="mc-bar-group">
+                                <div class="mc-bar-fill progressing" id="mc-bar-prog" style="height: 75%;" title="3 Progressing (SQL, DSA, Python)"></div>
+                                <span class="mc-bar-val" id="mc-val-prog">3</span>
+                            </div>
+                            <div class="mc-bar-group">
+                                <div class="mc-bar-fill upcoming" id="mc-bar-upc" style="height: 100%;" title="4 Upcoming (C++, React, AI/ML, System Design)"></div>
+                                <span class="mc-bar-val" id="mc-val-upc">4</span>
+                            </div>
+                            <div class="mc-bar-group">
+                                <div class="mc-bar-fill completed" id="mc-bar-comp" style="height: 25%;" title="1 Completed (Java 21)"></div>
+                                <span class="mc-bar-val" id="mc-val-comp">1</span>
+                            </div>
+                        </div>
                         <div class="metric-legend-list">
-                            <div class="legend-item"><span class="legend-dot progressing"></span> Progressing</div>
-                            <div class="legend-item"><span class="legend-dot upcoming"></span> Upcoming</div>
-                            <div class="legend-item"><span class="legend-dot completed"></span> Completed</div>
+                            <div class="legend-item"><span class="legend-dot progressing"></span> <span id="mc-leg-prog">Prog (3)</span></div>
+                            <div class="legend-item"><span class="legend-dot upcoming"></span> <span id="mc-leg-upc">Upc (4)</span></div>
+                            <div class="legend-item"><span class="legend-dot completed"></span> <span id="mc-leg-comp">Comp (1)</span></div>
                         </div>
                     </div>
 
@@ -396,29 +423,50 @@
                             <div class="donut-ring-container">
                                 <svg viewBox="0 0 36 36" class="circular-chart green">
                                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path class="circle" id="dash-quiz-ring" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle" id="dash-quiz-ring" stroke-dasharray="20, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                 </svg>
                                 <div class="donut-center-trophy">🏆</div>
                             </div>
                             <div class="donut-val-info">
-                                <div class="donut-count-num" id="dash-quizzes-count">0</div>
+                                <div class="donut-count-num" id="dash-quizzes-count">4</div>
                                 <div class="donut-count-label">Levels Passed</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 3: Interactive Visualizers -->
+                    <!-- Card 3: Interactive Visualizers & Compilers -->
                     <div class="metric-card visualizer-card">
                         <div class="metric-card-header">
-                            <span class="metric-title">Interactive Visualizers</span>
+                            <span class="metric-title">Visualizers & Compilers</span>
                             <span class="metric-icon">🎬</span>
                         </div>
-                        <div class="metric-big-val" id="dash-visualizers-count">0 <span>Engines</span></div>
-                        <div class="sparkline-container">
+                        <div class="metric-big-val" id="dash-visualizers-count">12 <span>Tools</span></div>
+                        <div class="sparkline-container" title="Interactive Visualizers (3) & Live Online Compilers (9)">
                             <svg viewBox="0 0 120 40" class="sparkline-svg">
-                                <path d="M0,35 Q20,10 40,25 T80,5 T120,30" fill="none" stroke="var(--jade, #00f5a0)" stroke-width="2.5" />
-                                <circle cx="80" cy="5" r="4" fill="var(--jade, #00f5a0)" />
+                                <defs>
+                                    <linearGradient id="visGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="var(--jade, #00f5a0)" stop-opacity="0.4" />
+                                        <stop offset="100%" stop-color="var(--jade, #00f5a0)" stop-opacity="0.0" />
+                                    </linearGradient>
+                                    <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.35" />
+                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Visualizers Line (Glowing Jade) -->
+                                <path d="M0,32 Q25,18 50,26 T90,14 T120,22 L120,40 L0,40 Z" fill="url(#visGrad)" />
+                                <path d="M0,32 Q25,18 50,26 T90,14 T120,22" fill="none" stroke="var(--jade, #00f5a0)" stroke-width="2.5" />
+                                <circle cx="90" cy="14" r="3" fill="var(--jade, #00f5a0)" />
+
+                                <!-- Compilers Line (Electric Blue Dashed) -->
+                                <path d="M0,38 Q30,20 60,10 T95,14 T120,5 L120,40 L0,40 Z" fill="url(#compGrad)" />
+                                <path d="M0,38 Q30,20 60,10 T95,14 T120,5" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="4,3" />
+                                <circle cx="120" cy="5" r="3" fill="#3b82f6" />
                             </svg>
+                        </div>
+                        <div class="vis-comp-legend">
+                            <span><span class="vis-comp-dot visualizer"></span><span id="vis-count-label">3 Vis</span></span>
+                            <span><span class="vis-comp-dot compiler"></span><span id="comp-count-label">9 Comp</span></span>
                         </div>
                     </div>
 
@@ -429,8 +477,12 @@
                             <span class="metric-icon">🧩</span>
                         </div>
                         <div class="metric-big-val" id="dash-dsa-count">0 <span>Solved</span></div>
-                        <div class="dsa-progress-bar-bg">
-                            <div class="dsa-progress-bar-fill" id="dash-dsa-bar" style="width: 0%;"></div>
+                        <div class="dsa-mini-bar-graph">
+                            <div class="dsa-bar-col" style="height: 40%;" title="Mon: 2 solved"></div>
+                            <div class="dsa-bar-col" style="height: 65%;" title="Tue: 3 solved"></div>
+                            <div class="dsa-bar-col" style="height: 35%;" title="Wed: 1 solved"></div>
+                            <div class="dsa-bar-col" style="height: 80%;" title="Thu: 4 solved"></div>
+                            <div class="dsa-bar-col active" style="height: 100%;" title="Today: 5 solved"></div>
                         </div>
                         <button class="dsa-start-btn" onclick="openProtectedSection('ds-course')">Start New Problem →</button>
                     </div>
@@ -445,7 +497,12 @@
                             <div class="rank-badge-number" id="dash-user-rank">Rank #1</div>
                             <div class="rank-badge-sub">Top Performer</div>
                         </div>
-                        <div class="user-xp-badge" id="dash-user-level">⚡ Level 12 · Code Ninja</div>
+                        <div class="user-xp-badge-wrap">
+                            <div class="user-xp-badge" id="dash-user-level">⚡ Level 12 · Code Ninja</div>
+                            <div class="rank-xp-mini-bar">
+                                <div class="rank-xp-fill" id="dash-xp-fill" style="width: 85%;"></div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -475,15 +532,15 @@
 
                         <!-- Tab Content: Masterclasses -->
                         <div id="learning-tab-masterclasses" class="learning-log-content" style="display:none;">
-                            <div class="log-items-list">
-                                <div class="dash-empty-state">No masterclass progress recorded yet.</div>
+                            <div class="log-items-list" id="dash-masterclass-logs-container">
+                                <!-- Populated dynamically via JS -->
                             </div>
                         </div>
 
                         <!-- Tab Content: Visualizers -->
                         <div id="learning-tab-visualizers" class="learning-log-content" style="display:none;">
-                            <div class="log-items-list">
-                                <div class="dash-empty-state">No visualizer activity recorded yet.</div>
+                            <div class="log-items-list" id="dash-visualizer-logs-container">
+                                <!-- Populated dynamically via JS -->
                             </div>
                         </div>
 
@@ -1005,7 +1062,8 @@
                 </select>
                 <button class="compiler-run-btn">▶ Run <span class="kbd-shortcut">(Ctrl+Enter)</span></button>
                 <button class="ai-mentor-btn" onclick="triggerAiMentor()" title="Ask Zetrox AI Mentor to analyze code and debug errors">
-                    <span>🤖</span> Zetrox AI Mentor
+                    <img src="image/zetrox-logo.png" class="zetrox-btn-logo zetrox-float-anim" alt="Zetrox Logo">
+                    <span>Zetrox AI Mentor</span>
                 </button>
                 <button class="host-room-btn" onclick="hostRoom()">
                     <span>🌐</span> Host Code Room
@@ -2273,9 +2331,12 @@ ORDER BY avg_sal DESC;</code></pre>
 <div id="ai-mentor-modal" class="ai-mentor-overlay" style="display:none;" onclick="if(event.target===this) closeAiMentorModal()">
     <div class="ai-mentor-container">
         <div class="ai-mentor-header">
-            <div>
-                <span class="ai-mentor-badge">🤖 ZETROX 2.5 FLASH AGENT</span>
-                <h3>Zetrox AI Code Mentor & Socratic Debugger</h3>
+            <div class="ai-mentor-header-brand">
+                <img src="image/zetrox-logo.png" class="ai-mentor-header-logo zetrox-pulse-glow zetrox-float-anim" alt="Zetrox Logo">
+                <div>
+                    <span class="ai-mentor-badge">ZETROX 2.5 FLASH AGENT</span>
+                    <h3>Zetrox AI Code Mentor & Socratic Debugger</h3>
+                </div>
             </div>
             <button class="ai-mentor-close-btn" onclick="closeAiMentorModal()">&times;</button>
         </div>
@@ -2285,18 +2346,23 @@ ORDER BY avg_sal DESC;</code></pre>
     </div>
 </div>
 
-<button id="zetrox-chat-trigger-btn" class="zetrox-chat-fab" onclick="toggleZetroxChat()" title="Open Zetrox AI Coding Assistant & Context Engine">
-    <span class="zetrox-fab-status" title="Zetrox Agent Active"></span>
-    <span class="zetrox-fab-icon">🤖</span>
-    <span class="zetrox-fab-label">Zetrox AI Agent</span>
+<button id="zetrox-chat-trigger-btn" class="zetrox-chat-fab-circle" onclick="toggleZetroxChat()" title="Zetrox AI Agent">
+    <span class="zetrox-fab-status-dot" title="Zetrox Active"></span>
+    <img src="image/zetrox-logo.png" class="zetrox-fab-circle-img zetrox-float-anim" alt="Zetrox AI">
 </button>
 
 <!-- Zetrox AI Coding Agent Chat Drawer -->
 <div id="zetrox-chat-drawer" class="zetrox-drawer" style="display:none;">
     <div class="zetrox-drawer-header">
-        <div class="zetrox-drawer-title">
-            <span class="zetrox-badge">🤖 ZETROX AI AGENT</span>
-            <h4>Zetrox Coding Assistant & Pair Programmer</h4>
+        <div class="zetrox-drawer-brand">
+            <div class="zetrox-avatar-wrap">
+                <img src="image/zetrox-logo.png" class="zetrox-header-logo zetrox-pulse-glow zetrox-float-anim" alt="Zetrox AI">
+                <span class="zetrox-live-pulse-dot"></span>
+            </div>
+            <div class="zetrox-drawer-title">
+                <span class="zetrox-badge">ZETROX AI AGENT</span>
+                <h4>Zetrox Coding Assistant & Pair Programmer</h4>
+            </div>
         </div>
         <button class="zetrox-drawer-close" onclick="toggleZetroxChat()">&times;</button>
     </div>
@@ -2304,7 +2370,9 @@ ORDER BY avg_sal DESC;</code></pre>
     <!-- Chat Messages Stream -->
     <div class="zetrox-messages-container" id="zetrox-messages-list">
         <div class="zetrox-msg agent">
-            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-avatar">
+                <img src="image/zetrox-logo.png" class="zetrox-avatar-img zetrox-float-anim" alt="Zetrox AI">
+            </div>
             <div class="zetrox-bubble">
                 Hello! I am <strong>Zetrox AI</strong>, your autonomous coding agent. 
                 I can compile code, explain errors, track your progress, recommend learning topics, or generate interactive quizzes!
@@ -2323,9 +2391,9 @@ ORDER BY avg_sal DESC;</code></pre>
 </div>
 
     <!-- Link external JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
-    <script src="quizzes.js"></script>
-    <script src="scripts.js?v=30" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js" defer></script>
+    <script src="quizzes.js" defer></script>
+    <script src="scripts.js?v=50" defer></script>
     <script src="dsa-course.js?v=30" defer></script>
 </body>
 </html>

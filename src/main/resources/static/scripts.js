@@ -4417,6 +4417,55 @@ async function loadCoursePdfsForStudents(courseId) {
 /* =====================================================
    ACADEMY DASHBOARD API INTEGRATION & TAB ENGINE
 ===================================================== */
+function renderMasterclassLogs() {
+    const container = document.getElementById("dash-masterclass-logs-container");
+    if (!container) return;
+
+    const masterclasses = [
+        { title: "Java 21 Enterprise Masterclass", badgeText: "JAVA", badgeClass: "java", pct: 90, target: "java-course" },
+        { title: "Python 3.12 Masterclass", badgeText: "PYTHON", badgeClass: "python", pct: 85, target: "python-course" },
+        { title: "SQL Database Masterclass", badgeText: "SQL", badgeClass: "sql", pct: 75, target: "sql-course" },
+        { title: "DSA & LeetCode Masterclass", badgeText: "DSA", badgeClass: "dsa", pct: 95, target: "dsa-course" }
+    ];
+
+    container.innerHTML = masterclasses.map(item => `
+        <div class="log-item-row">
+            <div class="log-item-info">
+                <span class="log-item-badge ${item.badgeClass}">${item.badgeText}</span>
+                <span class="log-item-title">${escapeHtml(item.title)}</span>
+            </div>
+            <div class="log-item-progress">
+                <div class="log-bar-bg"><div class="log-bar-fill" style="width:${item.pct}%;"></div></div>
+                <button class="review-btn" onclick="showSection('${item.target}')">Resume ›</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function renderVisualizerLogs() {
+    const container = document.getElementById("dash-visualizer-logs-container");
+    if (!container) return;
+
+    const visualizers = [
+        { title: "3D Sorting Algorithms Engine", badgeText: "ALGO", badgeClass: "dsa", pct: 100, target: "visualizer" },
+        { title: "Data Structures & Tree Explorer", badgeText: "TREES", badgeClass: "java", pct: 80, target: "visualizer" },
+        { title: "SQL Query Plan Visualizer", badgeText: "SQL", badgeClass: "sql", pct: 90, target: "visualizer" }
+    ];
+
+    container.innerHTML = visualizers.map(item => `
+        <div class="log-item-row">
+            <div class="log-item-info">
+                <span class="log-item-badge ${item.badgeClass}">${item.badgeText}</span>
+                <span class="log-item-title">${escapeHtml(item.title)}</span>
+            </div>
+            <div class="log-item-progress">
+                <div class="log-bar-bg"><div class="log-bar-fill" style="width:${item.pct}%;"></div></div>
+                <button class="review-btn" onclick="showSection('${item.target}')">Launch ›</button>
+            </div>
+        </div>
+    `).join("");
+}
+
 function switchLearningLogTab(tabName) {
     const tabs = ['quizzes', 'masterclasses', 'visualizers'];
     tabs.forEach(t => {
@@ -4429,6 +4478,22 @@ function switchLearningLogTab(tabName) {
             content.style.display = (t === tabName) ? 'block' : 'none';
         }
     });
+
+    if (tabName === 'masterclasses') {
+        renderMasterclassLogs();
+    } else if (tabName === 'visualizers') {
+        renderVisualizerLogs();
+    }
+
+    const paginationBar = document.getElementById("dash-log-pagination");
+    if (paginationBar) {
+        if (tabName === 'quizzes') {
+            renderPaginatedLogs();
+        } else {
+            paginationBar.innerHTML = "";
+            paginationBar.style.display = "none";
+        }
+    }
 }
 
 let _allQuizLogs = [];
@@ -4446,7 +4511,10 @@ function renderPaginatedLogs() {
 
     if (!_allQuizLogs || !_allQuizLogs.length) {
         logContainer.innerHTML = `<div class="dash-empty-state">No quiz activity logged yet.</div>`;
-        if (paginationBar) paginationBar.innerHTML = "";
+        if (paginationBar) {
+            paginationBar.innerHTML = "";
+            paginationBar.style.display = "none";
+        }
         return;
     }
 
@@ -4482,10 +4550,15 @@ function renderPaginatedLogs() {
     }).join("");
 
     if (paginationBar) {
-        if (totalPages <= 1) {
+        const activeTabBtn = document.getElementById("tab-btn-quizzes");
+        const isQuizzesActive = !activeTabBtn || activeTabBtn.classList.contains("active");
+
+        if (totalPages <= 1 || !isQuizzesActive) {
             paginationBar.innerHTML = "";
+            paginationBar.style.display = "none";
             return;
         }
+        paginationBar.style.display = "flex";
         let pageBtnsHtml = `<button class="page-btn" ${_currentLogPage === 1 ? 'disabled' : ''} onclick="changeLogPage(-1)">‹</button>`;
         for (let i = 1; i <= totalPages; i++) {
             pageBtnsHtml += `<button class="page-btn ${i === _currentLogPage ? 'active' : ''}" onclick="goToLogPage(${i})">${i}</button>`;
@@ -4578,62 +4651,203 @@ function goToLeaderboardPage(p) {
 
 async function loadAcademyDashboardStats() {
     try {
-        const email = localStorage.getItem("loggedInEmail") || (typeof state !== 'undefined' ? state.email : "") || "";
+        const email = localStorage.getItem("loggedInEmail") || localStorage.getItem("userEmail") || localStorage.getItem("username") || (typeof state !== 'undefined' ? state.email : "") || "";
         const res = await fetch(`/api/dashboard/stats?email=${encodeURIComponent(email)}`);
         if (!res.ok) return;
         const data = await res.json();
 
-        // 1. Header Banner
-        const userNameEl = document.getElementById("dash-user-name");
-        if (userNameEl && data.userName) {
-            userNameEl.textContent = data.userName;
+        // 1. Header Banner Greeting Logic (New vs Returning User)
+        const userKey = "has_visited_dashboard_" + (email || "user");
+        const isReturningUser = localStorage.getItem(userKey) === "true";
+        const greetingTitleEl = document.querySelector(".hero-welcome-title");
+        const displayName = data.userName || "Developer";
+
+        if (greetingTitleEl) {
+            if (isReturningUser) {
+                greetingTitleEl.innerHTML = `Welcome back, <span id="dash-user-name">${displayName}</span>! 👋`;
+            } else {
+                greetingTitleEl.innerHTML = `Welcome, <span id="dash-user-name">${displayName}</span>! 👋`;
+                localStorage.setItem(userKey, "true");
+            }
+        } else {
+            const userNameEl = document.getElementById("dash-user-name");
+            if (userNameEl) userNameEl.textContent = displayName;
         }
 
         // 2. Metric Stat Cards
         const masterclassesEl = document.getElementById("kpi-masterclasses-count") || document.getElementById("dash-masterclasses-count");
         if (masterclassesEl) {
-            masterclassesEl.innerHTML = `${data.activeMasterclassesCount ?? 0} <span class="stat-unit">Courses</span>`;
+            const count = (data.activeMasterclassesCount && data.activeMasterclassesCount > 0) ? data.activeMasterclassesCount : 4;
+            masterclassesEl.innerHTML = `${count} <span class="stat-unit">Courses</span>`;
         }
 
-        const quizzesCountEl = document.getElementById("kpi-quizzes-count") || document.getElementById("dash-quizzes-count");
-        if (quizzesCountEl) {
-            quizzesCountEl.innerHTML = `${data.quizzesCompletedCount ?? 0} <span class="stat-unit">Levels</span>`;
+function getRealDsaSolvedCount() {
+    try {
+        if (typeof getSolvedProblems === 'function') {
+            const solved = getSolvedProblems();
+            return Array.isArray(solved) ? solved.length : 0;
         }
+        const saved = localStorage.getItem('solved_dsa_problems');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return Array.isArray(parsed) ? parsed.length : 0;
+        }
+    } catch(e) {}
+    return 0;
+}
 
         const visEl = document.getElementById("kpi-visualizers-count") || document.getElementById("dash-visualizers-count");
         if (visEl) {
-            visEl.innerHTML = `${data.interactiveVisualizersCount ?? 0} <span class="stat-unit">Engines</span>`;
+            const compOptions = document.querySelectorAll("#compiler-language option");
+            const compCount = compOptions.length > 0 ? compOptions.length : 9;
+
+            const visOptions = document.querySelectorAll("#visualizer-language option");
+            const visCount = visOptions.length > 0 ? visOptions.length : 3;
+
+            const totalTools = visCount + compCount;
+            visEl.innerHTML = `${totalTools} <span>Tools</span>`;
+            
+            const visLbl = document.getElementById("vis-count-label");
+            const compLbl = document.getElementById("comp-count-label");
+            if (visLbl) visLbl.textContent = `${visCount} Vis`;
+            if (compLbl) compLbl.textContent = `${compCount} Comp`;
         }
+
+        const realDsaCount = (data.dsaQuestionsSolvedCount && data.dsaQuestionsSolvedCount > 0)
+            ? data.dsaQuestionsSolvedCount
+            : getRealDsaSolvedCount();
 
         const dsaEl = document.getElementById("kpi-dsa-score") || document.getElementById("dash-dsa-count");
         if (dsaEl) {
-            dsaEl.innerHTML = `${data.dsaQuestionsSolvedCount ?? 0} <span class="stat-unit">Solved</span>`;
+            dsaEl.innerHTML = `${realDsaCount} <span class="stat-unit">Solved</span>`;
         }
 
-        const dsaSubElem = document.getElementById("kpi-dsa-quiz-sub");
-        if (dsaSubElem) {
-            const count = data.dsaQuestionsSolvedCount ?? 0;
-            dsaSubElem.innerText = count === 1 ? "1 DSA Coding Problem Completed" : `${count} DSA Coding Problems Completed`;
+        const dsaBarCols = document.querySelectorAll(".dsa-mini-bar-graph .dsa-bar-col");
+        if (dsaBarCols && dsaBarCols.length) {
+            dsaBarCols.forEach((col, idx) => {
+                if (realDsaCount === 0) {
+                    col.style.height = '15%';
+                    col.classList.remove('active');
+                } else {
+                    col.style.height = `${Math.min(100, Math.max(20, (idx + 1) * 20))}%`;
+                    col.classList.toggle('active', idx === dsaBarCols.length - 1);
+                }
+            });
         }
-        updateDsaDashboardScore(data.dsaQuestionsSolvedCount ?? 0);
 
-        const rankEl = document.getElementById("kpi-campus-rank") || document.getElementById("dash-user-rank");
-        if (rankEl) {
-            rankEl.innerHTML = `Rank #${data.userRank ?? 0} <span class="stat-unit">Position</span>`;
-        }
+function updateMasterclassBarChart(quizLogs) {
+    const availableCourseEls = document.querySelectorAll('.available-courses .course-card');
+    const availableCount = availableCourseEls.length > 0 ? availableCourseEls.length : 4;
 
-        const rankSubElem = document.getElementById("kpi-campus-sub");
-        if (rankSubElem) {
-            rankSubElem.innerText = `Level ${data.userLevel ?? 0} · ${data.userXp ?? 0} XP Points`;
+    const upcomingCourseEls = document.querySelectorAll('.upcoming-courses .course-card');
+    const upcomingCount = upcomingCourseEls.length > 0 ? upcomingCourseEls.length : 13;
+
+    let completed = 1; // Default: Java 21 Enterprise (100% completed)
+
+    const courseMap = {};
+    if (Array.isArray(quizLogs) && quizLogs.length > 0) {
+        let compCount = 0;
+        quizLogs.forEach(log => {
+            const title = (log.quizTitle || "").toLowerCase();
+            let cat = "other";
+            if (title.includes("java")) cat = "java";
+            else if (title.includes("python")) cat = "python";
+            else if (title.includes("sql")) cat = "sql";
+            else if (title.includes("dsa")) cat = "dsa";
+
+            if (!courseMap[cat]) {
+                courseMap[cat] = { maxPct: 0 };
+            }
+            const pct = log.percentage || 0;
+            if (pct > courseMap[cat].maxPct) {
+                courseMap[cat].maxPct = pct;
+            }
+        });
+
+        Object.values(courseMap).forEach(c => {
+            if (c.maxPct >= 100) compCount++;
+        });
+
+        if (compCount > 0) {
+            completed = compCount;
         }
+    }
+
+    const progressing = Math.max(0, availableCount - completed);
+    const upcoming = upcomingCount;
+    const totalCourses = completed + progressing + upcoming;
+
+    const countEl = document.getElementById("dash-masterclasses-count");
+    if (countEl) {
+        countEl.innerHTML = `${totalCourses} <span>Courses</span>`;
+    }
+
+    const masterclassesEl = document.getElementById("kpi-masterclasses-count");
+    if (masterclassesEl) {
+        masterclassesEl.innerHTML = `${totalCourses} <span class="stat-unit">Courses</span>`;
+    }
+
+    const progBar = document.getElementById("mc-bar-prog");
+    const upcBar = document.getElementById("mc-bar-upc");
+    const compBar = document.getElementById("mc-bar-comp");
+
+    const maxVal = Math.max(progressing, upcoming, completed, 1);
+
+    if (progBar) {
+        progBar.style.height = `${(progressing / maxVal) * 100}%`;
+        progBar.title = `${progressing} Progressing (${availableCount} Available Total)`;
+    }
+    if (upcBar) {
+        upcBar.style.height = `${(upcoming / maxVal) * 100}%`;
+        upcBar.title = `${upcoming} Upcoming Courses`;
+    }
+    if (compBar) {
+        compBar.style.height = `${(completed / maxVal) * 100}%`;
+        compBar.title = `${completed} Completed Courses`;
+    }
+
+    const progValEl = document.getElementById("mc-val-prog");
+    const upcValEl = document.getElementById("mc-val-upc");
+    const compValEl = document.getElementById("mc-val-comp");
+
+    if (progValEl) progValEl.textContent = progressing;
+    if (upcValEl) upcValEl.textContent = upcoming;
+    if (compValEl) compValEl.textContent = completed;
+
+    const legProg = document.getElementById("mc-leg-prog");
+    const legUpc = document.getElementById("mc-leg-upc");
+    const legComp = document.getElementById("mc-leg-comp");
+
+    if (legProg) legProg.textContent = `Prog (${progressing})`;
+    if (legUpc) legUpc.textContent = `Upc (${upcoming})`;
+    if (legComp) legComp.textContent = `Comp (${completed})`;
+
+    initUpcomingCourseClickHandlers();
+}
 
         _allQuizLogs = Array.isArray(data.quizLogs) ? data.quizLogs : [];
         _currentLogPage = 1;
         renderPaginatedLogs();
+        updateMasterclassBarChart(_allQuizLogs);
 
         _allLeaderboardUsers = Array.isArray(data.leaderboard) ? data.leaderboard : [];
         _currentLeaderboardPage = 1;
         renderPaginatedLeaderboard();
+
+        const realQuizCount = (data.quizzesCompletedCount && data.quizzesCompletedCount > 0)
+            ? data.quizzesCompletedCount
+            : (_allQuizLogs ? _allQuizLogs.length : 0);
+
+        const quizzesCountEl = document.getElementById("dash-quizzes-count");
+        if (quizzesCountEl) {
+            quizzesCountEl.textContent = realQuizCount;
+        }
+
+        const quizRing = document.getElementById("dash-quiz-ring");
+        if (quizRing) {
+            const ringPct = Math.min(100, Math.round((realQuizCount / 20) * 100));
+            quizRing.setAttribute("stroke-dasharray", `${ringPct}, 100`);
+        }
 
     } catch (e) {
         console.warn("[DASHBOARD STATS] Could not load dashboard stats:", e);
@@ -4673,13 +4887,17 @@ async function triggerAiMentor() {
 
     // Render Animated Loading & Timer State
     bodyContent.innerHTML = `
-        <div style="text-align: center; padding: 36px 20px;">
-            <div class="ai-loading-icon">🤖</div>
-            <h4 style="margin: 0 0 4px 0; font-size: 1.15rem; color: var(--text-main, #f8fafc); font-weight: 700;">Zetrox AI Mentor is Analyzing Your Code...</h4>
-            <div>
+        <div class="ai-loading-box-container" style="text-align: center; padding: 36px 20px;">
+            <div class="ai-loading-logo-wrap">
+                <div class="ai-sonar-ring ring1"></div>
+                <div class="ai-sonar-ring ring2"></div>
+                <img src="image/zetrox-logo.png" class="ai-loading-logo zetrox-float-anim zetrox-pulse-glow" alt="Zetrox AI">
+            </div>
+            <h4 class="ai-loading-title">Zetrox AI Mentor is Analyzing Your Code...</h4>
+            <div class="ai-timer-badge-container">
                 <div class="ai-timer-badge" id="ai-mentor-timer-display">⏱️ 0.0s</div>
             </div>
-            <p id="ai-mentor-status-text" style="margin: 6px 0 10px 0; font-size: 0.92rem; color: var(--text-muted, #94a3b8); font-weight: 500; min-height: 24px;">
+            <p id="ai-mentor-status-text" class="ai-loading-status">
                 ⚡ Initializing Zetrox 2.5 Flash Agent...
             </p>
             <div class="ai-progress-track">
@@ -4988,7 +5206,7 @@ async function sendZetroxMessage() {
     typingEl.className = "zetrox-msg agent";
     typingEl.id = "zetrox-typing-indicator";
     typingEl.innerHTML = `
-        <div class="zetrox-avatar">🤖</div>
+        <div class="zetrox-avatar"><img src="image/zetrox-logo.png" class="zetrox-avatar-img zetrox-float-anim" alt="Zetrox AI"></div>
         <div class="zetrox-bubble" style="font-style: normal; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
             <span class="ai-typing-pulse">🧠</span> Zetrox AI is reasoning... <span class="zetrox-reason-timer" id="zetrox-live-timer">0.0s</span>
         </div>
@@ -5069,10 +5287,10 @@ async function sendZetroxMessage() {
         agentMsgEl.className = "zetrox-msg agent";
         agentMsgEl.style.maxWidth = "92%";
         agentMsgEl.innerHTML = `
-            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-avatar"><img src="image/zetrox-logo.png" class="zetrox-avatar-img zetrox-float-anim" alt="Zetrox AI"></div>
             <div class="zetrox-bubble" style="width: 100%;">
                 <div class="zetrox-card-header">
-                    <span class="zetrox-badge">🤖 ZETROX 2.5 FLASH AGENT</span>
+                    <span class="zetrox-badge">ZETROX AI AGENT</span>
                     <span class="zetrox-time-badge">⚡ Reasoned in ${elapsedSec}s</span>
                 </div>
                 <div id="${msgId}" class="zetrox-stream-body"></div>
@@ -5094,7 +5312,7 @@ async function sendZetroxMessage() {
         const errEl = document.createElement("div");
         errEl.className = "zetrox-msg agent";
         errEl.innerHTML = `
-            <div class="zetrox-avatar">🤖</div>
+            <div class="zetrox-avatar"><img src="image/zetrox-logo.png" class="zetrox-avatar-img" alt="Zetrox AI"></div>
             <div class="zetrox-bubble" style="color: #f43f5e;">Unable to reach Zetrox AI Agent. Ensure server is active.</div>
         `;
         list.appendChild(errEl);
@@ -5374,8 +5592,68 @@ function initCompilerTerminalResize() {
     });
 }
 
+function showToast(msg) {
+    let container = document.getElementById("toast-container");
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        container.style.cssText = "position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;";
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement("div");
+    toast.style.cssText = "background:#1e293b;color:#00f5a0;border:1px solid rgba(0,245,160,0.3);padding:12px 18px;border-radius:10px;font-size:0.85rem;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,0.5);opacity:0;transform:translateY(10px);transition:all 0.3s ease;";
+    toast.textContent = msg;
+    container.appendChild(toast);
+    requestAnimationFrame(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0)";
+    });
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(10px)";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function initUpcomingCourseClickHandlers() {
+    const upcomingCards = document.querySelectorAll('.course-card.upcoming');
+    upcomingCards.forEach(card => {
+        if (card.dataset.hasUpcomingListener) return;
+        card.dataset.hasUpcomingListener = "true";
+
+        card.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const courseTitle = card.querySelector('.card-title')?.textContent || "Course";
+            
+            card.classList.remove('upcoming');
+            const badge = card.querySelector('.card-badge');
+            if (badge) badge.textContent = 'Available';
+            
+            const upcomingLabel = card.querySelector('.card-upcoming-label');
+            if (upcomingLabel) {
+                upcomingLabel.className = 'card-start-prompt';
+                upcomingLabel.textContent = 'Start →';
+            }
+
+            const availableGrid = document.querySelector('.available-courses .courses');
+            if (availableGrid) {
+                availableGrid.appendChild(card);
+            }
+
+            showToast(`🎉 ${courseTitle} is now Available in your courses!`);
+
+            if (typeof updateMasterclassBarChart === 'function') {
+                updateMasterclassBarChart(typeof _allQuizLogs !== 'undefined' ? _allQuizLogs : []);
+            }
+        });
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initCompilerTerminalResize();
+    if (typeof loadAcademyDashboardStats === 'function') {
+        loadAcademyDashboardStats();
+    }
 });
 
 
