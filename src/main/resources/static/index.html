@@ -14,7 +14,8 @@
 
     <!-- Custom Popup & Glassy Light Mode Styles -->
     <link rel="stylesheet" href="custom-popup.css">
-    <link rel="stylesheet" href="index-light.css">
+    <link rel="stylesheet" href="index-light.css?v=galaxy2">
+    <link rel="stylesheet" href="three-d-ui.css?v=galaxy2">
     <script src="custom-popup.js"></script>
 
     <link rel="manifest" href="manifest.json">
@@ -29,8 +30,12 @@
             });
         }
     </script>
-</head>
 <body>
+    <!-- Full-Page Interactive Cosmic Galaxy Canvas -->
+    <canvas id="galaxyCanvas" class="galaxy-canvas"></canvas>
+
+    <!-- Full-Page Interactive Cursor Ambient Glow -->
+    <div class="page-cursor-glow" id="pageCursorGlow"></div>
 
     <!-- Header & Navigation Bar -->
     <header class="light-navbar">
@@ -65,96 +70,239 @@
                 </p>
 
                 <div class="hero-features-list">
-                    <span class="hero-feature-pill" style="border: 1px solid var(--accent-blue); font-weight:600;">🤖 Zetrox AI Agent</span>
-                    <span class="hero-feature-pill">🌳 DSA Masterclass</span>
-                    <span class="hero-feature-pill">☕ Java 21 Engine</span>
-                    <span class="hero-feature-pill">🐍 Python 3.12</span>
-                    <span class="hero-feature-pill">⚡ C++20</span>
-                    <span class="hero-feature-pill">🗄️ SQL RDBMS</span>
-                    <span class="hero-feature-pill">🌐 Live Rooms</span>
+                    <a href="#ai-agent-section" class="hero-feature-pill active-pill">🤖 Zetrox AI Agent</a>
+                    <a href="#dsa-section" class="hero-feature-pill">🌳 DSA Masterclass</a>
+                    <a href="#compilers-section" class="hero-feature-pill">☕ Java 21 Engine</a>
+                    <a href="#compilers-section" class="hero-feature-pill">🐍 Python 3.12</a>
+                    <a href="#compilers-section" class="hero-feature-pill">⚡ C++20</a>
+                    <a href="#compilers-section" class="hero-feature-pill">🗄️ SQL RDBMS</a>
+                    <a href="#rooms-section" class="hero-feature-pill">🌐 Live Rooms</a>
                 </div>
 
-                <div style="display:flex; gap:14px; align-items:center;">
-                    <button onclick="goWithoutLogin()" class="btn-auth-guest" style="width:auto; padding:12px 28px; font-size:1rem; margin:0;">
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <button onclick="goWithoutLogin()" class="btn-hero-guest">
                         🚀 Try Instant Guest Mode
                     </button>
-                    <a href="#dsa-section" style="color:var(--accent-blue); font-weight:600; text-decoration:none; font-size:0.95rem;">
-                        Browse Features ↓
+                    <a href="#dsa-section" class="hero-browse-link">
+                        Browse Features &darr;
                     </a>
                 </div>
             </div>
 
-            <!-- Auth Card (White Glass) -->
-            <div class="auth-glass-card">
-                <div class="auth-nav-tabs">
-                    <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
-                    <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Register</button>
-                    <button class="auth-tab-btn" id="tab-forgot" onclick="switchAuthTab('forgot')">Reset Password</button>
+            <!-- 3D Auth Stage Container with Cursor Motion & Parallax -->
+            <div class="auth-3d-stage" id="auth3dStage">
+                <!-- 3D Card Flipper (180deg Flip on Register) -->
+                <div class="auth-3d-flipper" id="authFlipper">
+                    
+                    <!-- FRONT FACE: Sign In & Reset Password -->
+                    <div class="auth-card-face auth-card-front" id="cardFrontFace">
+                        <!-- Glider Navigation Tabs -->
+                        <div class="auth-nav-tabs">
+                            <div class="auth-tab-glider" id="authTabGlider"></div>
+                            <button type="button" class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
+                            <button type="button" class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+                            <button type="button" class="auth-tab-btn" id="tab-forgot" onclick="switchAuthTab('forgot')">Reset</button>
+                        </div>
+
+                        <!-- View A: Login Form -->
+                        <div id="loginViewContainer" class="auth-form-view active-view">
+                            <div class="auth-face-header">
+                                <span class="auth-face-badge">Welcome Back</span>
+                                <h2 class="auth-face-title">Sign In to CodeTogether</h2>
+                                <p class="auth-face-subtitle">Access your workspaces, Zetrox AI mentor, and compilers.</p>
+                            </div>
+
+                            <form id="loginFormElement" onsubmit="handleUserLogin(event)">
+                                <div class="form-group">
+                                    <label class="form-label" for="login-email">Email Address</label>
+                                    <div class="form-input-wrapper">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <input type="email" id="login-email" class="form-input" placeholder="you@example.com" autocomplete="email" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-label">
+                                        <label for="login-password">Password</label>
+                                        <a href="javascript:void(0)" onclick="switchAuthTab('forgot')">Forgot Password?</a>
+                                    </div>
+                                    <div class="form-input-wrapper">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+                                        <input type="password" id="login-password" class="form-input" placeholder="Enter your password" autocomplete="current-password" required>
+                                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password', this)" title="Toggle password visibility">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="loginErrorMessage" class="auth-alert-box auth-alert-error"></div>
+
+                                <button type="submit" class="btn-auth-primary">
+                                    <span>Sign In to Platform</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </form>
+
+                            <div class="auth-flip-prompt">
+                                <span>Don't have an account?</span>
+                                <button type="button" class="auth-flip-btn" onclick="switchAuthTab('register')">
+                                    Create Free Account &rarr;
+                                </button>
+                            </div>
+
+                            <!-- Guest Mode Button -->
+                            <button type="button" onclick="goWithoutLogin()" class="btn-auth-guest">
+                                <span>🚀 Continue as Guest (Instant Access)</span>
+                            </button>
+                        </div>
+
+                        <!-- View B: Forgot Password Form -->
+                        <div id="forgotViewContainer" class="auth-form-view inactive-view">
+                            <div class="auth-face-header">
+                                <span class="auth-face-badge">Account Recovery</span>
+                                <h2 class="auth-face-title">Reset Your Password</h2>
+                                <p class="auth-face-subtitle">We'll send a 6-digit verification OTP code to your inbox.</p>
+                            </div>
+
+                            <form id="forgotFormElement" onsubmit="handleForgotPassword(event)">
+                                <div class="form-group">
+                                    <label class="form-label" for="forgot-email">Registered Email Address</label>
+                                    <div class="form-input-wrapper">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <input type="email" id="forgot-email" class="form-input" placeholder="registered@domain.com" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-auth-primary">
+                                    <span>Send Password Reset OTP</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </form>
+
+                            <div class="auth-flip-prompt">
+                                <span>Remembered your password?</span>
+                                <button type="button" class="auth-flip-btn" onclick="switchAuthTab('login')">
+                                    &larr; Back to Sign In
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACK FACE: Registration Form (3D Flipped 180°) -->
+                    <div class="auth-card-face auth-card-back" id="cardBackFace">
+                        <div class="auth-nav-tabs">
+                            <div class="auth-tab-glider" style="transform: translateX(100%);"></div>
+                            <button type="button" class="auth-tab-btn" onclick="switchAuthTab('login')">Sign In</button>
+                            <button type="button" class="auth-tab-btn active" onclick="switchAuthTab('register')">Register</button>
+                            <button type="button" class="auth-tab-btn" onclick="switchAuthTab('forgot')">Reset</button>
+                        </div>
+
+                        <div class="auth-face-header">
+                            <span class="auth-face-badge">Get Started Free</span>
+                            <h2 class="auth-face-title">Create Developer Account</h2>
+                            <p class="auth-face-subtitle">Join developers mastering DSA and full-stack coding.</p>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <form id="registerFormElement" onsubmit="handleUserRegister(event)">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                                <div class="form-group">
+                                    <label class="form-label" for="reg-firstname">First Name</label>
+                                    <div class="form-input-wrapper">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        <input type="text" id="reg-firstname" class="form-input" placeholder="First" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="reg-lastname">Last Name</label>
+                                    <div class="form-input-wrapper">
+                                        <input type="text" id="reg-lastname" class="form-input" style="padding-left:14px;" placeholder="Last" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-username">Username</label>
+                                <div class="form-input-wrapper">
+                                    <span style="position:absolute; left:14px; font-weight:700; color:#94a3b8; font-size:0.9rem; pointer-events:none;">@</span>
+                                    <input type="text" id="reg-username" class="form-input" placeholder="developer_username" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-email">Email Address</label>
+                                <div style="display:flex; gap:8px;">
+                                    <div class="form-input-wrapper" style="flex:1;">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <input type="email" id="reg-email" class="form-input" placeholder="name@domain.com" required>
+                                    </div>
+                                    <button type="button" id="sendOtpBtn" onclick="sendOtpCode()" class="btn-send-otp">Send OTP</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-otp">Verification OTP</label>
+                                <div class="form-input-wrapper">
+                                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    <input type="text" id="reg-otp" class="form-input" placeholder="6-digit verification code" maxlength="6" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-password">Create Password</label>
+                                <div class="form-input-wrapper">
+                                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    <input type="password" id="reg-password" class="form-input" placeholder="Min. 8 characters" required>
+                                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-password', this)" title="Toggle password visibility">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="registerErrorMessage" class="auth-alert-box auth-alert-error"></div>
+                            <div id="successMessage" class="auth-alert-box auth-alert-success">Account created! Redirecting to login...</div>
+
+                            <button type="submit" class="btn-auth-primary">
+                                <span>Create Free Account</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </form>
+
+                        <div class="auth-flip-prompt">
+                            <span>Already have an account?</span>
+                            <button type="button" class="auth-flip-btn" onclick="switchAuthTab('login')">
+                                Sign In &rarr;
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Login Form -->
-                <form id="loginFormElement" onsubmit="handleUserLogin(event)">
-                    <div class="form-group">
-                        <label class="form-label" for="login-email">Email Address</label>
-                        <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="login-password">Password</label>
-                        <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
-                    </div>
-                    <div id="loginErrorMessage" style="color:#ef4444; font-size:0.875rem; margin-bottom:12px; display:none;"></div>
-                    <button type="submit" class="btn-auth-primary">Sign In to Platform</button>
-                </form>
-
-                <!-- Registration Form -->
-                <form id="registerFormElement" style="display:none;" onsubmit="handleUserRegister(event)">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <div class="form-group">
-                            <label class="form-label" for="reg-firstname">First Name</label>
-                            <input type="text" id="reg-firstname" class="form-input" placeholder="First" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="reg-lastname">Last Name</label>
-                            <input type="text" id="reg-lastname" class="form-input" placeholder="Last" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="reg-username">Username</label>
-                        <input type="text" id="reg-username" class="form-input" placeholder="developer_username" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="reg-email">Email Address</label>
-                        <div style="display:flex; gap:8px;">
-                            <input type="email" id="reg-email" class="form-input" placeholder="name@domain.com" required>
-                            <button type="button" id="sendOtpBtn" onclick="sendOtpCode()" style="padding:0 14px; background:var(--accent-blue); color:#fff; border:none; border-radius:10px; font-weight:600; font-size:0.813rem; cursor:pointer; white-space:nowrap;">Send OTP</button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="reg-otp">Enter OTP</label>
-                        <input type="text" id="reg-otp" class="form-input" placeholder="6-digit OTP code" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="reg-password">Create Password</label>
-                        <input type="password" id="reg-password" class="form-input" placeholder="Strong password" required>
-                    </div>
-                    <div id="registerErrorMessage" style="color:#ef4444; font-size:0.875rem; margin-bottom:12px; display:none;"></div>
-                    <div id="successMessage" style="color:#059669; font-size:0.875rem; margin-bottom:12px; display:none;">Account created! Redirecting to login...</div>
-                    <button type="submit" class="btn-auth-primary">Create Free Account</button>
-                </form>
-
-                <!-- Forgot Password Form -->
-                <form id="forgotFormElement" style="display:none;" onsubmit="handleForgotPassword(event)">
-                    <div class="form-group">
-                        <label class="form-label" for="forgot-email">Account Email</label>
-                        <input type="email" id="forgot-email" class="form-input" placeholder="registered@domain.com" required>
-                    </div>
-                    <button type="submit" class="btn-auth-primary">Send Reset OTP</button>
-                </form>
-
-                <!-- Guest Mode Button -->
-                <button type="button" onclick="goWithoutLogin()" class="btn-auth-guest">
-                    🚀 Continue as Guest (No Login Required)
-                </button>
             </div>
         </section>
 
@@ -412,14 +560,385 @@
 
     <!-- Inline JS Handlers -->
     <script>
-        function switchAuthTab(tabName) {
-            document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.add('active');
+        let isCardFlipped = false;
 
-            document.getElementById('loginFormElement').style.display = tabName === 'login' ? 'block' : 'none';
-            document.getElementById('registerFormElement').style.display = tabName === 'register' ? 'block' : 'none';
-            document.getElementById('forgotFormElement').style.display = tabName === 'forgot' ? 'block' : 'none';
+        function switchAuthTab(tabName) {
+            const flipper = document.getElementById('authFlipper');
+            const gliders = document.querySelectorAll('.auth-tab-glider');
+            const loginView = document.getElementById('loginViewContainer');
+            const forgotView = document.getElementById('forgotViewContainer');
+
+            // Synchronize tab button styles across both faces
+            document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                const id = btn.id;
+                const text = btn.textContent.trim().toLowerCase();
+                const matches = (id && id === 'tab-' + tabName) || 
+                                (tabName === 'register' && text.includes('register')) ||
+                                (tabName === 'login' && text.includes('sign in')) ||
+                                (tabName === 'forgot' && text.includes('reset'));
+                if (matches) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            if (tabName === 'register') {
+                isCardFlipped = true;
+                if (flipper) flipper.classList.add('is-flipped');
+                gliders.forEach(g => g.style.transform = 'translateX(100%)');
+            } else if (tabName === 'login') {
+                isCardFlipped = false;
+                if (flipper) flipper.classList.remove('is-flipped');
+                if (loginView && forgotView) {
+                    loginView.classList.remove('inactive-view');
+                    loginView.classList.add('active-view');
+                    forgotView.classList.remove('active-view');
+                    forgotView.classList.add('inactive-view');
+                }
+                gliders.forEach(g => g.style.transform = 'translateX(0%)');
+            } else if (tabName === 'forgot') {
+                isCardFlipped = false;
+                if (flipper) flipper.classList.remove('is-flipped');
+                if (loginView && forgotView) {
+                    loginView.classList.remove('active-view');
+                    loginView.classList.add('inactive-view');
+                    forgotView.classList.remove('inactive-view');
+                    forgotView.classList.add('active-view');
+                }
+                gliders.forEach(g => g.style.transform = 'translateX(200%)');
+            }
         }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const isPass = input.type === 'password';
+            input.type = isPass ? 'text' : 'password';
+            if (isPass) {
+                btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+            } else {
+                btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            }
+        }
+
+        /* 3D Dynamic Cursor Motion, Hero Parallax & Showcase Cards Engine */
+        (function init3dCursorMotion() {
+            const stage = document.getElementById('auth3dStage');
+            const flipper = document.getElementById('authFlipper');
+            const hero = document.querySelector('.hero-container');
+            const heroContent = document.querySelector('.hero-content');
+            const heroBadge = document.querySelector('.hero-badge');
+            const heroTitle = document.querySelector('.hero-title');
+            const heroSubtitle = document.querySelector('.hero-subtitle');
+            const heroPillsList = document.querySelector('.hero-features-list');
+            const pills = document.querySelectorAll('.hero-feature-pill');
+            const satellites = document.querySelectorAll('.floating-satellite');
+            const cardsBelow = document.querySelectorAll('.light-glass-card');
+
+            /* --- 1. Auth Card Tilt & Satellites --- */
+            let targetTiltX = 0;
+            let targetTiltY = 0;
+            let currentTiltX = 0;
+            let currentTiltY = 0;
+            let shineX = 50;
+            let shineY = 50;
+            let isHoveringHero = false;
+            let animId = null;
+
+            // Hero left-side parallax targets
+            let heroOffsetX = 0;
+            let heroOffsetY = 0;
+            let currHeroOffsetX = 0;
+            let currHeroOffsetY = 0;
+
+            function renderPhysics() {
+                const damping = 0.12;
+                currentTiltX += (targetTiltX - currentTiltX) * damping;
+                currentTiltY += (targetTiltY - currentTiltY) * damping;
+
+                currHeroOffsetX += (heroOffsetX - currHeroOffsetX) * damping;
+                currHeroOffsetY += (heroOffsetY - currHeroOffsetY) * damping;
+
+                if (flipper) {
+                    flipper.style.setProperty('--tilt-x', `${currentTiltX.toFixed(2)}deg`);
+                    flipper.style.setProperty('--tilt-y', `${currentTiltY.toFixed(2)}deg`);
+                    flipper.style.setProperty('--mouse-x', `${shineX.toFixed(1)}%`);
+                    flipper.style.setProperty('--mouse-y', `${shineY.toFixed(1)}%`);
+                    flipper.style.setProperty('--shine-opacity', isHoveringHero ? '0.6' : '0.25');
+                }
+
+                // Hero left content 3D Parallax offsets
+                if (heroBadge) {
+                    heroBadge.style.transform = `translate3d(${(currHeroOffsetX * 6).toFixed(1)}px, ${(currHeroOffsetY * 5).toFixed(1)}px, 14px)`;
+                }
+                if (heroTitle) {
+                    heroTitle.style.transform = `translate3d(${(currHeroOffsetX * 14).toFixed(1)}px, ${(currHeroOffsetY * 10).toFixed(1)}px, 22px)`;
+                }
+                if (heroSubtitle) {
+                    heroSubtitle.style.transform = `translate3d(${(currHeroOffsetX * 10).toFixed(1)}px, ${(currHeroOffsetY * 8).toFixed(1)}px, 16px)`;
+                }
+                if (heroPillsList) {
+                    heroPillsList.style.transform = `translate3d(${(currHeroOffsetX * 6).toFixed(1)}px, ${(currHeroOffsetY * 5).toFixed(1)}px, 10px)`;
+                }
+
+                const stillMoving = Math.abs(targetTiltX - currentTiltX) > 0.04 || 
+                                    Math.abs(targetTiltY - currentTiltY) > 0.04 ||
+                                    Math.abs(heroOffsetX - currHeroOffsetX) > 0.04 ||
+                                    Math.abs(heroOffsetY - currHeroOffsetY) > 0.04;
+
+                if (isHoveringHero || stillMoving) {
+                    animId = requestAnimationFrame(renderPhysics);
+                } else {
+                    animId = null;
+                }
+            }
+
+            function requestPhysicsUpdate() {
+                if (!animId) {
+                    animId = requestAnimationFrame(renderPhysics);
+                }
+            }
+
+            /* --- 1. Global Full-Page Cursor Move Listener --- */
+            window.addEventListener('mousemove', (e) => {
+                isHoveringHero = true;
+
+                // Full-page ambient glow coordinates
+                document.documentElement.style.setProperty('--mouse-client-x', `${e.clientX}px`);
+                document.documentElement.style.setProperty('--mouse-client-y', `${e.clientY}px`);
+
+                // Hero ambient glow coordinates
+                if (hero) {
+                    const heroRect = hero.getBoundingClientRect();
+                    const glowX = ((e.clientX - heroRect.left) / heroRect.width) * 100;
+                    const glowY = ((e.clientY - heroRect.top) / heroRect.height) * 100;
+                    hero.style.setProperty('--hero-cursor-x', `${glowX.toFixed(1)}%`);
+                    hero.style.setProperty('--hero-cursor-y', `${glowY.toFixed(1)}%`);
+
+                    // Hero content normalized parallax offset (-1 to 1)
+                    const heroCenterX = heroRect.left + heroRect.width * 0.35;
+                    const heroCenterY = heroRect.top + heroRect.height / 2;
+                    heroOffsetX = Math.max(-1, Math.min(1, (e.clientX - heroCenterX) / (heroRect.width * 0.5)));
+                    heroOffsetY = Math.max(-1, Math.min(1, (e.clientY - heroCenterY) / (heroRect.height * 0.5)));
+                }
+
+                // 3D Auth Card Tilt across full page
+                if (stage && flipper) {
+                    const stageRect = stage.getBoundingClientRect();
+                    const stageCenterX = stageRect.left + stageRect.width / 2;
+                    const stageCenterY = stageRect.top + stageRect.height / 2;
+
+                    const normX = Math.max(-1, Math.min(1, (e.clientX - stageCenterX) / (window.innerWidth * 0.5)));
+                    const normY = Math.max(-1, Math.min(1, (e.clientY - stageCenterY) / (window.innerHeight * 0.5)));
+
+                    const maxAngle = 13;
+                    const flipFactor = isCardFlipped ? -1 : 1;
+                    targetTiltX = normX * maxAngle * flipFactor;
+                    targetTiltY = -normY * maxAngle;
+
+                    shineX = Math.max(0, Math.min(100, ((e.clientX - stageRect.left) / stageRect.width) * 100));
+                    shineY = Math.max(0, Math.min(100, ((e.clientY - stageRect.top) / stageRect.height) * 100));
+                }
+
+                requestPhysicsUpdate();
+            });
+
+            window.addEventListener('mouseleave', () => {
+                isHoveringHero = false;
+                targetTiltX = 0;
+                targetTiltY = 0;
+                heroOffsetX = 0;
+                heroOffsetY = 0;
+                shineX = 50;
+                shineY = 50;
+                requestPhysicsUpdate();
+            });
+
+            /* --- 2. Magnetic 3D Cursor Hover & Active Selection on Hero Pills --- */
+            pills.forEach(pill => {
+                pill.addEventListener('mousemove', (e) => {
+                    const r = pill.getBoundingClientRect();
+                    const px = (e.clientX - r.left - r.width / 2) / (r.width / 2);
+                    const py = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+                    pill.style.transform = `translateY(-5px) scale(1.06) rotateX(${(-py * 8).toFixed(1)}deg) rotateY(${(px * 8).toFixed(1)}deg)`;
+                });
+                pill.addEventListener('mouseleave', () => {
+                    pill.style.transform = '';
+                });
+                pill.addEventListener('click', () => {
+                    pills.forEach(p => p.classList.remove('active-pill'));
+                    pill.classList.add('active-pill');
+                });
+            });
+
+            /* --- 3. Interactive 3D Cursor Tilt & Specular Shine for Cards Below --- */
+            cardsBelow.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.setProperty('--card-shine', '1');
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const normX = Math.max(-1, Math.min(1, (x - centerX) / centerX));
+                    const normY = Math.max(-1, Math.min(1, (y - centerY) / centerY));
+
+                    // Subtle 3D tilt
+                    const maxTilt = 9;
+                    const tiltX = (normX * maxTilt).toFixed(2);
+                    const tiltY = (-normY * maxTilt).toFixed(2);
+
+                    const shinePercentX = ((x / rect.width) * 100).toFixed(1);
+                    const shinePercentY = ((y / rect.height) * 100).toFixed(1);
+
+                    card.style.transform = `perspective(1000px) rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateY(-8px) translateZ(12px)`;
+                    card.style.setProperty('--card-x', `${shinePercentX}%`);
+                    card.style.setProperty('--card-y', `${shinePercentY}%`);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px)';
+                    card.style.setProperty('--card-shine', '0');
+                });
+            });
+        })();
+
+        /* --- 4. Clean Ambient Galaxy Looping Particle Engine (No Letter Clutter) --- */
+        (function initFullPageGalaxy() {
+            const canvas = document.getElementById('galaxyCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width = 0;
+            let height = 0;
+            let dpr = window.devicePixelRatio || 1;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.scale(dpr, dpr);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Subtle Ambient Galaxy Stars (No Text, No Glyphs, No Clashing Lines)
+            const starCount = Math.min(130, Math.floor((width * height) / 10000));
+            const stars = [];
+            const colors = [
+                'rgba(37, 99, 235, ',   // Soft Cosmic Blue
+                'rgba(124, 58, 237, ',  // Soft Violet
+                'rgba(6, 182, 212, ',   // Soft Cyan
+                'rgba(147, 197, 253, '  // Very Soft Light Blue
+            ];
+
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.2 + 0.5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: Math.random() * 0.35 + 0.1,
+                    baseAlpha: Math.random() * 0.25 + 0.1,
+                    twinkleSpeed: Math.random() * 0.02 + 0.008,
+                    twinklePhase: Math.random() * Math.PI * 2,
+                    vx: (Math.random() - 0.5) * 0.22,
+                    vy: (Math.random() - 0.5) * 0.22,
+                    orbitAngle: Math.random() * Math.PI * 2,
+                    orbitSpeed: (Math.random() * 0.0003 + 0.0001) * (Math.random() > 0.5 ? 1 : -1)
+                });
+            }
+
+            // Cursor Gravitational Interaction
+            let cursorX = width / 2;
+            let cursorY = height / 2;
+            let cursorActive = false;
+
+            window.addEventListener('mousemove', (e) => {
+                cursorX = e.clientX;
+                cursorY = e.clientY;
+                cursorActive = true;
+            });
+
+            window.addEventListener('mouseleave', () => {
+                cursorActive = false;
+            });
+
+            function loop() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw Pure Soft Ambient Looping Particles
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+
+                    // Gentle orbital drift
+                    s.orbitAngle += s.orbitSpeed;
+                    s.x += s.vx + Math.cos(s.orbitAngle) * 0.15;
+                    s.y += s.vy + Math.sin(s.orbitAngle) * 0.15;
+
+                    // Screen wrap
+                    if (s.x < -5) s.x = width + 5;
+                    if (s.x > width + 5) s.x = -5;
+                    if (s.y < -5) s.y = height + 5;
+                    if (s.y > height + 5) s.y = -5;
+
+                    // Subtle Cursor Swirl
+                    if (cursorActive) {
+                        const dx = cursorX - s.x;
+                        const dy = cursorY - s.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120 && dist > 1) {
+                            const force = (1 - dist / 120) * 0.4;
+                            s.x += (dx / dist) * force;
+                            s.y += (dy / dist) * force;
+                        }
+                    }
+
+                    // Twinkle shimmer
+                    s.twinklePhase += s.twinkleSpeed;
+                    const alpha = Math.max(0.08, Math.min(0.45, s.baseAlpha + Math.sin(s.twinklePhase) * 0.18));
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = s.color + alpha + ')';
+                    ctx.fill();
+                }
+
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+        })();
+
+        /* --- 5. Clean Kinetic Text Reveal on Scroll --- */
+        (function initFullPageTextTransitions() {
+            const textElements = document.querySelectorAll(
+                '.section-tag, .section-title, .section-desc, .hero-badge, .card-title-text, .light-glass-card'
+            );
+
+            textElements.forEach((el, index) => {
+                el.classList.add('kinetic-text-reveal');
+                el.style.transitionDelay = `${(index % 3) * 0.08}s`;
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            textElements.forEach(el => observer.observe(el));
+        })();
 
         function openGuestFeature(sectionId, lang) {
             localStorage.removeItem("loggedInEmail");
@@ -453,6 +972,7 @@
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value.trim();
             const errorMsg = document.getElementById('loginErrorMessage');
+            if (errorMsg) errorMsg.style.display = 'none';
 
             try {
                 const response = await fetch("/api/login", {
@@ -481,12 +1001,16 @@
                         window.location.href = "main.html?section=home";
                     }
                 } else {
-                    errorMsg.textContent = data.message || "Login failed";
-                    errorMsg.style.display = 'block';
+                    if (errorMsg) {
+                        errorMsg.textContent = data.message || "Login failed";
+                        errorMsg.style.display = 'flex';
+                    }
                 }
             } catch (error) {
-                errorMsg.textContent = "Error connecting to server.";
-                errorMsg.style.display = 'block';
+                if (errorMsg) {
+                    errorMsg.textContent = "Error connecting to server.";
+                    errorMsg.style.display = 'flex';
+                }
             }
         }
 
@@ -556,6 +1080,9 @@
             const errorMsg = document.getElementById('registerErrorMessage');
             const successMsg = document.getElementById('successMessage');
 
+            if (errorMsg) errorMsg.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'none';
+
             try {
                 const response = await fetch('/api/register', {
                     method: 'POST',
@@ -566,15 +1093,18 @@
                 const data = await response.json();
                 if (response.ok) {
                     localStorage.setItem("isNewUser_" + email, "true");
-                    successMsg.style.display = 'block';
+                    if (successMsg) successMsg.style.display = 'flex';
                     setTimeout(() => {
-                        successMsg.style.display = 'none';
+                        if (successMsg) successMsg.style.display = 'none';
                         switchAuthTab('login');
-                        document.getElementById('login-email').value = email;
-                    }, 1500);
+                        const loginEmail = document.getElementById('login-email');
+                        if (loginEmail) loginEmail.value = email;
+                    }, 1400);
                 } else {
-                    errorMsg.textContent = data.message || "Registration failed";
-                    errorMsg.style.display = 'block';
+                    if (errorMsg) {
+                        errorMsg.textContent = data.message || "Registration failed";
+                        errorMsg.style.display = 'flex';
+                    }
                 }
             } catch (error) {
                 await customAlert('An error occurred while processing your request.');
