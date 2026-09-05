@@ -615,7 +615,9 @@ function goToLogin() {
    THEME HANDLING
 ===================================================== */
 function setTheme(mode) {
-    document.body.classList.toggle("light-mode", mode === "light");
+    const isLight = mode === "light";
+    document.body.classList.toggle("light-mode", isLight);
+    document.documentElement.classList.toggle("light-mode", isLight);
     localStorage.setItem("theme", mode);
     updateThemeButton();
     updateCompilerSelectColor();

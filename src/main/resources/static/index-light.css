@@ -16,6 +16,17 @@
     --glass-card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -110,13 +121,15 @@ body {
     align-items: center;
     position: relative;
     perspective: 1400px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Dynamic Ambient Cursor Glow in Hero */
 .hero-container::before {
     content: "";
     position: absolute;
-    inset: -15%;
+    inset: 0;
     pointer-events: none;
     background: radial-gradient(
         circle 520px at var(--hero-cursor-x, 30%) var(--hero-cursor-y, 35%),
@@ -202,11 +215,13 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
     pointer-events: none;
     z-index: 0;
     opacity: 0.55;
+    overflow: hidden;
 }
 
 /* Full-Page Text Moving & Scroll Reveal Transitions */
@@ -228,8 +243,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
     pointer-events: none;
     z-index: 1;
     background: radial-gradient(
@@ -241,6 +257,7 @@ body {
     );
     will-change: background;
     transition: opacity 0.3s ease;
+    overflow: hidden;
 }
 
 /* Feature Pills Matching Third Image */

@@ -14,9 +14,21 @@
 
     <!-- Custom Popup & Glassy Light Mode Styles -->
     <link rel="stylesheet" href="custom-popup.css">
-    <link rel="stylesheet" href="index-light.css?v=galaxy2">
-    <link rel="stylesheet" href="three-d-ui.css?v=galaxy2">
+    <link rel="stylesheet" href="index-light.css?v=noscroll">
+    <link rel="stylesheet" href="three-d-ui.css?v=noscroll">
     <script src="custom-popup.js"></script>
+
+    <style>
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            box-sizing: border-box;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+    </style>
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffffff">

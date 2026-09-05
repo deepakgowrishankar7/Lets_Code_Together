@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,14 +32,19 @@
     <!-- Link external CSS -->
     <link rel="stylesheet" href="custom-popup.css">
     <script src="custom-popup.js"></script>
-    <link rel="stylesheet" href="styles.css?v=70">
+    <link rel="stylesheet" href="styles.css?v=72">
     <link rel="stylesheet" href="mobile_fixes.css?v=2">
     <script>
-        // Apply Light Mode by default unless user explicitly selected dark mode
-        const savedTheme = localStorage.getItem("theme") || "light";
-        if (savedTheme === "light") {
-            document.documentElement.classList.add("light-mode");
-        }
+        // Apply Light Mode by default immediately without any flash
+        (function() {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            if (savedTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+            } else {
+                document.documentElement.classList.add("light-mode");
+                localStorage.setItem("theme", "light");
+            }
+        })();
 
         // Redirect to login page if user is NOT logged in AND NOT in guest mode
         const isGuest = localStorage.getItem("isGuest") === "true";
@@ -62,7 +67,12 @@
 
 </head>
 
-<body>
+<body class="light-mode">
+    <script>
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.remove("light-mode");
+        }
+    </script>
     <div class="dashboard">
         <!-- Sidebar Mobile Overlay -->
         <div id="sidebar-overlay" class="sidebar-overlay"></div>
