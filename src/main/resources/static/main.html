@@ -2286,7 +2286,7 @@ ORDER BY avg_sal DESC;</code></pre>
                     </div>
 
                     <div class="messenger-input-bar">
-                        <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('public-chat-input', this)">😊</button>
+                        <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('public-chat-input', this, event)">😊</button>
                         <textarea id="public-chat-input" placeholder="Type a message to the community... (Press Enter to send)" rows="1"></textarea>
                         <button class="chat-send-btn" onclick="sendPublicMessage()">
                             <span>Send</span>
@@ -2332,7 +2332,7 @@ ORDER BY avg_sal DESC;</code></pre>
                             <div id="private-chat-messages" class="messenger-messages-box private-messages"></div>
 
                             <div class="messenger-input-bar">
-                                <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('private-chat-input', this)">😊</button>
+                                <button class="chat-action-btn" title="Add Emoji Palette" onclick="toggleEmojiPicker('private-chat-input', this, event)">😊</button>
                                 <textarea id="private-chat-input" placeholder="Message contact..." rows="1"></textarea>
                                 <button class="chat-send-btn" onclick="sendPrivateMessage()">
                                     <span>Send</span>

@@ -2529,16 +2529,120 @@ function getInitials(name) {
     return name.substring(0, 2).toUpperCase();
 }
 
-const _EMOJI_LIST = [
-    '😊', '😂', '😍', '😎', '🥳', '🤔',
-    '🙌', '👍', '👎', '❤️', '🔥', '🎉',
-    '💯', '🚀', '💻', '☕', '🐍', '🛢️',
-    '⚡', '🧠', '🐞', '🤖', '🔒', '⚙️',
-    '🌐', '📦', '📄', '🏆', '🥇', '✨',
-    '🎯', '💬', '🤝', '✌️', '👊', '👌'
+const _EMOJI_CATEGORIES = [
+    {
+        id: 'smileys',
+        name: 'Smileys',
+        icon: '😀',
+        emojis: [
+            '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
+            '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😋', '😛', '😜',
+            '🤪', '😎', '🤓', '🧐', '🥳', '😏', '😒', '😞', '😔', '🥺',
+            '😢', '😭', '😤', '😠', '😡', '🤯', '😳', '🥵', '🥶', '😱',
+            '🤗', '🤔', '🤭', '🤫', '😶', '😐', '😬', '🙄', '😴', '🤤'
+        ]
+    },
+    {
+        id: 'gestures',
+        name: 'Hands & Gestures',
+        icon: '👍',
+        emojis: [
+            '👍', '👎', '👏', '🙌', '👐', '🤲', '🤝', '🙏', '✌️', '🤞',
+            '🤟', '🤘', '🤙', '👈', '👉', '👆', '👇', '☝️', '👌', '🤌',
+            '✊', '👊', '🤛', '🤜', '👋', '🤚', '🖐️', '✋', '🖖', '💪'
+        ]
+    },
+    {
+        id: 'tech',
+        name: 'Tech & Code',
+        icon: '💻',
+        emojis: [
+            '💻', '🖥️', '⌨️', '🖱️', '💾', '📱', '⚙️', '🔧', '🔨', '⚡',
+            '🚀', '🔥', '💡', '🧠', '🐞', '🤖', '🐍', '☕', '🛢️', '🌐',
+            '📦', '📄', '📊', '📈', '🔒', '🔑', '🎯', '✨', '🏆', '💯'
+        ]
+    },
+    {
+        id: 'symbols',
+        name: 'Symbols & Vibes',
+        icon: '🎉',
+        emojis: [
+            '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔',
+            '🔥', '✨', '🎉', '🎊', '🎈', '🎁', '⭐', '🌟', '💥', '💯',
+            '💬', '💭', '☕', '🍕', '🍻', '☀️', '🌙', '🌈', '⚡', '🏆'
+        ]
+    }
 ];
 
-function toggleEmojiPicker(inputId, btnElement) {
+function closeEmojiPicker(picker) {
+    if (!picker) return;
+    picker.classList.remove('emoji-picker-open');
+    picker.classList.add('emoji-picker-close');
+}
+
+function renderEmojiGrid(gridEl, emojis, inputId) {
+    gridEl.innerHTML = emojis.map(e => `
+        <button type="button"
+                class="emoji-item-btn"
+                title="${e}"
+                onclick="insertEmoji('${inputId}', '${e}')">
+            ${e}
+        </button>
+    `).join("");
+}
+
+function createEmojiPickerElement(inputId) {
+    const picker = document.createElement('div');
+    picker.className = 'emoji-picker-popup';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'emoji-picker-header';
+    header.innerHTML = `
+        <span class="emoji-picker-title">✨ Express with Emojis</span>
+        <button type="button" class="emoji-picker-close-btn" title="Close" onclick="closeEmojiPicker(this.closest('.emoji-picker-popup'))">✕</button>
+    `;
+    picker.appendChild(header);
+
+    // Category Tabs & Grid
+    const tabsContainer = document.createElement('div');
+    tabsContainer.className = 'emoji-picker-tabs';
+
+    const grid = document.createElement('div');
+    grid.className = 'emoji-picker-grid';
+
+    _EMOJI_CATEGORIES.forEach((cat, idx) => {
+        const tabBtn = document.createElement('button');
+        tabBtn.type = 'button';
+        tabBtn.className = `emoji-tab-btn ${idx === 0 ? 'active' : ''}`;
+        tabBtn.title = cat.name;
+        tabBtn.textContent = cat.icon;
+        tabBtn.onclick = (e) => {
+            e.stopPropagation();
+            picker.querySelectorAll('.emoji-tab-btn').forEach(b => b.classList.remove('active'));
+            tabBtn.classList.add('active');
+            renderEmojiGrid(grid, cat.emojis, inputId);
+        };
+        tabsContainer.appendChild(tabBtn);
+    });
+    picker.appendChild(tabsContainer);
+
+    renderEmojiGrid(grid, _EMOJI_CATEGORIES[0].emojis, inputId);
+    picker.appendChild(grid);
+
+    picker.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    return picker;
+}
+
+function toggleEmojiPicker(inputId, btnElement, event) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
     const parentBar = btnElement.closest('.messenger-input-bar');
     if (!parentBar) return;
 
@@ -2546,111 +2650,66 @@ function toggleEmojiPicker(inputId, btnElement) {
 
     let picker = parentBar.querySelector('.emoji-picker-popup');
 
-    // If picker already exists, toggle with animation
+    // If picker already exists, toggle visibility
     if (picker) {
         if (picker.classList.contains('emoji-picker-open')) {
-            picker.classList.remove('emoji-picker-open');
-            picker.classList.add('emoji-picker-close');
-            setTimeout(() => { picker.style.display = 'none'; picker.classList.remove('emoji-picker-close'); }, 200);
+            closeEmojiPicker(picker);
         } else {
-            picker.style.display = 'grid';
-            requestAnimationFrame(() => picker.classList.add('emoji-picker-open'));
+            // Close any other open pickers across the page
+            document.querySelectorAll('.emoji-picker-popup.emoji-picker-open').forEach(p => {
+                if (p !== picker) closeEmojiPicker(p);
+            });
+            picker.classList.remove('emoji-picker-close');
+            picker.classList.add('emoji-picker-open');
         }
         return;
     }
 
     // Close any other open pickers
-    document.querySelectorAll('.emoji-picker-popup').forEach(p => {
-        p.classList.remove('emoji-picker-open');
-        p.style.display = 'none';
-    });
+    document.querySelectorAll('.emoji-picker-popup.emoji-picker-open').forEach(p => closeEmojiPicker(p));
 
-    // Detect light mode
-    const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
-
-    picker = document.createElement('div');
-    picker.className = 'emoji-picker-popup';
-    picker.style.cssText = `
-        position: absolute;
-        bottom: 68px;
-        left: 12px;
-        z-index: 9999;
-        background: ${isLight ? 'rgba(255,255,255,0.97)' : 'rgba(22, 28, 45, 0.97)'};
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid ${isLight ? 'rgba(16,185,129,0.25)' : 'rgba(16,185,129,0.3)'};
-        border-radius: 20px;
-        padding: 14px 12px 10px;
-        box-shadow: ${isLight
-            ? '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(16,185,129,0.1)'
-            : '0 20px 60px rgba(0,0,0,0.6), 0 4px 16px rgba(16,185,129,0.15)'};
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 6px;
-        width: 295px;
-        box-sizing: border-box;
-        overflow: hidden;
-        transform-origin: bottom left;
-        transform: scale(0.7) translateY(10px);
-        opacity: 0;
-        transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease;
-    `;
-
-    // Header label
-    const header = document.createElement('div');
-    header.style.cssText = `
-        grid-column: 1 / -1;
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        color: ${isLight ? '#10b981' : '#34d399'};
-        margin-bottom: 6px;
-        text-transform: uppercase;
-        padding: 0 2px;
-    `;
-    header.textContent = '😊 Pick an Emoji';
-    picker.appendChild(header);
-
-    // Emoji buttons
-    const btnBg   = isLight ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.06)';
-    const btnBdr  = isLight ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.1)';
-    const hoverBg = 'rgba(16,185,129,0.22)';
-
-    picker.insertAdjacentHTML('beforeend', _EMOJI_LIST.map(e => `
-        <button type="button"
-                style="background:${btnBg}; border:1px solid ${btnBdr}; border-radius:10px; font-size:1.2rem; height:36px; width:100%; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-sizing:border-box; transition:all 0.14s ease;"
-                onmouseover="this.style.background='${hoverBg}'; this.style.transform='scale(1.2)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.25)';"
-                onmouseout="this.style.background='${btnBg}'; this.style.transform='scale(1)'; this.style.boxShadow='none';"
-                onclick="insertEmoji('${inputId}', '${e}'); this.closest('.emoji-picker-popup').classList.remove('emoji-picker-open'); setTimeout(()=>{ this.closest('.emoji-picker-popup').style.display='none'; }, 150);">
-            ${e}
-        </button>
-    `).join(""));
-
+    picker = createEmojiPickerElement(inputId);
     parentBar.appendChild(picker);
 
-    // Trigger open animation
+    // Trigger smooth GPU transition
     requestAnimationFrame(() => {
-        picker.style.display = 'grid';
-        requestAnimationFrame(() => picker.classList.add('emoji-picker-open'));
-    });
-
-    // Close on outside click
-    document.addEventListener('click', function closeHandler(e) {
-        if (!picker.contains(e.target) && e.target !== btnElement) {
-            picker.classList.remove('emoji-picker-open');
-            setTimeout(() => { picker.style.display = 'none'; }, 200);
-            document.removeEventListener('click', closeHandler);
-        }
+        picker.classList.remove('emoji-picker-close');
+        picker.classList.add('emoji-picker-open');
     });
 }
-
 
 function insertEmoji(inputId, emoji) {
     const input = document.getElementById(inputId);
     if (!input) return;
-    input.value += emoji;
+
+    const start = (input.selectionStart != null) ? input.selectionStart : input.value.length;
+    const end = (input.selectionEnd != null) ? input.selectionEnd : input.value.length;
+    const text = input.value;
+
+    input.value = text.substring(0, start) + emoji + text.substring(end);
+    const newPos = start + emoji.length;
+    input.selectionStart = newPos;
+    input.selectionEnd = newPos;
     input.focus();
+
+    input.dispatchEvent(new Event('input', { bubbles: true }));
 }
+
+// Global outside-click listener to dismiss any open emoji picker
+document.addEventListener('click', (e) => {
+    document.querySelectorAll('.emoji-picker-popup.emoji-picker-open').forEach(p => {
+        if (!p.contains(e.target) && !e.target.closest('.chat-action-btn')) {
+            closeEmojiPicker(p);
+        }
+    });
+});
+
+// Escape key to dismiss emoji picker
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.emoji-picker-popup.emoji-picker-open').forEach(p => closeEmojiPicker(p));
+    }
+});
 
 function formatChatTime(dateStr) {
     if (!dateStr) return '';
@@ -3468,7 +3527,7 @@ async function loadPrivateMessages(force = false) {
     setChatStatus(`Connected with ${selectedUser}`);
 }
 
-// Bind Enter Key on Chat Inputs
+// Bind Enter Key on Chat Inputs & Pre-initialize Emoji Pickers for Zero-Lag Open
 document.addEventListener("DOMContentLoaded", () => {
     ['public-chat-input', 'private-chat-input'].forEach(id => {
         const input = document.getElementById(id);
@@ -3480,6 +3539,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (id === 'private-chat-input') sendPrivateMessage();
                 }
             });
+
+            // Pre-mount emoji picker so the first click is instantaneous and zero-lag
+            const parentBar = input.closest('.messenger-input-bar');
+            if (parentBar && !parentBar.querySelector('.emoji-picker-popup')) {
+                parentBar.style.position = 'relative';
+                const picker = createEmojiPickerElement(id);
+                parentBar.appendChild(picker);
+            }
         }
     });
 });
